@@ -3,6 +3,6 @@ package test;
 public class Main {
 	public static void main(String[]args)
 	{
-		System.out.println("So simple yet so hard, wtf eclipse");//test test test
+		System.out.println("So simple yet so hard, wtf eclipse");//test test tes
 	}
 }

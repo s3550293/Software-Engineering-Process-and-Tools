@@ -8,5 +8,6 @@ public class Human {
 	{
 		//test
 		System.out.println("Hello World");
+		System.out.println("Luke's Push test");
 	}
 }

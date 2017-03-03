@@ -3,9 +3,9 @@ public class Main
 {
 	public static void main(String[] args)
 	{
-		System.out.println("Main File");
-		Human person = new Human();
-		person.print();
+		
+		Human david = new Human();
+		david.print();
 		//Test Code
 		
 	}

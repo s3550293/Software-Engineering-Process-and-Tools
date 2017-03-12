@@ -3,6 +3,7 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 
 /*
+ * follow this link to find out how to add tables and access tables
  * http://www.sqlitetutorial.net/sqlite-java/
  */
 public class DatabaseConnection

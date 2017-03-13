@@ -1,6 +1,7 @@
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 
 /*
@@ -42,17 +43,21 @@ public class DatabaseConnection
 			System.out.println(sqle.getMessage());
 		}
 	}
-	public void getUser(String username, String password, boolean accountType)
+	public User getUser(String username)
 	{
-		String query = ""; //ToDo
-		
-		try (Connection conn = this.connect(); Statement extract = conn.createStatement(); ResultSet output = extract.executeQuery(sql))
+		String query = "SELECT username, password, accountType FROM users WHERE username = ?"; //ToDo
+		User databaseUser = null;
+		try (Connection conn = this.connect(); PreparedStatement inject  = conn.prepareStatement(query))
 		{
-			
+			//Sets '?' to username
+			inject.setString(1, username);
+			ResultSet output  = inject.executeQuery();
+			databaseUser = new User(output.getString("username"), output.getString("password"), output.getBoolean("accountType"));
 		}
 		catch(SQLException sqle)
 		{
 			
 		}
+		return databaseUser;
 	}
 }

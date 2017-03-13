@@ -40,8 +40,13 @@ public class Database
 	/*
 	 * Function to create tables
 	 */
-	public void createTable()
+	public void createTable(String filename)
 	{
-		
+		String url = "jdbc:sqlite:db/"+filename;
+		String sql = "CREATE TABLE IF NOT EXSITS users (\n"
+						+"id integer PRIMARY KEY,\n"
+						+"username text NOT NULL\n,"
+						+"password text NOT NULL\n"
+						+"accountType boolean NOT NULL);";
 	}
 }

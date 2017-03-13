@@ -8,6 +8,7 @@ public class Main
 		 * start using "DatabaseConnection" once the database exists
 		 */
 		Database db = new Database("company.db");
+		db.createTable("company.db");
 		Login login = new Login();
 		login.loginMenu();
 	}

@@ -1,3 +1,4 @@
+package JUnit;
 
 
 import static org.junit.Assert.*;

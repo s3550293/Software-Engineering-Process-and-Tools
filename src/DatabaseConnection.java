@@ -3,6 +3,7 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 
 /*
  * follow this link to find out how to add tables and access tables
@@ -32,38 +33,50 @@ public class DatabaseConnection
 		/*
 		 * account type boolean 1 for business owner 0 for user
 		 */
-		String query = "INSERT INTO users(userID,username, password, accountType), VALUES(null,?,?,?)";
-		try(Connection connect = this.connect(); PreparedStatement inject = connect.prepareStatement(query))
+		String query = "INSERT INTO users(username, password, accountType) " + "VALUES('"+username+"','"+password+"','"+accountType+"')";
+		try(Connection connect = this.connect(); Statement inject = connect.createStatement())
 		{
 			/*
 			 * Sets the '?' values into the query
 			 */
-			inject.setString(1, username);
-			inject.setString(2, password);
-			inject.setBoolean(3, accountType);
+			inject.executeUpdate(query);
+			System.out.println("User Added");
 		}
 		catch(SQLException sqle)
 		{
 			System.out.println(sqle.getMessage());
 		}
 	}
+	
 	public User getUser(String username)
 	{
-		String query = "SELECT username, password, accountType FROM users WHERE username = ?";
+		int _id = 0;
+		String _username = "John";
+		String _password = "Smith";
+		boolean _accountType = false;
+		String query = "SELECT * FROM users WHERE username like ?";
 		//Creates a null user to return, this can be used to validate user at login
 		User databaseUser = null;
-		try (Connection conn = this.connect(); PreparedStatement inject  = conn.prepareStatement(query))
+		try (Connection connect = this.connect(); PreparedStatement  inject  = connect.prepareStatement(query))
 		{
-			//Sets '?' to username in the query
-			inject.setString(1, username);
-			ResultSet output  = inject.executeQuery();
-			//crates a user from the found infomation
-			databaseUser = new User(output.getString("username"), output.getString("password"), output.getBoolean("accountType"));
+			//Sets '?' to user name in the query
+			//crates a user from the found information
+			inject.setString(1,"%" + username + "%");
+			ResultSet output = inject.executeQuery();
+			while (output.next()){
+				_id = output.getInt(1);
+				_username = output.getString(2);
+				_password = output.getString(3);
+				_accountType = output.getBoolean(4);
+			}
+			databaseUser = new User(_id ,_username, _password, _accountType);
+			output.close();
 		}
 		catch(SQLException sqle)
 		{
-			System.out.println(sqle.getMessage());
+			System.out.println("Getting User: "+sqle.getMessage());
 		}
 		return databaseUser;
 	}
+	
 }

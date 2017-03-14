@@ -17,7 +17,7 @@ public class Database
 	/*
 	 * connect to the database
 	 */
-	public static void createNewDatabase(String filename)
+	public void createNewDatabase(String filename)
 	{
 		/*
 		 * sets the url and name of the database
@@ -53,15 +53,15 @@ public class Database
 		 * 
 		 * creating tables for users and user details to be remembered later
 		 */
-		String queryUser = "CREATE TABLE IF NOT EXSITS users (\n"
-						+"userID integer PRIMARY KEY,\n"
-						+"username text NOT NULL\n,"
-						+"password text NOT NULL\n"
+		String queryUser = "CREATE TABLE IF NOT EXISTS users ("
+						+"userID integer PRIMARY KEY AUTOINCREMENT,"
+						+"username text NOT NULL,"
+						+"password text NOT NULL,"
 						+"accountType boolean NOT NULL);";
-		String queryUserDetails = "CREATE TABLE IF NOT EXSITS userdetails (\n"
-						+"id integer,\n"
-						+"username text NOT NULL\n,"
-						+"Address text NOT NULL\n"
+		String queryUserDetails = "CREATE TABLE IF NOT EXISTS userdetails ("
+						+"id integer NOT NULL,"
+						+"username text NOT NULL,"
+						+"Address text NOT NULL,"
 						+"Phone number boolean NOT NULL,"
 						+ "FOREGIN KEY(id) REFERNECES users(userID));";
 		/*
@@ -69,12 +69,14 @@ public class Database
 		 */
 		try(Connection connect = DriverManager.getConnection(url); Statement smt = connect.createStatement())
 		{
-			smt.executeQuery(queryUser);
-			smt.executeQuery(queryUserDetails);
+			smt.executeUpdate(queryUser);
+			System.out.println("Table Users added");
+			//smt.executeUpdate(queryUserDetails);
+			//System.out.println("Table User Details added");
 		}
 		catch(SQLException sqle)
 		{
-			
+			System.out.println("Adding Table: "+sqle.getMessage());
 		}
 	}
 	/*

@@ -58,6 +58,7 @@ public class Database
 						+"username text NOT NULL,"
 						+"password text NOT NULL,"
 						+"accountType boolean NOT NULL);";
+		
 		String queryUserDetails = "CREATE TABLE IF NOT EXISTS userdetails ("
 						+"id integer NOT NULL,"
 						+"username text NOT NULL,"

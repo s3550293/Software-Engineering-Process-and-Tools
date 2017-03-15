@@ -1,24 +1,36 @@
 import org.junit.Test;
 import static org.junit.Assert.*;
+import org.junit.Before;
 
 public class RegisterJUnit
 {
 	Register registerUnit = new Register();
+	String result_UN;
+	boolean result_AT;
+	
+	@Before
+	public void setup_UsernameTest()
+	{
+		result_UN = registerUnit.checkTakenUsername("one");
+	}
+	
 	@Test
     public void testUsername()
 	{
-        String result = registerUnit.checkTakenUsername("one");
-        assertEquals("one", result);
-        result = registerUnit.checkTakenUsername("Pear");
-        assertEquals("apple", result);
+        assertEquals("one", result_UN);
 
     }
+	
+	@Before
+	public void setup_TestAccountType()
+	{
+		result_AT = registerUnit.setAccountType(1);
+	}
+	
 	@Test
 	public void testAccountType()
 	{
-		boolean result = registerUnit.setAccountType(1);
-		assertEquals(true, result);
-		result = registerUnit.setAccountType(2);
-        assertEquals(false, result);
+		assertEquals(true, result_AT);
+		assertNotSame(false, result_AT);
 	}
 }

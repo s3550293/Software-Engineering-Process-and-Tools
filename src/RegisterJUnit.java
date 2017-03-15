@@ -33,4 +33,26 @@ public class RegisterJUnit
 		assertEquals(true, result_AT);
 		assertNotSame(false, result_AT);
 	}
+	
+	@Before
+	public void setUp()
+	{
+
+	}
+	public boolean testUserName(String string) 
+	{
+		return false;
+	}
+	
+	@Test
+	public void CheckUserName() 
+	{
+		assertFalse(testUserName("1010101LUKE"));
+		assertFalse(testUserName(""));
+		assertFalse(testUserName(null));
+		assertFalse(testUserName("LUKEEEEEEEEEEEEEEEEEEEEEEEEEEE"));
+		
+		assertTrue(testUserName("Luke Mason"));
+		assertTrue(testUserName("LukeyyyMason"));
+	}
 }

@@ -55,10 +55,10 @@ public class DatabaseConnection
 		User databaseUser = null;
 		try (Connection conn = this.connect(); PreparedStatement inject  = conn.prepareStatement(query))
 		{
-			//Sets '?' to username in the query
+			//Sets '?' to user name in the query
 			inject.setString(1, username);
 			ResultSet output  = inject.executeQuery();
-			//crates a user from the found infomation
+			//crates a user from the found information
 			databaseUser = new User(output.getString("username"), output.getString("password"), output.getBoolean("accountType"));
 		}
 		catch(SQLException sqle)

@@ -54,17 +54,18 @@ public class Database
 		 * 
 		 * creating tables for users and user details to be remembered later
 		 */
-		String queryUser = "CREATE TABLE IF NOT EXSITS users (\n"
+		String queryUser = "CREATE TABLE IF NOT EXISTS users (\n"
 						+"userID integer PRIMARY KEY,\n"
-						+"username text NOT NULL\n,"
-						+"password text NOT NULL\n"
-						+"accountType boolean NOT NULL);";
-		String queryUserDetails = "CREATE TABLE IF NOT EXSITS userdetails (\n"
+						+"username text NOT NULL,\n"
+						+"password text NOT NULL,\n"
+						+"accountType boolean NOT NULL\n);";
+		
+		String queryUserDetails = "CREATE TABLE IF NOT EXISTS userdetails (\n"
 						+"id integer,\n"
-						+"username text NOT NULL\n,"
-						+"Address text NOT NULL\n"
-						+"Phone number boolean NOT NULL,"
-						+ "FOREGIN KEY(id) REFERNECES users(userID));";
+						+"username text NOT NULL,\n"
+						+"Address text NOT NULL,\n"
+						+"Phone number boolean NOT NULL,\n"
+						+ "FOREIGN KEY(id) REFERENCES users(userID)\n);";
 		/*
 		 * Attempting to connect to the database so tables can be created
 		 */
@@ -75,7 +76,7 @@ public class Database
 		}
 		catch(SQLException sqle)
 		{
-			
+			System.out.println(sqle.getMessage());
 		}
 	}
 	/*

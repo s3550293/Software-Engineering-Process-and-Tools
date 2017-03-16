@@ -1,11 +1,16 @@
-package testCases;
-import main_Package.*;
+package main_Package;
 import static org.junit.Assert.*;
 import java.sql.*;
 
-import org.junit.*;
+import org.junit.After;
+import org.junit.AfterClass;
+import org.junit.Before;
+import org.junit.BeforeClass;
+import org.junit.Test;
 
-public class AddWorkingTimeDates {
+
+public class AddWorkingTime {
+
 	/* Create at least 6 tests 
 	 * 
 	 * 1. Check if the employee exists - EmployeeExistsTest()
@@ -19,6 +24,13 @@ public class AddWorkingTimeDates {
 	
 	@BeforeClass
 	public static void setUpBeforeClass() throws Exception {
+		Database db = new Database("MockupDB");
+		db.createTable("MockupDB");
+		DatabaseConnection dc = new DatabaseConnection();
+		dc.addUser("Panha", "abc", true);
+		//true = business owner
+		
+		dc.getUser("Panha");
 		
 	}
 
@@ -28,8 +40,6 @@ public class AddWorkingTimeDates {
 
 	@Before
 	public void setUp() throws Exception {
-		Database db = new Database("MockupDB");
-		//set up database which contains a set of employee
 	}
 
 	@After
@@ -38,9 +48,7 @@ public class AddWorkingTimeDates {
 
 	@Test
 	public void EmployeeExistsTest() {
-		//retrieve employeeID for DB when search if the employee exists
+		assertEquals(5,5);
 	}
-	
-	
-
 }
+

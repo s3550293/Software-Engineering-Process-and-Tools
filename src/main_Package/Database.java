@@ -66,13 +66,22 @@ public class Database
 						+"Address text NOT NULL,\n"
 						+"Phone number boolean NOT NULL,\n"
 						+ "FOREIGN KEY(id) REFERENCES users(userID)\n);";
+		String queryEmployeeDetails = "CREATE TABLE IF NOT EXISTS employeedetails ("
+				+"emID integer NOT NULL,\n"
+				+"Name text NOT NULL,\n"
+				+"Address text NOT NULL,\n"
+				+"PhoneNumber integer NOT NULL"
+				+");";
+
 		/*
 		 * Attempting to connect to the database so tables can be created
 		 */
 		try(Connection connect = DriverManager.getConnection(url); Statement smt = connect.createStatement())
 		{
-			smt.executeQuery(queryUser);
-			smt.executeQuery(queryUserDetails);
+			//smt.executeQuery(queryUser);
+			//smt.executeQuery(queryUserDetails);
+			smt.executeQuery(queryEmployeeDetails);
+			System.out.println("new table created");
 		}
 		catch(SQLException sqle)
 		{

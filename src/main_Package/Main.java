@@ -10,6 +10,7 @@ public class Main
 		 */
 		Database db = new Database("company.db");
 		db.createTable("company.db");
+		
 		Login login = new Login();
 		login.loginMenu();
 	}

@@ -20,13 +20,4 @@ public class User
 	{
 		return _username + " " + _password + " " + _accountType;
 	}
-	public String getUsername() 
-	{
-		
-		return _username;
-	}
-	public String getPassword() 
-	{
-		return _password;
-	}
 }

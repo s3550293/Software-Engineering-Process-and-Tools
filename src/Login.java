@@ -12,7 +12,7 @@ public class Login
 	public void loginMenu()
 	{
 		boolean flag = true; //Boolean set for the while loop to keep looping until the user makes the correct choice
-		System.out.printf("%-1s %s\n", "", "Company Login");
+		System.out.printf("\n%-1s %s\n", "", "Company Login");
 		System.out.printf("%s\n","---------------------------");
 		System.out.printf("%-3s %-2s %s\n", "", "1.", "Login");
 		System.out.printf("%-3s %-2s %s\n", "", "2.", "Register");

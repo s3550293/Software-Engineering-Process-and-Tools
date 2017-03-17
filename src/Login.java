@@ -4,7 +4,7 @@ public class Login
 {
 	public Login()
 	{
-		//code
+	
 	}
 	/*
 	 * loginMenu displays the user login menu to the user
@@ -30,7 +30,7 @@ public class Login
 				switch(choice)
 				{
 					case 1:
-						//Todo
+						login();
 						break;
 					case 2:
 						//Todo
@@ -48,5 +48,59 @@ public class Login
 			}
 		}
 		userInput.close();
+	}
+	public void login()
+	{
+		DatabaseConnection connect = new DatabaseConnection();
+		Scanner scanner = new Scanner (System.in);
+
+		String userName;
+		String pass;
+		boolean passCheck=false;
+		System.out.printf("%s\n%s", "Please enter your username", "user> ");
+		userName = scanner.nextLine();
+
+		if(userName== connect.getUser(userName).getUsername())
+		{
+			while(passCheck==false)
+			{
+				System.out.printf("%s\n%s", "Please enter password", "user> ");
+				pass = scanner.nextLine();
+				if(pass== connect.getUser(userName).getPassword())
+				{
+					System.out.printf("\n%-1s", "", "Menu");
+					//user menu
+				}
+				else
+				{
+					System.out.printf("\n%-1s %s\n", "", "Incorrect Password");
+					passCheck=false;
+				}
+			}
+		}
+		else
+		{
+			System.out.printf("\n%-1s %s\n", "", "Username does not exist");
+			System.out.printf("%-3s %-2s %s\n", "", "1.", "Register");
+			System.out.printf("%-3s %-2s %s\n", "", "2.", "Try Again");
+			System.out.printf("%-3s %-2s %s\n", "", "3.", "Exit");
+			System.out.printf("%s\n%s", "Please chose a option between 1 and 2", "user> ");
+			int option = Integer.parseInt(scanner.nextLine());
+			switch(option)
+			{
+			case 1:
+				//Todo
+				break;
+			case 2:
+				login();
+				break;
+			case 3:
+				System.exit(0);
+				break;
+			default:
+				System.out.println("Option not available, please choose again");
+			}
+		}
+		scanner.close();
 	}
 }

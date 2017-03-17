@@ -11,8 +11,8 @@ public class Main
 		 * start using "DatabaseConnection" once the database exists
 		 * tables are to be writtien before completeion
 		 */
-		//Database db = new Database("company.db");
-		//db.createTable("company.db");
+		Database db = new Database("company.db");
+		db.createTable("company.db");
 		
 		/*
 		 * DatabaseConnection is to be used to connect and get data from the database
@@ -22,6 +22,7 @@ public class Main
 		 * other functions similar to addUser will be added later ie add booking
 		 */
 		//connect.addUser("William", "Apples22", false);
+		
 		
 		User bob = connect.getUser("William");
 		System.out.println(bob.toString());

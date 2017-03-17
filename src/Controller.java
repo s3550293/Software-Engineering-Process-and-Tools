@@ -4,6 +4,10 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
+import java.sql.Statement;
+import java.sql.Connection;
+import java.sql.*;
+
 import java.util.Scanner;
 
 import org.junit.Before;
@@ -184,7 +188,37 @@ public class Controller
 		return false;
 	}
 	
+	public boolean employeeIDCheck(int id) throws SQLException {
+		String EmployeeIDquery = "SELECT * FROM employeedetails";
+		Statement stmt = null;
+		String url = "jdbc:sqlite:db/company.db";
+		
+		try(Connection connect = DriverManager.getConnection(url)){
+			stmt = connect.createStatement();
+			ResultSet rs = stmt.executeQuery(EmployeeIDquery);
+			
+			//loop result set
+			while(rs.next()){
+				int empID = rs.getInt("emID");
+				if(empID == id){
+					System.out.println("id retrieved is " + id);
+					return true;
+				}
+			}
+			rs.close();
+			
+		}catch(Exception ex){
+			System.out.println(ex.getMessage());
+		}
+		return false;
+
+	}
 	
+	
+	
+	
+	
+
 	
 	
 	@Before
@@ -203,6 +237,13 @@ public class Controller
 		assertTrue(checkInputToContainInvalidChar("luke%@#$"));
 	}
 
+	@Test
+	public void testEmpID() throws SQLException{
+		
+		assertFalse(employeeIDCheck(123));
+		assertTrue(employeeIDCheck(223));
+	}
+	
 	@Test
 	public void testChangeInputIntoValidInteger() 
 	{

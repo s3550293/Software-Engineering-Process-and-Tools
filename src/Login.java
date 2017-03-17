@@ -4,7 +4,6 @@ public class Login
 {
 	public Login()
 	{
-	
 	}
 	/*
 	 * loginMenu displays the user login menu to the user
@@ -53,13 +52,13 @@ public class Login
 	{
 		DatabaseConnection connect = new DatabaseConnection();
 		Scanner scanner = new Scanner (System.in);
+		
 
-		String userName;
-		String pass;
+		String userName=null;
+		String pass=null;
 		boolean passCheck=false;
 		System.out.printf("%s\n%s", "Please enter your username", "user> ");
 		userName = scanner.nextLine();
-
 		if(userName== connect.getUser(userName).getUsername())
 		{
 			while(passCheck==false)
@@ -70,6 +69,8 @@ public class Login
 				{
 					System.out.printf("\n%-1s", "", "Menu");
 					//user menu
+					passCheck=true;
+					break;
 				}
 				else
 				{

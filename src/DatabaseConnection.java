@@ -83,39 +83,46 @@ public class DatabaseConnection
 		}
 		return databaseUser;
 	}
+	
+	//This function finds a selection of employees that matches the string name 
+	//and displays the employees with their relative ID's
+	//getEmployee(int ID) follows on from this.
+	public String findEmployee(String name)
+	{
+		return name;
+	}
 	public Employee getEmployee(int employeeID)
 	{
 		Employee databaseEmployee = null;
-		String name;
-		int payRate;
-		String query = "SELECT * FROM employees WHERE employeeID like ?"; 
-		//databaseEmployee  = new Employee(employeeID ,name, payRate); 
-		return databaseEmployee;
-		/*try (Connection connect = this.connect(); PreparedStatement  inject  = connect.prepareStatement(query))
+		int id = 0;
+		String name = "test";
+		int payRate = 0;
+		String query = "SELECT * FROM EMPLOYEES WHERE employeeID like ?"; 
+
+		try (Connection connect = this.connect(); PreparedStatement  inject  = connect.prepareStatement(query))
 		{
 			//Sets '?' to user name in the query
 			//crates a user from the found information
-			inject.setString(employeeID);
+			inject.setInt(1,employeeID);
 			ResultSet output = inject.executeQuery();
 			while (output.next()){
-				_id = output.getInt(1);
-				_username = output.getString(2);
-				_password = output.getString(3);
-				_accountType = output.getBoolean(4);
+				id = output.getInt(1);
+				name = output.getString(2);
+				payRate = output.getInt(3);
 			}
-			databaseUser = new User(_id ,_username, _password, _accountType);
+			databaseEmployee = new Employee(id ,name, payRate);
 			output.close();
 		}
 		catch(SQLException sqle)
 		{
-			System.out.println("Getting User: "+sqle.getMessage());
+			System.out.println("Getting Employee: "+sqle.getMessage());
 		}
-		return databaseUser;*/
+		return databaseEmployee;
 	}
 	
 	public void addEmployee(String name, int payRate)
 	{
-		String query = "INSERT INTO EMPLOYEES " + "VALUES ('" + name + "'," + payRate + ");";
+		String query = "INSERT INTO EMPLOYEES(name, payRate) " + "VALUES ('" + name + "'," + payRate + ");";
 		try(Connection connect = this.connect(); Statement inject = connect.createStatement())
 		{
 			/*
@@ -133,17 +140,31 @@ public class DatabaseConnection
 	@Before
 	public void setUp()
 	{
-		addEmployee("Luke Mason", 1000);
+		Database db = new Database("company.db");
+		db.createTable("company.db");
 	}
 	@Test
-	public void testAddEmployee()
-	{
-		assertEquals("Luke Mason  $1000",getEmployee(1));
+	public void testAddEmployeeAndTestGetEmployee()
+	{	
+		addEmployee("Luke Mason", 1000);
+		addEmployee("Jacob Boehm", 123);
+		addEmployee("Jake Mason", 30);
+		addEmployee("Leonardo Decaprio", 12);
+		
+		Employee Luke_Mason = getEmployee(1);
+		Employee Jacob_Boehm = getEmployee(2);
+		Employee Jake_Mason = getEmployee(3);
+		Employee Leonardo_Decaprio = getEmployee(4);
+		
+		assertTrue(Luke_Mason.toString().equals("ID: 1   Name: Luke Mason   Pay Rate: $1000"));
+		assertTrue(Jacob_Boehm.toString().equals("ID: 2   Name: Jacob Boehm   Pay Rate: $123"));
+		assertTrue(Jake_Mason.toString().equals("ID: 3   Name: Jake Mason   Pay Rate: $30"));
+		assertTrue(Leonardo_Decaprio.toString().equals("ID: 4   Name: Leonardo Decaprio   Pay Rate: $12"));
 	}
 	@After
 	public void tearDown()
 	{
-		
+		//Connection connect = this.connect(); Statement inject = connect.createStatement();
+		//inject.executeUpdate("DROP TABLE EMPLOYEES;");
 	}
-	
 }

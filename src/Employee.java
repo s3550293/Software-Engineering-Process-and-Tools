@@ -17,6 +17,6 @@ public class Employee {
 	
 	public String toString()
 	{
-		return name + "  $" + payRate;
+		return "ID: " + id + "   Name: " + name + "   Pay Rate: $" + payRate;
 	}
 }

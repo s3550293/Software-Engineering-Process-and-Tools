@@ -67,10 +67,10 @@ public class Database
 						+ "FOREGIN KEY(id) REFERNECES users(userID));";
 		
 		String queryEmployees = "CREATE TABLE IF NOT EXISTS EMPLOYEES ("
-								+"employeeID INT NOT NULL AUTO_INCREMENT,"
+								+"employeeID integer PRIMARY KEY AUTOINCREMENT,"
 								+"name VARCHAR(40) NOT NULL,"
-								+"payRate INT NOT NULL,"
-								+"PRIMARY KEY(employeeID));";
+								+"payRate integer NOT NULL);";
+								//+"PRIMARY KEY(employeeID));";
 		
 		String queryEmployeesWorkingTimes = "CREATE TABLE IF NOT EXISTS EMPLOYEES_WORKING_TIMES ("
 											+"employeeID INT NOT NULL,"
@@ -90,16 +90,16 @@ public class Database
 			System.out.println("Table 'Users' added");
 			
 			//Creating Table 'USERS_DETAILS'
-			smt.executeUpdate(queryUserDetails);
-			System.out.println("Table 'User Details added");
+			//smt.executeUpdate(queryUserDetails);
+			//System.out.println("Table 'User Details added");
 			
 			//Creating Table 'EMPLOYEES'
 			smt.executeUpdate(queryEmployees);
-			System.out.println("Table 'Employees' added");
+			System.out.println("Table 'EMPLOYEES' added");
 			
 			//Creating Table 'EMPLOYEES_WORKING_TIMES'
 			smt.executeUpdate(queryEmployeesWorkingTimes);
-			System.out.println("Table 'Employees Working Times' added");
+			System.out.println("Table 'EMPLOYEES_WORKING_TIMES' added");
 		}
 		catch(SQLException sqle)
 		{

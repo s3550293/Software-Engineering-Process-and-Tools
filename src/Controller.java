@@ -1,17 +1,15 @@
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
-
-import java.util.Scanner;
-
 import org.junit.Before;
 import org.junit.Test;
+import java.util.Scanner;
+
 
 public class Controller
 {
 	public Controller(){}
 	
-	Scanner kb = new Scanner(System.in);
 	
 	/*  
 	 * 
@@ -20,6 +18,8 @@ public class Controller
 	 */
 	public boolean addNewEmployee()
 	{
+		Scanner kb = new Scanner(System.in);
+		DatabaseConnection connect = new DatabaseConnection();
 		boolean loopAgain;
 		String employeeName;
 		String employeePayRate;
@@ -79,14 +79,15 @@ public class Controller
 			switch(answer)
 			{
 				case 1:
-					addEmployeeToDatabase(returnNextEmployeeId(),employeeName, employeePayRate2);
-					if(!(addWorkingTimeForNextMonth(returnNextEmployeeId())))
+					connect.addEmployee(employeeName, employeePayRate2);
+					/*if(!(addWorkingTimeForNextMonth(numberOfEmployees)))
 					{
-						System.out.println("Exitting to main menu");
+						System.out.println("Exiting to main menu");
 						return false;
-					}
+					}*/
+					System.out.println("ADD WORKING TIME FOR THIS EMPLOYEE NOT IMPLEMEMENTED, New Employee added");
 					return true;
-				case 2: addEmployeeToDatabase(returnNextEmployeeId(),employeeName, employeePayRate2); 
+				case 2: connect.addEmployee(employeeName, employeePayRate2); 
 						return true;
 				case 3: 
 					do
@@ -163,26 +164,11 @@ public class Controller
 	
 	//Counts how many employees there currently are in the database and generates 
 	//the next ID according to that number e.g 15 current employees, next id = "00016"
-	public String returnNextEmployeeId()
-	{
-		/* SELECT COUNT(employeeID) FROM employee; 
-		 */
-		// int amountOfEmployees;
-		String id = "";
-		return id;
-	}
-	
-	public void addEmployeeToDatabase(String id, String name, int payRate)
-	{
-		String insertSql = "INSERT INTO employee VALUES ('" + id + "','" + name + "'," + payRate + ");";
-	}
-	
+
 	public boolean addWorkingTimeForNextMonth(String Id)
 	{
 		return false;
 	}
-	
-	
 	
 	
 	@Before

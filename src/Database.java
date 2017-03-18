@@ -65,15 +65,41 @@ public class Database
 						+"Address text NOT NULL,"
 						+"Phone number boolean NOT NULL,"
 						+ "FOREGIN KEY(id) REFERNECES users(userID));";
+		
+		String queryEmployees = "CREATE TABLE IF NOT EXISTS EMPLOYEES ("
+								+"employeeID INT NOT NULL AUTO_INCREMENT,"
+								+"name VARCHAR(40) NOT NULL,"
+								+"payRate INT NOT NULL,"
+								+"PRIMARY KEY(employeeID));";
+		
+		String queryEmployeesWorkingTimes = "CREATE TABLE IF NOT EXISTS EMPLOYEES_WORKING_TIMES ("
+											+"employeeID INT NOT NULL,"
+											+"date VARCHAR(12) NOT NULL,"
+											+"startTime VARCHAR(10) NOT NULL,"
+											+"endTime VARCHAR(10) NOT NULL,"
+											+"FOREIGN KEY(employeeID) REFERENCES employees(employeeID));";
+		
+		
 		/*
 		 * Attempting to connect to the database so tables can be created
 		 */
 		try(Connection connect = DriverManager.getConnection(url); Statement smt = connect.createStatement())
 		{
+			//Creating Table 'USERS'
 			smt.executeUpdate(queryUser);
-			System.out.println("Table Users added");
-			//smt.executeUpdate(queryUserDetails);
-			//System.out.println("Table User Details added");
+			System.out.println("Table 'Users' added");
+			
+			//Creating Table 'USERS_DETAILS'
+			smt.executeUpdate(queryUserDetails);
+			System.out.println("Table 'User Details added");
+			
+			//Creating Table 'EMPLOYEES'
+			smt.executeUpdate(queryEmployees);
+			System.out.println("Table 'Employees' added");
+			
+			//Creating Table 'EMPLOYEES_WORKING_TIMES'
+			smt.executeUpdate(queryEmployeesWorkingTimes);
+			System.out.println("Table 'Employees Working Times' added");
 		}
 		catch(SQLException sqle)
 		{

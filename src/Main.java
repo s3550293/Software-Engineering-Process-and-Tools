@@ -7,10 +7,10 @@ public class Main
 		/*
 		 * Database class should only be used once at the start, once the database is created there is no need for it
 		 * start using "DatabaseConnection" once the database exists
-		 * tables are to be writtien before completeion
+		 * tables are to be written before completion
 		 */
-		//Database db = new Database("company.db");
-		//db.createTable("company.db");
+		Database db = new Database("company.db");
+		db.createTable("company.db");
 		
 		/*
 		 * DatabaseConnection is to be used to connect and get data from the database
@@ -20,6 +20,7 @@ public class Main
 		 * other functions similar to addUser will be added later ie add booking
 		 */
 		//connect.addUser("William", "Apples22", false);
+		//connect.
 		
 		User bob = connect.getUser("William");
 		System.out.println(bob.toString());

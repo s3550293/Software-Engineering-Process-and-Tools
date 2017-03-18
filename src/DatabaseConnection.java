@@ -5,6 +5,11 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
+import static org.junit.Assert.*;
+
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
 /*
  * follow this link to find out how to add tables and access tables
  * http://www.sqlitetutorial.net/sqlite-java/
@@ -77,6 +82,68 @@ public class DatabaseConnection
 			System.out.println("Getting User: "+sqle.getMessage());
 		}
 		return databaseUser;
+	}
+	public Employee getEmployee(int employeeID)
+	{
+		Employee databaseEmployee = null;
+		String name;
+		int payRate;
+		String query = "SELECT * FROM employees WHERE employeeID like ?"; 
+		//databaseEmployee  = new Employee(employeeID ,name, payRate); 
+		return databaseEmployee;
+		/*try (Connection connect = this.connect(); PreparedStatement  inject  = connect.prepareStatement(query))
+		{
+			//Sets '?' to user name in the query
+			//crates a user from the found information
+			inject.setString(employeeID);
+			ResultSet output = inject.executeQuery();
+			while (output.next()){
+				_id = output.getInt(1);
+				_username = output.getString(2);
+				_password = output.getString(3);
+				_accountType = output.getBoolean(4);
+			}
+			databaseUser = new User(_id ,_username, _password, _accountType);
+			output.close();
+		}
+		catch(SQLException sqle)
+		{
+			System.out.println("Getting User: "+sqle.getMessage());
+		}
+		return databaseUser;*/
+	}
+	
+	public void addEmployee(String name, int payRate)
+	{
+		String query = "INSERT INTO EMPLOYEES " + "VALUES ('" + name + "'," + payRate + ");";
+		try(Connection connect = this.connect(); Statement inject = connect.createStatement())
+		{
+			/*
+			 * Sets the '?' values into the query
+			 */
+			inject.executeUpdate(query);
+			System.out.println("Employee '"+name+"' Added");
+		}
+		catch(SQLException sqle)
+		{
+			System.out.println(sqle.getMessage());
+		}
+	}
+	
+	@Before
+	public void setUp()
+	{
+		addEmployee("Luke Mason", 1000);
+	}
+	@Test
+	public void testAddEmployee()
+	{
+		assertEquals("Luke Mason  $1000",getEmployee(1));
+	}
+	@After
+	public void tearDown()
+	{
+		
 	}
 	
 }

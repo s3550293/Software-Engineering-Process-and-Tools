@@ -26,6 +26,11 @@ public class User
 		
 		return _username;
 	}
+	
+	public boolean getAccountType(){
+		return _accountType;
+	}
+	
 	public String getPassword() 
 	{
 		return _password;

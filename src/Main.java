@@ -22,7 +22,7 @@ public class Main
 		 * other functions similar to addUser will be added later ie add booking
 		 */
 		//connect.addUser("William", "Apples22", false);
-		
+		connect.addUser("david","divad",true);
 		
 		User bob = connect.getUser("William");
 		System.out.println(bob.toString());

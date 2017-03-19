@@ -73,7 +73,19 @@ public class Database
 				+"Address text NOT NULL,\n"
 				+"PhoneNumber integer NOT NULL,"
 				+");";
-
+		String queryBusinessOwner = "CREATE TABLE IF NOT EXISTS businessowner ("
+				+"boID integer NOT NULL,"
+				+"Name text NOT NULL,"
+				+"Business text NOT NULL,"
+				+"Address text NOT NULL,"
+				+"PhoneNumber integer NOT NULL,"
+				+"FOREIGN KEY(boID) REFERENCES users(userID));";
+		String queryCustomer = "CREATE TABLE IF NOT EXISTS customerinfo ("
+				+"cusID integer NOT NULL,"
+				+"Name text NOT NULL,"
+				+"Address text NOT NULL,"
+				+"PhoneNumber integer NOT NULL,"
+				+"FOREIGN KEY (cusID) REFERENCES users(userID))";
 		
 		
 		/*
@@ -83,6 +95,8 @@ public class Database
 		{
 			//smt.executeUpdate(queryEmployeeDetails);
 			smt.executeUpdate(queryUser);
+			smt.executeUpdate(queryBusinessOwner);
+			smt.executeUpdate(queryCustomer);
 			System.out.println("Table Users added");
 			//smt.executeUpdate(queryUserDetails);
 			//System.out.println("Table User Details added");

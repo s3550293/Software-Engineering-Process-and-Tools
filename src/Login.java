@@ -62,16 +62,20 @@ public class Login
 		boolean passCheck=false;
 		System.out.printf("%s\n%s", "Please enter your username", "user> ");
 		userName = scanner.nextLine();
-		if(userName== connect.getUser(userName).getUsername())
+		if(userName.equals(connect.getUser(userName).getUsername()))
 		{
 			while(passCheck==false)
 			{
 				System.out.printf("%s\n%s", "Please enter password", "user> ");
 				pass = scanner.nextLine();
-				if(pass== connect.getUser(userName).getPassword())
+				if(pass.equals(connect.getUser(userName).getPassword()))
 				{
 					passCheck=true;
-					companyMenu();
+					if(connect.getUser(userName).getAccountType() == true){
+						companyMenu();
+					}else{
+						customerMenu();
+					}
 				}
 				else
 				{
@@ -105,6 +109,46 @@ public class Login
 		}
 		scanner.close();
 	}
+	
+	public void customerMenu(){
+Scanner scanner = new Scanner(System.in);
+		
+		System.out.printf("\n%-1s %s\n", "", "Customer Menu");
+		System.out.printf("%s\n","---------------------------");
+		System.out.printf("%-3s %-2s %s\n", "", "1.", ".......");
+		System.out.printf("%-3s %-2s %s\n", "", "2.", ".......");
+		System.out.printf("%-3s %-2s %s\n", "", "3.", ".......");
+		System.out.printf("%-3s %-2s %s\n", "", "4.", ".......");
+		System.out.printf("%-3s %-2s %s\n", "", "5.", ".......");
+		System.out.printf("%-3s %-2s %s\n", "", "6.", "Log Out");
+		int selection = Integer.parseInt(scanner.nextLine());
+		
+		switch(selection)
+		{
+		case 1:
+			//Todo
+			break;
+		case 2:
+			//Todo
+			break;
+		case 3:
+			//Todo
+			break;
+		case 4:
+			//Todo
+			break;
+		case 5:
+			//Todo
+			break;
+		case 6:
+			System.exit(0);
+			break;
+		default:
+			System.out.println("Option not available, please choose again");
+		}
+		scanner.close();
+	}
+	
 	
 	public void companyMenu()
 	{

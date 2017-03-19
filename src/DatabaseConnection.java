@@ -55,7 +55,7 @@ public class DatabaseConnection
 		int _id = 0;
 		String _username = "John";
 		String _password = "Smith";
-		boolean _accountType = false;
+		boolean _accountType = true;
 		String query = "SELECT * FROM users WHERE username like ?";
 		//Creates a null user to return, this can be used to validate user at login
 		User databaseUser = null;

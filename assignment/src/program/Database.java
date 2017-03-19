@@ -60,32 +60,19 @@ public class Database
 						+"username text NOT NULL,"
 						+"password text NOT NULL,"
 						+"accountType boolean NOT NULL);";
-		
+		@SuppressWarnings("unused")
 		String queryUserDetails = "CREATE TABLE IF NOT EXISTS userdetails ("
 						+"id integer NOT NULL,"
 						+"username text NOT NULL,"
 						+"Address text NOT NULL,"
 						+"Phone number boolean NOT NULL,"
 						+ "FOREGIN KEY(id) REFERNECES users(userID));";
+		@SuppressWarnings("unused")
 		String queryEmployeeDetails = "CREATE TABLE IF NOT EXISTS employeedetails ("
-				+"emID integer NOT NULL,\n"
-				+"Name text NOT NULL,\n"
-				+"Address text NOT NULL,\n"
-				+"PhoneNumber integer NOT NULL,"
-				+");";
-		String queryBusinessOwner = "CREATE TABLE IF NOT EXISTS businessowner ("
-				+"boID integer NOT NULL,"
-				+"Name text NOT NULL,"
-				+"Business text NOT NULL,"
-				+"Address text NOT NULL,"
-				+"PhoneNumber integer NOT NULL,"
-				+"FOREIGN KEY(boID) REFERENCES users(userID));";
-		String queryCustomer = "CREATE TABLE IF NOT EXISTS customerinfo ("
-				+"cusID integer NOT NULL,"
-				+"Name text NOT NULL,"
-				+"Address text NOT NULL,"
-				+"PhoneNumber integer NOT NULL,"
-				+"FOREIGN KEY (cusID) REFERENCES users(userID))";
+						+"emID integer PRIMARY KEY AUTOINCREMENT,\n"
+						+"name text NOT NULL,\n"
+						+"payrate text NOT NULL);";
+
 		
 		
 		/*
@@ -95,8 +82,6 @@ public class Database
 		{
 			//smt.executeUpdate(queryEmployeeDetails);
 			smt.executeUpdate(queryUser);
-			smt.executeUpdate(queryBusinessOwner);
-			smt.executeUpdate(queryCustomer);
 			System.out.println("Table Users added");
 			//smt.executeUpdate(queryUserDetails);
 			//System.out.println("Table User Details added");
@@ -114,6 +99,7 @@ public class Database
 		/*
 		 * Attempting to connect to the database so tables can be created
 		 */
+		@SuppressWarnings("unused")
 		Connection connect = null;
 		String url = "jdbc:sqlite:db/"+filename;
 		try

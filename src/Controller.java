@@ -23,7 +23,7 @@ public class Controller
 		boolean loopAgain;
 		String employeeName;
 		String employeePayRate;
-		int employeePayRate2;
+		double employeePayRate2;
 		//Enter in the employees Full name correctly
 		do
 		{
@@ -57,7 +57,7 @@ public class Controller
 				System.out.println("Exitting to main menu...");
 				return false;
 			}
-			employeePayRate2 = changeInputIntoValidInteger(employeePayRate);
+			employeePayRate2 = changeInputIntoValidDouble(employeePayRate);
 			if(employeePayRate2<0)
 			{
 				System.out.println("The amount you have entered contains invalid characters, is less than 0 or greater that 10000 ");
@@ -119,6 +119,7 @@ public class Controller
 		System.out.println("Unexpected Error: Please consult the developers");
 		return false;
 	}
+
 	//Checks each letter in the string and see's if the letter is not in the alphabet(lower case) and is not in the alphabet(Upper case)
 	//if it is not in either alphabet, then it returns true
 	public boolean checkInputToContainInvalidChar(String string)
@@ -139,17 +140,18 @@ public class Controller
 					}
 				}
 			}
-		}
+		}	
 		return false;
 	}
 	
 	
-	//Changes the string number into an integer
-	//return -1 if the input is a negative number OR if the input contains non-numeric characters
-	public int changeInputIntoValidInteger(String string) 
+	//Changes the string number into an Double
+	//return -1 if the input is a negative number OR if the input contains non-numeric characters except decimal
+	//Checks if the input contains more than 1 decimal
+	public double changeInputIntoValidDouble(String string) 
 	{
 		try {
-		      Integer input = Integer.parseInt(string);
+		      Double input = Double.parseDouble(string);
 		      //Checking to see if the input is a negative, negatives are not used as inputs in this project
 		      if(input < 0 || input > 10000)
 		      {
@@ -181,6 +183,7 @@ public class Controller
 	{
 		assertFalse(checkInputToContainInvalidChar("Luke Mason"));
 		assertFalse(checkInputToContainInvalidChar("LukeyyyMason"));
+		
 		assertTrue(checkInputToContainInvalidChar(""));
 		assertTrue(checkInputToContainInvalidChar("1010101LUKE"));
 		assertTrue(checkInputToContainInvalidChar("LUKEEEEEEEEEEEEEEEEEEEEEEEEEEE                                        "));
@@ -188,17 +191,25 @@ public class Controller
 	}
 
 	@Test
-	public void testChangeInputIntoValidInteger() 
+	public void testChangeInputIntoValidDouble() 
 	{
-		assertEquals(-1,changeInputIntoValidInteger(""));
-		assertEquals(-1,changeInputIntoValidInteger("lel"));
-		assertEquals(-1,changeInputIntoValidInteger("$"));
-		assertEquals(-1,changeInputIntoValidInteger("100$"));
-		assertEquals(-1,changeInputIntoValidInteger("-1"));
-		assertEquals(-1,changeInputIntoValidInteger("10001"));
-		assertEquals(10000,changeInputIntoValidInteger("10000"));
-		assertEquals(10,changeInputIntoValidInteger("10"));
-		assertEquals(0,changeInputIntoValidInteger("0"));
+		assertTrue(-1.0 == changeInputIntoValidDouble("..0"));
+		assertTrue(-1.0 == changeInputIntoValidDouble("0.."));
+		assertTrue(-1.0 == changeInputIntoValidDouble("5..0"));
+		assertTrue(-1.0 == changeInputIntoValidDouble("5.3.2"));
+		assertTrue(-1.0 == changeInputIntoValidDouble(""));
+		assertTrue(-1.0 == changeInputIntoValidDouble("lel"));
+		assertTrue(-1.0 == changeInputIntoValidDouble("$"));
+		assertTrue(-1.0 == changeInputIntoValidDouble("100$"));
+		assertTrue(-1.0 == changeInputIntoValidDouble("-1"));
+		assertTrue(-1.0 == changeInputIntoValidDouble("10001"));
+		
+		assertTrue(0.0 == changeInputIntoValidDouble("0."));
+		assertTrue(0.0 == changeInputIntoValidDouble(".0"));
+		assertTrue(10000.0 == changeInputIntoValidDouble("10000"));
+		assertTrue(10.0 == changeInputIntoValidDouble("10"));
+		assertTrue(0.0 == changeInputIntoValidDouble("0"));
+		
 	}
 
 }

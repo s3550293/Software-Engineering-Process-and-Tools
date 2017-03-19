@@ -22,6 +22,10 @@ public class Employee {
 	}
 	public String getName()
 	{
+		if(name.equals(""))
+		{
+			return "Employee does not exist";
+		}
 		return name;
 	}
 	public double getPayRate()

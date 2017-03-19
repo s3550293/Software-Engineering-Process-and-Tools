@@ -1,5 +1,4 @@
-
-
+package program;
 public class User
 {
 	/*

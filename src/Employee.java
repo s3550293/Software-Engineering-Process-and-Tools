@@ -17,6 +17,10 @@ public class Employee {
 	
 	public String toString()
 	{
+		if(id == 0)
+		{
+			return "Sorry, Employees with that ID do not exist";
+		}
 		return "ID: " + id + "   Name: " + name + "   Pay Rate: $" + payRate;
 	}
 }

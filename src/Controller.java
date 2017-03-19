@@ -39,7 +39,7 @@ public class Controller
 			}
 			if(checkInputToContainInvalidChar(employeeName))
 			{
-				System.out.println("The name you have entered contains non-alphatical characters");
+				System.out.println("The name you have entered contains non-alphabetical characters");
 				System.out.println("Please try again");
 				loopAgain = true;
 			}
@@ -52,7 +52,7 @@ public class Controller
 			employeePayRate = kb.nextLine();
 			//Attempting to change string into an integer
 			//Checking to see if the amount contains any non-digit characters
-			if(employeeName.equalsIgnoreCase("/exit"))
+			if(employeePayRate.equalsIgnoreCase("/exit"))
 			{
 				System.out.println("Exitting to main menu...");
 				return false;
@@ -60,7 +60,7 @@ public class Controller
 			employeePayRate2 = changeInputIntoValidInteger(employeePayRate);
 			if(employeePayRate2<0)
 			{
-				System.out.println("The amount you have entered contains invalid characters, or it is less than 0");
+				System.out.println("The amount you have entered contains invalid characters, is less than 0 or greater that 10000 ");
 				System.out.println("Please try again");
 				loopAgain = true;
 			}

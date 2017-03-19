@@ -19,11 +19,7 @@ public class Main
 		/*
 		 * other functions similar to addUser will be added later ie add booking
 		 */
-		//connect.addUser("William", "Apples22", false);
-		//connect.
-		
-		User bob = connect.getUser("William");
-		System.out.println(bob.toString());
+
 		Login login = new Login();
 		login.loginMenu();
 	}

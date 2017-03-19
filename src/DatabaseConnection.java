@@ -91,13 +91,14 @@ public class DatabaseConnection
 	{
 		return name;
 	}
+
 	public Employee getEmployee(int employeeID)
 	{
 		Employee databaseEmployee = null;
 		int id = 0;
-		String name = "test";
+		String name = "";
 		int payRate = 0;
-		String query = "SELECT * FROM EMPLOYEES WHERE employeeID like ?"; 
+		String query = "SELECT * FROM EMPLOYEES WHERE employeeID like ? "; 
 
 		try (Connection connect = this.connect(); PreparedStatement  inject  = connect.prepareStatement(query))
 		{
@@ -140,31 +141,88 @@ public class DatabaseConnection
 	@Before
 	public void setUp()
 	{
+		//Wiping EMPLOYEES table at start of test in case of any changes manually made via SQLite
+		try(Connection connect = this.connect(); Statement inject = connect.createStatement())
+		{
+			inject.executeUpdate("DROP TABLE EMPLOYEES");
+			System.out.println("Dropped Table");
+		}
+		catch(SQLException sqle)
+		{
+			System.out.println(sqle.getMessage());
+		}
+		//Creates ALL TABLES
 		Database db = new Database("company.db");
 		db.createTable("company.db");
 	}
 	@Test
-	public void testAddEmployeeAndTestGetEmployee()
+	public void testAddEmployee_And_TestGetEmployee_And_TestEmployeeToString()
 	{	
+		//Adding 4 new employees to blank EMPLOYEES table
 		addEmployee("Luke Mason", 1000);
 		addEmployee("Jacob Boehm", 123);
 		addEmployee("Jake Mason", 30);
 		addEmployee("Leonardo Decaprio", 12);
 		
+		//Assigning Employees to the employees in database
 		Employee Luke_Mason = getEmployee(1);
 		Employee Jacob_Boehm = getEmployee(2);
 		Employee Jake_Mason = getEmployee(3);
 		Employee Leonardo_Decaprio = getEmployee(4);
 		
+		//Testing the toString() outputs against the addEmployee inputs
 		assertTrue(Luke_Mason.toString().equals("ID: 1   Name: Luke Mason   Pay Rate: $1000"));
 		assertTrue(Jacob_Boehm.toString().equals("ID: 2   Name: Jacob Boehm   Pay Rate: $123"));
 		assertTrue(Jake_Mason.toString().equals("ID: 3   Name: Jake Mason   Pay Rate: $30"));
+		assertFalse(Jake_Mason.toString().equals("ID: 3   Name: Jake Mason   Pay Rate: $13"));
+		assertFalse(Jake_Mason.toString().equals("ID: 3   Name: BIG BOI   Pay Rate: $30"));
+		assertFalse(Leonardo_Decaprio.toString().equals("ID: 5   Name: Leonardo Decaprio   Pay Rate: $12"));
 		assertTrue(Leonardo_Decaprio.toString().equals("ID: 4   Name: Leonardo Decaprio   Pay Rate: $12"));
+		
+		//Deleting Employee 2 & 3 from EMPLOYEE table
+		try(Connection connect = this.connect(); Statement inject = connect.createStatement())
+		{
+			inject.executeUpdate("DELETE FROM EMPLOYEES WHERE name LIKE '%Jacob%' OR payRate LIKE 30;");
+			System.out.println("Deleted specified employees");
+		}
+		catch(SQLException sqle)
+		{
+			System.out.println(sqle.getMessage());
+		}
+		
+		//Adding new employee After rows have been deleted
+		addEmployee("Harry Potter",666);
+		
+		//Getting employee 5, even though we just deleted two employees
+		Employee Harry_Potter = getEmployee(5);
+		
+		//Getting Employees 2 & 3 that were just deleted
+		Employee Jacob_Boehm_2 = getEmployee(2);
+		Employee Jake_Mason_2 = getEmployee(3);
+	
+		//Testing the output of getting employees that do not exist  E.G ID 2 & 3 (they were deleted just before)
+		assertTrue(Jacob_Boehm_2.toString().equals("Sorry, Employees with that ID do not exist"));
+		assertTrue(Jake_Mason_2.toString().equals("Sorry, Employees with that ID do not exist"));
+		
+		//Testing that the ID of the new employee is 5 and DOES NOT take on the ID of recently deleted employees 2 & 3
+		assertFalse(Harry_Potter.toString().equals("ID: 2   Name: Harry Potter   Pay Rate: $666"));
+		assertFalse(Harry_Potter.toString().equals("ID: 3   Name: Harry Potter   Pay Rate: $666"));
+		assertTrue(Harry_Potter.toString().equals("ID: 5   Name: Harry Potter   Pay Rate: $666"));
+
+		
 	}
 	@After
 	public void tearDown()
 	{
-		//Connection connect = this.connect(); Statement inject = connect.createStatement();
-		//inject.executeUpdate("DROP TABLE EMPLOYEES;");
+		//Deleting table EMPLOYEES after the Test has been executed correctly
+		try(Connection connect = this.connect(); Statement inject = connect.createStatement())
+		{
+			inject.executeUpdate("DROP TABLE EMPLOYEES");
+			System.out.println("Dropped Table");
+		}
+		catch(SQLException sqle)
+		{
+			System.out.println(sqle.getMessage());
+		}
 	}
 }

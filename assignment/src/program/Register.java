@@ -21,7 +21,7 @@ public class Register
 		String _username = "";
 		String _password = "";
 		char _choice = 'y';
-		boolean accountType = true;
+		int accountType = 0;
 		Scanner userInput = new Scanner(System.in);
 		while(flag)
 		{
@@ -49,7 +49,7 @@ public class Register
 			System.out.printf("\n%-1s %s\n", "", "Confirm");
 			String _acc;
 			//create a string that can be printed to display account type
-			if(accountType = false){ _acc = "Business"; }else{ _acc = "Customer"; }
+			if(accountType == 1){ _acc = "Business"; }else{ _acc = "Customer"; }
 			System.out.println("Username: "+_username+" Password: "+_password+" Account Type: "+_acc);
 			System.out.print("[y/n]");
 			_choice = userInput.next().charAt(0);
@@ -126,26 +126,26 @@ public class Register
 		_testAccount = 'n';
 	}
 	//This method grabs the inital user input and selects either customer or business owner as the account type
-	public Boolean setAccountType(char account)
+	public int setAccountType(char account)
 	{
 		if(account == 'y' || account == 'Y')
 		{
-			return false;
+			return 1;
 		}
 		else
 		{
-			return true;
+			return 0;
 		}
 	}
 	@Test
 	public void testsetAccountTypeBusiness()
 	{
-		assertFalse("Account type business", setAccountType(_testAccount));
+		assertEquals("Account type business", 1, setAccountType(_testAccount));
 	}
 	@Test
 	public void testsetAccountTypeCustomer()
 	{
-		assertTrue("Account type customer", setAccountType(_testAccount));
+		assertEquals("Account type customer", 0, setAccountType(_testAccount));
 	}
 	
 }

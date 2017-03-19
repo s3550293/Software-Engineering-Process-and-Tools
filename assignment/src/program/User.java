@@ -6,10 +6,16 @@ public class User
 	 */
 	protected int _id;
 	protected String _username, _password;
-	protected boolean _accountType;
-	public User(int id, String username, String password, boolean accountType)
+	protected int _accountType;
+	public User(int id, String username, String password, int accountType)
 	{
 		_id = id;
+		_username = username;
+		_password = password;
+		_accountType = accountType;
+	}
+	public User(String username, String password, int accountType)
+	{
 		_username = username;
 		_password = password;
 		_accountType = accountType;
@@ -26,7 +32,7 @@ public class User
 		return _username;
 	}
 	
-	public boolean getAccountType(){
+	public int getAccountType(){
 		return _accountType;
 	}
 	

@@ -59,7 +59,7 @@ public class Database
 						+"userID integer PRIMARY KEY AUTOINCREMENT,"
 						+"username text NOT NULL,"
 						+"password text NOT NULL,"
-						+"accountType boolean NOT NULL);";
+						+"accountType integer NOT NULL);";
 		@SuppressWarnings("unused")
 		String queryUserDetails = "CREATE TABLE IF NOT EXISTS userdetails ("
 						+"id integer NOT NULL,"

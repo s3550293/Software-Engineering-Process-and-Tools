@@ -30,7 +30,7 @@ public class DatabaseConnection
         return connect;
 	}
 	
-	public void addUser(String username, String password, boolean accountType)
+	public void addUser(String username, String password, int accountType)
 	{
 		/*
 		 * account type boolean 1 for business owner 0 for user
@@ -55,7 +55,7 @@ public class DatabaseConnection
 		int _id = 0;
 		String _username = "null";
 		String _password = "null";
-		boolean _accountType = false;
+		int _accountType = 0;
 		String query = "SELECT * FROM users WHERE username like ?";
 		//Creates a null user to return, this can be used to validate user at login
 		User databaseUser = null;
@@ -69,7 +69,7 @@ public class DatabaseConnection
 				_id = output.getInt(1);
 				_username = output.getString(2);
 				_password = output.getString(3);
-				_accountType = output.getBoolean(4);
+				_accountType = output.getInt(4);
 			}
 			databaseUser = new User(_id ,_username, _password, _accountType);
 			output.close();

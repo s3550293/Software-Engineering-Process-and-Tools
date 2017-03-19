@@ -71,7 +71,7 @@ public class Login
 				if(pass.equals(connect.getUser(userName).getPassword()))
 				{
 					passCheck=true;
-					if(connect.getUser(userName).getAccountType() == true){
+					if(connect.getUser(userName).getAccountType() == 1){
 						companyMenu();
 					}else{
 						customerMenu();

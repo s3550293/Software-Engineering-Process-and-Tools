@@ -121,7 +121,7 @@ public class DatabaseConnection
 		return databaseEmployee;
 	}
 	
-	public void addEmployee(String name, int payRate)
+	public void addEmployee(String name, double payRate)
 	{
 		String query = "INSERT INTO EMPLOYEES(name, payRate) " + "VALUES ('" + name + "'," + payRate + ");";
 		try(Connection connect = this.connect(); Statement inject = connect.createStatement())
@@ -213,7 +213,12 @@ public class DatabaseConnection
 		Employee Jake_Mason_2 = getEmployee(3);
 	
 		//Testing the output of getting employees that do not exist  E.G ID 2 & 3 (they were deleted just before)
+		assertTrue(Jacob_Boehm_2.getId()==0);
+		assertTrue(Jacob_Boehm_2.getName().equals("Employee does not exist"));
 		assertTrue(Jacob_Boehm_2.toString().equals("Sorry, Employees with that ID do not exist"));
+		
+		assertTrue(Jake_Mason_2.getId()==0);
+		assertTrue(Jake_Mason_2.getName().equals("Employee does not exist"));
 		assertTrue(Jake_Mason_2.toString().equals("Sorry, Employees with that ID do not exist"));
 		
 		//Testing that the ID of the new employee is 5 and DOES NOT take on the ID of recently deleted employees 2 & 3

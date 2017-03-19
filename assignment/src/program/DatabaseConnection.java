@@ -69,6 +69,7 @@ public class DatabaseConnection
 				_id = output.getInt(1);
 				_username = output.getString(2);
 				_password = output.getString(3);
+				System.out.println(output.getInt(4));
 				_accountType = output.getInt(4);
 			}
 			databaseUser = new User(_id ,_username, _password, _accountType);

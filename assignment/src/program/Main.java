@@ -21,11 +21,12 @@ public class Main
 		/*
 		 * other functions similar to addUser will be added later ie add booking
 		 */
-		//connect.addUser("William", "Apples22", false);
-		//connect.addUser("david","divad",true);
-		
+		//connect.addUser("William", "Apples22", 0);
+		//connect.addUser("david","divad",1);
+		User lame = connect.getUser("William");
 		User bob = connect.getUser("david");
 		System.out.println(bob.toString());
+		System.out.println(lame.toString());
 		Login login = new Login();
 		login.loginMenu();
 	}

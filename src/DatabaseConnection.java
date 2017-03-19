@@ -162,22 +162,34 @@ public class DatabaseConnection
 		addEmployee("Luke Mason", 1000);
 		addEmployee("Jacob Boehm", 123);
 		addEmployee("Jake Mason", 30);
-		addEmployee("Leonardo Decaprio", 12);
+		addEmployee("Leonardo Dicaprio", 12);
 		
 		//Assigning Employees to the employees in database
 		Employee Luke_Mason = getEmployee(1);
 		Employee Jacob_Boehm = getEmployee(2);
 		Employee Jake_Mason = getEmployee(3);
-		Employee Leonardo_Decaprio = getEmployee(4);
+		Employee Leonardo_Dicaprio = getEmployee(4);
 		
-		//Testing the toString() outputs against the addEmployee inputs
-		assertTrue(Luke_Mason.toString().equals("ID: 1   Name: Luke Mason   Pay Rate: $1000"));
-		assertTrue(Jacob_Boehm.toString().equals("ID: 2   Name: Jacob Boehm   Pay Rate: $123"));
-		assertTrue(Jake_Mason.toString().equals("ID: 3   Name: Jake Mason   Pay Rate: $30"));
-		assertFalse(Jake_Mason.toString().equals("ID: 3   Name: Jake Mason   Pay Rate: $13"));
-		assertFalse(Jake_Mason.toString().equals("ID: 3   Name: BIG BOI   Pay Rate: $30"));
-		assertFalse(Leonardo_Decaprio.toString().equals("ID: 5   Name: Leonardo Decaprio   Pay Rate: $12"));
-		assertTrue(Leonardo_Decaprio.toString().equals("ID: 4   Name: Leonardo Decaprio   Pay Rate: $12"));
+		//Testing the toString() and get() methods against the different employees
+		assertTrue(Luke_Mason.getId()==1);
+		assertTrue(Luke_Mason.getPayRate()== 1000);
+		assertTrue(Luke_Mason.getName().equals("Luke Mason"));
+		assertTrue(Luke_Mason.toString().equals("ID: 1   Name: Luke Mason   Pay Rate: $1000.0"));
+		
+		assertTrue(Jacob_Boehm.getId()==2);
+		assertTrue(Jacob_Boehm.getPayRate()== 123.0);
+		assertTrue(Jacob_Boehm.getName().equals("Jacob Boehm"));
+		assertTrue(Jacob_Boehm.toString().equals("ID: 2   Name: Jacob Boehm   Pay Rate: $123.0"));
+	
+		assertTrue(Jake_Mason.getId()==3);
+		assertTrue(Jake_Mason.getPayRate()== 30);
+		assertTrue(Jake_Mason.getName().equals("Jake Mason"));
+		assertTrue(Jake_Mason.toString().equals("ID: 3   Name: Jake Mason   Pay Rate: $30.0"));
+		
+		assertTrue(Leonardo_Dicaprio.getId()==4);
+		assertTrue(Leonardo_Dicaprio.getPayRate()== 12);
+		assertTrue(Leonardo_Dicaprio.getName().equals("Leonardo Dicaprio"));
+		assertTrue(Leonardo_Dicaprio.toString().equals("ID: 4   Name: Leonardo Dicaprio   Pay Rate: $12.0"));
 		
 		//Deleting Employee 2 & 3 from EMPLOYEE table
 		try(Connection connect = this.connect(); Statement inject = connect.createStatement())
@@ -205,9 +217,10 @@ public class DatabaseConnection
 		assertTrue(Jake_Mason_2.toString().equals("Sorry, Employees with that ID do not exist"));
 		
 		//Testing that the ID of the new employee is 5 and DOES NOT take on the ID of recently deleted employees 2 & 3
-		assertFalse(Harry_Potter.toString().equals("ID: 2   Name: Harry Potter   Pay Rate: $666"));
-		assertFalse(Harry_Potter.toString().equals("ID: 3   Name: Harry Potter   Pay Rate: $666"));
-		assertTrue(Harry_Potter.toString().equals("ID: 5   Name: Harry Potter   Pay Rate: $666"));
+		assertTrue(Harry_Potter.getId()==5);
+		assertTrue(Harry_Potter.getPayRate()== 666);
+		assertTrue(Harry_Potter.getName().equals("Harry Potter"));
+		assertTrue(Harry_Potter.toString().equals("ID: 5   Name: Harry Potter   Pay Rate: $666.0"));
 
 		
 	}

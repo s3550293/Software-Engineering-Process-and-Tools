@@ -1,13 +1,14 @@
+import org.junit.*;
 
 public class Employee {
 
 	/*
 	 * Protected values used by child classes
 	 */
-	protected int id, payRate;
+	protected int id;
+	protected double payRate;
 	protected String name;
-	protected boolean _accountType;
-	public Employee(int id, String name, int payRate)
+	public Employee(int id, String name, double payRate)
 	{
 		this.id = id;
 		this.name = name;
@@ -15,6 +16,26 @@ public class Employee {
 	}
 	public Employee(){}
 	
+	public int getId()
+	{
+		return id;
+	}
+	public String getName()
+	{
+		return name;
+	}
+	public double getPayRate()
+	{
+		return payRate;
+	}
+	public void setName(String name)
+	{
+		this.name = name;
+	}
+	public void setPayRate(double payRate)
+	{
+		this.payRate = payRate;
+	}
 	public String toString()
 	{
 		if(id == 0)
@@ -23,4 +44,5 @@ public class Employee {
 		}
 		return "ID: " + id + "   Name: " + name + "   Pay Rate: $" + payRate;
 	}
+	
 }

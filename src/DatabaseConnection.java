@@ -97,7 +97,7 @@ public class DatabaseConnection
 		Employee databaseEmployee = null;
 		int id = 0;
 		String name = "";
-		int payRate = 0;
+		double payRate = 0;
 		String query = "SELECT * FROM EMPLOYEES WHERE employeeID like ? "; 
 
 		try (Connection connect = this.connect(); PreparedStatement  inject  = connect.prepareStatement(query))
@@ -109,7 +109,7 @@ public class DatabaseConnection
 			while (output.next()){
 				id = output.getInt(1);
 				name = output.getString(2);
-				payRate = output.getInt(3);
+				payRate = output.getDouble(3);
 			}
 			databaseEmployee = new Employee(id ,name, payRate);
 			output.close();

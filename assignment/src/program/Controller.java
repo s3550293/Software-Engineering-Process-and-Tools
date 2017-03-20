@@ -1,6 +1,5 @@
 package program;
 
-//import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
@@ -22,10 +21,12 @@ public class Controller
 	 */
 	public boolean addNewEmployee()
 	{
+		Scanner kb = new Scanner(System.in);
+		DatabaseConnection connect = new DatabaseConnection();
 		boolean loopAgain;
 		String employeeName;
 		String employeePayRate;
-		int employeePayRate2;
+		double employeePayRate2;
 		//Enter in the employees Full name correctly
 		do
 		{
@@ -37,11 +38,12 @@ public class Controller
 			if(employeeName.equalsIgnoreCase("/exit"))
 			{
 				System.out.println("Exitting to main menu...");
+				kb.close();
 				return false;
 			}
 			if(checkInputToContainInvalidChar(employeeName))
 			{
-				System.out.println("The name you have entered contains non-alphatical characters");
+				System.out.println("The name you have entered contains non-alphabetical characters");
 				System.out.println("Please try again");
 				loopAgain = true;
 			}
@@ -54,15 +56,16 @@ public class Controller
 			employeePayRate = kb.nextLine();
 			//Attempting to change string into an integer
 			//Checking to see if the amount contains any non-digit characters
-			if(employeeName.equalsIgnoreCase("/exit"))
+			if(employeePayRate.equalsIgnoreCase("/exit"))
 			{
 				System.out.println("Exitting to main menu...");
+				kb.close();
 				return false;
 			}
-			employeePayRate2 = changeInputIntoValidInteger(employeePayRate);
+			employeePayRate2 = changeInputIntoValidDouble(employeePayRate);
 			if(employeePayRate2<0)
 			{
-				System.out.println("The amount you have entered contains invalid characters, or it is less than 0");
+				System.out.println("The amount you have entered contains invalid characters, is less than 0 or greater that 10000 ");
 				System.out.println("Please try again");
 				loopAgain = true;
 			}
@@ -81,15 +84,18 @@ public class Controller
 			switch(answer)
 			{
 				case 1:
-					addEmployeeToDatabase(returnNextEmployeeId(),employeeName, employeePayRate2);
-					if(!(addWorkingTimeForNextMonth(returnNextEmployeeId())))
+					connect.addEmployee(employeeName, employeePayRate2);
+					/*if(!(addWorkingTimeForNextMonth(numberOfEmployees)))
 					{
-						System.out.println("Exitting to main menu");
+						System.out.println("Exiting to main menu");
 						return false;
-					}
+					}*/
+					System.out.println("ADD WORKING TIME FOR THIS EMPLOYEE NOT IMPLEMEMENTED, New Employee added");
+					kb.close();
 					return true;
-				case 2: addEmployeeToDatabase(returnNextEmployeeId(),employeeName, employeePayRate2); 
-						return true;
+				case 2: connect.addEmployee(employeeName, employeePayRate2); 
+					kb.close();		
+					return true;
 				case 3: 
 					do
 					{
@@ -98,6 +104,7 @@ public class Controller
 						String exit = kb.nextLine();
 						if(exit.equalsIgnoreCase("y"))
 						{
+							kb.close();
 							return false;
 						}
 						else if(exit.equalsIgnoreCase("n"))
@@ -118,8 +125,10 @@ public class Controller
 		}
 		while(loopAgain);
 		System.out.println("Unexpected Error: Please consult the developers");
+		kb.close();
 		return false;
 	}
+
 	//Checks each letter in the string and see's if the letter is not in the alphabet(lower case) and is not in the alphabet(Upper case)
 	//if it is not in either alphabet, then it returns true
 	public boolean checkInputToContainInvalidChar(String string)
@@ -140,17 +149,18 @@ public class Controller
 					}
 				}
 			}
-		}
+		}	
 		return false;
 	}
 	
 	
-	//Changes the string number into an integer
-	//return -1 if the input is a negative number OR if the input contains non-numeric characters
-	public int changeInputIntoValidInteger(String string) 
+	//Changes the string number into an Double
+	//return -1 if the input is a negative number OR if the input contains non-numeric characters except decimal
+	//Checks if the input contains more than 1 decimal
+	public double changeInputIntoValidDouble(String string) 
 	{
 		try {
-		      Integer input = Integer.parseInt(string);
+		      Double input = Double.parseDouble(string);
 		      //Checking to see if the input is a negative, negatives are not used as inputs in this project
 		      if(input < 0 || input > 10000)
 		      {
@@ -165,28 +175,11 @@ public class Controller
 	
 	//Counts how many employees there currently are in the database and generates 
 	//the next ID according to that number e.g 15 current employees, next id = "00016"
-	public String returnNextEmployeeId()
-	{
-		/* SELECT COUNT(employeeID) FROM employee; 
-		 */
-		// int amountOfEmployees;
-		String id = "";
-		return id;
-	}
-	
-	public void addEmployeeToDatabase(String id, String name, int payRate)
-	{
-		String insertSql = "INSERT INTO employee VALUES ('" + id + "','" + name + "'," + payRate + ");";
-	}
-	
+
 	public boolean addWorkingTimeForNextMonth(String Id)
 	{
 		return false;
 	}
-	
-	
-	
-
 	
 	
 	@Before
@@ -199,31 +192,42 @@ public class Controller
 	{
 		assertFalse(checkInputToContainInvalidChar("Luke Mason"));
 		assertFalse(checkInputToContainInvalidChar("LukeyyyMason"));
+		
 		assertTrue(checkInputToContainInvalidChar(""));
 		assertTrue(checkInputToContainInvalidChar("1010101LUKE"));
 		assertTrue(checkInputToContainInvalidChar("LUKEEEEEEEEEEEEEEEEEEEEEEEEEEE                                        "));
 		assertTrue(checkInputToContainInvalidChar("luke%@#$"));
 	}
+
+	@Test
+	public void testChangeInputIntoValidDouble() 
+	{
+		assertTrue(-1.0 == changeInputIntoValidDouble("..0"));
+		assertTrue(-1.0 == changeInputIntoValidDouble("0.."));
+		assertTrue(-1.0 == changeInputIntoValidDouble("5..0"));
+		assertTrue(-1.0 == changeInputIntoValidDouble("5.3.2"));
+		assertTrue(-1.0 == changeInputIntoValidDouble("..532"));
+		assertTrue(-1.0 == changeInputIntoValidDouble(""));
+		assertTrue(-1.0 == changeInputIntoValidDouble("lel"));
+		assertTrue(-1.0 == changeInputIntoValidDouble("$"));
+		assertTrue(-1.0 == changeInputIntoValidDouble("100$"));
+		assertTrue(-1.0 == changeInputIntoValidDouble("-1"));
+		assertTrue(-1.0 == changeInputIntoValidDouble("10001"));
+		
+		assertTrue(0.0 == changeInputIntoValidDouble("0."));
+		assertTrue(0.0 == changeInputIntoValidDouble(".0"));
+		assertTrue(10000.0 == changeInputIntoValidDouble("10000"));
+		assertTrue(10.0 == changeInputIntoValidDouble("10"));
+		assertTrue(0.0 == changeInputIntoValidDouble("0"));
+		
+	}
+
 	/*
 	@Test
 	public void testEmpID() throws SQLException{
 		
 		assertFalse(employeeIDCheck(123));
 		assertTrue(employeeIDCheck(223));
-	}
-	
-	@Test
-	public void testChangeInputIntoValidInteger() 
-	{
-		assertEquals(-1,changeInputIntoValidInteger(""));
-		assertEquals(-1,changeInputIntoValidInteger("lel"));
-		assertEquals(-1,changeInputIntoValidInteger("$"));
-		assertEquals(-1,changeInputIntoValidInteger("100$"));
-		assertEquals(-1,changeInputIntoValidInteger("-1"));
-		assertEquals(-1,changeInputIntoValidInteger("10001"));
-		assertEquals(10000,changeInputIntoValidInteger("10000"));
-		assertEquals(10,changeInputIntoValidInteger("10"));
-		assertEquals(0,changeInputIntoValidInteger("0"));
 	}
 	*/
 

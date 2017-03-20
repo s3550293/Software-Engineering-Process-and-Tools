@@ -78,7 +78,6 @@ public class Register
 			}
 		}
 	}
-	 
 	
 	@Before
 	public void setupCheckTakenUsernameTrue()

@@ -8,8 +8,10 @@ public class Register
 {
 	private String _Testusername;
 	private char _testAccount;
+	private String _testpassword;
 	private boolean usernameLoop = true;
 	private boolean accountTypeLoop = true;
+	private boolean accountPasswordLoop = true;
 	private DatabaseConnection connect = new DatabaseConnection();
 	
 	public Register(){}
@@ -35,8 +37,15 @@ public class Register
 				_username = userInput.nextLine();
 				checkTakenUsername(_username);
 			}
-			System.out.print("Enter password: ");
-			_password = userInput.nextLine();
+			while(accountPasswordLoop)
+			{
+				System.out.print("Enter password: ");
+				_password = userInput.nextLine();
+				if(checkPassword(_password) == true)
+				{
+					accountPasswordLoop = false;
+				}
+			}
 			System.out.print("are you a business owner [y/n]: ");
 			_choice = userInput.next().charAt(0);
 			//set the account type will loop until customer enters the correct 
@@ -134,6 +143,7 @@ public class Register
 		}
 		else
 		{
+			System.out.println("Error: Password is too short, please enter a longer password");
 			return 0;
 		}
 	}
@@ -146,6 +156,38 @@ public class Register
 	public void testsetAccountTypeCustomer()
 	{
 		assertEquals("Account type customer", 0, setAccountType(_testAccount));
+	}
+	
+	@Before
+	public void setupPasswordCheckLong()
+	{
+		_testpassword = "ThisIsALongPassword";
+	}
+	@Before
+	public void setupPasswordCheckShort()
+	{
+		_testpassword = "Short";
+	}
+	public boolean checkPassword(String _passwod)
+	{
+		if(_passwod.length() > 6)
+		{
+			return true;
+		}
+		else
+		{
+			return false;
+		}
+	}
+	@Test
+	public void testLongPassword()
+	{
+		assertTrue("Password Is long enough", checkPassword(_testpassword));
+	}
+	@Test
+	public void testShortPassword()
+	{
+		assertFalse("Password Is too short", checkPassword(_testpassword));
 	}
 	
 }

@@ -4,6 +4,7 @@ import java.util.Scanner;
 
 public class Business
 {
+	Login logout = new Login();
 	public Business(){ companyMenu(); }
 	
 	public void companyMenu()
@@ -38,7 +39,7 @@ public class Business
 			//Todo
 			break;
 		case 6:
-			System.exit(0);
+			//System.exit(0);
 			break;
 		default:
 			System.out.println("Option not available, please choose again");

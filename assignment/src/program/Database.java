@@ -61,7 +61,7 @@ public class Database
 						+"password text NOT NULL,"
 						+"accountType integer NOT NULL);";
 		@SuppressWarnings("unused")
-		String queryUserDetails = "CREATE TABLE IF NOT EXISTS userdetails ("
+		String queryUserDetails = "CREATE TABLE IF NOT EXISTS clientdetails ("
 						+"id integer NOT NULL,"
 						+"username text NOT NULL,"
 						+"Address text NOT NULL,"

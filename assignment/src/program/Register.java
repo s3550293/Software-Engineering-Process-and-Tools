@@ -79,8 +79,6 @@ public class Register
 		}
 	}
 	
-	public boolean 
-	
 	@Before
 	public void setupCheckTakenUsernameTrue()
 	{

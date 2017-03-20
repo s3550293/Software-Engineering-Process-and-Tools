@@ -4,9 +4,9 @@ import java.util.*;
 
 public class Login
 {
-	public Login()
-	{
-	}
+	 private Business bmenu;
+	 private Customer cmenu;
+	public Login(){ bmenu = new Business(); cmenu = new Customer();}
 	/*
 	 * loginMenu displays the user login menu to the user
 	 */
@@ -72,9 +72,9 @@ public class Login
 				{
 					passCheck=true;
 					if(connect.getUser(userName).getAccountType() == 1){
-						companyMenu();
+						bmenu.companyMenu();
 					}else{
-						customerMenu();
+						cmenu.customerMenu();
 					}
 				}
 				else
@@ -106,86 +106,6 @@ public class Login
 			default:
 				System.out.println("Option not available, please choose again");
 			}
-		}
-		scanner.close();
-	}
-	
-	public void customerMenu(){
-Scanner scanner = new Scanner(System.in);
-		
-		System.out.printf("\n%-1s %s\n", "", "Customer Menu");
-		System.out.printf("%s\n","---------------------------");
-		System.out.printf("%-3s %-2s %s\n", "", "1.", ".......");
-		System.out.printf("%-3s %-2s %s\n", "", "2.", ".......");
-		System.out.printf("%-3s %-2s %s\n", "", "3.", ".......");
-		System.out.printf("%-3s %-2s %s\n", "", "4.", ".......");
-		System.out.printf("%-3s %-2s %s\n", "", "5.", ".......");
-		System.out.printf("%-3s %-2s %s\n", "", "6.", "Log Out");
-		int selection = Integer.parseInt(scanner.nextLine());
-		
-		switch(selection)
-		{
-		case 1:
-			//Todo
-			break;
-		case 2:
-			//Todo
-			break;
-		case 3:
-			//Todo
-			break;
-		case 4:
-			//Todo
-			break;
-		case 5:
-			//Todo
-			break;
-		case 6:
-			System.exit(0);
-			break;
-		default:
-			System.out.println("Option not available, please choose again");
-		}
-		scanner.close();
-	}
-	
-	
-	public void companyMenu()
-	{
-		Scanner scanner = new Scanner(System.in);
-		
-		System.out.printf("\n%-1s %s\n", "", "Company Menu");
-		System.out.printf("%s\n","---------------------------");
-		System.out.printf("%-3s %-2s %s\n", "", "1.", "Check Employee Availability");
-		System.out.printf("%-3s %-2s %s\n", "", "2.", "Add New Employee/Working time");
-		System.out.printf("%-3s %-2s %s\n", "", "3.", "Check Bookings");
-		System.out.printf("%-3s %-2s %s\n", "", "4.", "Make Bookings");
-		System.out.printf("%-3s %-2s %s\n", "", "5.", "Change Employee Working Time");
-		System.out.printf("%-3s %-2s %s\n", "", "6.", "Log Out");
-		int selection = Integer.parseInt(scanner.nextLine());
-		
-		switch(selection)
-		{
-		case 1:
-			//Todo
-			break;
-		case 2:
-			//Todo
-			break;
-		case 3:
-			//Todo
-			break;
-		case 4:
-			//Todo
-			break;
-		case 5:
-			//Todo
-			break;
-		case 6:
-			System.exit(0);
-			break;
-		default:
-			System.out.println("Option not available, please choose again");
 		}
 		scanner.close();
 	}

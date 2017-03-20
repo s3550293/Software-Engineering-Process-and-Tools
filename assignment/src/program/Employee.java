@@ -1,26 +1,58 @@
 package program;
 
-public class Employee 
-{
-	private int _id;
-	private String _name;
-	private String _payRate;
-	
+import org.junit.*;
+
+public class Employee {
+
+	/*
+	 * Protected values used by child classes
+	 */
+	protected int id;
+	protected double payRate;
+	protected String name;
+	public Employee(int id, String name, double payRate)
+	{
+		this.id = id;
+		this.name = name;
+		this.payRate = payRate;
+	}
 	public Employee(){}
-	public Employee(int id, String name, String payRate)
+	public Employee(String name, double payRate)
 	{
-		_id = id;
-		_name = name;
-		_payRate = payRate;
+		this.name = name;
+		this.payRate = payRate;
 	}
-	public Employee(String name, String payRate)
+	public int getId()
 	{
-		_name = name;
-		_payRate = payRate;
+		return id;
+	}
+	public String getName()
+	{
+		if(name.equals(""))
+		{
+			return "Employee does not exist";
+		}
+		return name;
+	}
+	public double getPayRate()
+	{
+		return payRate;
+	}
+	public void setName(String name)
+	{
+		this.name = name;
+	}
+	public void setPayRate(double payRate)
+	{
+		this.payRate = payRate;
+	}
+	public String toString()
+	{
+		if(id == 0)
+		{
+			return "Sorry, Employees with that ID do not exist";
+		}
+		return "ID: " + id + "   Name: " + name + "   Pay Rate: $" + payRate;
 	}
 	
-	public int getID()
-	{
-		return _id;
-	}
 }

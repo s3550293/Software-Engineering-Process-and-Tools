@@ -1,6 +1,13 @@
 package program;
 
+import static org.junit.Assert.*;
+
+import java.io.ByteArrayInputStream;
+import java.io.InputStream;
 import java.util.*;
+import java.util.zip.CheckedOutputStream;
+
+import org.junit.Test;
 
 public class Login
 {
@@ -72,7 +79,8 @@ public class Login
 				{
 					passCheck=true;
 					if(connect.getUser(userName).getAccountType() == 1){
-						companyMenu();
+						Business menu = new Business();
+						menu.companyMenu();
 					}else{
 						customerMenu();
 					}
@@ -110,8 +118,41 @@ public class Login
 		scanner.close();
 	}
 	
+	
+	public int checkWhoLogin(String username, String password){
+		DatabaseConnection connect = new DatabaseConnection();
+		
+		boolean passCheck=false;
+		if(username.equals(connect.getUser(username).getUsername()))
+		{
+			while(passCheck==false)
+			{	
+				if(password.equals(connect.getUser(username).getPassword()))
+				{
+					passCheck=true;
+					if(connect.getUser(username).getAccountType() == 1){
+						return 1;
+					}else{
+						return 0;
+					}
+				}
+				else
+				{
+					passCheck=false;
+				}
+			}
+		}
+		return -1;
+	}
+	
+	public boolean customerLogin(){
+		return false;
+	}
+	
+	
+	
 	public void customerMenu(){
-Scanner scanner = new Scanner(System.in);
+		Scanner scanner = new Scanner(System.in);
 		
 		System.out.printf("\n%-1s %s\n", "", "Customer Menu");
 		System.out.printf("%s\n","---------------------------");
@@ -141,7 +182,7 @@ Scanner scanner = new Scanner(System.in);
 			//Todo
 			break;
 		case 6:
-			System.exit(0);
+			loginMenu();
 			break;
 		default:
 			System.out.println("Option not available, please choose again");
@@ -149,45 +190,45 @@ Scanner scanner = new Scanner(System.in);
 		scanner.close();
 	}
 	
-	
-	public void companyMenu()
+	public void tryAgainMenu()
 	{
 		Scanner scanner = new Scanner(System.in);
-		
-		System.out.printf("\n%-1s %s\n", "", "Company Menu");
-		System.out.printf("%s\n","---------------------------");
-		System.out.printf("%-3s %-2s %s\n", "", "1.", "Check Employee Availability");
-		System.out.printf("%-3s %-2s %s\n", "", "2.", "Add New Employee/Working time");
-		System.out.printf("%-3s %-2s %s\n", "", "3.", "Check Bookings");
-		System.out.printf("%-3s %-2s %s\n", "", "4.", "Make Bookings");
-		System.out.printf("%-3s %-2s %s\n", "", "5.", "Change Employee Working Time");
-		System.out.printf("%-3s %-2s %s\n", "", "6.", "Log Out");
-		int selection = Integer.parseInt(scanner.nextLine());
-		
-		switch(selection)
+	
+		System.out.printf("\n%-1s %s\n", "", "Username does not exist");
+		System.out.printf("%-3s %-2s %s\n", "", "1.", "Register");
+		System.out.printf("%-3s %-2s %s\n", "", "2.", "Try Again");
+		System.out.printf("%-3s %-2s %s\n", "", "3.", "Exit");
+		System.out.printf("%s\n%s", "Please chose a option between 1 and 2", "user> ");
+		int option = Integer.parseInt(scanner.nextLine());
+		switch(option)
 		{
 		case 1:
 			//Todo
 			break;
 		case 2:
-			//Todo
+			login();
 			break;
 		case 3:
-			//Todo
-			break;
-		case 4:
-			//Todo
-			break;
-		case 5:
-			//Todo
-			break;
-		case 6:
 			System.exit(0);
 			break;
 		default:
 			System.out.println("Option not available, please choose again");
 		}
 		scanner.close();
+	}
+
+
+	@Test
+	public void businessOwnerLoginTest(){
+		assertEquals(1,(checkWhoLogin("david", "divad")));
+	}
+	@Test
+	public void customerLoginTest(){
+		assertEquals(0,(checkWhoLogin("William", "Apples22")));
+	}
+	@Test
+	public void loginFail(){
+		assertEquals((-1),(checkWhoLogin("aaa","bbb")));
 	}
 	
 }

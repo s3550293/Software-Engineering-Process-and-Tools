@@ -4,8 +4,9 @@ import java.util.*;
 
 public class Login
 {
-	 private Business bmenu = new Business();
-	 private Customer cmenu = new Customer();
+	private Register reg = new Register();
+	private Business bmenu = new Business();
+	private Customer cmenu = new Customer();
 	public Login(){}
 	/*
 	 * loginMenu displays the user login menu to the user
@@ -13,15 +14,15 @@ public class Login
 	public void loginMenu()
 	{
 		boolean flag = true; //Boolean set for the while loop to keep looping until the user makes the correct choice
-		System.out.printf("\n%-1s %s\n", "", "Company Login");
-		System.out.printf("%s\n","---------------------------");
-		System.out.printf("%-3s %-2s %s\n", "", "1.", "Login");
-		System.out.printf("%-3s %-2s %s\n", "", "2.", "Register");
-		System.out.printf("%-3s %-2s %s\n", "", "3.", "Exit");
 		Scanner userInput = new Scanner(System.in);
 		while(flag)
 		{	
-			System.out.printf("%s\n%s", "Please chose a option between 1 and 2", "user> ");
+			System.out.printf("\n%-1s %s\n", "", "Company Login");
+			System.out.printf("%s\n","---------------------------");
+			System.out.printf("%-3s %-2s %s\n", "", "1.", "Login");
+			System.out.printf("%-3s %-2s %s\n", "", "2.", "Register");
+			System.out.printf("%-3s %-2s %s\n", "", "3.", "Exit");
+			System.out.printf("%s\n%s", "Please chose a option between 1 and 3", "user> ");
 			/*
 			 * Try catch checks the user input, throws an error if the incorrect data type is entered
 			 */
@@ -34,7 +35,7 @@ public class Login
 						login();
 						break;
 					case 2:
-						//Todo
+						reg.registerUser();
 						break;
 					case 3:
 						System.exit(0);

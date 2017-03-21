@@ -85,14 +85,39 @@ public class DatabaseConnection
 		return databaseUser;
 	}
 	
-	//This function finds a selection of employees that matches the string name 
-		//and displays the employees with their relative ID's
-		//getEmployee(int ID) follows on from this.
-		public String findEmployee(String name)
+		//This function finds a selection of employees that matches the string name 
+		//returns an array of object Employee
+		public Employee[] findEmployeeByName(String name)
 		{
-			return name;
+			Employee[] databaseEmployee = new Employee[1000];
+			int i = 0;
+			int id = 0;
+			double payRate = 0;
+			String query = "SELECT * FROM EMPLOYEES WHERE name like ? "; 
+
+			try (Connection connect = this.connect(); PreparedStatement  inject  = connect.prepareStatement(query))
+			{
+				//Sets '?' to user name in the query
+				//crates a user from the found information
+				inject.setString(1,"%"+name+"%");
+				ResultSet output = inject.executeQuery();
+				while (output.next()){
+					id = output.getInt(1);
+					name = output.getString(2);
+					payRate = output.getDouble(3);
+					++i;
+					databaseEmployee[i] = new Employee(id ,name, payRate);
+				}
+				output.close();
+			}
+			catch(SQLException sqle)
+			{
+				System.out.println("Getting Employee: "+sqle.getMessage());
+			}
+			return databaseEmployee;
 		}
 
+		//Gets the employee with matching ID from database and returns it as an Employee Object
 		public Employee getEmployee(int employeeID)
 		{
 			Employee databaseEmployee = null;
@@ -122,14 +147,12 @@ public class DatabaseConnection
 			return databaseEmployee;
 		}
 		
+		//Adds an employee to the database with the RAW parameters [parameters are not tested]
 		public void addEmployee(String name, double payRate)
 		{
 			String query = "INSERT INTO EMPLOYEES(name, payRate) " + "VALUES ('" + name + "'," + payRate + ");";
 			try(Connection connect = this.connect(); Statement inject = connect.createStatement())
 			{
-				/*
-				 * Sets the '?' values into the query
-				 */
 				inject.executeUpdate(query);
 				System.out.println("Employee '"+name+"' Added");
 			}
@@ -137,6 +160,65 @@ public class DatabaseConnection
 			{
 				System.out.println(sqle.getMessage());
 			}
+		}
+		
+		//Adds an employee's working time to the database with the RAW parameters [parameters are not tested]
+		public void addEmployeeWorkingTime(int id, String date, double startTime, double endTime)
+		{
+			String query = "INSERT INTO EMPLOYEES_WORKING_TIMES " + "VALUES (" + id + ",'" + date + "'," + startTime + "," + endTime + ");";
+			try(Connection connect = this.connect(); Statement inject = connect.createStatement())
+			{
+				inject.executeUpdate(query);
+				System.out.println("Employee " + id+ "'s working time Added");
+			}
+			catch(SQLException sqle)
+			{
+				System.out.println(sqle.getMessage());
+			}
+		}
+		
+		//Gets the employee's working times from database and returns it as an array of EmployeeWorkingTime
+		public EmployeeWorkingTime[] getEmployeeWorkingTimes(int employeeId)
+		{
+			EmployeeWorkingTime[] databaseWorkingTime = new EmployeeWorkingTime[10000];
+			int i = 0;
+			int id = 0;
+			String date;
+			double startTime;
+			double endTime;
+			String query = "SELECT * FROM EMPLOYEES WHERE name like ? "; 
+
+			try (Connection connect = this.connect(); PreparedStatement  inject  = connect.prepareStatement(query))
+			{
+				//Sets '?' to user name in the query
+				//crates a user from the found information
+				inject.setInt(1,employeeId);
+				ResultSet output = inject.executeQuery();
+				while (output.next()){
+					id = output.getInt(1);
+					date = output.getString(2);
+					startTime = output.getDouble(3);
+					endTime = output.getDouble(4);
+					++i;
+					databaseWorkingTime[i] = new EmployeeWorkingTime(id ,date, endTime, startTime);
+				}
+				output.close();
+			}
+			catch(SQLException sqle)
+			{
+				System.out.println("Getting Employee: "+sqle.getMessage());
+			}
+			return databaseWorkingTime;
+		}
+		
+		//Rounds a double to x amount of decimal places then return the rounded double
+		public static double round(double value, int places) {
+		    if (places < 0) throw new IllegalArgumentException();
+
+		    long factor = (long) Math.pow(10, places);
+		    value = value * factor;
+		    long tmp = Math.round(value);
+		    return (double) tmp / factor;
 		}
 		
 		public boolean employeeIDCheck(int id) throws SQLException {
@@ -164,7 +246,18 @@ public class DatabaseConnection
 			return false;
 
 		}
-		
+		public int countEmployeesInArray(Employee[] employees)
+		{
+			int counter = 0;
+			for (int i = 0; i < employees.length; i ++)
+			{
+			    if (employees[i] != null)
+			    {
+			        counter ++;
+			    }
+			}
+			return counter;
+		}
 		@Before
 		public void setUp()
 		{
@@ -172,7 +265,9 @@ public class DatabaseConnection
 			try(Connection connect = this.connect(); Statement inject = connect.createStatement())
 			{
 				inject.executeUpdate("DROP TABLE EMPLOYEES");
-				System.out.println("Dropped Table");
+				System.out.println("Dropped Employees Table");
+				inject.executeUpdate("DROP TABLE EMPLOYEES_WORKING_TIMES");
+				System.out.println("Dropped 'Working Times' Table");
 			}
 			catch(SQLException sqle)
 			{
@@ -183,7 +278,7 @@ public class DatabaseConnection
 			db.createTable("company.db");
 		}
 		@Test
-		public void testAddEmployee_And_TestGetEmployee_And_TestEmployeeToString()
+		public void testAddEmployee_And_TestGetEmployee_And_TestEmployeeAttributes()
 		{	
 			//Adding 4 new employees to blank EMPLOYEES table
 			addEmployee("Luke Mason", 1000);
@@ -256,6 +351,67 @@ public class DatabaseConnection
 
 			
 		}
+		@Test
+		public void testFindEmployeeByName()
+		{
+			int count;
+			//Adding Employees to test
+			addEmployee("Luke Mason", 1000);
+			addEmployee("Luke Boi", 24.57);
+			
+			//Searching employees with "luke"
+			Employee[] employees = findEmployeeByName("luke");
+			
+			//Counting the number of employees in employees[]
+			count = countEmployeesInArray(employees);
+			System.out.println(count);
+			//Expecting the amount of employees to be 2
+			assertTrue(count == 2);
+			
+			assertTrue(employees[1].getId()== 1);
+			assertTrue(employees[1].getName().equals("Luke Mason"));
+			assertTrue(employees[1].getPayRate()== 1000);
+			assertTrue(employees[1].toString().equals("ID: 1   Name: Luke Mason   Pay Rate: $1000.0"));
+			
+			assertTrue(employees[2].getId()== 2);
+			assertTrue(employees[2].getName().equals("Luke Boi"));
+			assertTrue(employees[2].getPayRate()== 24.57);
+			assertTrue(employees[2].toString().equals("ID: 2   Name: Luke Boi   Pay Rate: $24.57"));
+			
+			//searching employees with "lol"
+			Employee[] employees2 = findEmployeeByName("lol");
+			count = countEmployeesInArray(employees2);
+			assertTrue(count == 0);
+			
+			//searching employees with "boi"
+			Employee[] employees3 = findEmployeeByName("boi");
+			count = countEmployeesInArray(employees3);
+			assertTrue(count == 1);
+			
+			
+		}
+		@Test
+		public void testAddEmployeeWorkingTimeAndGetEmployeeWorkingTimes()
+		{	
+			//Adding first employee to database
+			addEmployee("Luke",100);
+			
+			//Assigning working times to employee 1 ('Luke') to the database
+			addEmployeeWorkingTime(1,"01/01/2017",8.5,14);
+			addEmployeeWorkingTime(1,"02/01/2017",8.5,14.34);
+
+			EmployeeWorkingTime[] LukesWorkingTimes = getEmployeeWorkingTimes(1);
+			assertTrue(LukesWorkingTimes[1].getId()==1);
+			assertTrue(LukesWorkingTimes[1].getDate()=="1/1/2017");
+			assertTrue(LukesWorkingTimes[1].getStartTime()== 8.5);
+			assertTrue(LukesWorkingTimes[1].getEndTime()==14);
+			
+			//Expected number of working times employee 1 should have
+			assertTrue(LukesWorkingTimes.length == 2);
+			
+			addEmployeeWorkingTime(1,"03/01/2017",8.5,14.34);
+			assertTrue(LukesWorkingTimes.length == 3);
+		}
 		@After
 		public void tearDown()
 		{
@@ -263,7 +419,9 @@ public class DatabaseConnection
 			try(Connection connect = this.connect(); Statement inject = connect.createStatement())
 			{
 				inject.executeUpdate("DROP TABLE EMPLOYEES");
-				System.out.println("Dropped Table");
+				System.out.println("Dropped Employees Table");
+				inject.executeUpdate("DROP TABLE EMPLOYEES_WORKING_TIMES");
+				System.out.println("Dropped 'Working Times' Table");
 			}
 			catch(SQLException sqle)
 			{

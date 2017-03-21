@@ -75,7 +75,8 @@ public class Login
 			menu.companyMenu();
 		}
 		else if(result == 0){
-			customerMenu();
+			Client menu = new Client();
+			menu.customerMenu();
 		}else{
 			tryAgainMenu();
 		}
@@ -102,59 +103,22 @@ public class Login
 				else
 				{
 					System.out.printf("\n%-1s %s\n", "", "Incorrect Password");
-					passCheck=false;
+					passCheck=true;
 				}
 			}
+		}else{
+			System.out.printf("\n%-1s %s\n", "", "Username does not exist");
 		}
 		
 		return -1;
 	}
 	
 	
-	public void customerMenu(){
-		Scanner scanner = new Scanner(System.in);
-		
-		System.out.printf("\n%-1s %s\n", "", "Customer Menu");
-		System.out.printf("%s\n","---------------------------");
-		System.out.printf("%-3s %-2s %s\n", "", "1.", ".......");
-		System.out.printf("%-3s %-2s %s\n", "", "2.", ".......");
-		System.out.printf("%-3s %-2s %s\n", "", "3.", ".......");
-		System.out.printf("%-3s %-2s %s\n", "", "4.", ".......");
-		System.out.printf("%-3s %-2s %s\n", "", "5.", ".......");
-		System.out.printf("%-3s %-2s %s\n", "", "6.", "Log Out");
-		int selection = Integer.parseInt(scanner.nextLine());
-		
-		switch(selection)
-		{
-		case 1:
-			//Todo
-			break;
-		case 2:
-			//Todo
-			break;
-		case 3:
-			//Todo
-			break;
-		case 4:
-			//Todo
-			break;
-		case 5:
-			//Todo
-			break;
-		case 6:
-			loginMenu();
-			break;
-		default:
-			System.out.println("Option not available, please choose again");
-		}
-		scanner.close();
-	}
-	
 	public void tryAgainMenu()
 	{
 		Scanner scanner = new Scanner(System.in);
 	
-		System.out.printf("\n%-1s %s\n", "", "Username does not exist");
+		System.out.printf("\n%-1s %s\n", "", "LogIn Failure");
 		System.out.printf("%-3s %-2s %s\n", "", "1.", "Register");
 		System.out.printf("%-3s %-2s %s\n", "", "2.", "Try Again");
 		System.out.printf("%-3s %-2s %s\n", "", "3.", "Exit");
@@ -177,7 +141,7 @@ public class Login
 		scanner.close();
 	}
 
-
+	
 	@Test
 	public void businessOwnerLoginTest(){
 		assertEquals(1,(logInProcess("david", "divad")));

@@ -69,12 +69,10 @@ public class Login
 		pass = scanner.nextLine();
 		int result = logInProcess(userName,pass);
 		if (result == 1){
-			Business menu = new Business();
-			menu.companyMenu();
+			cmenu.customerMenu();
 		}
 		else if(result == 0){
-			Client menu = new Client();
-			menu.customerMenu();
+			bmenu.companyMenu();
 		}else{
 			tryAgainMenu();
 		}

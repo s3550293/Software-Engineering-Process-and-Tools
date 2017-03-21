@@ -4,6 +4,7 @@ import java.util.Scanner;
 
 public class Business
 {
+	private Controller controller = new Controller();
 	public Business(){}
 	public void companyMenu()
 	{
@@ -25,7 +26,7 @@ public class Business
 			//Todo
 			break;
 		case 2:
-			//Todo
+			controller.addNewEmployee();
 			break;
 		case 3:
 			//Todo

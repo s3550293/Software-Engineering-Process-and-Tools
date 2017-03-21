@@ -4,9 +4,9 @@ import java.util.*;
 
 public class Login
 {
-	 private Business bmenu;
-	 private Customer cmenu;
-	public Login(){ bmenu = new Business(); cmenu = new Customer();}
+	 private Business bmenu = new Business();
+	 private Customer cmenu = new Customer();
+	public Login(){}
 	/*
 	 * loginMenu displays the user login menu to the user
 	 */

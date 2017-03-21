@@ -2,10 +2,7 @@ package program;
 
 import static org.junit.Assert.*;
 
-import java.io.ByteArrayInputStream;
-import java.io.InputStream;
 import java.util.*;
-import java.util.zip.CheckedOutputStream;
 
 import org.junit.Test;
 

@@ -33,6 +33,20 @@ public class DatabaseConnection
         }
         return connect;
 	}
+	private Connection Testconnect()
+	{
+		/*
+		 * creates a connection to the database to be used multiple times in the class
+		 */
+		String url = "jdbc:sqlite:db/testDatabase.db";
+        Connection connect = null;
+        try {
+            connect = DriverManager.getConnection(url);
+        } catch (SQLException sqle) {
+            System.out.println(sqle.getMessage());
+        }
+        return connect;
+	}
 	
 	public void addUser(String username, String password, int accountType)
 	{

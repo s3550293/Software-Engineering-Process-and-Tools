@@ -4,9 +4,7 @@ import java.util.Scanner;
 
 public class Business
 {
-	Login logout = new Login();
-	public Business(){ companyMenu(); }
-	
+	public Business(){}
 	public void companyMenu()
 	{
 		Scanner scanner = new Scanner(System.in);

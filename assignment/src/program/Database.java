@@ -128,4 +128,68 @@ public class Database
 			System.out.println(sqle.getMessage());
 		}
 	}
+	
+	/*
+	 * Test Functions
+	 */
+	
+	public void createTestTables(String filename)
+	{
+		String url = "jdbc:sqlite:db/"+filename;
+		/*
+		 * account type boolean 1 for business owner 0 for user
+		 * 
+		 * creating tables for users and user details to be remembered later
+		 */
+		String queryUser = "CREATE TABLE IF NOT EXISTS users ("
+						+"userID integer PRIMARY KEY AUTOINCREMENT,"
+						+"username text NOT NULL,"
+						+"password text NOT NULL,"
+						+"accountType integer NOT NULL);";
+		String queryUserDetails = "CREATE TABLE IF NOT EXISTS clientdetails ("
+						+"id integer NOT NULL,"
+						+"username text NOT NULL,"
+						+"Address text NOT NULL,"
+						+"Phone number boolean NOT NULL,"
+						+ "FOREGIN KEY(id) REFERNECES users(userID));";
+		String queryEmployees = "CREATE TABLE IF NOT EXISTS EMPLOYEES ("
+				+"employeeID integer PRIMARY KEY AUTOINCREMENT,"
+				+"name VARCHAR(40) NOT NULL,"
+				+"payRate integer NOT NULL);";
+
+		String queryEmployeesWorkingTimes = "CREATE TABLE IF NOT EXISTS EMPLOYEES_WORKING_TIMES ("
+							+"employeeID INT NOT NULL,"
+							+"date VARCHAR(12) NOT NULL,"
+							+"startTime VARCHAR(10) NOT NULL,"
+							+"endTime VARCHAR(10) NOT NULL,"
+							+"FOREIGN KEY(employeeID) REFERENCES employees(employeeID));";
+
+		
+		
+		/*
+		 * Attempting to connect to the database so tables can be created
+		 */
+		try(Connection connect = DriverManager.getConnection(url); Statement smt = connect.createStatement())
+		{
+			//Creating Table 'USERS'
+			smt.executeUpdate(queryUser);
+			System.out.println("Table 'Users' added");
+			
+			//Creating Table 'USERS_DETAILS'
+			smt.executeUpdate(queryUserDetails);
+			System.out.println("Table 'User Details added");
+			
+			//Creating Table 'EMPLOYEES'
+			smt.executeUpdate(queryEmployees);
+			System.out.println("Table 'EMPLOYEES' added");
+			
+			//Creating Table 'EMPLOYEES_WORKING_TIMES'
+			smt.executeUpdate(queryEmployeesWorkingTimes);
+			System.out.println("Table 'EMPLOYEES_WORKING_TIMES' added");
+		}
+		catch(SQLException sqle)
+		{
+			System.out.println("Adding Table: "+sqle.getMessage());
+		}
+	}
 }

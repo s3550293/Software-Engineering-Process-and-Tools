@@ -17,6 +17,7 @@ public class Business
 		System.out.printf("%-3s %-2s %s\n", "", "4.", "Make Bookings");
 		System.out.printf("%-3s %-2s %s\n", "", "5.", "Change Employee Working Time");
 		System.out.printf("%-3s %-2s %s\n", "", "6.", "Log Out");
+		System.out.printf("%s\n%s", "Please choose between 1 and 6", "user> ");
 		int selection = Integer.parseInt(scanner.nextLine());
 		
 		switch(selection)

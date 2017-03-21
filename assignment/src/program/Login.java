@@ -26,7 +26,7 @@ public class Login
 			System.out.printf("%-3s %-2s %s\n", "", "1.", "Login");
 			System.out.printf("%-3s %-2s %s\n", "", "2.", "Register");
 			System.out.printf("%-3s %-2s %s\n", "", "3.", "Exit");
-			System.out.printf("%s\n%s", "Please chose a option between 1 and 3", "user> ");
+			System.out.printf("%s\n%s", "Please choose a option between 1 and 3", "user> ");
 			/*
 			 * Try catch checks the user input, throws an error if the incorrect data type is entered
 			 */
@@ -123,7 +123,7 @@ public class Login
 		switch(option)
 		{
 		case 1:
-			//Todo
+			reg.registerUser();
 			break;
 		case 2:
 			login();
@@ -151,4 +151,9 @@ public class Login
 		assertEquals((-1),(logInProcess("aaa","bbb")));
 	}
 	
+	@Test
+	public void passFail()
+	{
+		assertEquals(-1,(logInProcess("david","bbb")));
+	}
 }

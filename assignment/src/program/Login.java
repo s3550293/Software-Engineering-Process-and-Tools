@@ -60,29 +60,43 @@ public class Login
 	
 	public void login()
 	{
-		DatabaseConnection connect = new DatabaseConnection();
+
 		Scanner scanner = new Scanner (System.in);
 		
-
 		String userName=null;
 		String pass=null;
-		boolean passCheck=false;
 		System.out.printf("%s\n%s", "Please enter your username", "user> ");
 		userName = scanner.nextLine();
+		System.out.printf("%s\n%s", "Please enter your pass", "user> ");
+		pass = scanner.nextLine();
+		int result = logInProcess(userName,pass);
+		if (result == 1){
+			Business menu = new Business();
+			menu.companyMenu();
+		}
+		else if(result == 0){
+			customerMenu();
+		}else{
+			tryAgainMenu();
+		}
+		scanner.close();
+	}
+	
+	public int logInProcess(String userName, String pass){
+		boolean passCheck = false;
+		DatabaseConnection connect = new DatabaseConnection();
 		if(userName.equals(connect.getUser(userName).getUsername()))
 		{
 			while(passCheck==false)
 			{
-				System.out.printf("%s\n%s", "Please enter password", "user> ");
-				pass = scanner.nextLine();
 				if(pass.equals(connect.getUser(userName).getPassword()))
 				{
 					passCheck=true;
 					if(connect.getUser(userName).getAccountType() == 1){
-						Business menu = new Business();
-						menu.companyMenu();
+						return 1;
+						
 					}else{
-						customerMenu();
+						return 0;
 					}
 				}
 				else
@@ -92,63 +106,9 @@ public class Login
 				}
 			}
 		}
-		else
-		{
-			System.out.printf("\n%-1s %s\n", "", "Username does not exist");
-			System.out.printf("%-3s %-2s %s\n", "", "1.", "Register");
-			System.out.printf("%-3s %-2s %s\n", "", "2.", "Try Again");
-			System.out.printf("%-3s %-2s %s\n", "", "3.", "Exit");
-			System.out.printf("%s\n%s", "Please chose a option between 1 and 2", "user> ");
-			int option = Integer.parseInt(scanner.nextLine());
-			switch(option)
-			{
-			case 1:
-				//Todo
-				break;
-			case 2:
-				login();
-				break;
-			case 3:
-				System.exit(0);
-				break;
-			default:
-				System.out.println("Option not available, please choose again");
-			}
-		}
-		scanner.close();
-	}
-	
-	
-	public int checkWhoLogin(String username, String password){
-		DatabaseConnection connect = new DatabaseConnection();
 		
-		boolean passCheck=false;
-		if(username.equals(connect.getUser(username).getUsername()))
-		{
-			while(passCheck==false)
-			{	
-				if(password.equals(connect.getUser(username).getPassword()))
-				{
-					passCheck=true;
-					if(connect.getUser(username).getAccountType() == 1){
-						return 1;
-					}else{
-						return 0;
-					}
-				}
-				else
-				{
-					passCheck=false;
-				}
-			}
-		}
 		return -1;
 	}
-	
-	public boolean customerLogin(){
-		return false;
-	}
-	
 	
 	
 	public void customerMenu(){
@@ -220,15 +180,15 @@ public class Login
 
 	@Test
 	public void businessOwnerLoginTest(){
-		assertEquals(1,(checkWhoLogin("david", "divad")));
+		assertEquals(1,(logInProcess("david", "divad")));
 	}
 	@Test
 	public void customerLoginTest(){
-		assertEquals(0,(checkWhoLogin("William", "Apples22")));
+		assertEquals(0,(logInProcess("William", "Apples22")));
 	}
 	@Test
 	public void loginFail(){
-		assertEquals((-1),(checkWhoLogin("aaa","bbb")));
+		assertEquals((-1),(logInProcess("aaa","bbb")));
 	}
 	
 }

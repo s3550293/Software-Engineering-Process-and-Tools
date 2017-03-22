@@ -12,6 +12,7 @@ public class EmployeeWorkingTime
 		this.id = id;
 		this.date = date;
 		this.startTime = startTime;
+		this.endTime = endTime;
 	}
 
 	public int getId()

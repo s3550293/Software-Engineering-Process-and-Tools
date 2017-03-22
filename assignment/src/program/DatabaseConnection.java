@@ -9,8 +9,6 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
-import org.junit.*;
-
 /*
  * follow this link to find out how to add tables and access tables
  * http://www.sqlitetutorial.net/sqlite-java/
@@ -87,7 +85,7 @@ public class DatabaseConnection
 	
 		//This function finds a selection of employees that matches the string name 
 		//returns an array of object Employee
-		public Employee[] findEmployeeByName(String name)
+		public Employee[] getEmployees(String name)
 		{
 			Employee[] databaseEmployee = new Employee[1000];
 			int i = 0;
@@ -105,8 +103,8 @@ public class DatabaseConnection
 					id = output.getInt(1);
 					name = output.getString(2);
 					payRate = output.getDouble(3);
-					++i;
 					databaseEmployee[i] = new Employee(id ,name, payRate);
+					++i;
 				}
 				output.close();
 			}
@@ -162,7 +160,7 @@ public class DatabaseConnection
 			}
 		}
 		
-		//Adds an employee's working time to the database with the RAW parameters [parameters are not tested]
+		//Adds ONE employee working time to the database with the RAW parameters [parameters are not tested]
 		public void addEmployeeWorkingTime(int id, String date, double startTime, double endTime)
 		{
 			String query = "INSERT INTO EMPLOYEES_WORKING_TIMES " + "VALUES (" + id + ",'" + date + "'," + startTime + "," + endTime + ");";
@@ -186,7 +184,7 @@ public class DatabaseConnection
 			String date;
 			double startTime;
 			double endTime;
-			String query = "SELECT * FROM EMPLOYEES WHERE name like ? "; 
+			String query = "SELECT * FROM EMPLOYEES_WORKING_TIMES WHERE employeeID = ? "; 
 
 			try (Connection connect = this.connect(); PreparedStatement  inject  = connect.prepareStatement(query))
 			{
@@ -194,19 +192,20 @@ public class DatabaseConnection
 				//crates a user from the found information
 				inject.setInt(1,employeeId);
 				ResultSet output = inject.executeQuery();
-				while (output.next()){
+				while (output.next())
+				{
 					id = output.getInt(1);
 					date = output.getString(2);
 					startTime = output.getDouble(3);
 					endTime = output.getDouble(4);
-					++i;
-					databaseWorkingTime[i] = new EmployeeWorkingTime(id ,date, endTime, startTime);
+					databaseWorkingTime[i] = new EmployeeWorkingTime(id ,date,startTime,endTime);
+					++i;				
 				}
 				output.close();
 			}
 			catch(SQLException sqle)
 			{
-				System.out.println("Getting Employee: "+sqle.getMessage());
+				System.out.println("Getting Working Time: "+sqle.getMessage());
 			}
 			return databaseWorkingTime;
 		}
@@ -244,190 +243,8 @@ public class DatabaseConnection
 				System.out.println(ex.getMessage());
 			}
 			return false;
-
 		}
-		public int countEmployeesInArray(Employee[] employees)
-		{
-			int counter = 0;
-			for (int i = 0; i < employees.length; i ++)
-			{
-			    if (employees[i] != null)
-			    {
-			        counter ++;
-			    }
-			}
-			return counter;
-		}
-		@Before
-		public void setUp()
-		{
-			//Wiping EMPLOYEES table at start of test in case of any changes manually made via SQLite
-			try(Connection connect = this.connect(); Statement inject = connect.createStatement())
-			{
-				inject.executeUpdate("DROP TABLE EMPLOYEES");
-				System.out.println("Dropped Employees Table");
-				inject.executeUpdate("DROP TABLE EMPLOYEES_WORKING_TIMES");
-				System.out.println("Dropped 'Working Times' Table");
-			}
-			catch(SQLException sqle)
-			{
-				System.out.println(sqle.getMessage());
-			}
-			//Creates ALL TABLES
-			Database db = new Database("company.db");
-			db.createTable("company.db");
-		}
-		@Test
-		public void testAddEmployee_And_TestGetEmployee_And_TestEmployeeAttributes()
-		{	
-			//Adding 4 new employees to blank EMPLOYEES table
-			addEmployee("Luke Mason", 1000);
-			addEmployee("Jacob Boehm", 123);
-			addEmployee("Jake Mason", 30);
-			addEmployee("Leonardo Dicaprio", 12);
-			
-			//Assigning Employees to the employees in database
-			Employee Luke_Mason = getEmployee(1);
-			Employee Jacob_Boehm = getEmployee(2);
-			Employee Jake_Mason = getEmployee(3);
-			Employee Leonardo_Dicaprio = getEmployee(4);
-			
-			//Testing the toString() and get() methods against the different employees
-			assertTrue(Luke_Mason.getId()==1);
-			assertTrue(Luke_Mason.getPayRate()== 1000);
-			assertTrue(Luke_Mason.getName().equals("Luke Mason"));
-			assertTrue(Luke_Mason.toString().equals("ID: 1   Name: Luke Mason   Pay Rate: $1000.0"));
-			
-			assertTrue(Jacob_Boehm.getId()==2);
-			assertTrue(Jacob_Boehm.getPayRate()== 123.0);
-			assertTrue(Jacob_Boehm.getName().equals("Jacob Boehm"));
-			assertTrue(Jacob_Boehm.toString().equals("ID: 2   Name: Jacob Boehm   Pay Rate: $123.0"));
 		
-			assertTrue(Jake_Mason.getId()==3);
-			assertTrue(Jake_Mason.getPayRate()== 30);
-			assertTrue(Jake_Mason.getName().equals("Jake Mason"));
-			assertTrue(Jake_Mason.toString().equals("ID: 3   Name: Jake Mason   Pay Rate: $30.0"));
-			
-			assertTrue(Leonardo_Dicaprio.getId()==4);
-			assertTrue(Leonardo_Dicaprio.getPayRate()== 12);
-			assertTrue(Leonardo_Dicaprio.getName().equals("Leonardo Dicaprio"));
-			assertTrue(Leonardo_Dicaprio.toString().equals("ID: 4   Name: Leonardo Dicaprio   Pay Rate: $12.0"));
-			
-			//Deleting Employee 2 & 3 from EMPLOYEE table
-			try(Connection connect = this.connect(); Statement inject = connect.createStatement())
-			{
-				inject.executeUpdate("DELETE FROM EMPLOYEES WHERE name LIKE '%Jacob%' OR payRate LIKE 30;");
-				System.out.println("Deleted specified employees");
-			}
-			catch(SQLException sqle)
-			{
-				System.out.println(sqle.getMessage());
-			}
-			
-			//Adding new employee After rows have been deleted
-			addEmployee("Harry Potter",666);
-			
-			//Getting employee 5, even though we just deleted two employees
-			Employee Harry_Potter = getEmployee(5);
-			
-			//Getting Employees 2 & 3 that were just deleted
-			Employee Jacob_Boehm_2 = getEmployee(2);
-			Employee Jake_Mason_2 = getEmployee(3);
-		
-			//Testing the output of getting employees that do not exist  E.G ID 2 & 3 (they were deleted just before)
-			assertTrue(Jacob_Boehm_2.getId()==0);
-			assertTrue(Jacob_Boehm_2.getName().equals("Employee does not exist"));
-			assertTrue(Jacob_Boehm_2.toString().equals("Sorry, Employees with that ID do not exist"));
-			
-			assertTrue(Jake_Mason_2.getId()==0);
-			assertTrue(Jake_Mason_2.getName().equals("Employee does not exist"));
-			assertTrue(Jake_Mason_2.toString().equals("Sorry, Employees with that ID do not exist"));
-			
-			//Testing that the ID of the new employee is 5 and DOES NOT take on the ID of recently deleted employees 2 & 3
-			assertTrue(Harry_Potter.getId()==5);
-			assertTrue(Harry_Potter.getPayRate()== 666);
-			assertTrue(Harry_Potter.getName().equals("Harry Potter"));
-			assertTrue(Harry_Potter.toString().equals("ID: 5   Name: Harry Potter   Pay Rate: $666.0"));
-
-			
-		}
-		@Test
-		public void testFindEmployeeByName()
-		{
-			int count;
-			//Adding Employees to test
-			addEmployee("Luke Mason", 1000);
-			addEmployee("Luke Boi", 24.57);
-			
-			//Searching employees with "luke"
-			Employee[] employees = findEmployeeByName("luke");
-			
-			//Counting the number of employees in employees[]
-			count = countEmployeesInArray(employees);
-			System.out.println(count);
-			//Expecting the amount of employees to be 2
-			assertTrue(count == 2);
-			
-			assertTrue(employees[1].getId()== 1);
-			assertTrue(employees[1].getName().equals("Luke Mason"));
-			assertTrue(employees[1].getPayRate()== 1000);
-			assertTrue(employees[1].toString().equals("ID: 1   Name: Luke Mason   Pay Rate: $1000.0"));
-			
-			assertTrue(employees[2].getId()== 2);
-			assertTrue(employees[2].getName().equals("Luke Boi"));
-			assertTrue(employees[2].getPayRate()== 24.57);
-			assertTrue(employees[2].toString().equals("ID: 2   Name: Luke Boi   Pay Rate: $24.57"));
-			
-			//searching employees with "lol"
-			Employee[] employees2 = findEmployeeByName("lol");
-			count = countEmployeesInArray(employees2);
-			assertTrue(count == 0);
-			
-			//searching employees with "boi"
-			Employee[] employees3 = findEmployeeByName("boi");
-			count = countEmployeesInArray(employees3);
-			assertTrue(count == 1);
-			
-			
-		}
-		@Test
-		public void testAddEmployeeWorkingTimeAndGetEmployeeWorkingTimes()
-		{	
-			//Adding first employee to database
-			addEmployee("Luke",100);
-			
-			//Assigning working times to employee 1 ('Luke') to the database
-			addEmployeeWorkingTime(1,"01/01/2017",8.5,14);
-			addEmployeeWorkingTime(1,"02/01/2017",8.5,14.34);
-
-			EmployeeWorkingTime[] LukesWorkingTimes = getEmployeeWorkingTimes(1);
-			assertTrue(LukesWorkingTimes[1].getId()==1);
-			assertTrue(LukesWorkingTimes[1].getDate()=="1/1/2017");
-			assertTrue(LukesWorkingTimes[1].getStartTime()== 8.5);
-			assertTrue(LukesWorkingTimes[1].getEndTime()==14);
-			
-			//Expected number of working times employee 1 should have
-			assertTrue(LukesWorkingTimes.length == 2);
-			
-			addEmployeeWorkingTime(1,"03/01/2017",8.5,14.34);
-			assertTrue(LukesWorkingTimes.length == 3);
-		}
-		@After
-		public void tearDown()
-		{
-			//Deleting table EMPLOYEES after the Test has been executed correctly
-			try(Connection connect = this.connect(); Statement inject = connect.createStatement())
-			{
-				inject.executeUpdate("DROP TABLE EMPLOYEES");
-				System.out.println("Dropped Employees Table");
-				inject.executeUpdate("DROP TABLE EMPLOYEES_WORKING_TIMES");
-				System.out.println("Dropped 'Working Times' Table");
-			}
-			catch(SQLException sqle)
-			{
-				System.out.println(sqle.getMessage());
-			}
-		}
 		
 	
 }

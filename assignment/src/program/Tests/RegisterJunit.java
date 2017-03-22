@@ -9,13 +9,13 @@ import program.DatabaseConnection;
 public class RegisterJunit
 {
 	Register reg = new Register();
-	Database data = new Database("Test.db");
+	Database data = new Database("company.db");
 	DatabaseConnection connect = new DatabaseConnection();
 	
 	@Before
 	public void setup()
 	{
-		data.createTable("Test.db");
+		data.createTable("company.db");
 		connect.addUser("TestUser", "123456", 0);
 		connect.addUser("Simba", "12345678", 0);
 	}

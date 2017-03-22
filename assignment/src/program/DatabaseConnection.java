@@ -188,7 +188,7 @@ public class DatabaseConnection
 				 * Sets the '?' values into the query
 				 */
 				inject.executeUpdate(query);
-				System.out.println("Table "+ tableName +"");
+				System.out.println("Table "+ tableName +" Dropped");
 				return true;
 			}
 			catch(SQLException sqle)

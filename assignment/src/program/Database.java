@@ -91,8 +91,8 @@ public class Database
 			System.out.println("Table 'Users' added");
 			
 			//Creating Table 'USERS_DETAILS'
-			smt.executeUpdate(queryUserDetails);
-			System.out.println("Table 'User Details added");
+			//smt.executeUpdate(queryUserDetails);
+			//System.out.println("Table 'User Details added");
 			
 			//Creating Table 'EMPLOYEES'
 			smt.executeUpdate(queryEmployees);

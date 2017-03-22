@@ -60,7 +60,6 @@ public class Database
 						+"username text NOT NULL,"
 						+"password text NOT NULL,"
 						+"accountType integer NOT NULL);";
-		@SuppressWarnings("unused")
 		String queryUserDetails = "CREATE TABLE IF NOT EXISTS clientdetails ("
 						+"id integer NOT NULL,"
 						+"username text NOT NULL,"
@@ -92,8 +91,8 @@ public class Database
 			System.out.println("Table 'Users' added");
 			
 			//Creating Table 'USERS_DETAILS'
-			//smt.executeUpdate(queryUserDetails);
-			//System.out.println("Table 'User Details added");
+			smt.executeUpdate(queryUserDetails);
+			System.out.println("Table 'User Details added");
 			
 			//Creating Table 'EMPLOYEES'
 			smt.executeUpdate(queryEmployees);

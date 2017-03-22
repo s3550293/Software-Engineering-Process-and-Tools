@@ -38,7 +38,7 @@ public class Controller
 			if(employeeName.equalsIgnoreCase("/exit"))
 			{
 				System.out.println("Exitting to main menu...");
-				kb.close();
+				
 				return false;
 			}
 			if(checkInputToContainInvalidChar(employeeName))
@@ -59,7 +59,7 @@ public class Controller
 			if(employeePayRate.equalsIgnoreCase("/exit"))
 			{
 				System.out.println("Exitting to main menu...");
-				kb.close();
+				
 				return false;
 			}
 			employeePayRate2 = changeInputIntoValidDouble(employeePayRate);
@@ -91,10 +91,10 @@ public class Controller
 						return false;
 					}*/
 					System.out.println("ADD WORKING TIME FOR THIS EMPLOYEE NOT IMPLEMEMENTED, New Employee added");
-					kb.close();
+					
 					return true;
 				case 2: connect.addEmployee(employeeName, employeePayRate2); 
-					kb.close();		
+							
 					return true;
 				case 3: 
 					do
@@ -104,7 +104,7 @@ public class Controller
 						String exit = kb.nextLine();
 						if(exit.equalsIgnoreCase("y"))
 						{
-							kb.close();
+							
 							return false;
 						}
 						else if(exit.equalsIgnoreCase("n"))
@@ -125,7 +125,7 @@ public class Controller
 		}
 		while(loopAgain);
 		System.out.println("Unexpected Error: Please consult the developers");
-		kb.close();
+		
 		return false;
 	}
 
@@ -172,126 +172,55 @@ public class Controller
 		}
 	}
 
-	
-	//Counts how many employees there currently are in the database and generates 
-	//the next ID according to that number e.g 15 current employees, next id = "00016"
-
-	public boolean addWorkingTimeForNextMonth(String username)
+	public boolean addWorkingTimesForEmployee()
 	{
 		Scanner kb = new Scanner(System.in);
 		DatabaseConnection connect = new DatabaseConnection();
-		boolean flag = false;
-		String selection;
-		String year;
-		String month;
-		String date;
-		String startTime;
-		String finishTime;
-		Business bmenu = new Business();
-		
-		System.out.println("1 . Add Working Time");
-		System.out.println("2 . Exit to Menu");
-		selection = kb.nextLine();
-		
-		switch(selection)
+		String employeeName;
+		boolean loopAgain;
+		do
 		{
-			case "1":
-				while(flag){
-					System.out.printf("Please Enter the year!\n", "user>");
-					year = kb.nextLine();
-					if(year.equals("/exit")){
-						flag = false;
-					}
-					
-					System.out.printf("Please Enter the month!\n", "user>");
-					month = kb.nextLine();
-					if(month.equals("/exit")){
-						flag = false;
-					}
-					
-					System.out.printf("Please Enter the date!\n", "user>");
-					date = kb.nextLine();
-					if(date.equals("/exit")){
-						flag = false;
-					}
-					
-					System.out.printf("Please Enter the start time!\n", "user>");
-					startTime = kb.nextLine();
-					if(startTime.equals("/exit")){
-						flag = false;
-					}
-					
-					System.out.printf("Please Enter the finish time!\n", "user>");
-					finishTime = kb.nextLine();
-					if(finishTime.equals("/exit")){
-						flag = false;
-					}
-					
-					
-					System.out.println("Error: Fail to register the working time into the Database");
-					
-					
-					
-					
-					
-					
-					
-					break;
-				}
-				
-			case "2":
-				bmenu.companyMenu();
-				break;
-			
-		
+			loopAgain = false;
+			System.out.print("Search - Enter in Employee's name [/exit to quit] >> ");
+			employeeName = kb.nextLine().toLowerCase();
+			if(employeeName.equalsIgnoreCase("/exit"))
+			{
+				System.out.println("Exitting to main menu...");
+				return false;
+			}
+			//Attempting to see if the input is valid
+			//Checking to see if the input contains any non-alphabetical characters e.g ?>!#%$#12345
+			if(checkInputToContainInvalidChar(employeeName))
+			{
+				System.out.println("The name you have entered contains non-alphabetical characters");
+				System.out.println("Please try again");
+				loopAgain = true;
+			}
 		}
-		
-		
-		
-		
+		while(loopAgain);
+		connect.getEmployees(employeeName);
+		/*do
+		{
+			loopAgain = false;
+			System.out.print("Enter in the pay rate of " + employeeName + " [/exit to quit] >> ");
+			employeePayRate = kb.nextLine();
+			//Attempting to change string into an integer
+			//Checking to see if the amount contains any non-digit characters
+			if(employeePayRate.equalsIgnoreCase("/exit"))
+			{
+				System.out.println("Exitting to main menu...");
+				
+				return false;
+			}
+			employeePayRate2 = changeInputIntoValidDouble(employeePayRate);
+			if(employeePayRate2<0)
+			{
+				System.out.println("The amount you have entered contains invalid characters, is less than 0 or greater that 10000 ");
+				System.out.println("Please try again");
+				loopAgain = true;
+			}
+		}
+		while(loopAgain);*/
 		return false;
 	}
-
-	
-	@Before
-	public void setUp()
-	{
-
-	}
-	@Test
-	public void testCheckInputToContainNonAlphabetChar() 
-	{
-		assertFalse(checkInputToContainInvalidChar("Luke Mason"));
-		assertFalse(checkInputToContainInvalidChar("LukeyyyMason"));
-		
-		assertTrue(checkInputToContainInvalidChar(""));
-		assertTrue(checkInputToContainInvalidChar("1010101LUKE"));
-		assertTrue(checkInputToContainInvalidChar("LUKEEEEEEEEEEEEEEEEEEEEEEEEEEE                                        "));
-		assertTrue(checkInputToContainInvalidChar("luke%@#$"));
-	}
-
-	@Test
-	public void testChangeInputIntoValidDouble() 
-	{
-		assertTrue(-1.0 == changeInputIntoValidDouble("..0"));
-		assertTrue(-1.0 == changeInputIntoValidDouble("0.."));
-		assertTrue(-1.0 == changeInputIntoValidDouble("5..0"));
-		assertTrue(-1.0 == changeInputIntoValidDouble("5.3.2"));
-		assertTrue(-1.0 == changeInputIntoValidDouble("..532"));
-		assertTrue(-1.0 == changeInputIntoValidDouble(""));
-		assertTrue(-1.0 == changeInputIntoValidDouble("lel"));
-		assertTrue(-1.0 == changeInputIntoValidDouble("$"));
-		assertTrue(-1.0 == changeInputIntoValidDouble("100$"));
-		assertTrue(-1.0 == changeInputIntoValidDouble("-1"));
-		assertTrue(-1.0 == changeInputIntoValidDouble("10001"));
-		
-		assertTrue(0.0 == changeInputIntoValidDouble("0."));
-		assertTrue(0.0 == changeInputIntoValidDouble(".0"));
-		assertTrue(10000.0 == changeInputIntoValidDouble("10000"));
-		assertTrue(10.0 == changeInputIntoValidDouble("10"));
-		assertTrue(0.0 == changeInputIntoValidDouble("0"));
-		
-	}
-
-
 }

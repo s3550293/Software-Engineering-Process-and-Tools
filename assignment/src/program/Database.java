@@ -65,7 +65,7 @@ public class Database
 						+"username text NOT NULL,"
 						+"Address text NOT NULL,"
 						+"Phone number boolean NOT NULL,"
-						+ "FOREGIN KEY(id) REFERNECES users(userID));";
+						+"FOREIGN KEY(id) REFERENCES users(userID));";
 		String queryEmployees = "CREATE TABLE IF NOT EXISTS EMPLOYEES ("
 				+"employeeID integer PRIMARY KEY AUTOINCREMENT,"
 				+"name VARCHAR(40) NOT NULL,"
@@ -92,7 +92,7 @@ public class Database
 			
 			//Creating Table 'USERS_DETAILS'
 			smt.executeUpdate(queryUserDetails);
-			System.out.println("Table 'User Details added");
+			System.out.println("Table 'User Details' added");
 			
 			//Creating Table 'EMPLOYEES'
 			smt.executeUpdate(queryEmployees);

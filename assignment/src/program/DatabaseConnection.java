@@ -153,30 +153,21 @@ public class DatabaseConnection
 			}
 		}
 		
-		public boolean employeeIDCheck(int id) throws SQLException {
-			String EmployeeIDquery = "SELECT * FROM employeedetails";
-			Statement stmt = null;
-			String url = "jdbc:sqlite:db/company.db";
-			
-			try(Connection connect = DriverManager.getConnection(url)){
-				stmt = connect.createStatement();
-				ResultSet rs = stmt.executeQuery(EmployeeIDquery);
-				
-				//loop result set
-				while(rs.next()){
-					int empID = rs.getInt("emID");
-					if(empID == id){
-						System.out.println("id retrieved is " + id);
-						return true;
-					}
-				}
-				rs.close();
-				
-			}catch(Exception ex){
-				System.out.println(ex.getMessage());
+		public void deleteEmployee(String name)
+		{
+			String query = "DELETE FROM users WHERE username LIKE '" + name + "'";
+			try(Connection connect = this.connect(); Statement inject = connect.createStatement())
+			{
+				/*
+				 * Sets the '?' values into the query
+				 */
+				inject.executeUpdate(query);
+				System.out.println("Employee '"+name+"' deleted");
 			}
-			return false;
-
+			catch(SQLException sqle)
+			{
+				System.out.println(sqle.getMessage());
+			}
 		}
 		
 		public boolean dropTable(String tableName)
@@ -188,7 +179,7 @@ public class DatabaseConnection
 				 * Sets the '?' values into the query
 				 */
 				inject.executeUpdate(query);
-				System.out.println("Table "+ tableName +"");
+				System.out.println("Table "+ tableName +" dropped ");
 				return true;
 			}
 			catch(SQLException sqle)

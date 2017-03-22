@@ -11,8 +11,8 @@ public class Main
 		 * start using "DatabaseConnection" once the database exists
 		 * tables are to be writtien before completeion
 		 */
-		//Database db = new Database("company.db");
-		//db.createTable("company.db");
+		Database db = new Database("company.db");
+		db.createTable("company.db");
 		
 		/*
 		 * DatabaseConnection is to be used to connect and get data from the database

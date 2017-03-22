@@ -176,11 +176,82 @@ public class Controller
 	//Counts how many employees there currently are in the database and generates 
 	//the next ID according to that number e.g 15 current employees, next id = "00016"
 
-	public boolean addWorkingTimeForNextMonth(String Id)
+	public boolean addWorkingTimeForNextMonth(String username)
 	{
+		Scanner kb = new Scanner(System.in);
+		DatabaseConnection connect = new DatabaseConnection();
+		boolean flag = false;
+		String selection;
+		String year;
+		String month;
+		String date;
+		String startTime;
+		String finishTime;
+		Business bmenu = new Business();
+		
+		System.out.println("1 . Add Working Time");
+		System.out.println("2 . Exit to Menu");
+		selection = kb.nextLine();
+		
+		switch(selection)
+		{
+			case "1":
+				while(flag){
+					System.out.printf("Please Enter the year!\n", "user>");
+					year = kb.nextLine();
+					if(year.equals("/exit")){
+						flag = false;
+					}
+					
+					System.out.printf("Please Enter the month!\n", "user>");
+					month = kb.nextLine();
+					if(month.equals("/exit")){
+						flag = false;
+					}
+					
+					System.out.printf("Please Enter the date!\n", "user>");
+					date = kb.nextLine();
+					if(date.equals("/exit")){
+						flag = false;
+					}
+					
+					System.out.printf("Please Enter the start time!\n", "user>");
+					startTime = kb.nextLine();
+					if(startTime.equals("/exit")){
+						flag = false;
+					}
+					
+					System.out.printf("Please Enter the finish time!\n", "user>");
+					finishTime = kb.nextLine();
+					if(finishTime.equals("/exit")){
+						flag = false;
+					}
+					
+					
+					System.out.println("Error: Fail to register the working time into the Database");
+					
+					
+					
+					
+					
+					
+					
+					break;
+				}
+				
+			case "2":
+				bmenu.companyMenu();
+				break;
+			
+		
+		}
+		
+		
+		
+		
 		return false;
 	}
-	
+
 	
 	@Before
 	public void setUp()
@@ -222,13 +293,5 @@ public class Controller
 		
 	}
 
-	/*
-	@Test
-	public void testEmpID() throws SQLException{
-		
-		assertFalse(employeeIDCheck(123));
-		assertTrue(employeeIDCheck(223));
-	}
-	*/
 
 }

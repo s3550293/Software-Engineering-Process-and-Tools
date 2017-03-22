@@ -69,14 +69,14 @@ public class Database
 		String queryEmployees = "CREATE TABLE IF NOT EXISTS EMPLOYEES ("
 				+"employeeID integer PRIMARY KEY AUTOINCREMENT,"
 				+"name VARCHAR(40) NOT NULL,"
-				+"payRate integer NOT NULL);";
+				+"payRate DOUBLE NOT NULL);";
 				//+"PRIMARY KEY(employeeID));";
 
 		String queryEmployeesWorkingTimes = "CREATE TABLE IF NOT EXISTS EMPLOYEES_WORKING_TIMES ("
-							+"employeeID INT NOT NULL,"
+							+"employeeID integer NOT NULL,"
 							+"date VARCHAR(12) NOT NULL,"
-							+"startTime VARCHAR(10) NOT NULL,"
-							+"endTime VARCHAR(10) NOT NULL,"
+							+"startTime DOUBLE NOT NULL,"
+							+"endTime DOUBLE NOT NULL,"
 							+"FOREIGN KEY(employeeID) REFERENCES employees(employeeID));";
 
 		
@@ -91,8 +91,8 @@ public class Database
 			System.out.println("Table 'Users' added");
 			
 			//Creating Table 'USERS_DETAILS'
-			smt.executeUpdate(queryUserDetails);
-			System.out.println("Table 'User Details added");
+			//smt.executeUpdate(queryUserDetails);
+			//System.out.println("Table 'User Details added");
 			
 			//Creating Table 'EMPLOYEES'
 			smt.executeUpdate(queryEmployees);

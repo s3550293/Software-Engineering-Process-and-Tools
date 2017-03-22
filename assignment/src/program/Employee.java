@@ -7,9 +7,9 @@ public class Employee {
 	/*
 	 * Protected values used by child classes
 	 */
-	protected int id;
-	protected double payRate;
-	protected String name;
+	private int id;
+	private double payRate;
+	private String name;
 	public Employee(int id, String name, double payRate)
 	{
 		this.id = id;

@@ -171,7 +171,79 @@ public class Controller
 			return -1;
 		}
 	}
-
+	
+	// UI for adding employee working time for next month
+	public boolean addWorkingTimesForNextMonth(String userName){
+		Scanner sc = new Scanner(System.in);
+		Controller controller = new Controller();
+		DatabaseConnection connect = new DatabaseConnection();
+		if(userName.equals(connect.getUser(userName).getUsername()) == false){
+			System.out.println("Employee does not exist");
+			return false;
+		}
+		boolean flag = false;
+		String selection;
+		double year;
+		double month;
+		double date;
+		double startTime;
+		double finishTime;
+		Business bmenu = new Business();
+		
+		do{
+			System.out.printf("Please Enter year:\n" , "user>>");
+			String yearStr = sc.nextLine();
+			if(yearStr.equalsIgnoreCase("/exit"))
+			{
+				System.out.println("Exitting to main menu...");
+				flag = false;
+			}
+			year = controller.changeInputIntoValidDouble(yearStr);
+			
+			System.out.printf("Please Enter month:\n" , "user>>");
+			String monthStr = sc.nextLine();
+			if(monthStr.equalsIgnoreCase("/exit"))
+			{
+				System.out.println("Exitting to main menu...");
+				flag = false;
+			}
+			month = controller.changeInputIntoValidDouble(monthStr);
+			
+			System.out.printf("Please Enter date:\n" , "user>>");
+			String dateStr = sc.nextLine();
+			if(dateStr.equalsIgnoreCase("/exit"))
+			{
+				System.out.println("Exitting to main menu...");
+				flag = false;
+			}
+			date = controller.changeInputIntoValidDouble(dateStr);
+			
+			System.out.printf("Please Enter start time:\n" , "user>>");
+			String startTimeStr = sc.nextLine();
+			if(startTimeStr.equalsIgnoreCase("/exit"))
+			{
+				System.out.println("Exitting to main menu...");
+				flag = false;
+			}
+			startTime = controller.changeInputIntoValidDouble(startTimeStr);
+			
+			System.out.printf("Please Enter finish time:\n" , "user>>");
+			String finishTimeStr = sc.nextLine();
+			if(finishTimeStr.equalsIgnoreCase("/exit"))
+			{
+				System.out.println("Exitting to main menu...");
+				flag = false;
+			}
+			finishTime = controller.changeInputIntoValidDouble(finishTimeStr);
+			
+			
+			
+			
+		}while (flag == false);
+		
+		return false;
+	}
+	
 	public boolean addWorkingTimesForEmployee()
 	{
 		Scanner kb = new Scanner(System.in);

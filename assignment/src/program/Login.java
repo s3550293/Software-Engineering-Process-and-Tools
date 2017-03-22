@@ -132,6 +132,7 @@ public class Login
 			login();
 			break;
 		case 3:
+			System.out.println("Exit the program...");
 			System.exit(0);
 			break;
 		default:

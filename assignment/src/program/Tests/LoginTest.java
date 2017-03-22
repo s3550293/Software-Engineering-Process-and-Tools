@@ -51,7 +51,7 @@ public class LoginTest {
 		// correct username and password for business owner
 		assertEquals(1,(ln.logInProcess("b1", "bbbb")));
 		
-		connect.deleteEmployee("c1");
+		connect.deleteUser("c1");
 		
 		// delete user and log in again
 		assertEquals((-1),(ln.logInProcess("c1", "cccc")));

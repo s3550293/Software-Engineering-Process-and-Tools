@@ -4,9 +4,8 @@ import java.util.Scanner;
 
 public class Business
 {
-
-	public Business(){ companyMenu(); }
-	
+	private Controller controller = new Controller();
+	public Business(){}
 	public void companyMenu()
 	{
 		Scanner scanner = new Scanner(System.in);
@@ -27,7 +26,7 @@ public class Business
 			//Todo
 			break;
 		case 2:
-			//Todo
+			controller.addNewEmployee();
 			break;
 		case 3:
 			//Todo
@@ -39,7 +38,8 @@ public class Business
 			//Todo
 			break;
 		case 6:
-			//System.exit(0);
+			Login login = new Login();
+			login.loginMenu();
 			break;
 		default:
 			System.out.println("Option not available, please choose again");

@@ -6,10 +6,8 @@ import static org.junit.Assert.*;
 
 public class Register 
 {
-	private String _Testusername;
-	private char _testAccount;
 	private boolean usernameLoop = true;
-	private boolean accountTypeLoop = true;
+	private boolean accountPasswordLoop = true;
 	private DatabaseConnection connect = new DatabaseConnection();
 	
 	public Register(){}
@@ -29,30 +27,42 @@ public class Register
 			System.out.printf("\n%-1s %s\n", "", "Register");
 			System.out.printf("%s\n","---------------------------");
 			//Checks if username already exsists
-			while(usernameLoop)
+			do
 			{
 				System.out.print("Enter username: ");
 				_username = userInput.nextLine();
 				checkTakenUsername(_username);
 			}
-			System.out.print("Enter password: ");
-			_password = userInput.nextLine();
-			System.out.print("are you a business owner [y/n]: ");
-			_choice = userInput.next().charAt(0);
+			while(usernameLoop);
+			do
+			{
+				System.out.print("Enter password: ");
+				_password = userInput.nextLine();
+				if(checkPassword(_password) == true)
+				{
+					accountPasswordLoop = false;
+				}
+			}
+			while(accountPasswordLoop);
 			//set the account type will loop until customer enters the correct 
-			while(accountTypeLoop)
+			/*
+			do
 			{
 				System.out.print("are you a business owner [y/n]: ");
 				_choice = userInput.next().charAt(0);;
+				userInput.nextLine();
 				accountType = setAccountType(_choice);
 			}
-			System.out.printf("\n%-1s %s\n", "", "Confirm");
+			while(accountTypeLoop);
+			*/
+			System.out.println("Confirm");
 			String _acc;
 			//create a string that can be printed to display account type
 			if(accountType == 1){ _acc = "Business"; }else{ _acc = "Customer"; }
 			System.out.println("Username: "+_username+" Password: "+_password+" Account Type: "+_acc);
 			System.out.print("[y/n]");
 			_choice = userInput.next().charAt(0);
+			userInput.nextLine();
 			//comfirming
 			while(flag_2)
 			{
@@ -79,16 +89,6 @@ public class Register
 		}
 	}
 	
-	@Before
-	public void setupCheckTakenUsernameTrue()
-	{
-		_Testusername = "apple10";
-	}
-	@Before
-	public void setupCheckTakenUsernameFalse()
-	{
-		_Testusername = "Simba01";
-	}
 	//This method checks if the username is equal to one already in the database
 	public boolean checkTakenUsername(String username)
 	{
@@ -104,48 +104,18 @@ public class Register
 		}
 		return output;
 	}
-	@Test
-	public void testCheckTakenUsernameTrue()
+	//Checks the length of the password
+	public boolean checkPassword(String _passwod)
 	{
-		assertTrue("Username was uniqe", checkTakenUsername(_Testusername));
-	}
-	@Test
-	public void testCheckTakenUsernameFalse()
-	{
-		assertFalse("Username was not uniqe", checkTakenUsername(_Testusername));
-	}
-	
-	@Before
-	public void setupSetAccountTypeBusi()
-	{
-		_testAccount = 'y';
-	}
-	@Before
-	public void setupSetAccountTypeCust()
-	{
-		_testAccount = 'n';
-	}
-	//This method grabs the inital user input and selects either customer or business owner as the account type
-	public int setAccountType(char account)
-	{
-		if(account == 'y' || account == 'Y')
+		int length = _passwod.length();
+		if(length >= 6)
 		{
-			return 1;
+			return true;
 		}
 		else
 		{
-			return 0;
+			System.out.println("Password is too short please enter a shorter password");
+			return false;
 		}
 	}
-	@Test
-	public void testsetAccountTypeBusiness()
-	{
-		assertEquals("Account type business", 1, setAccountType(_testAccount));
-	}
-	@Test
-	public void testsetAccountTypeCustomer()
-	{
-		assertEquals("Account type customer", 0, setAccountType(_testAccount));
-	}
-	
 }

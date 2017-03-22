@@ -175,6 +175,21 @@ public class DatabaseConnection
 			}
 		}
 		
+		//Delete user from database
+		public void deleteUser(String userName)
+		{
+			String query = "DELETE FROM users WHERE username LIKE '" + userName + "'";
+			try(Connection connect = this.connect(); Statement inject = connect.createStatement())
+			{
+				inject.executeUpdate(query);
+				System.out.println("User " + userName + " deleted!!");
+			}
+			catch(SQLException sqle)
+			{
+				System.out.println(sqle.getMessage());
+			}
+		}
+		
 		//Gets the employee's working times from database and returns it as an array of EmployeeWorkingTime
 		public EmployeeWorkingTime[] getEmployeeWorkingTimes(int employeeId)
 		{
@@ -220,31 +235,4 @@ public class DatabaseConnection
 		    return (double) tmp / factor;
 		}
 		
-		public boolean employeeIDCheck(int id) throws SQLException {
-			String EmployeeIDquery = "SELECT * FROM employeedetails";
-			Statement stmt = null;
-			String url = "jdbc:sqlite:db/company.db";
-			
-			try(Connection connect = DriverManager.getConnection(url)){
-				stmt = connect.createStatement();
-				ResultSet rs = stmt.executeQuery(EmployeeIDquery);
-				
-				//loop result set
-				while(rs.next()){
-					int empID = rs.getInt("emID");
-					if(empID == id){
-						System.out.println("id retrieved is " + id);
-						return true;
-					}
-				}
-				rs.close();
-				
-			}catch(Exception ex){
-				System.out.println(ex.getMessage());
-			}
-			return false;
-		}
-		
-		
-	
 }

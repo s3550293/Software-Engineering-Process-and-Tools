@@ -31,12 +31,12 @@ public class RegisterJunit
 		assertFalse(reg.checkPassword(""));
 		assertFalse(reg.checkPassword(" "));
 		
-		assertFalse(reg.checkTakenUsername("TestUser"));
-		assertFalse(reg.checkTakenUsername("testuser"));
-		assertFalse(reg.checkTakenUsername("Simba"));
-		assertFalse(reg.checkTakenUsername("simba"));
-		assertTrue(reg.checkTakenUsername("Charlie"));
-		assertTrue(reg.checkTakenUsername("Ben"));
+		assertTrue(reg.checkTakenUsername("TestUser"));
+		assertTrue(reg.checkTakenUsername("testuser"));
+		assertTrue(reg.checkTakenUsername("Simba"));
+		assertTrue(reg.checkTakenUsername("simba"));
+		assertFalse(reg.checkTakenUsername("Charlie"));
+		assertFalse(reg.checkTakenUsername("Ben"));
 	}
 	@After
 	public void after()

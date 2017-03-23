@@ -234,5 +234,23 @@ public class DatabaseConnection
 		    long tmp = Math.round(value);
 		    return (double) tmp / factor;
 		}
+		public boolean dropTable(String tableName)
+		{
+			String query = "DROP TABLE IF EXISTS '"+ tableName +"' ";
+			try(Connection connect = this.connect(); Statement inject = connect.createStatement())
+			{
+				/*
+				/* Sets the '?' values into the query
+		 		*/
+				inject.executeUpdate(query);
+				System.out.println("Table "+ tableName +"");
+				return true;
+			}
+			catch(SQLException sqle)
+			{
+				System.out.println(sqle.getMessage());
+				return false;
+			}
+		}
 		
 }

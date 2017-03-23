@@ -17,12 +17,12 @@ public class Main
 		/*
 		 * DatabaseConnection is to be used to connect and get data from the database
 		 */
-		//DatabaseConnection connect = new DatabaseConnection();
+		DatabaseConnection connect = new DatabaseConnection();
 		/*
 		 * other functions similar to addUser will be added later ie add booking
 		 */
-		//connect.addUser("William", "Apples22", 0);
-		//connect.addUser("david","divad",1);
+		connect.addUser("William", "Apples22", 0);
+		connect.addUser("bo1","bbbb",1);
 		/*
 		User lame = connect.getUser("William");
 		User bob = connect.getUser("david");

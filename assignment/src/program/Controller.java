@@ -38,7 +38,7 @@ public class Controller
 			if(employeeName.equalsIgnoreCase("/exit"))
 			{
 				System.out.println("Exitting to main menu...");
-				kb.close();
+				
 				return false;
 			}
 			if(checkInputToContainInvalidChar(employeeName))
@@ -59,7 +59,7 @@ public class Controller
 			if(employeePayRate.equalsIgnoreCase("/exit"))
 			{
 				System.out.println("Exitting to main menu...");
-				kb.close();
+				
 				return false;
 			}
 			employeePayRate2 = changeInputIntoValidDouble(employeePayRate);
@@ -91,10 +91,10 @@ public class Controller
 						return false;
 					}*/
 					System.out.println("ADD WORKING TIME FOR THIS EMPLOYEE NOT IMPLEMEMENTED, New Employee added");
-					kb.close();
+					
 					return true;
 				case 2: connect.addEmployee(employeeName, employeePayRate2); 
-					kb.close();		
+							
 					return true;
 				case 3: 
 					do
@@ -104,7 +104,7 @@ public class Controller
 						String exit = kb.nextLine();
 						if(exit.equalsIgnoreCase("y"))
 						{
-							kb.close();
+							
 							return false;
 						}
 						else if(exit.equalsIgnoreCase("n"))
@@ -125,7 +125,7 @@ public class Controller
 		}
 		while(loopAgain);
 		System.out.println("Unexpected Error: Please consult the developers");
-		kb.close();
+		
 		return false;
 	}
 
@@ -171,64 +171,165 @@ public class Controller
 			return -1;
 		}
 	}
-
 	
-	//Counts how many employees there currently are in the database and generates 
-	//the next ID according to that number e.g 15 current employees, next id = "00016"
+	/*
+	 * UI for adding employee working time for next month 
+	 * Status: In development
+	 */
+	public boolean addWorkingTimesForNextMonth(String userName){
+		Scanner sc = new Scanner(System.in);
+		Controller controller = new Controller();
+		DatabaseConnection connect = new DatabaseConnection();
+		
+		//check if the input username exists in database
+		if(userName.equals(connect.getUser(userName).getUsername()) == false){
+			System.out.println("Employee does not exist");
+			return false;
+		}
+		boolean valid = false;
+		int year, month, date, startTime, finishTime;
+		Business bmenu = new Business();
+		String yearStr = "", 
+			   monthStr = "", 
+			   dateStr = "", 
+			   startTimeStr = "", 
+			   finishTimeStr = "";
+		String exitCommand = "/exit";
+		
+		do{
+			while(valid == false){
+				System.out.printf("Please Enter year:\n" , "user>>");
+				yearStr = sc.nextLine();
+				//convert to Integer
+				year = (int)controller.changeInputIntoValidDouble(yearStr);
+				boolean isInt = isOfTypeInt(year);
+				if(isInt){
+					valid = true;
+				}else{
+					System.out.println("Please enter an appropriate year!");
+					valid = false;
+				}
+				/*
+				 * -check if input is negative
+				 * -check if input is this year
+				 */
+			}
+			valid = false;
+			while(valid == false){
+				System.out.printf("Please Enter month:\n" , "user>>");
+				monthStr = sc.nextLine();
+				month = (int)controller.changeInputIntoValidDouble(monthStr);
+				boolean isInt = isOfTypeInt(month);
+				if(isInt){
+					valid = true;
+				}else{
+					System.out.println("Please enter an appropriate month!");
+					valid = false;
+				}
+				/*
+				 * -check if input is negative
+				 * -check if input is this month/next month
+				 */
+			}
+			valid = false;
+			while(valid == false){
+				System.out.printf("Please Enter date(eg. DD/MM/YYYY:\n" , "user>>");
+				dateStr = sc.nextLine();
+				/*
+				 * -need to convert into date time format
+				 * -check if input is formatted correctly
+				 * -check if input is within next month
+				 */
+			}
+			valid = false;
+			while(valid == false){
+				System.out.printf("Please Enter start time(eg. HH:MM):\n" , "user>>");
+				startTimeStr = sc.nextLine();
+				/*
+				 * -need to convert into date time format
+				 * -check if input is formatted correctly
+				 */
+			}
+			valid = false;
+			while(valid == false){
+				System.out.printf("Please Enter finish time(eg. HH:MM):\n" , "user>>");
+				finishTimeStr = sc.nextLine();
+				/*
+				 * -need to convert into date time format
+				 * -check if input is formatted correctly
+				 */
+			}
+			valid = false;
+		}while (!yearStr.equalsIgnoreCase(exitCommand)
+				|| !monthStr.equalsIgnoreCase(exitCommand)
+				|| !dateStr.equalsIgnoreCase(exitCommand)
+				|| !startTimeStr.equalsIgnoreCase(exitCommand)
+				|| !finishTimeStr.equalsIgnoreCase(exitCommand));
+		
+		return false;
+	}
 
-	public boolean addWorkingTimeForNextMonth(String Id)
+	public boolean isOfTypeInt(int num) {
+	    try {
+	        Integer.valueOf(num);
+	        return true;
+	    } catch (NumberFormatException numberFormatException) {
+	        return false;
+	    }
+	}
+	
+	public boolean addWorkingTimesForEmployee()
 	{
+		Scanner kb = new Scanner(System.in);
+		DatabaseConnection connect = new DatabaseConnection();
+		String employeeName;
+		boolean loopAgain;
+		do
+		{
+			loopAgain = false;
+			System.out.print("Search - Enter in Employee's name [/exit to quit] >> ");
+			employeeName = kb.nextLine().toLowerCase();
+			if(employeeName.equalsIgnoreCase("/exit"))
+			{
+				System.out.println("Exitting to main menu...");
+				return false;
+			}
+			//Attempting to see if the input is valid
+			//Checking to see if the input contains any non-alphabetical characters e.g ?>!#%$#12345
+			if(checkInputToContainInvalidChar(employeeName))
+			{
+				System.out.println("The name you have entered contains non-alphabetical characters");
+				System.out.println("Please try again");
+				loopAgain = true;
+			}
+		}
+		while(loopAgain);
+		connect.getEmployees(employeeName);
+		/*do
+		{
+			loopAgain = false;
+			System.out.print("Enter in the pay rate of " + employeeName + " [/exit to quit] >> ");
+			employeePayRate = kb.nextLine();
+			//Attempting to change string into an integer
+			//Checking to see if the amount contains any non-digit characters
+			if(employeePayRate.equalsIgnoreCase("/exit"))
+			{
+				System.out.println("Exitting to main menu...");
+				
+				return false;
+			}
+			employeePayRate2 = changeInputIntoValidDouble(employeePayRate);
+			if(employeePayRate2<0)
+			{
+				System.out.println("The amount you have entered contains invalid characters, is less than 0 or greater that 10000 ");
+				System.out.println("Please try again");
+				loopAgain = true;
+			}
+		}
+		while(loopAgain);*/
 		return false;
 	}
 	
 	
-	@Before
-	public void setUp()
-	{
-
-	}
-	@Test
-	public void testCheckInputToContainNonAlphabetChar() 
-	{
-		assertFalse(checkInputToContainInvalidChar("Luke Mason"));
-		assertFalse(checkInputToContainInvalidChar("LukeyyyMason"));
-		
-		assertTrue(checkInputToContainInvalidChar(""));
-		assertTrue(checkInputToContainInvalidChar("1010101LUKE"));
-		assertTrue(checkInputToContainInvalidChar("LUKEEEEEEEEEEEEEEEEEEEEEEEEEEE                                        "));
-		assertTrue(checkInputToContainInvalidChar("luke%@#$"));
-	}
-
-	@Test
-	public void testChangeInputIntoValidDouble() 
-	{
-		assertTrue(-1.0 == changeInputIntoValidDouble("..0"));
-		assertTrue(-1.0 == changeInputIntoValidDouble("0.."));
-		assertTrue(-1.0 == changeInputIntoValidDouble("5..0"));
-		assertTrue(-1.0 == changeInputIntoValidDouble("5.3.2"));
-		assertTrue(-1.0 == changeInputIntoValidDouble("..532"));
-		assertTrue(-1.0 == changeInputIntoValidDouble(""));
-		assertTrue(-1.0 == changeInputIntoValidDouble("lel"));
-		assertTrue(-1.0 == changeInputIntoValidDouble("$"));
-		assertTrue(-1.0 == changeInputIntoValidDouble("100$"));
-		assertTrue(-1.0 == changeInputIntoValidDouble("-1"));
-		assertTrue(-1.0 == changeInputIntoValidDouble("10001"));
-		
-		assertTrue(0.0 == changeInputIntoValidDouble("0."));
-		assertTrue(0.0 == changeInputIntoValidDouble(".0"));
-		assertTrue(10000.0 == changeInputIntoValidDouble("10000"));
-		assertTrue(10.0 == changeInputIntoValidDouble("10"));
-		assertTrue(0.0 == changeInputIntoValidDouble("0"));
-		
-	}
-
-	/*
-	@Test
-	public void testEmpID() throws SQLException{
-		
-		assertFalse(employeeIDCheck(123));
-		assertTrue(employeeIDCheck(223));
-	}
-	*/
-
+	
 }

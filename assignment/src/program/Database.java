@@ -60,24 +60,23 @@ public class Database
 						+"username text NOT NULL,"
 						+"password text NOT NULL,"
 						+"accountType integer NOT NULL);";
-		@SuppressWarnings("unused")
 		String queryUserDetails = "CREATE TABLE IF NOT EXISTS clientdetails ("
 						+"id integer NOT NULL,"
 						+"username text NOT NULL,"
 						+"Address text NOT NULL,"
 						+"Phone number boolean NOT NULL,"
-						+ "FOREGIN KEY(id) REFERNECES users(userID));";
+						+ "FOREIGN KEY(id) REFERENCES users(userID));";
 		String queryEmployees = "CREATE TABLE IF NOT EXISTS EMPLOYEES ("
 				+"employeeID integer PRIMARY KEY AUTOINCREMENT,"
 				+"name VARCHAR(40) NOT NULL,"
-				+"payRate integer NOT NULL);";
+				+"payRate DOUBLE NOT NULL);";
 				//+"PRIMARY KEY(employeeID));";
 
 		String queryEmployeesWorkingTimes = "CREATE TABLE IF NOT EXISTS EMPLOYEES_WORKING_TIMES ("
-							+"employeeID INT NOT NULL,"
+							+"employeeID integer NOT NULL,"
 							+"date VARCHAR(12) NOT NULL,"
-							+"startTime VARCHAR(10) NOT NULL,"
-							+"endTime VARCHAR(10) NOT NULL,"
+							+"startTime DOUBLE NOT NULL,"
+							+"endTime DOUBLE NOT NULL,"
 							+"FOREIGN KEY(employeeID) REFERENCES employees(employeeID));";
 
 		
@@ -92,8 +91,8 @@ public class Database
 			System.out.println("Table 'Users' added");
 			
 			//Creating Table 'USERS_DETAILS'
-			//smt.executeUpdate(queryUserDetails);
-			//System.out.println("Table 'User Details added");
+			smt.executeUpdate(queryUserDetails);
+			System.out.println("Table 'User Details' added");
 			
 			//Creating Table 'EMPLOYEES'
 			smt.executeUpdate(queryEmployees);

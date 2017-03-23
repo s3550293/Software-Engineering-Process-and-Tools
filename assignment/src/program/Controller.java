@@ -3,8 +3,10 @@ package program;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.Scanner;
-
 import org.junit.Before;
 import org.junit.Test;
 
@@ -170,6 +172,29 @@ public class Controller
 		} catch (NumberFormatException e) {
 			return -1;
 		}
+	}
+	
+	public Date convertToDate(String val)
+	{
+		Date date = null;
+		SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
+        String dateInString = val;
+        try {
+
+            date = formatter.parse(dateInString);
+            return date;
+
+        } catch (ParseException e) {
+            e.printStackTrace();
+            return date;
+        }
+	}
+	
+	public String displayDate(Date date)
+	{
+		SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
+		String format = formatter.format(date);
+		return format;
 	}
 
 	

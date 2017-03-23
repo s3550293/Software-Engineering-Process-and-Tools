@@ -69,14 +69,14 @@ public class Login
 		pass = scanner.nextLine();
 		int result = logInProcess(userName,pass);
 		if (result == 1){
-			cmenu.customerMenu();
+			bmenu.companyMenu();
 		}
 		else if(result == 0){
-			bmenu.companyMenu();
+			cmenu.customerMenu();
 		}else{
 			tryAgainMenu();
 		}
-		scanner.close();
+		//scanner.close();
 	}
 	
 	public int logInProcess(String userName, String pass){

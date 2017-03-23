@@ -38,12 +38,14 @@ public class Business
 			//Todo
 			break;
 		case 6:
+			/*
 			Login login = new Login();
 			login.loginMenu();
+			*/
 			break;
 		default:
 			System.out.println("Option not available, please choose again");
 		}
-		scanner.close();
+		//scanner.close();
 	}
 }

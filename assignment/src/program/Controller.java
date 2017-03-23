@@ -394,8 +394,8 @@ public class Controller
 		long val = 0;
 		try {
 			long diff = time2.getTime() - time1.getTime();
-			long diffHours = diff / (60 * 60 * 1000) % 24;
-			val = diffHours;
+			long diffMinutes = diff / (60 * 1000) % 60;
+			val = diffMinutes;
 			//System.out.print(diffHours + " hours, ");
 
 		} catch (Exception e) {

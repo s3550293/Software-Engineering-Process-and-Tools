@@ -172,76 +172,110 @@ public class Controller
 		}
 	}
 	
-	// UI for adding employee working time for next month
+	/*
+	 * UI for adding employee working time for next month 
+	 * Status: In development
+	 */
 	public boolean addWorkingTimesForNextMonth(String userName){
 		Scanner sc = new Scanner(System.in);
 		Controller controller = new Controller();
 		DatabaseConnection connect = new DatabaseConnection();
+		
+		//check if the input username exists in database
 		if(userName.equals(connect.getUser(userName).getUsername()) == false){
 			System.out.println("Employee does not exist");
 			return false;
 		}
-		boolean flag = false;
-		String selection;
-		double year;
-		double month;
-		double date;
-		double startTime;
-		double finishTime;
+		boolean valid = false;
+		int year, month, date, startTime, finishTime;
 		Business bmenu = new Business();
+		String yearStr = "", 
+			   monthStr = "", 
+			   dateStr = "", 
+			   startTimeStr = "", 
+			   finishTimeStr = "";
+		String exitCommand = "/exit";
 		
 		do{
-			System.out.printf("Please Enter year:\n" , "user>>");
-			String yearStr = sc.nextLine();
-			if(yearStr.equalsIgnoreCase("/exit"))
-			{
-				System.out.println("Exitting to main menu...");
-				flag = false;
+			while(valid == false){
+				System.out.printf("Please Enter year:\n" , "user>>");
+				yearStr = sc.nextLine();
+				//convert to Integer
+				year = (int)controller.changeInputIntoValidDouble(yearStr);
+				boolean isInt = isOfTypeInt(year);
+				if(isInt){
+					valid = true;
+				}else{
+					System.out.println("Please enter an appropriate year!");
+					valid = false;
+				}
+				/*
+				 * -check if input is negative
+				 * -check if input is this year
+				 */
 			}
-			year = controller.changeInputIntoValidDouble(yearStr);
-			
-			System.out.printf("Please Enter month:\n" , "user>>");
-			String monthStr = sc.nextLine();
-			if(monthStr.equalsIgnoreCase("/exit"))
-			{
-				System.out.println("Exitting to main menu...");
-				flag = false;
+			valid = false;
+			while(valid == false){
+				System.out.printf("Please Enter month:\n" , "user>>");
+				monthStr = sc.nextLine();
+				month = (int)controller.changeInputIntoValidDouble(monthStr);
+				boolean isInt = isOfTypeInt(month);
+				if(isInt){
+					valid = true;
+				}else{
+					System.out.println("Please enter an appropriate month!");
+					valid = false;
+				}
+				/*
+				 * -check if input is negative
+				 * -check if input is this month/next month
+				 */
 			}
-			month = controller.changeInputIntoValidDouble(monthStr);
-			
-			System.out.printf("Please Enter date:\n" , "user>>");
-			String dateStr = sc.nextLine();
-			if(dateStr.equalsIgnoreCase("/exit"))
-			{
-				System.out.println("Exitting to main menu...");
-				flag = false;
+			valid = false;
+			while(valid == false){
+				System.out.printf("Please Enter date(eg. DD/MM/YYYY:\n" , "user>>");
+				dateStr = sc.nextLine();
+				/*
+				 * -need to convert into date time format
+				 * -check if input is formatted correctly
+				 * -check if input is within next month
+				 */
 			}
-			date = controller.changeInputIntoValidDouble(dateStr);
-			
-			System.out.printf("Please Enter start time:\n" , "user>>");
-			String startTimeStr = sc.nextLine();
-			if(startTimeStr.equalsIgnoreCase("/exit"))
-			{
-				System.out.println("Exitting to main menu...");
-				flag = false;
+			valid = false;
+			while(valid == false){
+				System.out.printf("Please Enter start time(eg. HH:MM):\n" , "user>>");
+				startTimeStr = sc.nextLine();
+				/*
+				 * -need to convert into date time format
+				 * -check if input is formatted correctly
+				 */
 			}
-			startTime = controller.changeInputIntoValidDouble(startTimeStr);
-			
-			System.out.printf("Please Enter finish time:\n" , "user>>");
-			String finishTimeStr = sc.nextLine();
-			if(finishTimeStr.equalsIgnoreCase("/exit"))
-			{
-				System.out.println("Exitting to main menu...");
-				flag = false;
+			valid = false;
+			while(valid == false){
+				System.out.printf("Please Enter finish time(eg. HH:MM):\n" , "user>>");
+				finishTimeStr = sc.nextLine();
+				/*
+				 * -need to convert into date time format
+				 * -check if input is formatted correctly
+				 */
 			}
-			finishTime = controller.changeInputIntoValidDouble(finishTimeStr);
-			
-			
-			
-			
-		}while (flag == false);
+			valid = false;
+		}while (!yearStr.equalsIgnoreCase(exitCommand)
+				|| !monthStr.equalsIgnoreCase(exitCommand)
+				|| !dateStr.equalsIgnoreCase(exitCommand)
+				|| !startTimeStr.equalsIgnoreCase(exitCommand)
+				|| !finishTimeStr.equalsIgnoreCase(exitCommand));
 		
 		return false;
+	}
+
+	public boolean isOfTypeInt(int num) {
+	    try {
+	        Integer.valueOf(num);
+	        return true;
+	    } catch (NumberFormatException numberFormatException) {
+	        return false;
+	    }
 	}
 	
 	public boolean addWorkingTimesForEmployee()

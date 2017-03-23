@@ -1,13 +1,13 @@
 package program;
 
-import static org.junit.Assert.*;
-
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.Date;
 
 /*
  * follow this link to find out how to add tables and access tables
@@ -85,9 +85,9 @@ public class DatabaseConnection
 	
 		//This function finds a selection of employees that matches the string name 
 		//returns an array of object Employee
-		public Employee[] getEmployees(String name)
+		public ArrayList<Employee> getEmployees(String name)
 		{
-			Employee[] databaseEmployee = new Employee[1000];
+			ArrayList<Employee> databaseEmployee = new ArrayList<Employee>();
 			int i = 0;
 			int id = 0;
 			double payRate = 0;
@@ -103,8 +103,7 @@ public class DatabaseConnection
 					id = output.getInt(1);
 					name = output.getString(2);
 					payRate = output.getDouble(3);
-					databaseEmployee[i] = new Employee(id ,name, payRate);
-					++i;
+					databaseEmployee.add(new Employee(id ,name, payRate));
 				}
 				output.close();
 			}
@@ -161,7 +160,7 @@ public class DatabaseConnection
 		}
 		
 		//Adds ONE employee working time to the database with the RAW parameters [parameters are not tested]
-		public void addEmployeeWorkingTime(int id, String date, double startTime, double endTime)
+		public void addEmployeeWorkingTime(int id, Date date, Date startTime, Date endTime)
 		{
 			String query = "INSERT INTO EMPLOYEES_WORKING_TIMES " + "VALUES (" + id + ",'" + date + "'," + startTime + "," + endTime + ");";
 			try(Connection connect = this.connect(); Statement inject = connect.createStatement())
@@ -191,14 +190,14 @@ public class DatabaseConnection
 		}
 		
 		//Gets the employee's working times from database and returns it as an array of EmployeeWorkingTime
-		public EmployeeWorkingTime[] getEmployeeWorkingTimes(int employeeId)
+		public ArrayList<EmployeeWorkingTime> getEmployeeWorkingTimes(int employeeId)
 		{
-			EmployeeWorkingTime[] databaseWorkingTime = new EmployeeWorkingTime[10000];
+			ArrayList<EmployeeWorkingTime> databaseWorkingTime = new ArrayList<EmployeeWorkingTime>();
 			int i = 0;
 			int id = 0;
-			String date;
-			double startTime;
-			double endTime;
+			Date date;
+			Date startTime;
+			Date endTime;
 			String query = "SELECT * FROM EMPLOYEES_WORKING_TIMES WHERE employeeID = ? "; 
 
 			try (Connection connect = this.connect(); PreparedStatement  inject  = connect.prepareStatement(query))
@@ -210,11 +209,10 @@ public class DatabaseConnection
 				while (output.next())
 				{
 					id = output.getInt(1);
-					date = output.getString(2);
-					startTime = output.getDouble(3);
-					endTime = output.getDouble(4);
-					databaseWorkingTime[i] = new EmployeeWorkingTime(id ,date,startTime,endTime);
-					++i;				
+					date = output.getDate(2);
+					startTime = output.getDate(3);
+					endTime = output.getDate(4);
+					databaseWorkingTime.add(new EmployeeWorkingTime(id ,date,startTime,endTime));				
 				}
 				output.close();
 			}

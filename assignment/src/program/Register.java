@@ -1,8 +1,6 @@
 package program;
 
 import java.util.Scanner;
-import org.junit.*;
-import static org.junit.Assert.*;
 
 public class Register 
 {
@@ -20,6 +18,7 @@ public class Register
 		String _password = "";
 		char _choice = 'y';
 		int accountType = 0;
+		@SuppressWarnings("resource")
 		Scanner userInput = new Scanner(System.in);
 		while(flag)
 		{

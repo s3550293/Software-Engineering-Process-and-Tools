@@ -1,12 +1,11 @@
 package program;
 
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
 
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.Scanner;
-
-import org.junit.Before;
-import org.junit.Test;
 
 public class Controller
 {
@@ -21,6 +20,7 @@ public class Controller
 	 */
 	public boolean addNewEmployee()
 	{
+		@SuppressWarnings("resource")
 		Scanner kb = new Scanner(System.in);
 		DatabaseConnection connect = new DatabaseConnection();
 		boolean loopAgain;
@@ -177,6 +177,7 @@ public class Controller
 	 * Status: In development
 	 */
 	public boolean addWorkingTimesForNextMonth(String userName){
+		@SuppressWarnings("resource")
 		Scanner sc = new Scanner(System.in);
 		Controller controller = new Controller();
 		DatabaseConnection connect = new DatabaseConnection();
@@ -280,6 +281,7 @@ public class Controller
 	
 	public boolean addWorkingTimesForEmployee()
 	{
+		@SuppressWarnings("resource")
 		Scanner kb = new Scanner(System.in);
 		DatabaseConnection connect = new DatabaseConnection();
 		String employeeName;
@@ -328,6 +330,95 @@ public class Controller
 		}
 		while(loopAgain);*/
 		return false;
+	}
+	
+	/*
+	 * Use Convert String to Date when entering data into the database
+	 */
+	public Date convertStringToDate(String date)
+	{
+		Date _date = null;
+		SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yy");
+		try 
+		{
+			_date = sdf.parse(date);
+		} 
+		catch (ParseException e)
+		{
+			System.out.println(e.getMessage());
+		}
+		return _date;
+	}
+	
+	/*
+	 * Use Convert Date to String when reading/printing from database
+	 */
+	public String convertDateToString(Date date)
+	{
+		String _date = null;
+		SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yy");
+		_date = sdf.format(date);
+		return _date;
+	}
+	
+	/*
+	 * Use Convert String to Time when entering into the database
+	 */
+	public Date convertStringToTime(String time)
+	{
+		Date _time = null;
+		DateFormat sdf = new SimpleDateFormat("HH:mm");
+		try 
+		{
+			_time = sdf.parse(time);
+		} 
+		catch (ParseException e)
+		{
+			System.out.println(e.getMessage());
+		}
+		return _time;
+	}
+	public String convertTimeToString(Date time)
+	{
+		String _time = null;
+		DateFormat sdf = new SimpleDateFormat("HH:mm");
+		_time = sdf.format(time);
+		return _time;
+	}
+	
+	/*
+	 * used to compare two times and get the duration
+	 */
+	public long getTimeDifference(Date time1, Date time2)
+	{
+		long val = 0;
+		try {
+			long diff = time2.getTime() - time1.getTime();
+			long diffHours = diff / (60 * 60 * 1000) % 24;
+			val = diffHours;
+			//System.out.print(diffHours + " hours, ");
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return val;
+	}
+	/*
+	 * used to compare two dates and get the duration
+	 */
+	public long getDateDifference(Date date1, Date date2)
+	{
+		long val = 0;
+		try {
+			long diff = date2.getTime() - date1.getTime();
+			long diffDays = diff / (24 * 60 * 60 * 1000);
+			val = diffDays;
+			//System.out.print(diffDays + " days, ");
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return val;
 	}
 	
 	

@@ -270,7 +270,7 @@ public class Controller
 			}
 		}
 		while(loopAgain);
-		connect.getEmployees(employeeName);
+		connect.findEmployeeByName(employeeName);
 		/*do
 		{
 			loopAgain = false;
@@ -295,4 +295,57 @@ public class Controller
 		while(loopAgain);*/
 		return false;
 	}
+	
+	
+	
+	
+	@Before
+	public void setUp()
+	{
+
+	}
+	@Test
+	public void testCheckInputToContainNonAlphabetChar() 
+	{
+		assertFalse(checkInputToContainInvalidChar("Luke Mason"));
+		assertFalse(checkInputToContainInvalidChar("LukeyyyMason"));
+		
+		assertTrue(checkInputToContainInvalidChar(""));
+		assertTrue(checkInputToContainInvalidChar("1010101LUKE"));
+		assertTrue(checkInputToContainInvalidChar("LUKEEEEEEEEEEEEEEEEEEEEEEEEEEE                                        "));
+		assertTrue(checkInputToContainInvalidChar("luke%@#$"));
+	}
+
+	@Test
+	public void testChangeInputIntoValidDouble() 
+	{
+		assertTrue(-1.0 == changeInputIntoValidDouble("..0"));
+		assertTrue(-1.0 == changeInputIntoValidDouble("0.."));
+		assertTrue(-1.0 == changeInputIntoValidDouble("5..0"));
+		assertTrue(-1.0 == changeInputIntoValidDouble("5.3.2"));
+		assertTrue(-1.0 == changeInputIntoValidDouble("..532"));
+		assertTrue(-1.0 == changeInputIntoValidDouble(""));
+		assertTrue(-1.0 == changeInputIntoValidDouble("lel"));
+		assertTrue(-1.0 == changeInputIntoValidDouble("$"));
+		assertTrue(-1.0 == changeInputIntoValidDouble("100$"));
+		assertTrue(-1.0 == changeInputIntoValidDouble("-1"));
+		assertTrue(-1.0 == changeInputIntoValidDouble("10001"));
+		
+		assertTrue(0.0 == changeInputIntoValidDouble("0."));
+		assertTrue(0.0 == changeInputIntoValidDouble(".0"));
+		assertTrue(10000.0 == changeInputIntoValidDouble("10000"));
+		assertTrue(10.0 == changeInputIntoValidDouble("10"));
+		assertTrue(0.0 == changeInputIntoValidDouble("0"));
+		
+	}
+
+	/*
+	@Test
+	public void testEmpID() throws SQLException{
+		
+		assertFalse(employeeIDCheck(123));
+		assertTrue(employeeIDCheck(223));
+	}
+	*/
+
 }

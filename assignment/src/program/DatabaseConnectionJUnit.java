@@ -1,5 +1,5 @@
-package program.Tests;
-import program.DatabaseConnection;
+package program;
+
 import static org.junit.Assert.assertTrue;
 import java.sql.Connection;
 import java.sql.SQLException;
@@ -8,10 +8,6 @@ import java.sql.DriverManager;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-
-import program.Database;
-import program.Employee;
-import program.EmployeeWorkingTime;
 
 public class DatabaseConnectionJUnit {
 	

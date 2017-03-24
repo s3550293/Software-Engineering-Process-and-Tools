@@ -53,6 +53,7 @@ public class ControllerJunit {
 	public void testDateConvertFunc()
 	{
 		assertEquals("01/01/2012",controller.convertDateToString(controller.convertStringToDate("01/01/2012")));
+		assertEquals("01/01/2012",controller.convertDateToString(controller.convertStringToDate("1/01/2012")));
 		assertEquals("30/12/2020",controller.convertDateToString(controller.convertStringToDate("30/12/2020")));
 		assertEquals("12/12/2012",controller.convertDateToString(controller.convertStringToDate("12/12/2012")));
 		

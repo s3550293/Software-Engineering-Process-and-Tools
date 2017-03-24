@@ -176,14 +176,14 @@ public class Controller
 	 * UI for adding employee working time for next month 
 	 * Status: In development
 	 */
-	public boolean addWorkingTimesForNextMonth(String userName){
+	public boolean addWorkingTimesForNextMonth(int employeeID){
 		@SuppressWarnings("resource")
 		Scanner sc = new Scanner(System.in);
 		Controller controller = new Controller();
 		DatabaseConnection connect = new DatabaseConnection();
 		
-		//check if the input username exists in database
-		if(userName.equals(connect.getUser(userName).getUsername()) == false){
+		//check by id if the employee exists in database
+		if(employeeID != connect.getEmployee(employeeID).getId()){
 			System.out.println("Employee does not exist");
 			return false;
 		}

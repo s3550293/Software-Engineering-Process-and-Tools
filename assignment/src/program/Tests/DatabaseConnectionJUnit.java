@@ -30,30 +30,7 @@ public class DatabaseConnectionJUnit {
         }
         return connect;
 	}
-	public int countEmployeesInArray(Employee[] employees)
-	{
-		int counter = 0;
-		for (int i = 0; i < employees.length; i ++)
-		{
-		    if (employees[i] != null)
-		    {
-		        counter ++;
-		    }
-		}
-		return counter;
-	}
-	public int countWorkTimesInArray(EmployeeWorkingTime[] employeeWorkingTime)
-	{
-		int counter = 0;
-		for (int i = 0; i < employeeWorkingTime.length; i ++)
-		{
-		    if (employeeWorkingTime[i] != null)
-		    {
-		        counter ++;
-		    }
-		}
-		return counter;
-	}
+	
 	DatabaseConnection connect = new DatabaseConnection();
 	
 	@Before
@@ -201,8 +178,10 @@ public class DatabaseConnectionJUnit {
 		//Needs to be changed to the new codebase
 		/*
 		//Assigning working times to employee 1 ('Luke') to the database
-		connect.addEmployeeWorkingTime(1,"01/01/2017",8.5,14);
-		connect.addEmployeeWorkingTime(1,"02/01/2017",8.66666667,14.34);
+
+		connect.addEmployeeWorkingTime(1,date1,8:50,14:00);
+		connect.addEmployeeWorkingTime(1,02/01/2017,8:50,14:30);
+		
 		EmployeeWorkingTime[] LukesWorkingTimes = connect.getEmployeeWorkingTimes(1);
 		
 		//Counting how many working times are in array

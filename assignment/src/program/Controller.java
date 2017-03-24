@@ -4,7 +4,10 @@ package program;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.Scanner;
 
 public class Controller
@@ -24,6 +27,8 @@ public class Controller
 		Scanner kb = new Scanner(System.in);
 		DatabaseConnection connect = new DatabaseConnection();
 		boolean loopAgain;
+		String employeeFName;
+		String employeeLName;
 		String employeeName;
 		String employeePayRate;
 		double employeePayRate2;
@@ -31,17 +36,17 @@ public class Controller
 		do
 		{
 			loopAgain = false;
-			System.out.print("Enter in the new employee's full name [/exit to quit] >> ");
-			employeeName = kb.nextLine().toLowerCase();
+			System.out.print("Enter in the new employee's first name only [/exit to quit] >> ");
+			employeeFName = kb.nextLine().toLowerCase();
 			//Attempting to see if the input is valid
 			//Checking to see if the input contains any non-alphabetical characters e.g ?>!#%$#12345
-			if(employeeName.equalsIgnoreCase("/exit"))
+			if(employeeFName.equalsIgnoreCase("/exit"))
 			{
 				System.out.println("Exitting to main menu...");
 				
 				return false;
 			}
-			if(checkInputToContainInvalidChar(employeeName))
+			if(checkInputToContainInvalidChar(employeeFName))
 			{
 				System.out.println("The name you have entered contains non-alphabetical characters");
 				System.out.println("Please try again");
@@ -49,6 +54,28 @@ public class Controller
 			}
 		}
 		while(loopAgain);
+		do
+		{
+			loopAgain = false;
+			System.out.print("Enter in the new employee's last name only [/exit to quit] >> ");
+			employeeLName = kb.nextLine().toLowerCase();
+			//Attempting to see if the input is valid
+			//Checking to see if the input contains any non-alphabetical characters e.g ?>!#%$#12345
+			if(employeeLName.equalsIgnoreCase("/exit"))
+			{
+				System.out.println("Exitting to main menu...");
+				
+				return false;
+			}
+			if(checkInputToContainInvalidChar(employeeLName))
+			{
+				System.out.println("The name you have entered contains non-alphabetical characters");
+				System.out.println("Please try again");
+				loopAgain = true;
+			}
+		}
+		while(loopAgain);
+		employeeName = employeeFName +" "+employeeLName;
 		do
 		{
 			loopAgain = false;
@@ -153,7 +180,78 @@ public class Controller
 		return false;
 	}
 	
-	
+	//finds all employees by name and prints to screen then calls add  employee work time function
+	public boolean findEmployeeByNameUI()
+	{
+		DatabaseConnection connect = new DatabaseConnection();
+		String employeeName;
+		boolean loopAgain;
+		boolean loopAgain2;
+		do
+		{
+			loopAgain = false;
+			System.out.println("~~~Search for Employee~~~[/exit to quit]");
+			System.out.print("Employee Name >> ");
+			employeeName = kb.nextLine().toLowerCase();
+			//Attempting to see if the input is valid
+			//Checking to see if the input contains any non-alphabetical characters e.g ?>!#%$#12345
+			if(employeeName.equalsIgnoreCase("/exit"))
+			{
+				System.out.println("Exitting to main menu...");
+				
+				return false;
+			}
+			ArrayList<Employee> employees = connect.getEmployees(employeeName);
+
+			for(Employee employee: employees)
+			{
+			    System.out.println(employee.toString());
+			    if(employees.size() == 0)
+			    {
+			    	System.out.println("Sorry but there are no matches for the name '"+employeeName+"'\n Please Try again");
+			    	loopAgain = true;
+			    	continue;
+			    }
+			}
+			do
+			{
+				loopAgain2 = false;
+				System.out.println("What employee would you like to add working times for?");
+				System.out.print("Employee''s ID >> ");
+				String employeeId = kb.nextLine();
+				if(employeeId.equalsIgnoreCase("/exit"))
+				{
+					System.out.println("Exitting to main menu...");
+					
+					return false;
+				}
+				int id = changeInputIntoValidInt(employeeId);
+				if(id < 0)
+				{
+					System.out.println("Invalid ID, Try again");
+					loopAgain2 = true;
+					continue;
+				}
+				boolean idExists = false;
+				for(Employee employee: employees)
+				{
+					if(employee.getId()==id)
+					{
+						idExists = true;
+						addWorkingTimesForNextMonth(id);
+					}
+				}
+				if(!idExists)
+				{
+					System.out.println("ID MISMATCH: There is no ID that matches an employee you have just searched for\n Try Again");
+					loopAgain2 = true;
+				}
+			}
+			while(loopAgain2);
+		}
+		while(loopAgain);
+		return false;
+	}
 	//Changes the string number into an Double
 	//return -1 if the input is a negative number OR if the input contains non-numeric characters except decimal
 	//Checks if the input contains more than 1 decimal
@@ -162,7 +260,7 @@ public class Controller
 		try {
 		      Double input = Double.parseDouble(string);
 		      //Checking to see if the input is a negative, negatives are not used as inputs in this project
-		      if(input < 0 || input > 10000)
+		      if(input < 0 || input > 1000)
 		      {
 		    	  return -1;
 		      }
@@ -172,21 +270,59 @@ public class Controller
 		}
 	}
 	
+	//Changes the string number into an Int
+	//return -1 if the input is a negative number OR if the input contains non-numeric characters
+	public int changeInputIntoValidInt(String string) 
+	{
+		try {
+		      Integer input = Integer.parseInt(string);
+		      //Checking to see if the input is a negative, negatives are not used as inputs in this project
+		      if(input < 0)
+		      {
+		    	  return -1;
+		      }
+		      return input;
+		} catch (NumberFormatException e) {
+			return -1;
+		}
+	}
+	
+	//Checking date and it's format before converting, if okay, then convert, return date
+	public boolean checkNewDate(String date)
+	{
+		
+		Date date1 = convertStringToDate(date);
+		if(date1 == null)
+		{
+			System.out.println("This is an invalid date format, Try again (dd/mm/yyyy)");
+			return false;
+		}
+		Calendar c=new GregorianCalendar();
+		c.add(Calendar.DATE, 30);
+		Date date2 =c.getTime();
+		System.out.println(getDateDifference(date1,date2));
+		System.out.println(date1);
+		System.out.println(date2);
+		if(date1.after(date2))
+		{
+			System.out.println("This date is more than 30 days in advance, Try again");
+			return false;
+		}
+		return true;
+	}
+	
+	//DAVID
 	/*
 	 * UI for adding employee working time for next month 
 	 * Status: In development
 	 */
-	public boolean addWorkingTimesForNextMonth(String userName){
+	public boolean addWorkingTimesForNextMonth(int employeeId){
 		@SuppressWarnings("resource")
 		Scanner sc = new Scanner(System.in);
 		Controller controller = new Controller();
 		DatabaseConnection connect = new DatabaseConnection();
 		
-		//check if the input username exists in database
-		if(userName.equals(connect.getUser(userName).getUsername()) == false){
-			System.out.println("Employee does not exist");
-			return false;
-		}
+		//check if the input employeeId exists in database
 		boolean valid = false;
 		int year, month, date, startTime, finishTime;
 		Business bmenu = new Business();
@@ -333,12 +469,14 @@ public class Controller
 	}
 	
 	/*
+	
+	//JOSEPH
 	 * Use Convert String to Date when entering data into the database
 	 */
 	public Date convertStringToDate(String date)
 	{
 		Date _date = null;
-		SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yy");
+		SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
 		try 
 		{
 			_date = sdf.parse(date);

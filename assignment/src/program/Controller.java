@@ -338,14 +338,15 @@ public class Controller
 	public Date convertStringToDate(String date)
 	{
 		Date _date = null;
-		SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yy");
+		SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
 		try 
 		{
 			_date = sdf.parse(date);
 		} 
 		catch (ParseException e)
 		{
-			System.out.println(e.getMessage());
+			System.out.println("Convert To Date Error: "+e.getMessage());
+			
 		}
 		return _date;
 	}
@@ -356,7 +357,7 @@ public class Controller
 	public String convertDateToString(Date date)
 	{
 		String _date = null;
-		SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yy");
+		SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
 		_date = sdf.format(date);
 		return _date;
 	}
@@ -375,6 +376,7 @@ public class Controller
 		catch (ParseException e)
 		{
 			System.out.println(e.getMessage());
+			return _time;
 		}
 		return _time;
 	}
@@ -395,8 +397,13 @@ public class Controller
 		try {
 			long diff = time2.getTime() - time1.getTime();
 			long diffMinutes = diff / (60 * 1000) % 60;
+			long diffHours = diff / (60 * 60 * 1000) % 24;
 			val = diffMinutes;
-			//System.out.print(diffHours + " hours, ");
+			if(diffHours != 0)
+			{
+				val += diffHours*60;
+			}
+			System.out.print(val + " minutes, ");
 
 		} catch (Exception e) {
 			e.printStackTrace();

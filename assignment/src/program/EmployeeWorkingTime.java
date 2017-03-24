@@ -4,14 +4,14 @@ import java.util.Date;
 
 public class EmployeeWorkingTime 
 {
-	private int id;
-	private Date date;
-	private Date startTime;
-	private Date endTime;
+	private int id, empID;
+	private Date date, startTime, endTime;
 	
-	public EmployeeWorkingTime(int id, Date date, Date startTime, Date endTime)
+	public EmployeeWorkingTime(){}
+	public EmployeeWorkingTime(int id, int empID, Date date, Date startTime, Date endTime)
 	{
 		this.id = id;
+		this.empID = empID;
 		this.date = date;
 		this.startTime = startTime;
 		this.endTime = endTime;
@@ -20,6 +20,10 @@ public class EmployeeWorkingTime
 	public int getId()
 	{
 		return id;
+	}
+	public int getEmpID()
+	{
+		return empID;
 	}
 	public Date getDate()
 	{

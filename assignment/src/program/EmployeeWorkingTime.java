@@ -1,15 +1,17 @@
 package program;
 
+import java.util.Date;
+
 public class EmployeeWorkingTime 
 {
-	private int id;
-	private String date;
-	private double startTime;
-	private double endTime;
+	private int id, empID;
+	private Date date, startTime, endTime;
 	
-	public EmployeeWorkingTime(int id, String date, double startTime, double endTime)
+	public EmployeeWorkingTime(){}
+	public EmployeeWorkingTime(int id, int empID, Date date, Date startTime, Date endTime)
 	{
 		this.id = id;
+		this.empID = empID;
 		this.date = date;
 		this.startTime = startTime;
 		this.endTime = endTime;
@@ -19,27 +21,31 @@ public class EmployeeWorkingTime
 	{
 		return id;
 	}
-	public String getDate()
+	public int getEmpID()
+	{
+		return empID;
+	}
+	public Date getDate()
 	{
 		return date;
 	}
-	public double getStartTime()
+	public Date getStartTime()
 	{
 		return startTime;
 	}
-	public double getEndTime()
+	public Date getEndTime()
 	{
 		return endTime;
 	}
-	public void setDate(String date)
+	public void setDate(Date date)
 	{
 		this.date = date;
 	}
-	public void setStartTime(double startTime)
+	public void setStartTime(Date startTime)
 	{
 		this.startTime = startTime;
 	}
-	public void setEndTime(double endTime)
+	public void setEndTime(Date endTime)
 	{
 		this.endTime = endTime;
 	}

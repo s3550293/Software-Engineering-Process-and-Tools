@@ -41,6 +41,6 @@ public class RegisterJunit
 	@After
 	public void after()
 	{
-		//connect.dropTable("users");
+		connect.dropTable("users");
 	}
 }

@@ -17,7 +17,7 @@ public class Login
 		Scanner userInput = new Scanner(System.in);
 		while(flag)
 		{	
-			System.out.printf("\n%-1s %s\n", "", "Company Login");
+			System.out.printf("\n%-1s %s\n", "", "Login");
 			System.out.printf("%s\n","---------------------------");
 			System.out.printf("%-3s %-2s %s\n", "", "1.", "Login");
 			System.out.printf("%-3s %-2s %s\n", "", "2.", "Register");

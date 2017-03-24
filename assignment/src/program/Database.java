@@ -70,13 +70,13 @@ public class Database
 				+"employeeID integer PRIMARY KEY AUTOINCREMENT,"
 				+"name VARCHAR(40) NOT NULL,"
 				+"payRate DOUBLE NOT NULL);";
-				//+"PRIMARY KEY(employeeID));";
 
 		String queryEmployeesWorkingTimes = "CREATE TABLE IF NOT EXISTS EMPLOYEES_WORKING_TIMES ("
+							+"id integer PRIMARY KEY AUTOINCREMENT,"
 							+"employeeID integer NOT NULL,"
-							+"date VARCHAR(12) NOT NULL,"
-							+"startTime DOUBLE NOT NULL,"
-							+"endTime DOUBLE NOT NULL,"
+							+"date VARCHAR(20) NOT NULL,"
+							+"startTime DATE NOT NULL,"
+							+"endTime DATE NOT NULL,"
 							+"FOREIGN KEY(employeeID) REFERENCES employees(employeeID));";
 
 		
@@ -159,8 +159,8 @@ public class Database
 		String queryEmployeesWorkingTimes = "CREATE TABLE IF NOT EXISTS EMPLOYEES_WORKING_TIMES ("
 							+"employeeID INT NOT NULL,"
 							+"date VARCHAR(12) NOT NULL,"
-							+"startTime VARCHAR(10) NOT NULL,"
-							+"endTime VARCHAR(10) NOT NULL,"
+							+"startTime VARCHAR(12) NOT NULL,"
+							+"endTime VARCHAR(12) NOT NULL,"
 							+"FOREIGN KEY(employeeID) REFERENCES employees(employeeID));";
 
 		

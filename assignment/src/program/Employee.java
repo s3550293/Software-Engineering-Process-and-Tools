@@ -1,7 +1,5 @@
 package program;
 
-import org.junit.*;
-
 public class Employee {
 
 	/*

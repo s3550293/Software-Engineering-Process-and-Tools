@@ -8,6 +8,7 @@ public class Business
 	public Business(){}
 	public void companyMenu()
 	{
+		@SuppressWarnings("resource")
 		Scanner scanner = new Scanner(System.in);
 		
 		System.out.printf("\n%-1s %s\n", "", "Company Menu");
@@ -45,6 +46,8 @@ public class Business
 		default:
 			System.out.println("Option not available, please choose again");
 		}
-		scanner.close();
+		//scanner.close();
 	}
+	
+	
 }

@@ -1,12 +1,11 @@
 package program;
 
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
 
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.Scanner;
-
-import org.junit.Before;
-import org.junit.Test;
 
 public class Controller
 {
@@ -21,6 +20,7 @@ public class Controller
 	 */
 	public boolean addNewEmployee()
 	{
+		@SuppressWarnings("resource")
 		Scanner kb = new Scanner(System.in);
 		DatabaseConnection connect = new DatabaseConnection();
 		boolean loopAgain;
@@ -176,25 +176,30 @@ public class Controller
 	 * UI for adding employee working time for next month 
 	 * Status: In development
 	 */
-	public boolean addWorkingTimesForNextMonth(String userName){
+	public boolean addWorkingTimesForNextMonth(int employeeID){
+		@SuppressWarnings("resource")
 		Scanner sc = new Scanner(System.in);
 		Controller controller = new Controller();
 		DatabaseConnection connect = new DatabaseConnection();
 		
-		//check if the input username exists in database
-		if(userName.equals(connect.getUser(userName).getUsername()) == false){
+		//check by id if the employee exists in database
+		if(employeeID != connect.getEmployee(employeeID).getId()){
 			System.out.println("Employee does not exist");
 			return false;
 		}
 		boolean valid = false;
-		int year, month, date, startTime, finishTime;
-		Business bmenu = new Business();
+		int year = 0, 
+			month = 0, 
+			date = 0, 
+			startTime = 0, 
+			finishTime = 0;
 		String yearStr = "", 
 			   monthStr = "", 
 			   dateStr = "", 
 			   startTimeStr = "", 
 			   finishTimeStr = "";
 		String exitCommand = "/exit";
+		String formattedDate = "";
 		
 		do{
 			while(valid == false){
@@ -233,8 +238,16 @@ public class Controller
 			}
 			valid = false;
 			while(valid == false){
-				System.out.printf("Please Enter date(eg. DD/MM/YYYY:\n" , "user>>");
+				System.out.printf("Please Enter date:\n" , "user>>");
 				dateStr = sc.nextLine();
+				date = (int)controller.changeInputIntoValidDouble(dateStr);
+				boolean isInt = isOfTypeInt(date);
+				if(isInt){
+					valid = true;
+				}else{
+					System.out.println("Please enter an appropriate date!");
+					valid = false;
+				}
 				/*
 				 * -need to convert into date time format
 				 * -check if input is formatted correctly
@@ -242,22 +255,24 @@ public class Controller
 				 */
 			}
 			valid = false;
+			
+			//Format date input into: DD/MM/YYYY
+			String new_dateStr = Integer.toString(date);
+			String new_monthStr = Integer.toString(month);
+			String new_yearStr = Integer.toString(year);
+			formattedDate = new_dateStr + "/" + new_monthStr + "/" + new_yearStr;
+			Date correctDate = convertStringToDate(formattedDate);
+			
 			while(valid == false){
 				System.out.printf("Please Enter start time(eg. HH:MM):\n" , "user>>");
 				startTimeStr = sc.nextLine();
-				/*
-				 * -need to convert into date time format
-				 * -check if input is formatted correctly
-				 */
-			}
-			valid = false;
-			while(valid == false){
 				System.out.printf("Please Enter finish time(eg. HH:MM):\n" , "user>>");
 				finishTimeStr = sc.nextLine();
-				/*
-				 * -need to convert into date time format
-				 * -check if input is formatted correctly
-				 */
+				if(checkOutofBoundWorkinghours(startTimeStr, finishTimeStr)){
+					return true;
+				}else{
+					return false;
+				}
 			}
 			valid = false;
 		}while (!yearStr.equalsIgnoreCase(exitCommand)
@@ -278,8 +293,25 @@ public class Controller
 	    }
 	}
 	
+	public Boolean checkOutofBoundWorkinghours(String start, String end){
+			String min_Boundhour = "8:00";
+			String max_Boundhour = "17:00";
+			Date startBound = convertStringToTime(min_Boundhour);
+			Date endBound = convertStringToTime(max_Boundhour);
+			Date startTime = convertStringToTime(start);
+			Date endTime = convertStringToTime(end);
+			
+			long getStartTimeDiff = getTimeDifference(startBound, startTime);
+			long getEndTimeDiff = getTimeDifference(endTime, endBound);
+			if((getStartTimeDiff >= 0) && (getEndTimeDiff >= 0)){
+				return true;
+			}
+			return false;
+		}
+	
 	public boolean addWorkingTimesForEmployee()
 	{
+		@SuppressWarnings("resource")
 		Scanner kb = new Scanner(System.in);
 		DatabaseConnection connect = new DatabaseConnection();
 		String employeeName;
@@ -328,6 +360,102 @@ public class Controller
 		}
 		while(loopAgain);*/
 		return false;
+	}
+	
+	/*
+	 * Use Convert String to Date when entering data into the database
+	 */
+	public Date convertStringToDate(String date)
+	{
+		Date _date = null;
+		SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+		try 
+		{
+			_date = sdf.parse(date);
+		} 
+		catch (ParseException e)
+		{
+			System.out.println("Convert To Date Error: "+e.getMessage());
+			
+		}
+		return _date;
+	}
+	
+	/*
+	 * Use Convert Date to String when reading/printing from database
+	 */
+	public String convertDateToString(Date date)
+	{
+		String _date = null;
+		SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+		_date = sdf.format(date);
+		return _date;
+	}
+	
+	/*
+	 * Use Convert String to Time when entering into the database
+	 */
+	public Date convertStringToTime(String time)
+	{
+		Date _time = null;
+		DateFormat sdf = new SimpleDateFormat("HH:mm");
+		try 
+		{
+			_time = sdf.parse(time);
+		} 
+		catch (ParseException e)
+		{
+			System.out.println(e.getMessage());
+			return _time;
+		}
+		return _time;
+	}
+	public String convertTimeToString(Date time)
+	{
+		String _time = null;
+		DateFormat sdf = new SimpleDateFormat("HH:mm");
+		_time = sdf.format(time);
+		return _time;
+	}
+	
+	/*
+	 * used to compare two times and get the duration
+	 */
+	public long getTimeDifference(Date time1, Date time2)
+	{
+		long val = 0;
+		try {
+			long diff = time2.getTime() - time1.getTime();
+			long diffMinutes = diff / (60 * 1000) % 60;
+			long diffHours = diff / (60 * 60 * 1000) % 24;
+			val = diffMinutes;
+			if(diffHours != 0)
+			{
+				val += diffHours*60;
+			}
+			System.out.print(val + " minutes, ");
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return val;
+	}
+	/*
+	 * used to compare two dates and get the duration
+	 */
+	public long getDateDifference(Date date1, Date date2)
+	{
+		long val = 0;
+		try {
+			long diff = date2.getTime() - date1.getTime();
+			long diffDays = diff / (24 * 60 * 60 * 1000);
+			val = diffDays;
+			//System.out.print(diffDays + " days, ");
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return val;
 	}
 	
 	

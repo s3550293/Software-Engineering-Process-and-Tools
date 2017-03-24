@@ -2,6 +2,10 @@ package program.Tests;
 
 import static org.junit.Assert.*;
 
+import java.util.Calendar;
+import java.util.Date;
+import java.util.GregorianCalendar;
+
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -44,9 +48,59 @@ public class ControllerJunit {
 		
 		assertTrue(0.0 == controller.changeInputIntoValidDouble("0."));
 		assertTrue(0.0 == controller.changeInputIntoValidDouble(".0"));
-		assertTrue(10000.0 == controller.changeInputIntoValidDouble("10000"));
+		assertTrue(1000.0 == controller.changeInputIntoValidDouble("1000"));
 		assertTrue(10.0 == controller.changeInputIntoValidDouble("10"));
 		assertTrue(0.0 == controller.changeInputIntoValidDouble("0"));
+		
+	}
+	@Test
+	public void testChangeInputIntoValidInt() 
+	{
+		assertTrue(-1 == controller.changeInputIntoValidInt("..0"));
+		assertTrue(-1 == controller.changeInputIntoValidInt("0.."));
+		assertTrue(-1 == controller.changeInputIntoValidInt("5..0"));
+		assertTrue(-1 == controller.changeInputIntoValidInt("5.3.2"));
+		assertTrue(-1 == controller.changeInputIntoValidInt("..532"));
+		assertTrue(-1 == controller.changeInputIntoValidInt(""));
+		assertTrue(-1 == controller.changeInputIntoValidInt("lel"));
+		assertTrue(-1 == controller.changeInputIntoValidInt("$"));
+		assertTrue(-1 == controller.changeInputIntoValidInt("100$"));
+		assertTrue(-1 == controller.changeInputIntoValidInt("-1"));
+		assertTrue(-1 == controller.changeInputIntoValidInt("0."));
+		assertTrue(-1 == controller.changeInputIntoValidInt(".0"));
+		
+		assertTrue(10000 == controller.changeInputIntoValidInt("10000"));
+		assertTrue(10 == controller.changeInputIntoValidInt("10"));
+		assertTrue(0 == controller.changeInputIntoValidInt("0"));	
+	}
+	@Test
+	public void testCheckNewDate()
+	{
+		Date date;
+		Calendar a=new GregorianCalendar();
+		a.add(Calendar.DATE, 28);
+		date =a.getTime();
+		assertTrue(controller.checkNewDate(date));
+		
+		Calendar b=new GregorianCalendar();
+		b.add(Calendar.DATE, 28);
+		date =b.getTime();
+		assertTrue(controller.checkNewDate(date));
+		
+		Calendar c=new GregorianCalendar();
+		c.add(Calendar.DATE, 29);
+		date =c.getTime();
+		assertTrue(controller.checkNewDate(date));
+		
+		Calendar d =new GregorianCalendar();
+		d.add(Calendar.DATE, 30);
+		date =d.getTime();
+		assertTrue(controller.checkNewDate(date));
+		
+		Calendar e =new GregorianCalendar();
+		e.add(Calendar.DATE, 31);
+		date =e.getTime();
+		assertFalse(controller.checkNewDate(date));
 		
 	}
 	@Test
@@ -74,6 +128,12 @@ public class ControllerJunit {
 		assertEquals(null,controller.convertStringToDate("//03/20000"));
 		assertEquals(null,controller.convertStringToDate("19//2/1001"));
 		assertEquals(null,controller.convertStringToDate("stupid"));
+		
+		assertEquals(null,controller.convertStringToTime("01/01/2012"));
+		assertEquals(null,controller.convertStringToTime("stf:fds"));
+		assertEquals(null,controller.convertStringToTime("ok:ok"));
+		assertEquals(null,controller.convertStringToTime("2012"));
+		
 	}
 
 	/*

@@ -16,6 +16,7 @@ import java.util.Date;
  */
 public class DatabaseConnection
 {
+	private Controller controller = new Controller();
 	public DatabaseConnection(){}
 	private Connection connect()
 	{
@@ -160,17 +161,18 @@ public class DatabaseConnection
 		}
 		
 		//Adds ONE employee working time to the database with the RAW parameters [parameters are not tested]
-		public void addEmployeeWorkingTime(int id, Date date, Date startTime, Date endTime)
+		public void addEmployeeWorkingTime(int empID, String date, String startTime, String endTime)
 		{
-			String query = "INSERT INTO EMPLOYEES_WORKING_TIMES " + "VALUES (" + id + ",'" + date + "'," + startTime + "," + endTime + ");";
+			String query = "INSERT INTO EMPLOYEES_WORKING_TIMES(employeeID, date, startTime, endTime) " + "VALUES ("+ empID +",'"+ date +"','"+ startTime +"','"+ endTime +"');";
 			try(Connection connect = this.connect(); Statement inject = connect.createStatement())
 			{
 				inject.executeUpdate(query);
-				System.out.println("Employee " + id+ "'s working time Added");
+				System.out.println("Employee " + empID+ "'s working time Added");
 			}
 			catch(SQLException sqle)
 			{
 				System.out.println(sqle.getMessage());
+				System.out.println(date);
 			}
 		}
 		
@@ -193,11 +195,9 @@ public class DatabaseConnection
 		public ArrayList<EmployeeWorkingTime> getEmployeeWorkingTimes(int employeeId)
 		{
 			ArrayList<EmployeeWorkingTime> databaseWorkingTime = new ArrayList<EmployeeWorkingTime>();
-			int i = 0;
 			int id = 0;
-			Date date;
-			Date startTime;
-			Date endTime;
+			int empID = 0;
+			Date date, startTime, endTime;
 			String query = "SELECT * FROM EMPLOYEES_WORKING_TIMES WHERE employeeID = ? "; 
 
 			try (Connection connect = this.connect(); PreparedStatement  inject  = connect.prepareStatement(query))
@@ -209,10 +209,11 @@ public class DatabaseConnection
 				while (output.next())
 				{
 					id = output.getInt(1);
-					date = output.getDate(2);
-					startTime = output.getDate(3);
-					endTime = output.getDate(4);
-					databaseWorkingTime.add(new EmployeeWorkingTime(id ,date,startTime,endTime));				
+					empID = output.getInt(2);
+					date = controller.convertStringToDate(output.getString(3));
+					startTime = controller.convertStringToTime(output.getString(4));
+					endTime = controller.convertStringToTime(output.getString(5));
+					databaseWorkingTime.add(new EmployeeWorkingTime(id,empID,date,startTime,endTime));				
 				}
 				output.close();
 			}
@@ -237,9 +238,6 @@ public class DatabaseConnection
 			String query = "DROP TABLE IF EXISTS '"+ tableName +"' ";
 			try(Connection connect = this.connect(); Statement inject = connect.createStatement())
 			{
-				/*
-				/* Sets the '?' values into the query
-		 		*/
 				inject.executeUpdate(query);
 				System.out.println("Table "+ tableName +"");
 				return true;

@@ -1,9 +1,13 @@
 package program.Tests;
 
-import static org.junit.Assert.assertTrue;
+import program.Controller;
+
+import static org.junit.Assert.*;
+
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
 import java.sql.DriverManager;
 import org.junit.After;
 import org.junit.Before;
@@ -16,6 +20,7 @@ import program.EmployeeWorkingTime;
 
 public class DatabaseConnectionJUnit {
 	
+	Controller controller = new Controller();
 	private Connection connect()
 	{
 		/*
@@ -30,6 +35,8 @@ public class DatabaseConnectionJUnit {
         }
         return connect;
 	}
+	/*
+	 * OutDated Code
 	public int countEmployeesInArray(Employee[] employees)
 	{
 		int counter = 0;
@@ -54,6 +61,7 @@ public class DatabaseConnectionJUnit {
 		}
 		return counter;
 	}
+	*/
 	DatabaseConnection connect = new DatabaseConnection();
 	
 	@Before
@@ -155,76 +163,91 @@ public class DatabaseConnectionJUnit {
 	public void testGetEmployees()
 	{
 		System.out.println("\n\nGetEmployees\n------------------------------------------------------------------------");
-		int count;
+		
 		//Adding Employees to test
 		connect.addEmployee("Luke Mason", 1000);
 		connect.addEmployee("Luke Boi", 24.57);
+		connect.addEmployee("Mason Smith", 24.57);
+		connect.addEmployee("Jane Smith", 24.57);
 		
 		//Needs to be changed to the new codebase
 		//Searching employees with "luke"
-		//Employee[] employees = connect.getEmployees("luke");
+		ArrayList<Employee> employees = connect.getEmployees("Mason");
+		Employee emp = new Employee();
 		
-		//Counting the number of employees in employees[]
+		assertTrue(employees.size() == 2);
+		for(Employee e: employees)
+		{
+			if(e.getName().equals("Luke Mason"))
+				emp = e;
+		}
 		
-		//count = countEmployeesInArray(employees);
-		/*
-		//Expecting the amount of employees to be 2
-		assertTrue(count == 2);
-		assertTrue(employees[0].getId()== 1);
-		assertTrue(employees[0].getName().equals("Luke Mason"));
-		assertTrue(employees[0].getPayRate()== 1000);
-		assertTrue(employees[0].toString().equals("ID: 1   Name: Luke Mason   Pay Rate: $1000.0"));
-		assertTrue(employees[1].getId()== 2);
-		assertTrue(employees[1].getName().equals("Luke Boi"));
-		assertTrue(employees[1].getPayRate()== 24.57);
-		assertTrue(employees[1].toString().equals("ID: 2   Name: Luke Boi   Pay Rate: $24.57"));
+		assertTrue(emp.getId()== 1);
+		assertTrue(emp.getName().equals("Luke Mason"));
+		assertTrue(emp.getPayRate()== 1000);
+		assertTrue(emp.toString().equals("ID: 1   Name: Luke Mason   Pay Rate: $1000.0"));
+		
+		for(Employee e: employees)
+		{
+			if(e.getName().equals("Mason Smith"))
+				emp = e;
+		}
+		assertTrue(emp.getId()== 3);
+		assertTrue(emp.getName().equals("Mason Smith"));
+		assertTrue(emp.getPayRate()== 24.57);
+		assertTrue(emp.toString().equals("ID: 3   Name: Mason Smith   Pay Rate: $24.57"));
 		
 		//searching employees with "lol"
-		Employee[] employees2 = connect.getEmployees("lol");
-		count = countEmployeesInArray(employees2);
-		assertTrue(count == 0);
+		employees = connect.getEmployees("Steven Holger");
+		assertTrue(employees.size() == 0);
 		
 		//searching employees with "boi"
-		Employee[] employees3 = connect.getEmployees("boi");
-		count = countEmployeesInArray(employees3);
-		assertTrue(count == 1);
-		*/
+		employees = connect.getEmployees("Smith");
+		assertTrue(employees.size() == 2);
 		
 	}
 	@Test
 	public void testAddEmployeeWorkingTimeAndGetEmployeeWorkingTimes()
 	{	
 		System.out.println("\n\nAdd EmployeeWorkingTime And GetEmployeeWorkingTimes\n------------------------------------------------------------------------");
-		int count;
-		//Adding first employee to database
-		connect.addEmployee("Luke",100);
+		connect.addEmployee("Luke Charles",100);
+		connect.addEmployee("David Smith",100);
 		//Needs to be changed to the new codebase
-		/*
 		//Assigning working times to employee 1 ('Luke') to the database
-		connect.addEmployeeWorkingTime(1,"01/01/2017",8.5,14);
-		connect.addEmployeeWorkingTime(1,"02/01/2017",8.66666667,14.34);
-		EmployeeWorkingTime[] LukesWorkingTimes = connect.getEmployeeWorkingTimes(1);
+		ArrayList<Employee> employees = connect.getEmployees("Luke Charles");
+		Employee emp = new Employee();
+		for(Employee e: employees)
+		{
+			if(e.getName().equals("Luke Charles"))
+				emp = e;
+		}
+		connect.addEmployeeWorkingTime(emp.getId(),"03/12/2017","9:50","17:25");
+		connect.addEmployeeWorkingTime(emp.getId(),"02/03/2017","8:30","14:30");
+		ArrayList<EmployeeWorkingTime> lukesWorkingTimes = connect.getEmployeeWorkingTimes(emp.getId());
 		
 		//Counting how many working times are in array
-		count = countWorkTimesInArray(LukesWorkingTimes);
-		assertTrue(count == 2);
+		assertEquals(2,lukesWorkingTimes.size());
 		//Checking each attribute of each working time
-		assertTrue(LukesWorkingTimes[0].getId()==1);
-		assertTrue(LukesWorkingTimes[0].getDate().equals("01/01/2017"));
-		assertTrue(LukesWorkingTimes[0].getStartTime()== 8.5);
-		assertTrue(LukesWorkingTimes[0].getEndTime()==14);
+		EmployeeWorkingTime emplWorking = new EmployeeWorkingTime();
+		for(EmployeeWorkingTime empWork: lukesWorkingTimes)
+		{
+			if(empWork.getId() == 1)
+				emplWorking = empWork;
+		}
+		assertTrue(emplWorking.getId()==1);
+		assertEquals("03/12/2017", controller.convertDateToString(emplWorking.getDate()));
+		assertEquals("09:50", controller.convertTimeToString(emplWorking.getStartTime()));
+		assertEquals("17:25", controller.convertTimeToString(emplWorking.getEndTime()));
 		
-		assertTrue(LukesWorkingTimes[1].getId()==1);
-		assertTrue(LukesWorkingTimes[1].getDate().equals("02/01/2017"));
-		assertTrue(LukesWorkingTimes[1].getStartTime()== 8.66666667);
-		assertTrue(LukesWorkingTimes[1].getEndTime()==14.34);
-
-		
-		connect.addEmployeeWorkingTime(1,"03/01/2017",8.5,14.355555555555);
-		EmployeeWorkingTime[] LukesWorkingTimes2 = connect.getEmployeeWorkingTimes(1);
-		count = countWorkTimesInArray(LukesWorkingTimes2);
-		assertTrue(count == 3);
-		*/
+		for(EmployeeWorkingTime empWork: lukesWorkingTimes)
+		{
+			if(empWork.getId() == 2)
+				emplWorking = empWork;
+		}
+		assertTrue(emplWorking.getId()==2);
+		assertEquals("02/03/2017", controller.convertDateToString(emplWorking.getDate()));
+		assertEquals("08:30", controller.convertTimeToString(emplWorking.getStartTime()));
+		assertEquals("14:30", controller.convertTimeToString(emplWorking.getEndTime()));
 	}
 	@After
 	public void tearDown()
@@ -243,4 +266,5 @@ public class DatabaseConnectionJUnit {
 			System.out.println(sqle.getMessage());
 		}
 	}
+	
 }

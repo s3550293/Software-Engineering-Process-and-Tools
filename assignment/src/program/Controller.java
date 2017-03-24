@@ -288,24 +288,23 @@ public class Controller
 	}
 	
 	//Checking date and it's format before converting, if okay, then convert, return date
-	public boolean checkNewDate(String date)
+	public boolean checkNewDate(Date date1)
 	{
-		
-		Date date1 = convertStringToDate(date);
-		if(date1 == null)
-		{
-			System.out.println("This is an invalid date format, Try again (dd/mm/yyyy)");
-			return false;
-		}
 		Calendar c=new GregorianCalendar();
 		c.add(Calendar.DATE, 30);
-		Date date2 =c.getTime();
-		System.out.println(getDateDifference(date1,date2));
-		System.out.println(date1);
-		System.out.println(date2);
-		if(date1.after(date2))
+		Date thirtyDaysIntoFuture =c.getTime();
+		
+		Calendar b=new GregorianCalendar();
+		Date currentTime =b.getTime();
+		
+		if(date1.after(thirtyDaysIntoFuture))
 		{
 			System.out.println("This date is more than 30 days in advance, Try again");
+			return false;
+		}
+		if(date1.before(currentTime))
+		{
+			System.out.println("You can't set a date in the past!, Try again");
 			return false;
 		}
 		return true;
@@ -323,86 +322,217 @@ public class Controller
 		DatabaseConnection connect = new DatabaseConnection();
 		
 		//check if the input employeeId exists in database
-		boolean valid = false;
-		int year, month, date, startTime, finishTime;
+		boolean valid, valid2;
+		int year = 2017, month = 1, day = 1;
+		Date startTime = null, finishTime = null, newDate= null;
 		Business bmenu = new Business();
-		String yearStr = "", 
-			   monthStr = "", 
-			   dateStr = "", 
-			   startTimeStr = "", 
-			   finishTimeStr = "";
-		String exitCommand = "/exit";
-		
+		String newDateStr;
+		String newStartTimeStr; 
+		String newFinishTimeStr;
 		do{
+			valid = false;
 			while(valid == false){
-				System.out.printf("Please Enter year:\n" , "user>>");
-				yearStr = sc.nextLine();
+				System.out.printf("Please Enter year:\n" , "year >> ");
+				String yearStr = sc.nextLine();
+				if(yearStr.equalsIgnoreCase("/exit"))
+				{
+					System.out.println("Exitting to main menu...");
+					
+					return false;
+				}
 				//convert to Integer
-				year = (int)controller.changeInputIntoValidDouble(yearStr);
-				boolean isInt = isOfTypeInt(year);
-				if(isInt){
+				year = controller.changeInputIntoValidInt(yearStr);
+				if(year > 0)//will be -1 if the input is invalid
+				{
 					valid = true;
 				}else{
-					System.out.println("Please enter an appropriate year!");
+					System.out.println("Innappropriate year!");
 					valid = false;
 				}
+				
 				/*
-				 * -check if input is negative
 				 * -check if input is this year
 				 */
 			}
 			valid = false;
 			while(valid == false){
-				System.out.printf("Please Enter month:\n" , "user>>");
-				monthStr = sc.nextLine();
-				month = (int)controller.changeInputIntoValidDouble(monthStr);
-				boolean isInt = isOfTypeInt(month);
-				if(isInt){
+				System.out.printf("Please Enter month:\n" , "month >> ");
+				String monthStr = sc.nextLine();
+				if(monthStr.equalsIgnoreCase("/exit"))
+				{
+					System.out.println("Exitting to main menu...");
+					
+					return false;
+				}
+				month = controller.changeInputIntoValidInt(monthStr);
+				if(month > 0)//will be -1 if the input is invalid
+				{
 					valid = true;
 				}else{
-					System.out.println("Please enter an appropriate month!");
+					System.out.println("Innappropriate month!");
 					valid = false;
 				}
 				/*
-				 * -check if input is negative
 				 * -check if input is this month/next month
 				 */
 			}
 			valid = false;
 			while(valid == false){
-				System.out.printf("Please Enter date(eg. DD/MM/YYYY:\n" , "user>>");
-				dateStr = sc.nextLine();
+				System.out.printf("Please Enter day:\n" , "day >> ");
+				String dayStr = sc.nextLine();
+				if(dayStr.equalsIgnoreCase("/exit"))
+				{
+					System.out.println("Exitting to main menu...");
+					
+					return false;
+				}
+				day = controller.changeInputIntoValidInt(dayStr);
+				if(day > 0)
+				{
+					valid = true;
+				}else{
+					System.out.println("Innappropriate day!");
+					valid = false;
+				}
 				/*
-				 * -need to convert into date time format
-				 * -check if input is formatted correctly
-				 * -check if input is within next month
+				 * -check if input is this month/next month
 				 */
 			}
+			
+			//Making a date from year, month and day integers
+			Calendar cal = Calendar.getInstance();
+			cal.set(Calendar.YEAR, year);
+			cal.set(Calendar.MONTH, month);
+			cal.set(Calendar.DAY_OF_MONTH, day);
+			newDate = cal.getTime();
+			if(!checkNewDate(newDate))
+			{
+				valid = false;
+			}
+		}
+		while(!valid);
+		do
+		{
+			valid2 = false;
 			valid = false;
-			while(valid == false){
-				System.out.printf("Please Enter start time(eg. HH:MM):\n" , "user>>");
-				startTimeStr = sc.nextLine();
-				/*
-				 * -need to convert into date time format
-				 * -check if input is formatted correctly
-				 */
+			while(valid == false)
+			{
+				int hours = 0;
+				int minutes = 0;
+				valid = true;
+				do
+				{
+					valid = true;
+					System.out.print("Please Enter start time\nHours >> ");
+					String startTimeHourStr = sc.nextLine();
+					if(startTimeHourStr.equalsIgnoreCase("/exit"))
+					{
+						System.out.println("Exitting to main menu...");
+						return false;
+					}
+					hours = changeInputIntoValidInt(startTimeHourStr);
+					if(hours < 0 || hours > 23)
+					{
+						System.out.println("Incorrect amount of hours, Try Again");
+						valid = false;
+					}
+				}while(!valid);
+				do
+				{
+					valid = true;
+					System.out.print("Minutes >> ");
+					String startTimeMinStr = sc.nextLine();
+					if(startTimeMinStr.equalsIgnoreCase("/exit"))
+					{
+						System.out.println("Exitting to main menu...");
+						return false;
+					}
+					minutes = changeInputIntoValidInt(startTimeMinStr);
+					if(minutes < 0 || minutes > 59)
+					{
+						System.out.println("Incorrect amount of hours, Try Again");
+						valid = false;
+					}
+				}while(!valid);
+				
+				String hoursStr = String.format("%02d", hours);
+				String minsStr = String.format("%02d", minutes);
+				String startTimeStr = hoursStr + ":" + minsStr;
+				startTime = convertStringToTime(startTimeStr);
+				if(startTime == null)
+				{
+					System.out.println("This time is not in the correct format HH:MM, Try Again");
+					valid = false;
+					continue;
+				}
 			}
 			valid = false;
-			while(valid == false){
-				System.out.printf("Please Enter finish time(eg. HH:MM):\n" , "user>>");
-				finishTimeStr = sc.nextLine();
-				/*
-				 * -need to convert into date time format
-				 * -check if input is formatted correctly
-				 */
+			while(valid == false)
+			{
+				int hours = 0;
+				int minutes = 0;
+				valid = true;
+				do
+				{
+					valid = true;
+					System.out.print("Please Enter finish time\nHours >> ");
+					String startTimeHourStr = sc.nextLine();
+					if(startTimeHourStr.equalsIgnoreCase("/exit"))
+					{
+						System.out.println("Exitting to main menu...");
+						return false;
+					}
+					hours = changeInputIntoValidInt(startTimeHourStr);
+					if(hours < 0 || hours > 23)
+					{
+						System.out.println("Incorrect amount of hours, Try Again");
+						valid = false;
+					}
+				}while(!valid);
+				do
+				{
+					valid = true;
+					System.out.print("Minutes >> ");
+					String finishTimeMinStr = sc.nextLine();
+					if(finishTimeMinStr.equalsIgnoreCase("/exit"))
+					{
+						System.out.println("Exitting to main menu...");
+						return false;
+					}
+					minutes = changeInputIntoValidInt(finishTimeMinStr);
+					if(minutes < 0 || minutes > 59)
+					{
+						System.out.println("Incorrect amount of hours, Try Again");
+						valid = false;
+					}
+				}while(!valid);
+				
+				String hoursStr = String.format("%02d", hours);
+				String minsStr = String.format("%02d", minutes);
+				String finishTimeStr = hoursStr + ":" + minsStr;
+				finishTime = convertStringToTime(finishTimeStr);
+				if(finishTime == null)
+				{
+					System.out.println("This time is not in the correct format HH:MM, Try Again");
+					valid = false;
+					continue;
+				}
 			}
-			valid = false;
-		}while (!yearStr.equalsIgnoreCase(exitCommand)
-				|| !monthStr.equalsIgnoreCase(exitCommand)
-				|| !dateStr.equalsIgnoreCase(exitCommand)
-				|| !startTimeStr.equalsIgnoreCase(exitCommand)
-				|| !finishTimeStr.equalsIgnoreCase(exitCommand));
+			
+		}while (valid2);
 		
+		newDateStr = convertDateToString(newDate);
+		newStartTimeStr = convertTimeToString(startTime);
+		newFinishTimeStr = convertTimeToString(finishTime);
+		connect.addEmployeeWorkingTime(employeeId, newDateStr, newStartTimeStr, newFinishTimeStr);
+		return true;
+	}
+	public boolean checkNewStartTime(Date startTime)
+	{
+		return false;
+	}
+	public boolean checkNewEndTime(Date endTime)
+	{
 		return false;
 	}
 

@@ -176,26 +176,30 @@ public class Controller
 	 * UI for adding employee working time for next month 
 	 * Status: In development
 	 */
-	public boolean addWorkingTimesForNextMonth(String userName){
+	public boolean addWorkingTimesForNextMonth(int employeeID){
 		@SuppressWarnings("resource")
 		Scanner sc = new Scanner(System.in);
 		Controller controller = new Controller();
 		DatabaseConnection connect = new DatabaseConnection();
 		
-		//check if the input username exists in database
-		if(userName.equals(connect.getUser(userName).getUsername()) == false){
+		//check by id if the employee exists in database
+		if(employeeID != connect.getEmployee(employeeID).getId()){
 			System.out.println("Employee does not exist");
 			return false;
 		}
 		boolean valid = false;
-		int year, month, date, startTime, finishTime;
-		Business bmenu = new Business();
+		int year = 0, 
+			month = 0, 
+			date = 0, 
+			startTime = 0, 
+			finishTime = 0;
 		String yearStr = "", 
 			   monthStr = "", 
 			   dateStr = "", 
 			   startTimeStr = "", 
 			   finishTimeStr = "";
 		String exitCommand = "/exit";
+		String formattedDate = "";
 		
 		do{
 			while(valid == false){
@@ -234,8 +238,16 @@ public class Controller
 			}
 			valid = false;
 			while(valid == false){
-				System.out.printf("Please Enter date(eg. DD/MM/YYYY:\n" , "user>>");
+				System.out.printf("Please Enter date:\n" , "user>>");
 				dateStr = sc.nextLine();
+				date = (int)controller.changeInputIntoValidDouble(dateStr);
+				boolean isInt = isOfTypeInt(date);
+				if(isInt){
+					valid = true;
+				}else{
+					System.out.println("Please enter an appropriate date!");
+					valid = false;
+				}
 				/*
 				 * -need to convert into date time format
 				 * -check if input is formatted correctly
@@ -243,22 +255,24 @@ public class Controller
 				 */
 			}
 			valid = false;
+			
+			//Format date input into: DD/MM/YYYY
+			String new_dateStr = Integer.toString(date);
+			String new_monthStr = Integer.toString(month);
+			String new_yearStr = Integer.toString(year);
+			formattedDate = new_dateStr + "/" + new_monthStr + "/" + new_yearStr;
+			Date correctDate = convertStringToDate(formattedDate);
+			
 			while(valid == false){
 				System.out.printf("Please Enter start time(eg. HH:MM):\n" , "user>>");
 				startTimeStr = sc.nextLine();
-				/*
-				 * -need to convert into date time format
-				 * -check if input is formatted correctly
-				 */
-			}
-			valid = false;
-			while(valid == false){
 				System.out.printf("Please Enter finish time(eg. HH:MM):\n" , "user>>");
 				finishTimeStr = sc.nextLine();
-				/*
-				 * -need to convert into date time format
-				 * -check if input is formatted correctly
-				 */
+				if(checkOutofBoundWorkinghours(startTimeStr, finishTimeStr)){
+					return true;
+				}else{
+					return false;
+				}
 			}
 			valid = false;
 		}while (!yearStr.equalsIgnoreCase(exitCommand)
@@ -278,6 +292,22 @@ public class Controller
 	        return false;
 	    }
 	}
+	
+	public Boolean checkOutofBoundWorkinghours(String start, String end){
+			String min_Boundhour = "8:00";
+			String max_Boundhour = "17:00";
+			Date startBound = convertStringToTime(min_Boundhour);
+			Date endBound = convertStringToTime(max_Boundhour);
+			Date startTime = convertStringToTime(start);
+			Date endTime = convertStringToTime(end);
+			
+			long getStartTimeDiff = getTimeDifference(startBound, startTime);
+			long getEndTimeDiff = getTimeDifference(endTime, endBound);
+			if((getStartTimeDiff >= 0) && (getEndTimeDiff >= 0)){
+				return true;
+			}
+			return false;
+		}
 	
 	public boolean addWorkingTimesForEmployee()
 	{

@@ -696,6 +696,90 @@ public class Controller
 		return val;
 	}
 	
+	public void displayAvailability()
+	{
+		Scanner sc = new Scanner(System.in);
+		DatabaseConnection connect = new DatabaseConnection();
+		//get employees array
+		ArrayList<Employee> emList = new ArrayList<Employee>();
+		emList=connect.getEmployees("");
+		
+		//display table in format
+		SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
+		Calendar c = Calendar.getInstance();
+		String today = sdf.format(c.getTime());
+		Date todayDate= convertStringToDate(today);
+		String days[] = new String[7];
+		for(int i=0;i<7;i++)
+		{
+			
+			days[i]=today;
+			c.add(Calendar.DATE, 1);
+			today = sdf.format(c.getTime());
+		}
+		Date lastDate=convertStringToDate(days[6]);
+		
+		System.out.printf("\nEmployee %2s %2s %2s %2s %2s %2s %2s",days[0],days[1],days[2],days[3],days[4],days[5],days[6]);
+		//loop to display working employee
+		//going thru employees, compare availability within 7 days from today if true display
+		ArrayList<EmployeeWorkingTime> workDays=new ArrayList<EmployeeWorkingTime>();
+		for(int i=0;i<emList.size();i++)
+		{
+			String workString="";
+			int ID=emList.get(i).getId();
+			String name=connect.getEmployee(ID).getName();
+			workDays=connect.getEmployeeWorkingTimes(ID);
+			for(int j=0;j<7;j++)
+			{
+				for(int t=0;t<workDays.size();t++)
+				{
+					Date readDate= workDays.get(t).getDate();
+					String convertDate=convertDateToString(readDate);
+					if(convertDate==days[j])
+					{
+						workString+=convertDate;
+					}
+					else if(todayDate.after(readDate)&& lastDate.before(readDate) && convertDate!=days[j])
+					{
+						workString+=" - ";
+					}
+				}
+			}
+			
+			System.out.printf("\n%d %s %s ",ID,name,workString );
+		}
+		Employee employee=new Employee();
+		System.out.println("\nPlease enter employee id to view more");
+		int empKey =Integer.parseInt(sc.nextLine());
+		employee=connect.getEmployee(empKey);
+		String name=employee.getName();
+		double payrate=employee.getPayRate(); 
+		System.out.printf("\n%s %d",name,payrate);
+		System.out.println("\nDate");
+		System.out.println("\n-----");
+		//loop to display time below days
+		ArrayList<EmployeeWorkingTime> allDays=new ArrayList<EmployeeWorkingTime>();
+		allDays=connect.getEmployeeWorkingTimes(empKey);
+		for(int j=0;j<7;j++)
+		{
+			for(int t=0;t<allDays.size();t++)
+			{
+				Date inDate= allDays.get(t).getDate();
+				String convertDate=convertDateToString(inDate);
+				Date startTime=allDays.get(t).getStartTime();
+				Date endTime=allDays.get(t).getEndTime();
+				String convertStart=convertTimeToString(startTime);
+				String convertEnd=convertTimeToString(endTime);
+				if(convertDate==days[j])
+				{
+					System.out.printf("\n%s",convertDate);
+					System.out.printf("\n Start: %s End: %s ",convertStart,convertEnd);
+				}
+			}
+		}
+		
+		sc.close();	
+		}
 	
 	
 }

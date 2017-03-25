@@ -50,7 +50,7 @@ public class Login
 				System.out.println("Invalid input, please enter your choice again");
 			}
 		}
-		userInput.close();
+		//userInput.close();
 	}
 	
 	public void login()
@@ -73,7 +73,7 @@ public class Login
 		}else{
 			tryAgainMenu();
 		}
-		scanner.close();
+		//scanner.close();
 	}
 	
 	public int logInProcess(String userName, String pass){
@@ -138,6 +138,6 @@ public class Login
 		default:
 			System.out.println("Option not available, please choose again");
 		}
-		scanner.close();
+		//scanner.close();
 	}
 }

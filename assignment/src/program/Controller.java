@@ -92,7 +92,7 @@ public class Controller
 			if (employeePayRate2 < 0)
 			{
 				System.out.println(
-						"The amount you have entered contains invalid characters, is less than 0 or greater that 10000 ");
+						"The amount you have entered contains invalid characters, is less than 0 or greater that 1000 ");
 				System.out.println("Please try again");
 				loopAgain = true;
 			}

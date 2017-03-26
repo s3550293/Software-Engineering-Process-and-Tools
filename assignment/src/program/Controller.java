@@ -111,16 +111,23 @@ public class Controller
 			{
 			case 1:
 				connect.addEmployee(employeeName, employeePayRate2);
-				/*
-				 * if(!(addWorkingTimeForNextMonth(numberOfEmployees))) {
-				 * System.out.println("Exiting to main menu"); return false; }
-				 */
-				System.out.println("ADD WORKING TIME FOR THIS EMPLOYEE NOT IMPLEMEMENTED, New Employee added");
-
+				ArrayList<Employee> employees = connect.getEmployees(employeeName);
+				if(employees.size() > 1)
+				{
+					System.out.println("ERROR: There are two employees in the database with the same name, cannot add working times");
+					return true;
+				}
+				for (Employee employee : employees) 
+				{
+					if(!(addWorkingTimesForNextMonth(employee.getId()))) 
+					  {
+						  System.out.println("Save and exiting to main menu"); 
+					  }
+				}
 				return true;
 			case 2:
 				connect.addEmployee(employeeName, employeePayRate2);
-
+				System.out.println("Employee " + employeeName + " added!");
 				return true;
 			case 3:
 				do
@@ -163,42 +170,23 @@ public class Controller
 		}
 		for (int i = 0; i < string.length(); i++)
 		{
-			if ((int) string.charAt(i) < 97 || (int) string.charAt(i) > 122)// checks
-			// if
-			// the
-			// char
-			// is
-			// not
-			// a
-			// lower
-			// case
-			// letter
+			if ((int) string.charAt(i) < 97 || (int) string.charAt(i) > 122)// checks if the letter is not a lowercase letter
 			{
-				if ((int) string.charAt(i) < 65 || (int) string.charAt(i) > 90)// checks
-				// if
-				// the
-				// char
-				// is
-				// not
-				// an
-				// upper
-				// case
-				// letter
+				if ((int) string.charAt(i) < 65 || (int) string.charAt(i) > 90)// checks if the letter is not an upper case letter
 				{
-					if ((int) string.charAt(i) != 32)// checks if the char is
+					/*if ((int) string.charAt(i) != 32)// checks if the char is
 					// not a 'space'
-					{
+					{*/
 						return true;
-					}
 				}
 			}
-		}
+		}	
 		return false;
 	}
 
 	// finds all employees by name and prints to screen then calls add employee
 	// work time function
-	public boolean findEmployeeByNameUI()
+	public boolean addWorkingTimesForEmployeeByName()
 	{
 		DatabaseConnection connect = new DatabaseConnection();
 		String employeeName;
@@ -220,9 +208,10 @@ public class Controller
 				return false;
 			}
 			ArrayList<Employee> employees = connect.getEmployees(employeeName);
-
+			System.out.println("~~~LIST OF EMPLOYEES~~~");
 			for (Employee employee : employees)
 			{
+				
 				System.out.println(employee.toString());
 				if (employees.size() == 0)
 				{
@@ -232,16 +221,16 @@ public class Controller
 					continue;
 				}
 			}
+			System.out.println("~~~~~~~~~~END~~~~~~~~~~");
 			do
 			{
 				loopAgain2 = false;
-				System.out.println("What employee would you like to add working times for?");
-				System.out.print("Employee''s ID >> ");
+				System.out.println("Which employee would you like to add working times for?");
+				System.out.print("Employee's ID >> ");
 				String employeeId = kb.nextLine();
 				if (employeeId.equalsIgnoreCase("/exit"))
 				{
 					System.out.println("Exitting to main menu...");
-
 					return false;
 				}
 				int id = changeInputIntoValidInt(employeeId);
@@ -357,208 +346,201 @@ public class Controller
 		String newDateStr;
 		String newStartTimeStr;
 		String newFinishTimeStr;
+		int count =1;
+		boolean infiniteloop = true;
 		do
 		{
-			valid = false;
-			while (valid == false)
-			{
-				System.out.printf("Please Enter year:\n", "year >> ");
-				String yearStr = sc.nextLine();
-				if (yearStr.equalsIgnoreCase("/exit"))
-				{
-					System.out.println("Exitting to main menu...");
-
-					return false;
-				}
-				// convert to Integer
-				year = controller.changeInputIntoValidInt(yearStr);
-				if (year > 0)// will be -1 if the input is invalid
-				{
-					valid = true;
-				} else
-				{
-					System.out.println("Innappropriate year!");
-					valid = false;
-				}
-
-				/*
-				 * -check if input is this year
-				 */
-			}
-			valid = false;
-			while (valid == false)
-			{
-				System.out.printf("Please Enter month:\n", "month >> ");
-				String monthStr = sc.nextLine();
-				if (monthStr.equalsIgnoreCase("/exit"))
-				{
-					System.out.println("Exitting to main menu...");
-
-					return false;
-				}
-				month = controller.changeInputIntoValidInt(monthStr);
-				if (month > 0)// will be -1 if the input is invalid
-				{
-					valid = true;
-				} else
-				{
-					System.out.println("Innappropriate month!");
-					valid = false;
-				}
-				/*
-				 * -check if input is this month/next month
-				 */
-			}
-			valid = false;
-			while (valid == false)
-			{
-				System.out.printf("Please Enter day:\n", "day >> ");
-				String dayStr = sc.nextLine();
-				if (dayStr.equalsIgnoreCase("/exit"))
-				{
-					System.out.println("Exitting to main menu...");
-
-					return false;
-				}
-				day = controller.changeInputIntoValidInt(dayStr);
-				if (day > 0)
-				{
-					valid = true;
-				} else
-				{
-					System.out.println("Innappropriate day!");
-					valid = false;
-				}
-				/*
-				 * -check if input is this month/next month
-				 */
-			}
-
-			// Making a date from year, month and day integers
-			Calendar cal = Calendar.getInstance();
-			cal.set(Calendar.YEAR, year);
-			cal.set(Calendar.MONTH, month);
-			cal.set(Calendar.DAY_OF_MONTH, day);
-			newDate = cal.getTime();
-			if (!checkNewDate(newDate))
+			System.out.print("/exit TO SAVE & EXIT ANYTIME");
+			System.out.print("~~~~Adding Work Time "+count+" ~~~~");
+			do
 			{
 				valid = false;
-			}
-		} while (!valid);
-		do
-		{
-			valid2 = false;
-			valid = false;
-			while (valid == false)
-			{
-				int hours = 0;
-				int minutes = 0;
-				valid = true;
-				do
+				while (valid == false)
 				{
-					valid = true;
-					System.out.print("Please Enter start time\nHours >> ");
-					String startTimeHourStr = sc.nextLine();
-					if (startTimeHourStr.equalsIgnoreCase("/exit"))
+					System.out.print("Please Enter year:\nyear >> ");
+					String yearStr = sc.nextLine();
+					if (yearStr.equalsIgnoreCase("/exit"))
 					{
-						System.out.println("Exitting to main menu...");
-						return false;
+						return true;
 					}
-					hours = changeInputIntoValidInt(startTimeHourStr);
-					if (hours < 0 || hours > 23)
+					// convert to Integer
+					year = controller.changeInputIntoValidInt(yearStr);
+					if (year > 0)// will be -1 if the input is invalid
 					{
-						System.out.println("Incorrect amount of hours, Try Again");
+						valid = true;
+					} else
+					{
+						System.out.println("Innappropriate year!");
 						valid = false;
 					}
-				} while (!valid);
-				do
-				{
-					valid = true;
-					System.out.print("Minutes >> ");
-					String startTimeMinStr = sc.nextLine();
-					if (startTimeMinStr.equalsIgnoreCase("/exit"))
-					{
-						System.out.println("Exitting to main menu...");
-						return false;
-					}
-					minutes = changeInputIntoValidInt(startTimeMinStr);
-					if (minutes < 0 || minutes > 59)
-					{
-						System.out.println("Incorrect amount of hours, Try Again");
-						valid = false;
-					}
-				} while (!valid);
-
-				String hoursStr = String.format("%02d", hours);
-				String minsStr = String.format("%02d", minutes);
-				String startTimeStr = hoursStr + ":" + minsStr;
-				startTime = convertStringToTime(startTimeStr);
-				if (startTime == null)
-				{
-					System.out.println("This time is not in the correct format HH:MM, Try Again");
-					valid = false;
-					continue;
+	
+				
 				}
-			}
-			valid = false;
-			while (valid == false)
-			{
-				int hours = 0;
-				int minutes = 0;
-				valid = true;
-				do
+				valid = false;
+				while (valid == false)
 				{
-					valid = true;
-					System.out.print("Please Enter finish time\nHours >> ");
-					String startTimeHourStr = sc.nextLine();
-					if (startTimeHourStr.equalsIgnoreCase("/exit"))
+					System.out.print("Please Enter month (1-12):\nmonth >> ");
+					String monthStr = sc.nextLine();
+					if (monthStr.equalsIgnoreCase("/exit"))
 					{
-						System.out.println("Exitting to main menu...");
-						return false;
+						return true;
 					}
-					hours = changeInputIntoValidInt(startTimeHourStr);
-					if (hours < 0 || hours > 23)
+					month = controller.changeInputIntoValidInt(monthStr);
+					if (month > 0 && month < 13)// will be -1 if the input is invalid
 					{
-						System.out.println("Incorrect amount of hours, Try Again");
+						valid = true;
+					} else
+					{
+						System.out.println("Innappropriate month!");
 						valid = false;
 					}
-				} while (!valid);
-				do
-				{
-					valid = true;
-					System.out.print("Minutes >> ");
-					String finishTimeMinStr = sc.nextLine();
-					if (finishTimeMinStr.equalsIgnoreCase("/exit"))
-					{
-						System.out.println("Exitting to main menu...");
-						return false;
-					}
-					minutes = changeInputIntoValidInt(finishTimeMinStr);
-					if (minutes < 0 || minutes > 59)
-					{
-						System.out.println("Incorrect amount of hours, Try Again");
-						valid = false;
-					}
-				} while (!valid);
-
-				String hoursStr = String.format("%02d", hours);
-				String minsStr = String.format("%02d", minutes);
-				String finishTimeStr = hoursStr + ":" + minsStr;
-				finishTime = convertStringToTime(finishTimeStr);
-				if (finishTime == null)
-				{
-					System.out.println("This time is not in the correct format HH:MM, Try Again");
-					valid = false;
-					continue;
+					
 				}
-			}
-
-		} while (valid2);
-
-		newDateStr = convertDateToString(newDate);
-		newStartTimeStr = convertTimeToString(startTime);
-		newFinishTimeStr = convertTimeToString(finishTime);
-		connect.addEmployeeWorkingTime(employeeId, newDateStr, newStartTimeStr, newFinishTimeStr);
+				valid = false;
+				while (valid == false)
+				{
+					System.out.print("Please Enter day:\nday >> ");
+					String dayStr = sc.nextLine();
+					if (dayStr.equalsIgnoreCase("/exit"))
+					{
+						return true;
+					}
+					day = controller.changeInputIntoValidInt(dayStr);
+					if (day > 0 && day < 32)
+					{
+						valid = true;
+					} else
+					{
+						System.out.println("Innappropriate day!");
+						valid = false;
+					}
+				
+				}
+	
+				// Making a date from year, month and day integers
+				Calendar cal = Calendar.getInstance();
+				cal.set(Calendar.YEAR, year);
+				cal.set(Calendar.MONTH, month-1);
+				cal.set(Calendar.DAY_OF_MONTH, day);
+				newDate = cal.getTime();
+				if (!checkNewDate(newDate))
+				{
+					valid = false;
+				}
+			} while (!valid);
+			do
+			{
+				valid2 = false;
+				valid = false;
+				while (valid == false)
+				{
+					int hours = 0;
+					int minutes = 0;
+					valid = true;
+					do
+					{
+						valid = true;
+						System.out.print("Please Enter start time (0-23)\nHours >> ");
+						String startTimeHourStr = sc.nextLine();
+						if (startTimeHourStr.equalsIgnoreCase("/exit"))
+						{
+							System.out.println("Exitting to main menu...");
+							return true;
+						}
+						hours = changeInputIntoValidInt(startTimeHourStr);
+						if (hours < 0 || hours > 23)
+						{
+							System.out.println("Incorrect amount of hours, Try Again");
+							valid = false;
+						}
+					} while (!valid);
+					do
+					{
+						valid = true;
+						System.out.print("Minutes(0-59) >> ");
+						String startTimeMinStr = sc.nextLine();
+						if (startTimeMinStr.equalsIgnoreCase("/exit"))
+						{
+							return true;
+						}
+						minutes = changeInputIntoValidInt(startTimeMinStr);
+						if (minutes < 0 || minutes > 59)
+						{
+							System.out.println("Incorrect amount of hours, Try Again");
+							valid = false;
+						}
+					} while (!valid);
+	
+					String hoursStr = String.format("%02d", hours);
+					String minsStr = String.format("%02d", minutes);
+					String startTimeStr = hoursStr + ":" + minsStr;
+					startTime = convertStringToTime(startTimeStr);
+					if (startTime == null)
+					{
+						System.out.println("This time is not in the correct format HH:MM, Try Again");
+						valid = false;
+						continue;
+					}
+				}
+				valid = false;
+				while (valid == false)
+				{
+					int hours = 0;
+					int minutes = 0;
+					valid = true;
+					do
+					{
+						valid = true;
+						System.out.print("Please Enter finish time\nHours >> ");
+						String startTimeHourStr = sc.nextLine();
+						if (startTimeHourStr.equalsIgnoreCase("/exit"))
+						{
+							return true;
+						}
+						hours = changeInputIntoValidInt(startTimeHourStr);
+						if (hours < 0 || hours > 23)
+						{
+							System.out.println("Incorrect amount of hours, Try Again");
+							valid = false;
+						}
+					} while (!valid);
+					do
+					{
+						valid = true;
+						System.out.print("Minutes >> ");
+						String finishTimeMinStr = sc.nextLine();
+						if (finishTimeMinStr.equalsIgnoreCase("/exit"))
+						{
+							return true;
+						}
+						minutes = changeInputIntoValidInt(finishTimeMinStr);
+						if (minutes < 0 || minutes > 59)
+						{
+							System.out.println("Incorrect amount of hours, Try Again");
+							valid = false;
+						}
+					} while (!valid);
+	
+					String hoursStr = String.format("%02d", hours);
+					String minsStr = String.format("%02d", minutes);
+					String finishTimeStr = hoursStr + ":" + minsStr;
+					finishTime = convertStringToTime(finishTimeStr);
+					if (finishTime == null)
+					{
+						System.out.println("This time is not in the correct format HH:MM, Try Again");
+						valid = false;
+						continue;
+					}
+				}
+	
+			} while (valid2);
+	
+			newDateStr = convertDateToString(newDate);
+			newStartTimeStr = convertTimeToString(startTime);
+			newFinishTimeStr = convertTimeToString(finishTime);
+			connect.addEmployeeWorkingTime(employeeId, newDateStr, newStartTimeStr, newFinishTimeStr);
+			++count;
+		}while(infiniteloop);
 		return true;
 	}
 
@@ -572,7 +554,7 @@ public class Controller
 		return false;
 	}
 
-	public boolean isOfTypeInt(int num)
+	/*public boolean isOfTypeInt(int num)
 	{
 		try
 		{
@@ -584,7 +566,7 @@ public class Controller
 		}
 	}
 
-	public boolean addWorkingTimesForEmployee()
+	/*public boolean addWorkingTimesForEmployee()
 	{
 		@SuppressWarnings("resource")
 		Scanner kb = new Scanner(System.in);
@@ -626,9 +608,9 @@ public class Controller
 		 * println("The amount you have entered contains invalid characters, is less than 0 or greater that 10000 "
 		 * ); System.out.println("Please try again"); loopAgain = true; } }
 		 * while(loopAgain);
-		 */
+		 
 		return false;
-	}
+	}*/
 
 	/*
 	 *

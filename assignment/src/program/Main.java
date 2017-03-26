@@ -20,13 +20,13 @@ public class Main
 		/*
 		 * other functions similar to addUser will be added later ie add booking
 		 */
-		/*
+		
 		Database db = new Database("company.db");
 		db.createTable("company.db");
 		DatabaseConnection connect = new DatabaseConnection();
 		connect.addUser("William", "Apples22", 0);
 		connect.addUser("bo1","123456",1);
-		connect.addEmployee("Luke Charles",100);
+		/*connect.addEmployee("Luke Charles",100);
 		connect.addEmployee("David Smith",100);
 		connect.addEmployeeWorkingTime(1,"28/03/2017","9:50","17:25");
 		connect.addEmployeeWorkingTime(1,"29/03/2017","8:30","14:30");

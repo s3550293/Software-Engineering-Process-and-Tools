@@ -22,10 +22,11 @@ public class ControllerJunit {
 	@Test
 	public void testCheckInputToContainNonAlphabetChar() 
 	{
-		assertFalse(controller.checkInputToContainInvalidChar("Luke Mason"));
+		assertFalse(controller.checkInputToContainInvalidChar("Luke"));
 		assertFalse(controller.checkInputToContainInvalidChar("LukeyyyMason"));
 		
 		assertTrue(controller.checkInputToContainInvalidChar(""));
+		assertTrue(controller.checkInputToContainInvalidChar(" "));
 		assertTrue(controller.checkInputToContainInvalidChar("1010101LUKE"));
 		assertTrue(controller.checkInputToContainInvalidChar("LUKEEEEEEEEEEEEEEEEEEEEEEEEEEE                                        "));
 		assertTrue(controller.checkInputToContainInvalidChar("luke%@#$"));

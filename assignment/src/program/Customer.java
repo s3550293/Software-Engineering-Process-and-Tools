@@ -18,6 +18,7 @@ public class Customer {
 				System.out.printf("%-3s %-2s %s\n", "", "4.", ".......");
 				System.out.printf("%-3s %-2s %s\n", "", "5.", ".......");
 				System.out.printf("%-3s %-2s %s\n", "", "6.", "Log Out");
+				System.out.printf("%s\n%s", "Please choose between 1 and 6", "user> ");
 				int selection = Integer.parseInt(scanner.nextLine());
 				
 				switch(selection)
@@ -38,7 +39,8 @@ public class Customer {
 					//Todo
 					break;
 				case 6:
-					System.exit(0);
+					Login login = new Login();
+					login.loginMenu();
 					break;
 				default:
 					System.out.println("Option not available, please choose again");

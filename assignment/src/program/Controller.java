@@ -350,8 +350,8 @@ public class Controller
 		boolean infiniteloop = true;
 		do
 		{
-			System.out.print("/exit TO SAVE & EXIT ANYTIME");
-			System.out.print("~~~~Adding Work Time "+count+" ~~~~");
+			System.out.println("/exit TO SAVE & EXIT ANYTIME");
+			System.out.println("~~~~Adding Work Time "+count+" ~~~~");
 			do
 			{
 				valid = false;

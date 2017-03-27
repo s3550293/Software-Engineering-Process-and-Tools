@@ -4,13 +4,12 @@ import java.util.Date;
 
 public class BookingDetails {
 
-	private int id, bookingID, cusID;
+	private int bookingID, cusID;
 	private Date date, startTime, endTime;
 	
 	public BookingDetails(){}
-	public BookingDetails(int id, int bookingID, int cusID, Date date, Date startTime, Date endTime)
+	public BookingDetails(int bookingID, int cusID, Date date, Date startTime, Date endTime)
 	{
-		this.id = id;
 		this.bookingID = bookingID;
 		this.cusID = cusID;
 		this.date = date;
@@ -18,13 +17,14 @@ public class BookingDetails {
 		this.endTime = endTime;
 	}
 
-	public int getId()
-	{
-		return id;
-	}
-	public int getEmpID()
+	
+	public int getBookingID()
 	{
 		return bookingID;
+	}
+	public int getCustomerId()
+	{
+		return cusID;
 	}
 	public Date getDate()
 	{
@@ -52,7 +52,7 @@ public class BookingDetails {
 	}
 	public String toString()
 	{
-		return "ID: " + id + "   Customer ID: " + cusID + "   Date: " + date + "   Start Time: " 
+		return "Booking ID: " + bookingID + "   Customer ID: " + cusID + "   Date: " + date + "   Start Time: " 
 				+ startTime+ "   End Time: " + endTime;
 	}
 }

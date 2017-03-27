@@ -79,6 +79,13 @@ public class Database
 							+"endTime DATE NOT NULL,"
 							+"FOREIGN KEY(employeeID) REFERENCES employees(employeeID));";
 
+		String queryBookingTimes = "CREATE TABLE IF NOT EXISTS BOOKING_TIMES ("
+				+"bookingID integer PRIMARY KEY AUTOINCREMENT,"
+				+"cusID integer NOT NULL,"
+				+"date VARCHAR(20) NOT NULL,"
+				+"startTime DATE NOT NULL,"
+				+"endTime DATE NOT NULL,"
+				+"FOREIGN KEY(cusID) REFERENCES clientdetails(id));";
 		
 		
 		/*
@@ -101,6 +108,10 @@ public class Database
 			//Creating Table 'EMPLOYEES_WORKING_TIMES'
 			smt.executeUpdate(queryEmployeesWorkingTimes);
 			System.out.println("Table 'EMPLOYEES_WORKING_TIMES' added");
+
+			//Creating Table 'BOOKING_TIMES'
+			smt.executeUpdate(queryBookingTimes);
+			System.out.println("Table 'BOOKING_TIMES' added");
 		}
 		catch(SQLException sqle)
 		{
@@ -150,7 +161,7 @@ public class Database
 						+"username text NOT NULL,"
 						+"Address text NOT NULL,"
 						+"Phone number boolean NOT NULL,"
-						+ "FOREGIN KEY(id) REFERNECES users(userID));";
+						+ "FOREGIN KEY(id) REFERENCES users(userID));";
 		String queryEmployees = "CREATE TABLE IF NOT EXISTS EMPLOYEES ("
 				+"employeeID integer PRIMARY KEY AUTOINCREMENT,"
 				+"name VARCHAR(40) NOT NULL,"

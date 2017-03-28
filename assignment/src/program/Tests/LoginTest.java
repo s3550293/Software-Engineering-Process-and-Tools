@@ -71,9 +71,6 @@ public class LoginTest {
 	{
 		/*
 		connect.dropTable("users");
-		connect.dropTable("clientdetails");
-		connect.dropTable("EMPLOYEES");
-		connect.dropTable("EMPLOYEES_WORKING_TIMES");
 		*/
 	}
 }

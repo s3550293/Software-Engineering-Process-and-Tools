@@ -8,6 +8,7 @@ import java.sql.Connection;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.Date;
 import java.sql.DriverManager;
 import org.junit.After;
 import org.junit.Before;
@@ -75,6 +76,8 @@ public class DatabaseConnectionJUnit {
 			System.out.println("Dropped Employees Table");
 			inject.executeUpdate("DROP TABLE IF EXISTS EMPLOYEES_WORKING_TIMES");
 			System.out.println("Dropped 'Working Times' Table");
+			inject.executeUpdate("DROP TABLE IF EXISTS BOOKINGS");
+			System.out.println("Dropped 'Bookings' Table");
 		}
 		catch(SQLException sqle)
 		{
@@ -88,7 +91,7 @@ public class DatabaseConnectionJUnit {
 	@Test
 	public void testAddEmployee_And_TestGetEmployee_And_TestEmployeeAttributes()
 	{	
-		System.out.println("\n\nAdd Employee And Test GetEmployee And Test EmployeeAttributes\n------------------------------------------------------------------------");
+		System.out.println("\n\nAdd Employee And Test GetEmployee And Test Employee Attributes\n------------------------------------------------------------------------");
 		//Adding 4 new employees to blank EMPLOYEES table
 		connect.addEmployee("Luke Mason", 1000);
 		connect.addEmployee("Jacob Boehm", 123);
@@ -134,7 +137,7 @@ public class DatabaseConnectionJUnit {
 		}
 		
 		//Adding new employee After rows have been deleted
-		connect.addEmployee("Harry Potter",666);
+		connect.addEmployee("Harry Potter",600);
 		
 		//Getting employee 5, even though we just deleted two employees
 		Employee Harry_Potter = connect.getEmployee(5);
@@ -153,9 +156,9 @@ public class DatabaseConnectionJUnit {
 		
 		//Testing that the ID of the new employee is 5 and DOES NOT take on the ID of recently deleted employees 2 & 3
 		assertTrue(Harry_Potter.getId()==5);
-		assertTrue(Harry_Potter.getPayRate()== 666);
+		assertTrue(Harry_Potter.getPayRate()== 600);
 		assertTrue(Harry_Potter.getName().equals("Harry Potter"));
-		assertTrue(Harry_Potter.toString().equals("ID: 5   Name: Harry Potter   Pay Rate: $666.0"));
+		assertTrue(Harry_Potter.toString().equals("ID: 5   Name: Harry Potter   Pay Rate: $600.0"));
 
 		
 	}
@@ -249,6 +252,16 @@ public class DatabaseConnectionJUnit {
 		assertEquals("08:30", controller.convertTimeToString(emplWorking.getStartTime()));
 		assertEquals("14:30", controller.convertTimeToString(emplWorking.getEndTime()));
 	}
+	@Test
+	public void testAddBookingToDatabase ()
+	{
+		//addBooking (int userId, Date date, String startTime, String endTime, String description)
+	}
+	@Test
+	public void testAddBookingObject()
+	{
+		//Booking booking1 = new Booking(1,1/1/2017,"8:00","11:00","Light Trim");
+	}
 	@After
 	public void tearDown()
 	{
@@ -260,6 +273,8 @@ public class DatabaseConnectionJUnit {
 			System.out.println("Dropped Employees Table");
 			inject.executeUpdate("DROP TABLE EMPLOYEES_WORKING_TIMES");
 			System.out.println("Dropped 'Working Times' Table");
+			inject.executeUpdate("DROP TABLE IF EXISTS BOOKINGS");
+			System.out.println("Dropped 'Bookings' Table");
 		}
 		catch(SQLException sqle)
 		{

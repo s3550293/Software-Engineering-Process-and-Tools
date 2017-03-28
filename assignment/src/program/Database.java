@@ -75,10 +75,17 @@ public class Database
 							+"id integer PRIMARY KEY AUTOINCREMENT,"
 							+"employeeID integer NOT NULL,"
 							+"date VARCHAR(20) NOT NULL,"
-							+"startTime DATE NOT NULL,"
-							+"endTime DATE NOT NULL,"
+							+"startTime text NOT NULL,"
+							+"endTime text NOT NULL,"
 							+"FOREIGN KEY(employeeID) REFERENCES employees(employeeID));";
-
+		String queryBookings = "CREATE TABLE IF NOT EXISTS BOOKINGS ("
+								+"id integer PRIMARY KEY AUTOINCREMENT,"
+								+"userID integer NOT NULL,"
+								+"date VARCHAR(20) NOT NULL,"
+								+"startTime text NOT NULL,"
+								+"endTime text NOT NULL,"
+								+"desc text,"
+								+"FOREIGN KEY (userID) REFERENCES users(userID));";
 		
 		
 		/*
@@ -101,13 +108,17 @@ public class Database
 			//Creating Table 'EMPLOYEES_WORKING_TIMES'
 			smt.executeUpdate(queryEmployeesWorkingTimes);
 			System.out.println("Table 'EMPLOYEES_WORKING_TIMES' added");
+			
+			//Creating Table 'BOOKINGS'
+			smt.executeUpdate(queryBookings);
+			System.out.println("Table 'BOOKINGS' added");
 		}
 		catch(SQLException sqle)
 		{
-			System.out.println("Adding Table: "+sqle.getMessage());
+			System.out.println("ERROR: couldn't add table: "+sqle.getMessage());
 		}
 	}
-	/*
+	/**
 	 * used to add testing data at the start
 	 */
 	public void addData(String filename)
@@ -128,10 +139,9 @@ public class Database
 		}
 	}
 	
-	/*
-	 * Test Functions
+	/**
+	 * Test Tables for Test Functions
 	 */
-	
 	public void createTestTables(String filename)
 	{
 		String url = "jdbc:sqlite:db/"+filename;
@@ -162,7 +172,14 @@ public class Database
 							+"startTime VARCHAR(12) NOT NULL,"
 							+"endTime VARCHAR(12) NOT NULL,"
 							+"FOREIGN KEY(employeeID) REFERENCES employees(employeeID));";
-
+		String queryBookings = "CREATE TABLE IF NOT EXISTS BOOKINGS ("
+				+"id integer PRIMARY KEY AUTOINCREMENT,"
+				+"userID integer NOT NULL,"
+				+"date VARCHAR(20) NOT NULL,"
+				+"startTime text NOT NULL,"
+				+"endTime text NOT NULL,"
+				+"desc text,"
+				+"FOREIGN KEY (userID) REFERENCES users(userID));";
 		
 		
 		/*
@@ -185,6 +202,10 @@ public class Database
 			//Creating Table 'EMPLOYEES_WORKING_TIMES'
 			smt.executeUpdate(queryEmployeesWorkingTimes);
 			System.out.println("Table 'EMPLOYEES_WORKING_TIMES' added");
+			
+			//Creating Table 'BOOKINGS'
+			smt.executeUpdate(queryBookings);
+			System.out.println("Table 'BOOKINGS' added");
 		}
 		catch(SQLException sqle)
 		{

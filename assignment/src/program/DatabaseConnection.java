@@ -14,6 +14,12 @@ import java.util.Date;
  * http://www.sqlitetutorial.net/sqlite-java/
  * this is where I will leave my sanity
  */
+
+/**
+ * Consists of functions that add and extract information to and from the database
+ * @author Luke Mason, Joseph Garner
+ *
+ */
 public class DatabaseConnection
 {
 	private Controller controller = new Controller();
@@ -53,6 +59,11 @@ public class DatabaseConnection
 		}
 	}
 	
+	/**
+	 * Gets where the user name keyword matches another users name
+	 * @param username
+	 * @return User Object
+	 */
 	public User getUser(String username)
 	{
 		int _id = 0;
@@ -84,169 +95,225 @@ public class DatabaseConnection
 		return databaseUser;
 	}
 	
-		//This function finds a selection of employees that matches the string name 
-		//returns an array of object Employee
-		public ArrayList<Employee> getEmployees(String name)
-		{
-			ArrayList<Employee> databaseEmployee = new ArrayList<Employee>();
-			int i = 0;
-			int id = 0;
-			double payRate = 0;
-			String query = "SELECT * FROM EMPLOYEES WHERE name like ? "; 
+	/**
+	 * This function finds a selection of employees that matches the string name
+	 * @param name
+	 * @return ArrayList<Employee> Objects
+	 */
+	public ArrayList<Employee> getEmployees(String name)
+	{
+		ArrayList<Employee> databaseEmployee = new ArrayList<Employee>();
+		int i = 0;
+		int id = 0;
+		double payRate = 0;
+		String query = "SELECT * FROM EMPLOYEES WHERE name like ? "; 
 
-			try (Connection connect = this.connect(); PreparedStatement  inject  = connect.prepareStatement(query))
-			{
-				//Sets '?' to user name in the query
-				//crates a user from the found information
-				inject.setString(1,"%"+name+"%");
-				ResultSet output = inject.executeQuery();
-				while (output.next()){
-					id = output.getInt(1);
-					name = output.getString(2);
-					payRate = output.getDouble(3);
-					databaseEmployee.add(new Employee(id ,name, payRate));
-				}
-				output.close();
+		try (Connection connect = this.connect(); PreparedStatement  inject  = connect.prepareStatement(query))
+		{
+			//Sets '?' to user name in the query
+			//crates a user from the found information
+			inject.setString(1,"%"+name+"%");
+			ResultSet output = inject.executeQuery();
+			while (output.next()){
+				id = output.getInt(1);
+				name = output.getString(2);
+				payRate = output.getDouble(3);
+				databaseEmployee.add(new Employee(id ,name, payRate));
 			}
-			catch(SQLException sqle)
-			{
-				System.out.println("Getting Employee: "+sqle.getMessage());
-			}
-			return databaseEmployee;
+			output.close();
 		}
+		catch(SQLException sqle)
+		{
+			System.out.println("Getting Employee: "+sqle.getMessage());
+		}
+		return databaseEmployee;
+	}
 
-		//Gets the employee with matching ID from database and returns it as an Employee Object
-		public Employee getEmployee(int employeeID)
-		{
-			Employee databaseEmployee = null;
-			int id = 0;
-			String name = "";
-			double payRate = 0;
-			String query = "SELECT * FROM EMPLOYEES WHERE employeeID like ? "; 
+	/**
+	 * Gets the employee with matching ID from database
+	 * @param employeeID
+	 * @return Employee Object
+	 */
+	public Employee getEmployee(int employeeID)
+	{
+		Employee databaseEmployee = null;
+		int id = 0;
+		String name = "";
+		double payRate = 0;
+		String query = "SELECT * FROM EMPLOYEES WHERE employeeID like ? "; 
 
-			try (Connection connect = this.connect(); PreparedStatement  inject  = connect.prepareStatement(query))
-			{
-				//Sets '?' to user name in the query
-				//crates a user from the found information
-				inject.setInt(1,employeeID);
-				ResultSet output = inject.executeQuery();
-				while (output.next()){
-					id = output.getInt(1);
-					name = output.getString(2);
-					payRate = output.getDouble(3);
-				}
-				databaseEmployee = new Employee(id ,name, payRate);
-				output.close();
-			}
-			catch(SQLException sqle)
-			{
-				System.out.println("Getting Employee: "+sqle.getMessage());
-			}
-			return databaseEmployee;
-		}
-		
-		//Adds an employee to the database with the RAW parameters [parameters are not tested]
-		public void addEmployee(String name, double payRate)
+		try (Connection connect = this.connect(); PreparedStatement  inject  = connect.prepareStatement(query))
 		{
-			String query = "INSERT INTO EMPLOYEES(name, payRate) " + "VALUES ('" + name + "'," + payRate + ");";
-			try(Connection connect = this.connect(); Statement inject = connect.createStatement())
-			{
-				inject.executeUpdate(query);
-				System.out.println("Employee '"+name+"' Added");
+			//Sets '?' to user name in the query
+			//crates a user from the found information
+			inject.setInt(1,employeeID);
+			ResultSet output = inject.executeQuery();
+			while (output.next()){
+				id = output.getInt(1);
+				name = output.getString(2);
+				payRate = output.getDouble(3);
 			}
-			catch(SQLException sqle)
-			{
-				System.out.println(sqle.getMessage());
-			}
+			databaseEmployee = new Employee(id ,name, payRate);
+			output.close();
 		}
-		
-		//Adds ONE employee working time to the database with the RAW parameters [parameters are not tested]
-		public void addEmployeeWorkingTime(int empID, String date, String startTime, String endTime)
+		catch(SQLException sqle)
 		{
-			String query = "INSERT INTO EMPLOYEES_WORKING_TIMES(employeeID, date, startTime, endTime) " + "VALUES ("+ empID +",'"+ date +"','"+ startTime +"','"+ endTime +"');";
-			try(Connection connect = this.connect(); Statement inject = connect.createStatement())
-			{
-				inject.executeUpdate(query);
-				System.out.println("Employee " + empID+ "'s working time Added");
-			}
-			catch(SQLException sqle)
-			{
-				System.out.println(sqle.getMessage());
-				System.out.println(date);
-			}
+			System.out.println("Getting Employee: "+sqle.getMessage());
 		}
-		
-		//Delete user from database
-		public void deleteUser(String userName)
+		return databaseEmployee;
+	}
+	
+	/**
+	 * Adds an employee to the database
+	 * @param name
+	 * @param payRate
+	 */
+	public void addEmployee(String name, double payRate)
+	{
+		String query = "INSERT INTO EMPLOYEES(name, payRate) " + "VALUES ('" + name + "'," + payRate + ");";
+		try(Connection connect = this.connect(); Statement inject = connect.createStatement())
 		{
-			String query = "DELETE FROM users WHERE username LIKE '" + userName + "'";
-			try(Connection connect = this.connect(); Statement inject = connect.createStatement())
-			{
-				inject.executeUpdate(query);
-				System.out.println("User " + userName + " deleted!!");
-			}
-			catch(SQLException sqle)
-			{
-				System.out.println(sqle.getMessage());
-			}
+			inject.executeUpdate(query);
+			System.out.println("Employee '"+name+"' Added");
 		}
-		
-		//Gets the employee's working times from database and returns it as an array of EmployeeWorkingTime
-		public ArrayList<EmployeeWorkingTime> getEmployeeWorkingTimes(int employeeId)
+		catch(SQLException sqle)
 		{
-			ArrayList<EmployeeWorkingTime> databaseWorkingTime = new ArrayList<EmployeeWorkingTime>();
-			int id = 0;
-			int empID = 0;
-			Date date, startTime, endTime;
-			String query = "SELECT * FROM EMPLOYEES_WORKING_TIMES WHERE employeeID = ? "; 
+			System.out.println(sqle.getMessage());
+		}
+	}
+	
+	/**
+	 * Adds ONE employee working time to the database
+	 * @param empID
+	 * @param date
+	 * @param startTime
+	 * @param endTime
+	 */
+	public void addEmployeeWorkingTime(int empID, String date, String startTime, String endTime)
+	{
+		String query = "INSERT INTO EMPLOYEES_WORKING_TIMES(employeeID, date, startTime, endTime) " + "VALUES ("+ empID +",'"+ date +"','"+ startTime +"','"+ endTime +"');";
+		try(Connection connect = this.connect(); Statement inject = connect.createStatement())
+		{
+			inject.executeUpdate(query);
+			System.out.println("Employee " + empID+ "'s working time Added");
+		}
+		catch(SQLException sqle)
+		{
+			System.out.println(sqle.getMessage());
+			System.out.println(date);
+		}
+	}
+	
+	/**
+	 * Delete user from database
+	 * @param userName
+	 */
+	public void deleteUser(String userName)
+	{
+		String query = "DELETE FROM users WHERE username LIKE '" + userName + "'";
+		try(Connection connect = this.connect(); Statement inject = connect.createStatement())
+		{
+			inject.executeUpdate(query);
+			System.out.println("User " + userName + " deleted!!");
+		}
+		catch(SQLException sqle)
+		{
+			System.out.println(sqle.getMessage());
+		}
+	}
+	
+	/**
+	 * Gets the employee's working times from database
+	 * @param employeeId
+	 * @return ArrayList <EmployeeWorkingTime> Objects
+	 */
+	public ArrayList<EmployeeWorkingTime> getEmployeeWorkingTimes(int employeeId)
+	{
+		ArrayList<EmployeeWorkingTime> databaseWorkingTime = new ArrayList<EmployeeWorkingTime>();
+		int id = 0;
+		int empID = 0;
+		Date date, startTime, endTime;
+		String query = "SELECT * FROM EMPLOYEES_WORKING_TIMES WHERE employeeID = ? "; 
 
-			try (Connection connect = this.connect(); PreparedStatement  inject  = connect.prepareStatement(query))
-			{
-				//Sets '?' to user name in the query
-				//crates a user from the found information
-				inject.setInt(1,employeeId);
-				ResultSet output = inject.executeQuery();
-				while (output.next())
-				{
-					id = output.getInt(1);
-					empID = output.getInt(2);
-					date = controller.convertStringToDate(output.getString(3));
-					startTime = controller.convertStringToTime(output.getString(4));
-					endTime = controller.convertStringToTime(output.getString(5));
-					databaseWorkingTime.add(new EmployeeWorkingTime(id,empID,date,startTime,endTime));				
-				}
-				output.close();
-			}
-			catch(SQLException sqle)
-			{
-				System.out.println("Getting Working Time: "+sqle.getMessage());
-			}
-			return databaseWorkingTime;
-		}
-		
-		//Rounds a double to x amount of decimal places then return the rounded double
-		public static double round(double value, int places) {
-		    if (places < 0) throw new IllegalArgumentException();
-
-		    long factor = (long) Math.pow(10, places);
-		    value = value * factor;
-		    long tmp = Math.round(value);
-		    return (double) tmp / factor;
-		}
-		public boolean dropTable(String tableName)
+		try (Connection connect = this.connect(); PreparedStatement  inject  = connect.prepareStatement(query))
 		{
-			String query = "DROP TABLE IF EXISTS '"+ tableName +"' ";
-			try(Connection connect = this.connect(); Statement inject = connect.createStatement())
+			//Sets '?' to user name in the query
+			//crates a user from the found information
+			inject.setInt(1,employeeId);
+			ResultSet output = inject.executeQuery();
+			while (output.next())
 			{
-				inject.executeUpdate(query);
-				System.out.println("Table "+ tableName +"");
-				return true;
+				id = output.getInt(1);
+				empID = output.getInt(2);
+				date = controller.convertStringToDate(output.getString(3));
+				startTime = controller.convertStringToTime(output.getString(4));
+				endTime = controller.convertStringToTime(output.getString(5));
+				databaseWorkingTime.add(new EmployeeWorkingTime(id,empID,date,startTime,endTime));				
 			}
-			catch(SQLException sqle)
-			{
-				System.out.println(sqle.getMessage());
-				return false;
-			}
+			output.close();
 		}
-		
+		catch(SQLException sqle)
+		{
+			System.out.println("Getting Working Time: "+sqle.getMessage());
+		}
+		return databaseWorkingTime;
+	}
+	
+	/**
+	 * Rounds a double to x amount of decimal places then return the rounded double
+	 * @param value
+	 * @param places
+	 * @return
+	 */
+	public static double round(double value, int places) {
+	    if (places < 0) throw new IllegalArgumentException();
+
+	    long factor = (long) Math.pow(10, places);
+	    value = value * factor;
+	    long tmp = Math.round(value);
+	    return (double) tmp / factor;
+	}
+	
+	/**
+	 * Drops table name from database
+	 * @param tableName
+	 * @return
+	 */
+	public boolean dropTable(String tableName)
+	{
+		String query = "DROP TABLE IF EXISTS '"+ tableName +"' ";
+		try(Connection connect = this.connect(); Statement inject = connect.createStatement())
+		{
+			inject.executeUpdate(query);
+			System.out.println("Table "+ tableName +"");
+			return true;
+		}
+		catch(SQLException sqle)
+		{
+			System.out.println(sqle.getMessage());
+			return false;
+		}
+	}
+	/**
+	 * Adds one booking to the database
+	 * @param userId
+	 * @param date
+	 * @param startTime
+	 * @param endTime
+	 * @param description
+	 */
+	public void addBooking (int userId, Date date, String startTime, String endTime, String description)
+	{
+		//bookingID is made in the database
+		String query = "INSERT INTO BOOKINGS (userID,date,startTime,endTime,Desc)" + "VALUES(" + userId + "," + date + ",'" + startTime + "','" + endTime + "','" + description + "');";
+		try(Connection connect = this.connect(); Statement inject = connect.createStatement())
+		{
+			inject.executeUpdate(query);
+			System.out.println("Booking Added");
+		}
+		catch(SQLException sqle)
+		{
+			System.out.println(sqle.getMessage());
+		}
+	}
 }

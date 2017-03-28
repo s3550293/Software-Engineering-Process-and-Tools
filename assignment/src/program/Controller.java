@@ -15,10 +15,10 @@ public class Controller
 
 	Scanner kb = new Scanner(System.in);
 
-	/*
-	 *
-	 * LUKE MASON
-	 *
+	/**
+	 * @author Luke Mason
+	 * Prompts user for sufficient information in order to add a new employee to database
+	 * @return false if the program breaks out of loop. True if /exit is called or user exits
 	 */
 	public boolean addNewEmployee()
 	{
@@ -31,7 +31,7 @@ public class Controller
 		String employeeName;
 		String employeePayRate;
 		double employeePayRate2;
-		// Enter in the employees Full name correctly
+		// Loop until first name is valid
 		do
 		{
 			loopAgain = false;
@@ -42,18 +42,18 @@ public class Controller
 			// characters e.g ?>!#%$#12345
 			if (employeeFName.equalsIgnoreCase("/exit"))
 			{
-				System.out.println("Exitting to main menu...");
+				System.out.println("Exitting to main menu...");//exit command
 
 				return false;
 			}
-			if (checkInputToContainInvalidChar(employeeFName))
+			if (checkInputToContainInvalidChar(employeeFName))//checking for invalid characters
 			{
 				System.out.println("The name you have entered contains non-alphabetical characters");
 				System.out.println("Please try again");
 				loopAgain = true;
 			}
 		} while (loopAgain);
-		do
+		do//Loop until last name is valid
 		{
 			loopAgain = false;
 			System.out.print("Enter in the new employee's last name only [/exit to quit] >> ");
@@ -61,21 +61,21 @@ public class Controller
 			// Attempting to see if the input is valid
 			// Checking to see if the input contains any non-alphabetical
 			// characters e.g ?>!#%$#12345
-			if (employeeLName.equalsIgnoreCase("/exit"))
+			if (employeeLName.equalsIgnoreCase("/exit"))//exit command
 			{
 				System.out.println("Exitting to main menu...");
 
 				return false;
 			}
-			if (checkInputToContainInvalidChar(employeeLName))
+			if (checkInputToContainInvalidChar(employeeLName))//checking for invalid characters
 			{
 				System.out.println("The name you have entered contains non-alphabetical characters");
 				System.out.println("Please try again");
 				loopAgain = true;
 			}
 		} while (loopAgain);
-		employeeName = employeeFName + " " + employeeLName;
-		do
+		employeeName = employeeFName + " " + employeeLName;//concatenating first and last name into name
+		do//Loop until pay rate is valid
 		{
 			loopAgain = false;
 			System.out.print("Enter in the pay rate of " + employeeName + " [/exit to quit] >> ");
@@ -84,11 +84,11 @@ public class Controller
 			// Checking to see if the amount contains any non-digit characters
 			if (employeePayRate.equalsIgnoreCase("/exit"))
 			{
-				System.out.println("Exitting to main menu...");
+				System.out.println("Exitting to main menu...");//exit command
 
 				return false;
 			}
-			employeePayRate2 = changeInputIntoValidDouble(employeePayRate);
+			employeePayRate2 = changeInputIntoValidDouble(employeePayRate);//checking for invalid input
 			if (employeePayRate2 < 0)
 			{
 				System.out.println(
@@ -97,7 +97,7 @@ public class Controller
 				loopAgain = true;
 			}
 		} while (loopAgain);
-		do
+		do//Loop until valid option is selected
 		{
 			loopAgain = false;
 			System.out.println("What would you like to do now?");
@@ -110,34 +110,33 @@ public class Controller
 			switch (answer)
 			{
 			case 1:
-				connect.addEmployee(employeeName, employeePayRate2);
-				ArrayList<Employee> employees = connect.getEmployees(employeeName);
-				if(employees.size() > 1)
+				connect.addEmployee(employeeName, employeePayRate2);//adding employee
+				ArrayList<Employee> employees = connect.getEmployees(employeeName);//adding working times to employee just made
+				if(employees.size() > 1)//If employee just made has exact same name as an existing employee then returns to main menu
 				{
 					System.out.println("ERROR: There are two employees in the database with the same name, cannot add working times");
 					return true;
 				}
 				for (Employee employee : employees) 
 				{
-					if(!(addWorkingTimesForNextMonth(employee.getId()))) 
+					if(addWorkingTimesForNextMonth(employee.getId()))//exit command is called  
 					  {
-						  System.out.println("Save and exiting to main menu"); 
+						  System.out.println("Saved and exiting to main menu");
 					  }
 				}
 				return true;
 			case 2:
-				connect.addEmployee(employeeName, employeePayRate2);
+				connect.addEmployee(employeeName, employeePayRate2);//adding employee
 				System.out.println("Employee " + employeeName + " added!");
 				return true;
 			case 3:
-				do
+				do//Loop until input is valid
 				{
 					loopAgain = false;
 					System.out.print("Are you sure you don't want to save the employee to the database?(Y/N)");
 					String exit = kb.nextLine();
 					if (exit.equalsIgnoreCase("y"))
 					{
-
 						return false;
 					} else if (exit.equalsIgnoreCase("n"))
 					{
@@ -159,9 +158,12 @@ public class Controller
 		return false;
 	}
 
-	// Checks each letter in the string and see's if the letter is not in the
-	// alphabet(lower case) and is not in the alphabet(Upper case)
-	// if it is not in either alphabet, then it returns true
+	/**
+	 * @author Luke Mason
+	 * Checks each letter in the string and see's if the letter is not in the alphabet(lower case) and is not in the alphabet(Upper case)
+	 * @param string
+	 * @return if input DOES contain invalid char, then it returns true. returns false if valid
+	 */
 	public boolean checkInputToContainInvalidChar(String string)
 	{
 		if (string.length() == 0 || string.length() > 40)
@@ -184,15 +186,19 @@ public class Controller
 		return false;
 	}
 
-	// finds all employees by name and prints to screen then calls add employee
-	// work time function
+	/**
+	 * @author Luke Mason
+	 * Finds all employees by name input from UI and prints them to screen
+	 * Calls add employee work time function to add a work times for next month
+	 * @return true when /exit is called
+	 */
 	public boolean addWorkingTimesForEmployeeByName()
 	{
 		DatabaseConnection connect = new DatabaseConnection();
 		String employeeName;
 		boolean loopAgain;
 		boolean loopAgain2;
-		do
+		do//Loop prompt for employee username search
 		{
 			loopAgain = false;
 			System.out.println("~~~Search for Employee~~~[/exit to quit]");
@@ -201,55 +207,60 @@ public class Controller
 			// Attempting to see if the input is valid
 			// Checking to see if the input contains any non-alphabetical
 			// characters e.g ?>!#%$#12345
-			if (employeeName.equalsIgnoreCase("/exit"))
+			if (employeeName.equalsIgnoreCase("/exit"))//exit command
 			{
 				System.out.println("Exitting to main menu...");
 
-				return false;
+				return true;
 			}
 			ArrayList<Employee> employees = connect.getEmployees(employeeName);
 			System.out.println("~~~LIST OF EMPLOYEES~~~");
-			for (Employee employee : employees)
+			if (employees.size() == 0)//if array list is empty then the user is prompted to try again
 			{
-				
+				System.out.println(
+						"Sorry but there are no matches for the name '" + employeeName + "'\n Please Try again");
+				loopAgain = true;
+				continue;
+			}
+			for (Employee employee : employees)//Displays all employees toString in the array list
+			{
 				System.out.println(employee.toString());
-				if (employees.size() == 0)
+			}
+			System.out.println("~~~~~~~~~~END~~~~~~~~~~");
+			do//prompting user to pick an employee or /again to search for employees again
+			{
+				loopAgain2 = false;
+				System.out.println("Which employee would you like to add working times for [/again to search again]?");
+				System.out.print("Employee's ID >> ");
+				String employeeId = kb.nextLine();
+				if (employeeId.equalsIgnoreCase("/exit"))//exit command
 				{
-					System.out.println(
-							"Sorry but there are no matches for the name '" + employeeName + "'\n Please Try again");
+					System.out.println("Exitting to main menu...");
+					return true;
+				}
+				if (employeeId.equalsIgnoreCase("/again"))//lets user search for employee again
+				{
+					loopAgain2 = false;
 					loopAgain = true;
 					continue;
 				}
-			}
-			System.out.println("~~~~~~~~~~END~~~~~~~~~~");
-			do
-			{
-				loopAgain2 = false;
-				System.out.println("Which employee would you like to add working times for?");
-				System.out.print("Employee's ID >> ");
-				String employeeId = kb.nextLine();
-				if (employeeId.equalsIgnoreCase("/exit"))
-				{
-					System.out.println("Exitting to main menu...");
-					return false;
-				}
-				int id = changeInputIntoValidInt(employeeId);
-				if (id < 0)
+				int id = changeInputIntoValidInt(employeeId);//Converting id into a valid integer
+				if (id < 0)//if id is invalid, prompts user for id again
 				{
 					System.out.println("Invalid ID, Try again");
 					loopAgain2 = true;
 					continue;
 				}
 				boolean idExists = false;
-				for (Employee employee : employees)
+				for (Employee employee : employees)//checks to see if id exists in the selection of employees in array
 				{
-					if (employee.getId() == id)
+					if (employee.getId() == id)//calls working time functions and starts adding them for matched employee
 					{
 						idExists = true;
 						addWorkingTimesForNextMonth(id);
 					}
 				}
-				if (!idExists)
+				if (!idExists)//if id is not matched, prompts user to try again
 				{
 					System.out.println(
 							"ID MISMATCH: There is no ID that matches an employee you have just searched for\n Try Again");
@@ -260,10 +271,12 @@ public class Controller
 		return false;
 	}
 
-	// Changes the string number into an Double
-	// return -1 if the input is a negative number OR if the input contains
-	// non-numeric characters except decimal
-	// Checks if the input contains more than 1 decimal
+	/**
+	 * @author Luke Mason
+	 * Changes the string number into an Double & Checks if the input contains more than 1 decimal
+	 * @param string
+	 * @return -1 if the input is a negative number OR if the input contains non-numeric characters except decimal
+	 */
 	public double changeInputIntoValidDouble(String string)
 	{
 		try
@@ -282,9 +295,12 @@ public class Controller
 		}
 	}
 
-	// Changes the string number into an Int
-	// return -1 if the input is a negative number OR if the input contains
-	// non-numeric characters
+	/**
+	 * @author Luke Mason
+	 * Changes the string number into an Integer
+	 * @param string
+	 * @return -1 if the input is a negative number OR if the input contains non-numeric characters
+	 */
 	public int changeInputIntoValidInt(String string)
 	{
 		try
@@ -303,8 +319,12 @@ public class Controller
 		}
 	}
 
-	// Checking date and it's format before converting, if okay, then convert,
-	// return date
+	/**
+	 * @author Luke Mason
+	 * Checking date and it's format before converting, if okay, then convert,
+	 * @param date1
+	 * @return false if date is > 30 days in future or if date < current date
+	 */
 	public boolean checkNewDate(Date date1)
 	{
 		Calendar c = new GregorianCalendar();
@@ -327,9 +347,11 @@ public class Controller
 		return true;
 	}
 
-	// DAVID
-	/*
-	 * UI for adding employee working time for next month Status: In development
+	/**
+	 * @author Luke Mason, David Heang
+	 * UI for adding employee working times for next month
+	 * @param employeeId
+	 * @return only returns false if user somehow breaks out of infinite loop with out exiting function
 	 */
 	public boolean addWorkingTimesForNextMonth(int employeeId)
 	{
@@ -348,27 +370,28 @@ public class Controller
 		String newFinishTimeStr;
 		int count =1;
 		boolean infiniteloop = true;
-		do
+		do //Infinite Loop, exit with /exit
 		{
 			System.out.println("/exit TO SAVE & EXIT ANYTIME");
 			System.out.println("~~~~Adding Work Time "+count+" ~~~~");
-			do
+			do//Loop year,month,day (date) until date is valid
 			{
-				valid = false;
-				while (valid == false)
+				valid = false;//resetting valid to false for next loop
+				while (valid == false)//Loop until year is valid
 				{
 					System.out.print("Please Enter year:\nyear >> ");
 					String yearStr = sc.nextLine();
-					if (yearStr.equalsIgnoreCase("/exit"))
+					if (yearStr.equalsIgnoreCase("/exit"))//exit command
 					{
 						return true;
 					}
-					// convert to Integer
+					//converting to integer, returns -1 if the input is invalid
 					year = controller.changeInputIntoValidInt(yearStr);
-					if (year > 0)// will be -1 if the input is invalid
+					if (year > 0)
 					{
 						valid = true;
-					} else
+					} 
+					else
 					{
 						System.out.println("Innappropriate year!");
 						valid = false;
@@ -376,17 +399,18 @@ public class Controller
 	
 				
 				}
-				valid = false;
-				while (valid == false)
+				valid = false;//resetting valid to false for next loop
+				while (valid == false)//Loop until month is valid
 				{
 					System.out.print("Please Enter month (1-12):\nmonth >> ");
 					String monthStr = sc.nextLine();
-					if (monthStr.equalsIgnoreCase("/exit"))
+					if (monthStr.equalsIgnoreCase("/exit"))//exit command
 					{
 						return true;
 					}
+					//converting to integer, returns -1 if the input is invalid
 					month = controller.changeInputIntoValidInt(monthStr);
-					if (month > 0 && month < 13)// will be -1 if the input is invalid
+					if (month > 0 && month < 13)
 					{
 						valid = true;
 					} else
@@ -396,8 +420,8 @@ public class Controller
 					}
 					
 				}
-				valid = false;
-				while (valid == false)
+				valid = false;//resetting valid to false for next loop
+				while (valid == false)//Loop until day is valid
 				{
 					System.out.print("Please Enter day:\nday >> ");
 					String dayStr = sc.nextLine();
@@ -405,6 +429,7 @@ public class Controller
 					{
 						return true;
 					}
+					//converting to integer, returns -1 if the input is invalid
 					day = controller.changeInputIntoValidInt(dayStr);
 					if (day > 0 && day < 32)
 					{
@@ -420,31 +445,30 @@ public class Controller
 				// Making a date from year, month and day integers
 				Calendar cal = Calendar.getInstance();
 				cal.set(Calendar.YEAR, year);
-				cal.set(Calendar.MONTH, month-1);
+				cal.set(Calendar.MONTH, month-1);//january = 0, so we -1
 				cal.set(Calendar.DAY_OF_MONTH, day);
 				newDate = cal.getTime();
 				if (!checkNewDate(newDate))
 				{
 					valid = false;
 				}
-			} while (!valid);
-			do
+			} while (!valid);//If chrckNewDate is false then it loops to beginning
+			do//Loop for startTime and EndTime (shouldn't get used since there is no restriction to what end time and start time can be)
 			{
-				valid2 = false;
-				valid = false;
-				while (valid == false)
+				valid2 = false;//resetting valid to false for next loop
+				valid = false;//resetting valid to false for next loop
+				while (valid == false)//Loop start time hours and minutes until valid
 				{
 					int hours = 0;
 					int minutes = 0;
 					valid = true;
-					do
+					do//Loop start time hours until valid
 					{
 						valid = true;
 						System.out.print("Please Enter start time (0-23)\nHours >> ");
 						String startTimeHourStr = sc.nextLine();
-						if (startTimeHourStr.equalsIgnoreCase("/exit"))
+						if (startTimeHourStr.equalsIgnoreCase("/exit"))//exit command
 						{
-							System.out.println("Exitting to main menu...");
 							return true;
 						}
 						hours = changeInputIntoValidInt(startTimeHourStr);
@@ -454,27 +478,27 @@ public class Controller
 							valid = false;
 						}
 					} while (!valid);
-					do
+					do//Loop start time minutes until valid
 					{
 						valid = true;
 						System.out.print("Minutes(0-59) >> ");
 						String startTimeMinStr = sc.nextLine();
-						if (startTimeMinStr.equalsIgnoreCase("/exit"))
+						if (startTimeMinStr.equalsIgnoreCase("/exit"))//exit command
 						{
 							return true;
 						}
 						minutes = changeInputIntoValidInt(startTimeMinStr);
 						if (minutes < 0 || minutes > 59)
 						{
-							System.out.println("Incorrect amount of hours, Try Again");
+							System.out.println("Incorrect amount of minutes, Try Again");
 							valid = false;
 						}
 					} while (!valid);
-	
+					//converting single integers to 2 char long strings e.g 1 = "01", 4 = "04"
 					String hoursStr = String.format("%02d", hours);
 					String minsStr = String.format("%02d", minutes);
-					String startTimeStr = hoursStr + ":" + minsStr;
-					startTime = convertStringToTime(startTimeStr);
+					String startTimeStr = hoursStr + ":" + minsStr;//concatenating hours and minutes e.g 01:04
+					startTime = convertStringToTime(startTimeStr);//converting string into Time to double check the formating is correct
 					if (startTime == null)
 					{
 						System.out.println("This time is not in the correct format HH:MM, Try Again");
@@ -482,18 +506,18 @@ public class Controller
 						continue;
 					}
 				}
-				valid = false;
-				while (valid == false)
+				valid = false;//resetting valid to false for next loop
+				while (valid == false)//Loop finish time hours and minutes until valid
 				{
 					int hours = 0;
 					int minutes = 0;
 					valid = true;
-					do
+					do//loop finish time hours until valid
 					{
 						valid = true;
 						System.out.print("Please Enter finish time\nHours >> ");
 						String startTimeHourStr = sc.nextLine();
-						if (startTimeHourStr.equalsIgnoreCase("/exit"))
+						if (startTimeHourStr.equalsIgnoreCase("/exit"))//exit command
 						{
 							return true;
 						}
@@ -504,27 +528,27 @@ public class Controller
 							valid = false;
 						}
 					} while (!valid);
-					do
+					do//loop finish time minutes until valid
 					{
 						valid = true;
 						System.out.print("Minutes >> ");
 						String finishTimeMinStr = sc.nextLine();
-						if (finishTimeMinStr.equalsIgnoreCase("/exit"))
+						if (finishTimeMinStr.equalsIgnoreCase("/exit"))//exit command
 						{
 							return true;
 						}
 						minutes = changeInputIntoValidInt(finishTimeMinStr);
 						if (minutes < 0 || minutes > 59)
 						{
-							System.out.println("Incorrect amount of hours, Try Again");
+							System.out.println("Incorrect amount of minutes, Try Again");
 							valid = false;
 						}
 					} while (!valid);
-	
+					//converting single integers to 2 char long strings e.g 1 = "01", 4 = "04"
 					String hoursStr = String.format("%02d", hours);
 					String minsStr = String.format("%02d", minutes);
-					String finishTimeStr = hoursStr + ":" + minsStr;
-					finishTime = convertStringToTime(finishTimeStr);
+					String finishTimeStr = hoursStr + ":" + minsStr;//concatenating hours and minutes e.g 01:04
+					finishTime = convertStringToTime(finishTimeStr);//converting string into Time to double check the formating is correct
 					if (finishTime == null)
 					{
 						System.out.println("This time is not in the correct format HH:MM, Try Again");
@@ -535,22 +559,12 @@ public class Controller
 	
 			} while (valid2);
 	
-			newDateStr = convertDateToString(newDate);
-			newStartTimeStr = convertTimeToString(startTime);
-			newFinishTimeStr = convertTimeToString(finishTime);
+			newDateStr = convertDateToString(newDate);//converting double checked date format into string
+			newStartTimeStr = convertTimeToString(startTime);//converting double checked date format into string
+			newFinishTimeStr = convertTimeToString(finishTime);//converting double checked date format into string
 			connect.addEmployeeWorkingTime(employeeId, newDateStr, newStartTimeStr, newFinishTimeStr);
-			++count;
-		}while(infiniteloop);
-		return true;
-	}
-
-	public boolean checkNewStartTime(Date startTime)
-	{
-		return false;
-	}
-
-	public boolean checkNewEndTime(Date endTime)
-	{
+			++count;//counts what loop number is current and used to display to user
+		}while(infiniteloop);//can only use /exit to get out of loop/function
 		return false;
 	}
 
@@ -612,9 +626,11 @@ public class Controller
 		return false;
 	}*/
 
-	/*
-	 *
-	 * //JOSEPH Use Convert String to Date when entering data into the database
+	/**
+	 * @author Joseph Garner
+	 * Converts type String to type Date
+	 * @param date
+	 * @return Date date
 	 */
 	public Date convertStringToDate(String date)
 	{
@@ -631,8 +647,11 @@ public class Controller
 		return _date;
 	}
 
-	/*
+	/**
+	 * @author Joseph Garner
 	 * Use Convert Date to String when reading/printing from database
+	 * @param date
+	 * @return String date
 	 */
 	public String convertDateToString(Date date)
 	{
@@ -642,8 +661,11 @@ public class Controller
 		return _date;
 	}
 
-	/*
+	/**
+	 * @author Joseph Garner
 	 * Use Convert String to Time when entering into the database
+	 * @param time
+	 * @return Date time
 	 */
 	public Date convertStringToTime(String time)
 	{
@@ -659,7 +681,12 @@ public class Controller
 		}
 		return _time;
 	}
-
+	/**
+	 * @author Joseph Garner
+	 * Use Convert Time to String when entering into the database
+	 * @param time
+	 * @return string time
+	 */
 	public String convertTimeToString(Date time)
 	{
 		String _time = null;
@@ -668,8 +695,12 @@ public class Controller
 		return _time;
 	}
 
-	/*
-	 * used to compare two times and get the duration
+	/**
+	 * @author Joseph Garner
+	 * used to compare two times and get the duration between them
+	 * @param time1
+	 * @param time2
+	 * @return
 	 */
 	public long getTimeDifference(Date time1, Date time2)
 	{
@@ -693,8 +724,13 @@ public class Controller
 		return val;
 	}
 
-	/*
+	
+	/**
+	 * @author Joseph Garner
 	 * used to compare two dates and get the duration
+	 * @param date1
+	 * @param date2
+	 * @return
 	 */
 	public long getDateDifference(Date date1, Date date2)
 	{
@@ -713,7 +749,11 @@ public class Controller
 		return val;
 	}
 
-	@SuppressWarnings("resource")
+	/**
+	 * @author Bryan Soh
+	 * 
+	 * @return
+	 */
 	public void displayAvailability()
 	{
 		boolean loopflag = true;
@@ -819,6 +859,13 @@ public class Controller
 		}
 	}
 
+	/**
+	 * @author Bryan Soh
+	 * 
+	 * @param date
+	 * @param workDays
+	 * @return
+	 */
 	private String matchDate(String date, ArrayList<EmployeeWorkingTime> workDays)
 	{
 		for (EmployeeWorkingTime ew : workDays)
@@ -832,6 +879,15 @@ public class Controller
 
 	}
 
+	
+	/**
+	 * @author Bryan Soh
+	 * 
+	 * @param time
+	 * @param date
+	 * @param workDays
+	 * @return
+	 */
 	private String getTime(String time, String date, ArrayList<EmployeeWorkingTime> workDays)
 	{
 		if (time.equalsIgnoreCase("start"))

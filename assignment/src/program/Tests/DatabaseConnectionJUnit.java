@@ -8,7 +8,6 @@ import java.sql.Connection;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
-import java.util.Date;
 import java.sql.DriverManager;
 import org.junit.After;
 import org.junit.Before;
@@ -256,11 +255,6 @@ public class DatabaseConnectionJUnit {
 	public void testAddBookingToDatabase ()
 	{
 		//addBooking (int userId, Date date, String startTime, String endTime, String description)
-	}
-	@Test
-	public void testAddBookingObject()
-	{
-		//Booking booking1 = new Booking(1,1/1/2017,"8:00","11:00","Light Trim");
 	}
 	@After
 	public void tearDown()

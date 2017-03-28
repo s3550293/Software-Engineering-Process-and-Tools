@@ -911,5 +911,13 @@ public class Controller
 		}
 		return "";
 	}
+	
+	public void checkBooking()
+	{
+		//get customers
+		//display booking days
+		//prompt user input
+		//display customer booking
+	}
 
 }

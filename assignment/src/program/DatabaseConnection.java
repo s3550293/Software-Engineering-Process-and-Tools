@@ -316,4 +316,43 @@ public class DatabaseConnection
 			System.out.println(sqle.getMessage());
 		}
 	}
+	
+	/**
+	 * Gets the employee's working times from database
+	 * @param cusID
+	 * @return ArrayList <Booking> Objects
+	 */
+	public ArrayList<Booking> getBooking (int customerID)
+	{
+		ArrayList<Booking> databaseBookingTime = new ArrayList<Booking>();
+		int bookingID = 0;
+		int cusID = 0;
+		Date date, startTime, endTime;
+		String desc;
+		String query = "SELECT * FROM BOOKING WHERE customerID = ? "; 
+
+		try (Connection connect = this.connect(); PreparedStatement  inject  = connect.prepareStatement(query))
+		{
+			//Sets '?' to user name in the query
+			//crates a user from the found information
+			inject.setInt(1,customerID);
+			ResultSet output = inject.executeQuery();
+			while (output.next())
+			{
+				bookingID = output.getInt(1);
+				cusID = output.getInt(2);
+				date = controller.convertStringToDate(output.getString(3));
+				startTime = controller.convertStringToTime(output.getString(4));
+				endTime = controller.convertStringToTime(output.getString(5));
+				desc=output.getString(6);
+				databaseBookingTime.add(new Booking(bookingID,cusID,date,startTime,endTime,desc));				
+			}
+			output.close();
+		}
+		catch(SQLException sqle)
+		{
+			System.out.println("Getting Booking Time: "+sqle.getMessage());
+		}
+		return databaseBookingTime;
+	}
 }

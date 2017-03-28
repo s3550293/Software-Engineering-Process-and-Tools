@@ -2,6 +2,7 @@ package program.Tests;
 
 import static org.junit.Assert.*;
 
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
@@ -10,9 +11,12 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import program.Controller;
+import program.DatabaseConnection;
+import program.EmployeeWorkingTime;
 public class ControllerJunit {
 	
 	Controller controller = new Controller();
+	DatabaseConnection connect = new DatabaseConnection();
 	
 	@Before
 	public void setUp()
@@ -135,6 +139,22 @@ public class ControllerJunit {
 		assertEquals(null,controller.convertStringToTime("stf:fds"));
 		assertEquals(null,controller.convertStringToTime("ok:ok"));
 		assertEquals(null,controller.convertStringToTime("2012"));
+		
+	}
+	
+	@Test
+	public void testDisplayAvailFunc()
+	{
+		ArrayList<EmployeeWorkingTime> workDays = connect.getEmployeeWorkingTimes(1);
+		//connect.addEmployeeWorkingTime(1,"28/03/2017","9:50","17:25");
+		//connect.addEmployeeWorkingTime(1,"29/03/2017","8:30","14:30");
+		assertEquals("09:50", controller.getTime("start", "28/03/2017", workDays));
+		assertEquals("08:30", controller.getTime("start", "29/03/2017", workDays));
+		assertEquals("17:25", controller.getTime("end", "28/03/2017", workDays));
+		assertEquals("14:30", controller.getTime("end", "29/03/2017", workDays));
+		
+		assertEquals("28/03/2017",controller.matchDate("28/03/2017", workDays));
+		assertEquals("29/03/2017",controller.matchDate("29/03/2017", workDays));
 		
 	}
 

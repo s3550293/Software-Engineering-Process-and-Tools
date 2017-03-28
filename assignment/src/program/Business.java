@@ -19,8 +19,9 @@ public class Business
 			System.out.printf("%-3s %-2s %s\n", "", "2.", "Add New Employee/Working time");
 			System.out.printf("%-3s %-2s %s\n", "", "3.", "Check Bookings");
 			System.out.printf("%-3s %-2s %s\n", "", "4.", "Make Bookings");
-			System.out.printf("%-3s %-2s %s\n", "", "5.", "Add Employee Working Times");
-			System.out.printf("%-3s %-2s %s\n", "", "6.", "Log Out");
+			System.out.printf("%-3s %-2s %s\n", "", "5.", "Delete Bookings");
+			System.out.printf("%-3s %-2s %s\n", "", "6.", "Add Employee Working Times");
+			System.out.printf("%-3s %-2s %s\n", "", "7.", "Log Out");
 			System.out.printf("%s\n%s", "Please choose between 1 and 6", "user> ");
 			int selection = Integer.parseInt(scanner.nextLine());
 			
@@ -39,9 +40,12 @@ public class Business
 				//Todo
 				break;
 			case 5:
-				controller.addWorkingTimesForEmployeeByName();
+				deleteBooking();
 				break;
 			case 6:
+				controller.addWorkingTimesForEmployeeByName();
+				break;
+			case 7:
 				flag = false;
 				break;
 			default:
@@ -49,6 +53,14 @@ public class Business
 			}
 			//scanner.close();
 		}
+	}
+	
+	/**
+	 * @author Joseph Garner
+	 */
+	public void deleteBooking()
+	{
+		
 	}
 	
 	

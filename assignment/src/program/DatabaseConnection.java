@@ -223,6 +223,15 @@ public class DatabaseConnection
 	}
 	
 	/**
+	 * Delete Booking from database
+	 * @param id - allows the user to delete a select booking
+	 */
+	public void deleteBooking(int id)
+	{
+		
+	}
+	
+	/**
 	 * Gets the employee's working times from database
 	 * @param employeeId
 	 * @return ArrayList <EmployeeWorkingTime> Objects

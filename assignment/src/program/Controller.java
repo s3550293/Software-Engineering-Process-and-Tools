@@ -860,13 +860,13 @@ public class Controller
 	}
 
 	/**
-	 * @author Bryan Soh
+	 * @author Joseph Garner
 	 * 
 	 * @param date
 	 * @param workDays
 	 * @return
 	 */
-	private String matchDate(String date, ArrayList<EmployeeWorkingTime> workDays)
+	public String matchDate(String date, ArrayList<EmployeeWorkingTime> workDays)
 	{
 		for (EmployeeWorkingTime ew : workDays)
 		{
@@ -881,14 +881,14 @@ public class Controller
 
 	
 	/**
-	 * @author Bryan Soh
+	 * @author Joseph Garner
 	 * 
 	 * @param time
 	 * @param date
 	 * @param workDays
 	 * @return
 	 */
-	private String getTime(String time, String date, ArrayList<EmployeeWorkingTime> workDays)
+	public String getTime(String time, String date, ArrayList<EmployeeWorkingTime> workDays)
 	{
 		if (time.equalsIgnoreCase("start"))
 		{

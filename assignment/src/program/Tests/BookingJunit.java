@@ -10,30 +10,80 @@ import org.junit.Test;
 
 public class BookingJunit {
 
-	Booking book;
+	Booking book1;
+	Booking book2;
 	Controller con = new Controller();
 	
 	
 
-	@Test
+	@Before
 	public void test() {
 		
-		//Add in detials
-		book = new Booking(1, 12, con.convertStringToDate("01/01/2018"), con.convertStringToTime("13:00"),
+		//Add in details
+		book1 = new Booking(1, 12, con.convertStringToDate("01/01/2018"), con.convertStringToTime("13:00"),
 				con.convertStringToTime("14:00"), "this is my first booking");
 		
-		//Test booking id
-		assertEquals(1, book.getBookingID());
-		//Test customer id
-		assertEquals(12, book.getCustomerId());
-		//Test booking date
-		assertEquals(con.convertStringToDate("01/01/2018") , book.getDate());
-		//Test start time
-		assertEquals(con.convertStringToTime("13:00") , book.getStartTime());
-		//Test end time
-		assertEquals(con.convertStringToTime("14:00"), book.getEndTime());
-		//Test description
-		assertEquals("this is my first booking", book.getDesc());
+		book2 = new Booking(2, 23, con.convertStringToDate("10/10/2017"), con.convertStringToTime("08:00"),
+				con.convertStringToTime("10:00"), "this is my second booking");
+		
+	}
+	
+	@Test
+	public void testBookingID(){
+		
+		assertEquals(1, book1.getBookingID());
+		assertEquals(2, book2.getBookingID());
 	}
 
+	@Test
+	public void testCustomerID(){
+		
+		assertEquals(1, book1.getBookingID());
+		assertEquals(2, book2.getBookingID());
+	}
+	
+	@Test
+	public void testDate(){
+		
+		assertEquals(con.convertStringToDate("01/01/2018") , book1.getDate());
+		assertEquals(con.convertStringToDate("10/10/2017") , book2.getDate());
+		book1.setDate(con.convertStringToDate("10/10/2018"));
+		book2.setDate(con.convertStringToDate("11/11/2018"));
+		assertEquals(con.convertStringToDate("10/10/2018") , book1.getDate());
+		assertEquals(con.convertStringToDate("11/11/2018") , book2.getDate());
+	}
+	
+	@Test
+	public void testStartTime(){
+
+		assertEquals(con.convertStringToTime("13:00") , book1.getStartTime());
+		assertEquals(con.convertStringToTime("08:00") , book2.getStartTime());
+		book1.setStartTime(con.convertStringToTime("11:00"));
+		book2.setStartTime(con.convertStringToTime("09:00"));
+		assertEquals(con.convertStringToTime("11:00") , book1.getStartTime());
+		assertEquals(con.convertStringToTime("09:00") , book2.getStartTime());
+	}
+	
+	@Test
+	public void testEndTime(){
+
+		
+		assertEquals(con.convertStringToTime("14:00"), book1.getEndTime());
+		assertEquals(con.convertStringToTime("10:00"), book2.getEndTime());
+		book1.setStartTime(con.convertStringToTime("12:00"));
+		book2.setStartTime(con.convertStringToTime("11:00"));
+		assertEquals(con.convertStringToTime("12:00") , book1.getStartTime());
+		assertEquals(con.convertStringToTime("11:00") , book2.getStartTime());
+	}
+	
+	@Test
+	public void testDescription(){
+		
+		assertEquals("this is my first booking", book1.getDesc());
+		assertEquals("this is my second booking", book2.getDesc());
+		book1.setDesc("this is my updated first booking");
+		book2.setDesc("this is my updated second booking");
+		assertEquals("this is my updated first booking", book1.getDesc());
+		assertEquals("this is my updated second booking", book2.getDesc());
+	}
 }

@@ -2,19 +2,21 @@ package program;
 
 import java.util.Date;
 
-public class BookingDetails {
+public class Booking {
 
 	private int bookingID, cusID;
 	private Date date, startTime, endTime;
+	private String desc;
 	
-	public BookingDetails(){}
-	public BookingDetails(int bookingID, int cusID, Date date, Date startTime, Date endTime)
+	public Booking(){}
+	public Booking(int bookingID, int cusID, Date date, Date startTime, Date endTime, String desc)
 	{
 		this.bookingID = bookingID;
 		this.cusID = cusID;
 		this.date = date;
 		this.startTime = startTime;
 		this.endTime = endTime;
+		this.desc = desc;
 	}
 
 	
@@ -38,6 +40,10 @@ public class BookingDetails {
 	{
 		return endTime;
 	}
+	public String getDesc()
+	{
+		return desc;
+	}
 	public void setDate(Date date)
 	{
 		this.date = date;
@@ -50,9 +56,13 @@ public class BookingDetails {
 	{
 		this.endTime = endTime;
 	}
+	public void setDesc(String desc)
+	{
+		this.desc = desc;
+	}
 	public String toString()
 	{
 		return "Booking ID: " + bookingID + "   Customer ID: " + cusID + "   Date: " + date + "   Start Time: " 
-				+ startTime+ "   End Time: " + endTime;
+				+ startTime + "   End Time: " + endTime + "   Decription: " + desc;
 	}
 }

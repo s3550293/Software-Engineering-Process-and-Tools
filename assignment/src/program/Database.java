@@ -175,7 +175,7 @@ public class Database
 		String queryBookings = "CREATE TABLE IF NOT EXISTS BOOKINGS ("
 				+"id integer PRIMARY KEY AUTOINCREMENT,"
 				+"userID integer NOT NULL,"
-				+"date VARCHAR(20) NOT NULL,"
+				+"date text NOT NULL,"
 				+"startTime text NOT NULL,"
 				+"endTime text NOT NULL,"
 				+"desc text,"

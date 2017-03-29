@@ -311,7 +311,7 @@ public class DatabaseConnection
 	 * @param endTime
 	 * @param description
 	 */
-	public void addBooking (int userId, Date date, String startTime, String endTime, String description)
+	public void addBooking (int userId, String date, String startTime, String endTime, String description)
 	{
 		//bookingID is made in the database
 		String query = "INSERT INTO BOOKINGS (userID,date,startTime,endTime,Desc)" + "VALUES(" + userId + "," + date + ",'" + startTime + "','" + endTime + "','" + description + "');";
@@ -338,7 +338,7 @@ public class DatabaseConnection
 		int cusID = 0;
 		Date date, startTime, endTime;
 		String desc;
-		String query = "SELECT * FROM BOOKING WHERE customerID = ? "; 
+		String query = "SELECT * FROM BOOKINGS WHERE userID = ? "; 
 
 		try (Connection connect = this.connect(); PreparedStatement  inject  = connect.prepareStatement(query))
 		{
@@ -363,5 +363,83 @@ public class DatabaseConnection
 			System.out.println("Getting Booking Time: "+sqle.getMessage());
 		}
 		return databaseBookingTime;
+	}
+	
+	/**
+	 * Gets all booking object from database
+	 * @param cusID
+	 * @return ArrayList <Booking> Objects
+	 */
+	public ArrayList<Booking> getAllBooking ()
+	{
+		ArrayList<Booking> databaseBookingTime = new ArrayList<Booking>();
+		int bookingID = 0;
+		int cusID = 0;
+		Date date, startTime, endTime;
+		String desc;
+		String query = "SELECT * FROM BOOKINGS"; 
+
+		try (Connection connect = this.connect(); PreparedStatement  inject  = connect.prepareStatement(query))
+		{
+			//Sets '?' to user name in the query
+			//crates a user from the found information
+			//inject.setInt(1,customerID);
+			ResultSet output = inject.executeQuery();
+			while (output.next())
+			{
+				bookingID = output.getInt(1);
+				cusID = output.getInt(2);
+				date = controller.convertStringToDate(output.getString(3));
+				startTime = controller.convertStringToTime(output.getString(4));
+				endTime = controller.convertStringToTime(output.getString(5));
+				desc=output.getString(6);
+				databaseBookingTime.add(new Booking(bookingID,cusID,date,startTime,endTime,desc));				
+			}
+			output.close();
+		}
+		catch(SQLException sqle)
+		{
+			System.out.println("Getting Booking Time: "+sqle.getMessage());
+		}
+		return databaseBookingTime;
+	}
+	
+	/**
+	 * Gets one booking from database
+	 * @param bookID
+	 * @return one <Booking> Object
+	 */
+	public Booking getOneBooking(int bookID)
+	{
+		Booking getBooking = null;
+		int bookingID = 0;
+		int cusID = 0;
+		Date date, startTime, endTime;
+		String desc;
+		String query = "SELECT * FROM BOOKINGS WHERE id = ?"; 
+
+		try (Connection connect = this.connect(); PreparedStatement  inject  = connect.prepareStatement(query))
+		{
+			//Sets '?' to user name in the query
+			//crates a user from the found information
+			//inject.setInt(1,customerID);
+			ResultSet output = inject.executeQuery();
+			while (output.next())
+			{
+				bookingID = output.getInt(1);
+				cusID = output.getInt(2);
+				date = controller.convertStringToDate(output.getString(3));
+				startTime = controller.convertStringToTime(output.getString(4));
+				endTime = controller.convertStringToTime(output.getString(5));
+				desc=output.getString(6);
+				getBooking = new Booking(bookingID,cusID,date,startTime,endTime,desc);				
+			}
+			output.close();
+		}
+		catch(SQLException sqle)
+		{
+			System.out.println("Getting Booking Time: "+sqle.getMessage());
+		}
+		return getBooking;
 	}
 }

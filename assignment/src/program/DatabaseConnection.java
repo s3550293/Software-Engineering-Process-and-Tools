@@ -314,7 +314,7 @@ public class DatabaseConnection
 	public void addBooking (int userId, String date, String startTime, String endTime, String description)
 	{
 		//bookingID is made in the database
-		String query = "INSERT INTO BOOKINGS (userID,date,startTime,endTime,Desc)" + "VALUES(" + userId + "," + date + ",'" + startTime + "','" + endTime + "','" + description + "');";
+		String query = "INSERT INTO BOOKINGS (userID,date,startTime,endTime,Desc)" + "VALUES(" + userId + ",'" + date + "','" + startTime + "','" + endTime + "','" + description + "');";
 		try(Connection connect = this.connect(); Statement inject = connect.createStatement())
 		{
 			inject.executeUpdate(query);
@@ -422,7 +422,7 @@ public class DatabaseConnection
 		{
 			//Sets '?' to user name in the query
 			//crates a user from the found information
-			//inject.setInt(1,customerID);
+			inject.setInt(1, bookID);
 			ResultSet output = inject.executeQuery();
 			while (output.next())
 			{

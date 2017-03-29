@@ -20,7 +20,7 @@ public class Main
 		/*
 		 * other functions similar to addUser will be added later ie add booking
 		 */
-		/*
+		
 		Database db = new Database("company.db");
 		db.createTable("company.db");
 		DatabaseConnection connect = new DatabaseConnection();
@@ -33,7 +33,10 @@ public class Main
 
 		connect.addEmployeeWorkingTime(2,"01/04/2017","10:30","12:30");
 		connect.addEmployeeWorkingTime(2,"26/03/2017","11:30","15:30");
-		*/
+		connect.addBooking(11, "01/04/2017", "10:30", "11:30", "first");
+		Booking bo = new Booking();
+		bo = connect.getOneBooking(6);
+		System.out.println(bo.toString());
 		/*
 		User lame = connect.getUser("William");
 		User bob = connect.getUser("david");

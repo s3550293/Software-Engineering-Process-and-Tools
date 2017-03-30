@@ -7,14 +7,17 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
 
+import org.apache.log4j.Logger;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import program.Controller;
 import program.DatabaseConnection;
 import program.EmployeeWorkingTime;
+import program.Main;
 public class ControllerJunit {
 	
+	private static Logger log = Logger.getLogger(Main.class);
 	Controller controller = new Controller();
 	DatabaseConnection connect = new DatabaseConnection();
 	

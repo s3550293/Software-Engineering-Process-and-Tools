@@ -9,8 +9,11 @@ import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.Scanner;
 
+import org.apache.log4j.Logger;
+
 public class Controller
 {
+	private static Logger log = Logger.getLogger(Main.class);
 	public Controller(){}
 
 	Scanner kb = new Scanner(System.in);

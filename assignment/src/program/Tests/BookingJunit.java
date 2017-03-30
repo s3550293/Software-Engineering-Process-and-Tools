@@ -1,15 +1,18 @@
 package program.Tests;
 import program.Booking;
 import program.Controller;
+import program.Main;
 
 import static org.junit.Assert.*;
 
+import org.apache.log4j.Logger;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
 public class BookingJunit {
 
+	private static Logger log = Logger.getLogger(Main.class);
 	Booking book1;
 	Booking book2;
 	Controller con = new Controller();

@@ -2,12 +2,16 @@ package program.Tests;
 
 import program.Register;
 import static org.junit.Assert.*;
+
+import org.apache.log4j.Logger;
 import org.junit.*;
 import program.Database;
 import program.DatabaseConnection;
+import program.Main;
 
 public class RegisterJunit
 {
+	private static Logger log = Logger.getLogger(Main.class);
 	Register reg = new Register();
 	Database data = new Database("Test.db");
 	DatabaseConnection connect = new DatabaseConnection();
@@ -15,7 +19,7 @@ public class RegisterJunit
 	@Before
 	public void setup()
 	{
-		data.createTable("Test.db");
+		data.createTable("company.db");
 		connect.addUser("TestUser", "123456", 0);
 		connect.addUser("Simba", "12345678", 0);
 	}
@@ -41,6 +45,7 @@ public class RegisterJunit
 	@After
 	public void after()
 	{
-		connect.dropTable("users");
+		connect.dropUser("TestUser");
+		connect.dropUser("Simba");
 	}
 }

@@ -2,8 +2,11 @@ package program;
 
 import java.util.Date;
 
-public class Booking {
+import org.apache.log4j.Logger;
 
+public class Booking {
+	
+	private static Logger log = Logger.getLogger(Main.class);
 	private int bookingID, cusID;
 	private Date date, startTime, endTime;
 	private String desc;

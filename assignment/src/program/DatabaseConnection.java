@@ -9,6 +9,8 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Date;
 
+import org.apache.log4j.Logger;
+
 /*
  * follow this link to find out how to add tables and access tables
  * http://www.sqlitetutorial.net/sqlite-java/
@@ -22,6 +24,7 @@ import java.util.Date;
  */
 public class DatabaseConnection
 {
+	private static Logger log = Logger.getLogger(Main.class);
 	private Controller controller = new Controller();
 	public DatabaseConnection(){}
 	private Connection connect()
@@ -34,7 +37,8 @@ public class DatabaseConnection
         try {
             connect = DriverManager.getConnection(url);
         } catch (SQLException sqle) {
-            System.out.println(sqle.getMessage());
+            //System.out.println(sqle.getMessage());
+            log.warn(sqle.getMessage());
         }
         return connect;
 	}
@@ -51,11 +55,13 @@ public class DatabaseConnection
 			 * Sets the '?' values into the query
 			 */
 			inject.executeUpdate(query);
-			System.out.println("User Added");
+			//System.out.println("User Added");
+			log.info("User Added");
 		}
 		catch(SQLException sqle)
 		{
-			System.out.println(sqle.getMessage());
+			//System.out.println(sqle.getMessage());
+			log.warn(sqle.getMessage());
 		}
 	}
 	
@@ -90,7 +96,8 @@ public class DatabaseConnection
 		}
 		catch(SQLException sqle)
 		{
-			System.out.println("Getting User: "+sqle.getMessage());
+			//System.out.println("Getting User: "+sqle.getMessage());
+			log.warn(sqle.getMessage());
 		}
 		return databaseUser;
 	}
@@ -124,7 +131,8 @@ public class DatabaseConnection
 		}
 		catch(SQLException sqle)
 		{
-			System.out.println("Getting Employee: "+sqle.getMessage());
+			//System.out.println("Getting Employee: "+sqle.getMessage());
+			log.warn(sqle.getMessage());
 		}
 		return databaseEmployee;
 	}
@@ -158,7 +166,8 @@ public class DatabaseConnection
 		}
 		catch(SQLException sqle)
 		{
-			System.out.println("Getting Employee: "+sqle.getMessage());
+			//System.out.println("Getting Employee: "+sqle.getMessage());
+			log.warn(sqle.getMessage());
 		}
 		return databaseEmployee;
 	}
@@ -178,7 +187,8 @@ public class DatabaseConnection
 		}
 		catch(SQLException sqle)
 		{
-			System.out.println(sqle.getMessage());
+			//System.out.println(sqle.getMessage());
+			log.warn(sqle.getMessage());
 		}
 	}
 	
@@ -199,8 +209,10 @@ public class DatabaseConnection
 		}
 		catch(SQLException sqle)
 		{
-			System.out.println(sqle.getMessage());
-			System.out.println(date);
+			//System.out.println(sqle.getMessage());
+			//System.out.println(date);
+			log.warn(sqle.getMessage());
+			log.info(date);
 		}
 	}
 	
@@ -218,7 +230,8 @@ public class DatabaseConnection
 		}
 		catch(SQLException sqle)
 		{
-			System.out.println(sqle.getMessage());
+			//System.out.println(sqle.getMessage());
+			log.warn(sqle.getMessage());
 		}
 	}
 	
@@ -263,7 +276,8 @@ public class DatabaseConnection
 		}
 		catch(SQLException sqle)
 		{
-			System.out.println("Getting Working Time: "+sqle.getMessage());
+			//System.out.println("Getting Working Time: "+sqle.getMessage());
+			log.warn(sqle.getMessage());
 		}
 		return databaseWorkingTime;
 	}
@@ -299,7 +313,31 @@ public class DatabaseConnection
 		}
 		catch(SQLException sqle)
 		{
-			System.out.println(sqle.getMessage());
+			//System.out.println(sqle.getMessage());
+			log.warn(sqle.getMessage());
+			return false;
+		}
+	}
+	
+	/**
+	 * Drops table name from database
+	 * @param username
+	 * @return
+	 */
+	public boolean dropUser(String username)
+	{
+		String query = "DELETE FROM USERS WHERE username like '"+ username +"' ";
+		try(Connection connect = this.connect(); Statement inject = connect.createStatement())
+		{
+			inject.executeUpdate(query);
+			//System.out.println("Table "+ tableName +"");
+			log.info("User "+username+" Dropped");
+			return true;
+		}
+		catch(SQLException sqle)
+		{
+			//System.out.println(sqle.getMessage());
+			log.warn(sqle.getMessage());
 			return false;
 		}
 	}
@@ -311,10 +349,10 @@ public class DatabaseConnection
 	 * @param endTime
 	 * @param description
 	 */
-	public void addBooking (int userId, String date, String startTime, String endTime, String description)
+	public void addBooking (int userId, String date, String startTime, String endTime, String status)
 	{
 		//bookingID is made in the database
-		String query = "INSERT INTO BOOKINGS (userID,date,startTime,endTime,Desc)" + "VALUES(" + userId + ",'" + date + "','" + startTime + "','" + endTime + "','" + description + "');";
+		String query = "INSERT INTO BOOKINGS (userID,date,startTime,endTime,Desc)" + "VALUES(" + userId + ",'" + date + "','" + startTime + "','" + endTime + "','" + status + "');";
 		try(Connection connect = this.connect(); Statement inject = connect.createStatement())
 		{
 			inject.executeUpdate(query);

@@ -2,8 +2,11 @@ package program;
 
 import java.util.*;
 
+import org.apache.log4j.Logger;
+
 public class Login
 {
+	private static Logger log = Logger.getLogger(Main.class);
 	private Register reg = new Register();
 	private Business bmenu = new Business();
 	private Client cmenu = new Client();

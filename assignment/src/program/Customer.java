@@ -2,7 +2,11 @@ package program;
 
 import java.util.Scanner;
 
+import org.apache.log4j.Logger;
+
 public class Customer {
+	
+	private static Logger log = Logger.getLogger(Main.class);
 	
 	public Customer(){}
 	

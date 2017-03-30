@@ -9,6 +9,8 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.sql.DriverManager;
+
+import org.apache.log4j.Logger;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -17,9 +19,11 @@ import program.Database;
 import program.DatabaseConnection;
 import program.Employee;
 import program.EmployeeWorkingTime;
+import program.Main;
 
 public class DatabaseConnectionJUnit {
 	
+	private static Logger log = Logger.getLogger(Main.class);
 	Controller controller = new Controller();
 	private Connection connect()
 	{

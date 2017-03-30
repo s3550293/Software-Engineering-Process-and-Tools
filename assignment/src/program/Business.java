@@ -2,8 +2,12 @@ package program;
 
 import java.util.Scanner;
 
+import org.apache.log4j.Logger;
+
 public class Business
 {
+	
+	private static Logger log = Logger.getLogger(Main.class);
 	private boolean flag = true;
 	private Controller controller = new Controller();
 	public Business(){}

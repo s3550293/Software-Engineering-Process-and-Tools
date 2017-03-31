@@ -360,7 +360,7 @@ public class DatabaseConnection
 		}
 		catch(SQLException sqle)
 		{
-			System.out.println(sqle.getMessage());
+			log.warn(sqle.getMessage());
 		}
 	}
 	
@@ -398,7 +398,7 @@ public class DatabaseConnection
 		}
 		catch(SQLException sqle)
 		{
-			System.out.println("Getting Booking Time: "+sqle.getMessage());
+			log.warn(sqle.getMessage());
 		}
 		return databaseBookingTime;
 	}
@@ -437,7 +437,7 @@ public class DatabaseConnection
 		}
 		catch(SQLException sqle)
 		{
-			System.out.println("Getting Booking Time: "+sqle.getMessage());
+			log.warn(sqle.getMessage());
 		}
 		return databaseBookingTime;
 	}
@@ -476,8 +476,32 @@ public class DatabaseConnection
 		}
 		catch(SQLException sqle)
 		{
-			System.out.println("Getting Booking Time: "+sqle.getMessage());
+			log.warn(sqle.getMessage());
 		}
 		return getBooking;
+	}
+	
+	/*
+	 * set booking status to 'cancel'
+	 * @param bookID
+	 * @return true or false
+	 */
+	public boolean cancelBooking(int bookID){
+		
+		String query = "UPDATE BOOKINGS SET status = 'cancel' WHERE bookID = '" + bookID + "' " + 
+		"AND status = active"; 
+		
+		try(Connection connect = this.connect(); Statement inject = connect.createStatement())
+		{
+			inject.executeUpdate(query);
+			System.out.println("Book ID "+ bookID +" cancelled");
+			return true;
+		}
+		catch(SQLException sqle)
+		{
+			//System.out.println(sqle.getMessage());
+			log.warn(sqle.getMessage());
+			return false;
+		}
 	}
 }

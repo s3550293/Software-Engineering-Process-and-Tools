@@ -9,17 +9,17 @@ public class Booking {
 	private static Logger log = Logger.getLogger(Main.class);
 	private int bookingID, cusID;
 	private Date date, startTime, endTime;
-	private String desc;
+	private String status;
 	
 	public Booking(){}
-	public Booking(int bookingID, int cusID, Date date, Date startTime, Date endTime, String desc)
+	public Booking(int bookingID, int cusID, Date date, Date startTime, Date endTime, String status)
 	{
 		this.bookingID = bookingID;
 		this.cusID = cusID;
 		this.date = date;
 		this.startTime = startTime;
 		this.endTime = endTime;
-		this.desc = desc;
+		this.status = status;
 	}
 
 	
@@ -43,9 +43,9 @@ public class Booking {
 	{
 		return endTime;
 	}
-	public String getDesc()
+	public String getStatus()
 	{
-		return desc;
+		return status;
 	}
 	public void setDate(Date date)
 	{
@@ -59,13 +59,13 @@ public class Booking {
 	{
 		this.endTime = endTime;
 	}
-	public void setDesc(String desc)
+	public void setStatus(String status)
 	{
-		this.desc = desc;
+		this.status = status;
 	}
 	public String toString()
 	{
 		return "Booking ID: " + bookingID + "   Customer ID: " + cusID + "   Date: " + date + "   Start Time: " 
-				+ startTime + "   End Time: " + endTime + "   Decription: " + desc;
+				+ startTime + "   End Time: " + endTime + "   Status: " + status;
 	}
 }

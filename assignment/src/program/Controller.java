@@ -14,7 +14,7 @@ import org.apache.log4j.Logger;
 
 public class Controller
 {
-	private static Logger log = Logger.getLogger(Main.class);
+	private static Logger log = Logger.getLogger(Controller.class);
 	public Controller(){}
 
 	Scanner kb = new Scanner(System.in);

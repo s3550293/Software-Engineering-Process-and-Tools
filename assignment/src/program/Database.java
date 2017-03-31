@@ -10,7 +10,7 @@ import org.apache.log4j.Logger;
 
 public class Database
 {
-	private static Logger log = Logger.getLogger(Main.class);
+	private static Logger log = Logger.getLogger(Database.class);
 	
 	/*
 	 * this class is to only be used once at the start

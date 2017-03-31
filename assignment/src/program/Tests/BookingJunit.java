@@ -12,7 +12,7 @@ import org.junit.Test;
 
 public class BookingJunit {
 
-	private static Logger log = Logger.getLogger(Main.class);
+	private static Logger log = Logger.getLogger(BookingJunit.class);
 	Booking book1;
 	Booking book2;
 	Controller con = new Controller();

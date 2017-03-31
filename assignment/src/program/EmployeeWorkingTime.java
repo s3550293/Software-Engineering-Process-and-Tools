@@ -6,7 +6,7 @@ import org.apache.log4j.Logger;
 
 public class EmployeeWorkingTime 
 {
-	private static Logger log = Logger.getLogger(Main.class);
+	private static Logger log = Logger.getLogger(EmployeeWorkingTime.class);
 	private int id, empID;
 	private Date date, startTime, endTime;
 	

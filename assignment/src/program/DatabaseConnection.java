@@ -24,7 +24,7 @@ import org.apache.log4j.Logger;
  */
 public class DatabaseConnection
 {
-	private static Logger log = Logger.getLogger(Main.class);
+	private static Logger log = Logger.getLogger(DatabaseConnection.class);
 	private Controller controller = new Controller();
 	public DatabaseConnection(){}
 	private Connection connect()

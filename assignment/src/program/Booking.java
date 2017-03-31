@@ -6,7 +6,7 @@ import org.apache.log4j.Logger;
 
 public class Booking {
 	
-	private static Logger log = Logger.getLogger(Main.class);
+	private static Logger log = Logger.getLogger(Booking.class);
 	private int bookingID, cusID;
 	private Date date, startTime, endTime;
 	private String desc;

@@ -56,7 +56,7 @@ public class DatabaseConnection
 			 */
 			inject.executeUpdate(query);
 			//System.out.println("User Added");
-			log.info("User Added");
+			log.info("User Added\n");
 		}
 		catch(SQLException sqle)
 		{
@@ -342,7 +342,7 @@ public class DatabaseConnection
 		{
 			inject.executeUpdate(query);
 			//System.out.println("Table "+ tableName +"");
-			log.info("User "+username+" Dropped");
+			log.info("User "+username+" Dropped\n");
 			return true;
 		}
 		catch(SQLException sqle)

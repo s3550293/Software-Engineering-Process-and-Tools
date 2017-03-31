@@ -198,6 +198,7 @@ public class Controller
 	 */
 	public boolean addWorkingTimesForEmployeeByName()
 	{
+		log.info("IN addWorkingTimesForEmployeeByName\n");
 		DatabaseConnection connect = new DatabaseConnection();
 		String employeeName;
 		boolean loopAgain;
@@ -214,11 +215,10 @@ public class Controller
 			if (employeeName.equalsIgnoreCase("/exit"))//exit command
 			{
 				System.out.println("Exitting to main menu...");
-
+				log.info("OUT addWorkingTimesForEmployeeByName\n");
 				return true;
 			}
 			ArrayList<Employee> employees = connect.getEmployees(employeeName);
-			System.out.println("~~~LIST OF EMPLOYEES~~~");
 			if (employees.size() == 0)//if array list is empty then the user is prompted to try again
 			{
 				System.out.println(
@@ -226,11 +226,15 @@ public class Controller
 				loopAgain = true;
 				continue;
 			}
-			for (Employee employee : employees)//Displays all employees toString in the array list
+			else
 			{
-				System.out.println(employee.toString());
+				System.out.println("~~~LIST OF EMPLOYEES~~~\n");
+				for (Employee employee : employees)//Displays all employees toString in the array list
+				{
+					System.out.println(employee.toString());
+				}
+				System.out.println("\n~~~~~~~~~~END~~~~~~~~~~");
 			}
-			System.out.println("~~~~~~~~~~END~~~~~~~~~~");
 			do//prompting user to pick an employee or /again to search for employees again
 			{
 				loopAgain2 = false;
@@ -240,6 +244,7 @@ public class Controller
 				if (employeeId.equalsIgnoreCase("/exit"))//exit command
 				{
 					System.out.println("Exitting to main menu...");
+					log.info("OUT addWorkingTimesForEmployeeByName\n");
 					return true;
 				}
 				if (employeeId.equalsIgnoreCase("/again"))//lets user search for employee again
@@ -272,6 +277,7 @@ public class Controller
 				}
 			} while (loopAgain2);
 		} while (loopAgain);
+		log.info("OUT addWorkingTimesForEmployeeByName\n");
 		return false;
 	}
 
@@ -283,6 +289,7 @@ public class Controller
 	 */
 	public double changeInputIntoValidDouble(String string)
 	{
+		log.info("IN changeStringToDouble\n");
 		try
 		{
 			Double input = Double.parseDouble(string);
@@ -290,11 +297,13 @@ public class Controller
 			// used as inputs in this project
 			if (input < 0 || input > 1000)
 			{
+				log.info("OUT changeStringToDouble\n");
 				return -1;
 			}
 			return input;
 		} catch (NumberFormatException e)
 		{
+			log.info("OUT changeStringToDouble\n");
 			return -1;
 		}
 	}
@@ -307,6 +316,7 @@ public class Controller
 	 */
 	public int changeInputIntoValidInt(String string)
 	{
+		log.info("IN changeStringToINT\n");
 		try
 		{
 			Integer input = Integer.parseInt(string);
@@ -314,11 +324,13 @@ public class Controller
 			// used as inputs in this project
 			if (input < 0)
 			{
+				log.info("OUT changeStringToINT\n");
 				return -1;
 			}
 			return input;
 		} catch (NumberFormatException e)
 		{
+			log.info("OUT changeStringToINT\n");
 			return -1;
 		}
 	}
@@ -359,7 +371,7 @@ public class Controller
 	 */
 	public boolean addWorkingTimesForNextMonth(int employeeId)
 	{
-		log.info("IN addWorkingTimesForNextMonth");
+		log.info("IN addWorkingTimesForNextMonth\n");
 		Controller controller = new Controller();
 		DatabaseConnection connect = new DatabaseConnection();
 
@@ -392,7 +404,7 @@ public class Controller
 					String choiceStr = kb.nextLine();
 					if (choiceStr.equalsIgnoreCase("/exit"))
 					{
-						log.info("OUT addWorkingTimesForNextMonth");
+						log.info("OUT addWorkingTimesForNextMonth\n");
 						return true;
 					}
 					int choice = controller.changeInputIntoValidInt(choiceStr);
@@ -420,7 +432,7 @@ public class Controller
 					choiceStr = choiceStr.replace(" ", "").replace(",","");
 					if (choiceStr.equalsIgnoreCase("/exit"))
 					{
-						log.info("OUT addWorkingTimesForNextMonth");
+						log.info("OUT addWorkingTimesForNextMonth\n");
 						return true;
 					}
 					if(choiceStr.equalsIgnoreCase("/back"))
@@ -470,7 +482,7 @@ public class Controller
 			while(!valid);
 		}while(loop);//can only use /exit to get out of loop/function
 		System.out.println("Save and Exitting to main menu ...");
-		log.info("OUT addWorkingTimesForNextMonth");
+		log.info("OUT addWorkingTimesForNextMonth\n");
 		return false;
 	}
 	
@@ -481,7 +493,7 @@ public class Controller
 	 */
 	public String[] allocateWorkTimes(String choiceStr)
 	{
-		log.info("IN allocateWorkTimes");
+		log.info("IN allocateWorkTimes\n");
 		String[] times = new String[2];
 		if(choiceStr.indexOf("M")!= -1)
 		{
@@ -503,7 +515,7 @@ public class Controller
 					times[1] = "16:00";
 				}
 			}
-			log.info("OUT allocateWorkTimes");
+			log.info("OUT allocateWorkTimes\n");
 			return times;
 		}
 		else if(choiceStr.indexOf("A")!= -1)
@@ -526,7 +538,7 @@ public class Controller
 					times[1] = "20:00";
 				}
 			}
-			log.info("OUT allocateWorkTimes");
+			log.info("OUT allocateWorkTimes\n");
 			return times;
 		}
 		else if(choiceStr.indexOf("E")!= -1)
@@ -549,13 +561,13 @@ public class Controller
 					times[0] = "12:00";
 				}
 			}
-			log.info("OUT allocateWorkTimes");
+			log.info("OUT allocateWorkTimes\n");
 			return times;
 		}
 		else
 		{
 			System.out.println("ERROR: Should not be here");
-			log.info("OUT allocateWorkTimes");
+			log.info("OUT allocateWorkTimes\n");
 			return null;
 		}
 	}
@@ -567,7 +579,7 @@ public class Controller
 	 */
 	public boolean checkWorkTimeChoice(String choiceStr)
 	{
-		log.info("IN checkWorkTimeChoice");
+		log.info("IN checkWorkTimeChoice\n");
 		int amount = 0; 
 		int amount2 = 0;
 		int amount3 = 0 ;
@@ -581,29 +593,29 @@ public class Controller
 			if(amount != 2 || amount2 != 2 || amount3 != 2 || amount4 != 3)
 			{
 				System.out.println("Invalid input!");
-				log.info("OUT checkWorkTimeChoice");
+				log.info("OUT checkWorkTimeChoice\n");
 				return false;
 			}
 		}
 		if(choiceStr.equals("ME")||choiceStr.equals("EM")||choiceStr.equals("MM")||choiceStr.equals("EE")||choiceStr.equals("AA"))
 		{
 			System.out.println("Invalid input!");
-			log.info("OUT checkWorkTimeChoice");
+			log.info("OUT checkWorkTimeChoice\n");
 			return false;
 		}
 		if(choiceStr.length() == 1 && amount4 != 1)
 		{
 			System.out.println("Invalid input!");
-			log.info("OUT checkWorkTimeChoice");
+			log.info("OUT checkWorkTimeChoice\n");
 			return false;
 		}
 		if(choiceStr.length()>3 || choiceStr.length()< 1)
 		{
 			System.out.println("Invalid input!");
-			log.info("OUT checkWorkTimeChoice");
+			log.info("OUT checkWorkTimeChoice\n");
 			return false;
 		}
-		log.info("OUT checkWorkTimeChoice");
+		log.info("OUT checkWorkTimeChoice\n");
 		return true;
 	}
 	

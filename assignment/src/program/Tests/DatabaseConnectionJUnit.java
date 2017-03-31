@@ -1,5 +1,6 @@
 package program.Tests;
 
+import program.Booking;
 import program.Controller;
 
 import static org.junit.Assert.*;
@@ -273,6 +274,39 @@ public class DatabaseConnectionJUnit {
 	{
 		//addBooking (integer userId, Date date, String startTime, String endTime, String description)
 	}
+	
+	@Test
+	public void testCancelBooking()
+	{
+		System.out.println("\n\nCancel Bookings\n--------------");
+		ArrayList<Booking> books = new ArrayList<Booking>();
+		Booking b1 = new Booking();
+		
+		//Add bookings
+		connect.addBooking(1, "04/04/17", "10:30", "12:00", "active");
+		connect.addBooking(2, "04/04/17", "11:30", "12:00", "active");
+		connect.addBooking(3, "05/04/17", "10:30", "12:00", "active");
+		connect.addBooking(4, "05/04/17", "11:30", "12:00", "active");
+		books = connect.getAllBooking();
+		for(Booking b: books){
+			System.out.println("id " + b.getBookingID() + " : "+b.getStatus());
+		}
+		//Cancel bookings
+		assertTrue(connect.cancelBooking(1));
+		assertTrue(connect.cancelBooking(3));
+		assertTrue(connect.cancelBooking(4));
+		books = connect.getAllBooking();
+		for(Booking b: books){
+			System.out.println("id " + b.getBookingID() + " : "+b.getStatus());
+		}
+		//Compare results
+		assertEquals("cancel",books.get(0).getStatus());
+		assertEquals("active",books.get(1).getStatus());
+		assertEquals("cancel",books.get(2).getStatus());
+		assertEquals("cancel",books.get(3).getStatus());
+		
+	}
+	
 	@After
 	public void tearDown()
 	{

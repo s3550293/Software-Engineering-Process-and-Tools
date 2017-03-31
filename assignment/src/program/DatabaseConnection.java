@@ -364,7 +364,7 @@ public class DatabaseConnection
 	{
 		log.info("IN addBookingToDatabase\n");
 		//bookingID is made in the database
-		String query = "INSERT INTO BOOKINGS (userID,date,startTime,endTime,Desc)" + "VALUES(" + userId + ",'" + date + "','" + startTime + "','" + endTime + "','" + status + "');";
+		String query = "INSERT INTO BOOKINGS (userID,date,startTime,endTime,status)" + "VALUES(" + userId + ",'" + date + "','" + startTime + "','" + endTime + "','" + status + "');";
 		try(Connection connect = this.connect(); Statement inject = connect.createStatement())
 		{
 			inject.executeUpdate(query);
@@ -372,7 +372,7 @@ public class DatabaseConnection
 		}
 		catch(SQLException sqle)
 		{
-			System.out.println(sqle.getMessage());
+			log.warn(sqle.getMessage());
 		}
 		log.info("OUT addBookingToDatabase\n");
 	}
@@ -411,7 +411,7 @@ public class DatabaseConnection
 		}
 		catch(SQLException sqle)
 		{
-			System.out.println("Getting Booking Time: "+sqle.getMessage());
+			log.warn(sqle.getMessage());
 		}
 		return databaseBookingTime;
 	}
@@ -450,7 +450,7 @@ public class DatabaseConnection
 		}
 		catch(SQLException sqle)
 		{
-			System.out.println("Getting Booking Time: "+sqle.getMessage());
+			log.warn(sqle.getMessage());
 		}
 		return databaseBookingTime;
 	}
@@ -489,8 +489,31 @@ public class DatabaseConnection
 		}
 		catch(SQLException sqle)
 		{
-			System.out.println("Getting Booking Time: "+sqle.getMessage());
+			log.warn(sqle.getMessage());
 		}
 		return getBooking;
+	}
+	
+	/*
+	 * set booking status to 'cancel'
+	 * @param bookID
+	 * @return true or false
+	 */
+	public boolean cancelBooking(int bookID){
+		
+		String query = "UPDATE BOOKINGS SET status = 'cancel' WHERE id = " + bookID;
+		
+		try(Connection connect = this.connect(); Statement inject = connect.createStatement())
+		{
+			inject.executeUpdate(query);
+			System.out.println("Book ID "+ bookID +" cancelled");
+			return true;
+		}
+		catch(SQLException sqle)
+		{
+			//System.out.println(sqle.getMessage());
+			log.warn(sqle.getMessage());
+			return false;
+		}
 	}
 }

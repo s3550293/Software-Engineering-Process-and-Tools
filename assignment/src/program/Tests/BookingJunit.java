@@ -24,10 +24,10 @@ public class BookingJunit {
 		
 		//Add in details
 		book1 = new Booking(1, 12, con.convertStringToDate("01/01/2018"), con.convertStringToTime("13:00"),
-				con.convertStringToTime("14:00"), "this is my first booking");
+				con.convertStringToTime("14:00"), "active");
 		
 		book2 = new Booking(2, 23, con.convertStringToDate("10/10/2017"), con.convertStringToTime("08:00"),
-				con.convertStringToTime("10:00"), "this is my second booking");
+				con.convertStringToTime("10:00"), "active");
 		
 	}
 	
@@ -82,11 +82,11 @@ public class BookingJunit {
 	@Test
 	public void testDescription(){
 		
-		assertEquals("this is my first booking", book1.getDesc());
-		assertEquals("this is my second booking", book2.getDesc());
-		book1.setDesc("this is my updated first booking");
-		book2.setDesc("this is my updated second booking");
-		assertEquals("this is my updated first booking", book1.getDesc());
-		assertEquals("this is my updated second booking", book2.getDesc());
+		assertEquals("active", book1.getStatus());
+		assertEquals("active", book2.getStatus());
+		book1.setStatus("cancel");
+		book2.setStatus("cancel");
+		assertEquals("cancel", book1.getStatus());
+		assertEquals("cancel", book2.getStatus());
 	}
 }

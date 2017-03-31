@@ -364,7 +364,7 @@ public class DatabaseConnection
 	{
 		log.info("IN addBookingToDatabase\n");
 		//bookingID is made in the database
-		String query = "INSERT INTO BOOKINGS (userID,date,startTime,endTime,Desc)" + "VALUES(" + userId + ",'" + date + "','" + startTime + "','" + endTime + "','" + status + "');";
+		String query = "INSERT INTO BOOKINGS (userID,date,startTime,endTime,status)" + "VALUES(" + userId + ",'" + date + "','" + startTime + "','" + endTime + "','" + status + "');";
 		try(Connection connect = this.connect(); Statement inject = connect.createStatement())
 		{
 			inject.executeUpdate(query);
@@ -501,8 +501,7 @@ public class DatabaseConnection
 	 */
 	public boolean cancelBooking(int bookID){
 		
-		String query = "UPDATE BOOKINGS SET status = 'cancel' WHERE bookID = '" + bookID + "' " + 
-		"AND status = active"; 
+		String query = "UPDATE BOOKINGS SET status = 'cancel' WHERE id = " + bookID;
 		
 		try(Connection connect = this.connect(); Statement inject = connect.createStatement())
 		{

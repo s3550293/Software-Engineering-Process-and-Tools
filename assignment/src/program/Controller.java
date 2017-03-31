@@ -9,6 +9,8 @@ import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.Scanner;
 
+import org.sqlite.util.StringUtils;
+
 public class Controller
 {
 	public Controller(){}
@@ -201,7 +203,7 @@ public class Controller
 		do//Loop prompt for employee username search
 		{
 			loopAgain = false;
-			System.out.println("~~~Search for Employee~~~[/exit to quit]");
+			System.out.println("/exit to exit");
 			System.out.print("Employee Name >> ");
 			employeeName = kb.nextLine().toLowerCase();
 			// Attempting to see if the input is valid
@@ -361,213 +363,229 @@ public class Controller
 		DatabaseConnection connect = new DatabaseConnection();
 
 		// check if the input employeeId exists in database
-		boolean valid, valid2;
-		int year = 2017, month = 1, day = 1;
-		Date startTime = null, finishTime = null, newDate = null;
-		Business bmenu = new Business();
-		String newDateStr;
-		String newStartTimeStr;
-		String newFinishTimeStr;
+		boolean valid = false, valid2 = false;
+		String newDateStr = "";
+		String newStartTimeStr = "";
+		String newFinishTimeStr = "";
 		int count =1;
-		boolean infiniteloop = true;
-		do //Infinite Loop, exit with /exit
+		boolean loop = false;
+		do//Loop, exit with /exit
 		{
-			System.out.println("/exit TO SAVE & EXIT ANYTIME");
-			System.out.println("~~~~Adding Work Time "+count+" ~~~~");
-			do//Loop year,month,day (date) until date is valid
-			{
-				valid = false;//resetting valid to false for next loop
-				while (valid == false)//Loop until year is valid
+			do{
+				valid2 = true;
+				do
 				{
-					System.out.print("Please Enter year:\nyear >> ");
-					String yearStr = sc.nextLine();
-					if (yearStr.equalsIgnoreCase("/exit"))//exit command
-					{
-						return true;
-					}
-					//converting to integer, returns -1 if the input is invalid
-					year = controller.changeInputIntoValidInt(yearStr);
-					if (year > 0)
-					{
-						valid = true;
-					} 
-					else
-					{
-						System.out.println("Innappropriate year!");
-						valid = false;
-					}
-	
-				
-				}
-				valid = false;//resetting valid to false for next loop
-				while (valid == false)//Loop until month is valid
-				{
-					System.out.print("Please Enter month (1-12):\nmonth >> ");
-					String monthStr = sc.nextLine();
-					if (monthStr.equalsIgnoreCase("/exit"))//exit command
-					{
-						return true;
-					}
-					//converting to integer, returns -1 if the input is invalid
-					month = controller.changeInputIntoValidInt(monthStr);
-					if (month > 0 && month < 13)
-					{
-						valid = true;
-					} else
-					{
-						System.out.println("Innappropriate month!");
-						valid = false;
-					}
-					
-				}
-				valid = false;//resetting valid to false for next loop
-				while (valid == false)//Loop until day is valid
-				{
-					System.out.print("Please Enter day:\nday >> ");
-					String dayStr = sc.nextLine();
-					if (dayStr.equalsIgnoreCase("/exit"))
-					{
-						return true;
-					}
-					//converting to integer, returns -1 if the input is invalid
-					day = controller.changeInputIntoValidInt(dayStr);
-					if (day > 0 && day < 32)
-					{
-						valid = true;
-					} else
-					{
-						System.out.println("Innappropriate day!");
-						valid = false;
-					}
-				
-				}
-	
-				// Making a date from year, month and day integers
-				Calendar cal = Calendar.getInstance();
-				cal.set(Calendar.YEAR, year);
-				cal.set(Calendar.MONTH, month-1);//january = 0, so we -1
-				cal.set(Calendar.DAY_OF_MONTH, day);
-				newDate = cal.getTime();
-				if (!checkNewDate(newDate))
-				{
-					valid = false;
-				}
-			} while (!valid);//If chrckNewDate is false then it loops to beginning
-			do//Loop for startTime and EndTime (shouldn't get used since there is no restriction to what end time and start time can be)
-			{
-				valid2 = false;//resetting valid to false for next loop
-				valid = false;//resetting valid to false for next loop
-				while (valid == false)//Loop start time hours and minutes until valid
-				{
-					int hours = 0;
-					int minutes = 0;
 					valid = true;
-					do//Loop start time hours until valid
+					SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+					String[] dateArray = new String[7];
+					Calendar c = Calendar.getInstance();
+					for(int i = 1;i<=7; i++)
 					{
-						valid = true;
-						System.out.print("Please Enter start time (0-23)\nHours >> ");
-						String startTimeHourStr = sc.nextLine();
-						if (startTimeHourStr.equalsIgnoreCase("/exit"))//exit command
-						{
-							return true;
-						}
-						hours = changeInputIntoValidInt(startTimeHourStr);
-						if (hours < 0 || hours > 23)
-						{
-							System.out.println("Incorrect amount of hours, Try Again");
-							valid = false;
-						}
-					} while (!valid);
-					do//Loop start time minutes until valid
+						dateArray[i-1] = sdf.format(c.getTime());//puts each date from every loop into array
+						String time = sdf.format(c.getTime());
+						System.out.println(i+": " + time);
+						c.add(Calendar.DAY_OF_MONTH, i);
+					}
+					System.out.println("\n/exit to save and exit to main menu\n");
+					System.out.print("Enter which day you want to assign the employee to >> ");
+					String choiceStr = kb.nextLine();
+					if (choiceStr.equalsIgnoreCase("/exit"))
 					{
-						valid = true;
-						System.out.print("Minutes(0-59) >> ");
-						String startTimeMinStr = sc.nextLine();
-						if (startTimeMinStr.equalsIgnoreCase("/exit"))//exit command
-						{
-							return true;
-						}
-						minutes = changeInputIntoValidInt(startTimeMinStr);
-						if (minutes < 0 || minutes > 59)
-						{
-							System.out.println("Incorrect amount of minutes, Try Again");
-							valid = false;
-						}
-					} while (!valid);
-					//converting single integers to 2 char long strings e.g 1 = "01", 4 = "04"
-					String hoursStr = String.format("%02d", hours);
-					String minsStr = String.format("%02d", minutes);
-					String startTimeStr = hoursStr + ":" + minsStr;//concatenating hours and minutes e.g 01:04
-					startTime = convertStringToTime(startTimeStr);//converting string into Time to double check the formating is correct
-					if (startTime == null)
+						return true;
+					}
+					int choice = controller.changeInputIntoValidInt(choiceStr);
+					if (choice < 1 || choice > 7)
 					{
-						System.out.println("This time is not in the correct format HH:MM, Try Again");
+						System.out.println("Invalid input!");
 						valid = false;
 						continue;
 					}
+					newDateStr = dateArray[choice-1];
 				}
-				valid = false;//resetting valid to false for next loop
-				while (valid == false)//Loop finish time hours and minutes until valid
+				while(!valid);
+				do
 				{
-					int hours = 0;
-					int minutes = 0;
-					valid = true;
-					do//loop finish time hours until valid
+					valid2 = true;
+					System.out.println("\n");
+					System.out.println("M - Morning: 8am - 12pm");
+					System.out.println("A - Afternoon: 12pm - 4pm");
+					System.out.println("E - Evening: 4pm - 8pm");
+					System.out.println("\n/exit to save and exit to main menu");
+					System.out.println("/back to re-enter Time block(s) again\n");
+					System.out.println("\"ME\" or \"EM\" are invalid time blocks");
+					System.out.print("Choose time blocks to assign employee\n Type answer as a word - e.g MAE or EA etc >> ");
+					String choiceStr = kb.nextLine().toUpperCase();
+					choiceStr = choiceStr.replace(" ", "").replace(",","");
+					if (choiceStr.equalsIgnoreCase("/exit"))
+					{
+						return true;
+					}
+					if(choiceStr.equalsIgnoreCase("/back"))
 					{
 						valid = true;
-						System.out.print("Please Enter finish time\nHours >> ");
-						String startTimeHourStr = sc.nextLine();
-						if (startTimeHourStr.equalsIgnoreCase("/exit"))//exit command
-						{
-							return true;
-						}
-						hours = changeInputIntoValidInt(startTimeHourStr);
-						if (hours < 0 || hours > 23)
-						{
-							System.out.println("Incorrect amount of hours, Try Again");
-							valid = false;
-						}
-					} while (!valid);
-					do//loop finish time minutes until valid
+						valid2 = false;
+						continue;
+					}
+					valid = checkWorkTimeChoice(choiceStr);
+					if(!valid){continue;}
+					String[] times = new String[2];
+					times = allocateWorkTimes(choiceStr);
+					if(times == null)
 					{
-						valid = true;
-						System.out.print("Minutes >> ");
-						String finishTimeMinStr = sc.nextLine();
-						if (finishTimeMinStr.equalsIgnoreCase("/exit"))//exit command
-						{
-							return true;
-						}
-						minutes = changeInputIntoValidInt(finishTimeMinStr);
-						if (minutes < 0 || minutes > 59)
-						{
-							System.out.println("Incorrect amount of minutes, Try Again");
-							valid = false;
-						}
-					} while (!valid);
-					//converting single integers to 2 char long strings e.g 1 = "01", 4 = "04"
-					String hoursStr = String.format("%02d", hours);
-					String minsStr = String.format("%02d", minutes);
-					String finishTimeStr = hoursStr + ":" + minsStr;//concatenating hours and minutes e.g 01:04
-					finishTime = convertStringToTime(finishTimeStr);//converting string into Time to double check the formating is correct
-					if (finishTime == null)
-					{
-						System.out.println("This time is not in the correct format HH:MM, Try Again");
 						valid = false;
 						continue;
 					}
+					newStartTimeStr = times[0];
+				    newFinishTimeStr = times[1];
 				}
-	
-			} while (valid2);
-	
-			newDateStr = convertDateToString(newDate);//converting double checked date format into string
-			newStartTimeStr = convertTimeToString(startTime);//converting double checked date format into string
-			newFinishTimeStr = convertTimeToString(finishTime);//converting double checked date format into string
+				while(!valid);
+			}
+			while(!valid2);//Used for /back command
 			connect.addEmployeeWorkingTime(employeeId, newDateStr, newStartTimeStr, newFinishTimeStr);
+			System.out.println("Employee Work time: "+newStartTimeStr+" - "+newFinishTimeStr+" is now added on "+newDateStr);
+			do
+			{
+				valid = true;
+				System.out.println("\nWould you like to add another work time for the employee?");
+				System.out.println("1. Yes");
+				System.out.println("2. No");
+				String choiceStr = kb.nextLine();
+				int choice = controller.changeInputIntoValidInt(choiceStr);
+				if (choice < 1 || choice > 2)
+				{
+					System.out.println("Please enter in 1 or 2");
+					valid = false;
+					continue;
+				}
+				switch(choice)
+				{
+					case 1: loop = true; break;
+					case 2: loop = false; break;
+					default: System.out.println("Please enter in 1 or 2"); valid = false;
+				}
+			}
+			while(!valid);
 			++count;//counts what loop number is current and used to display to user
-		}while(infiniteloop);//can only use /exit to get out of loop/function
+		}while(loop);//can only use /exit to get out of loop/function
+		System.out.println("Save and Exitting to main menu ...");
 		return false;
 	}
+	public String[] allocateWorkTimes(String choiceStr)
+	{
+		String[] times = new String[2];
+		if(choiceStr.indexOf("M")!= -1)
+		{
+			times[0] = "8:00";
+			times[1] = "12:00";
+			if(choiceStr.indexOf("A")!= -1)
+			{
+				times[1] = "16:00";
+				if(choiceStr.indexOf("E")!= -1)
+				{
+					times[1] = "20:00";
+				}
+			}
+			else if(choiceStr.indexOf("E")!= -1)
+			{
+				times[1] = "20:00";
+				if(choiceStr.indexOf("A")!= -1)
+				{
+					times[1] = "16:00";
+				}
+			}
+			return times;
+		}
+		else if(choiceStr.indexOf("A")!= -1)
+		{
+			times[0] = "12:00";
+			times[1] = "16:00";
+			if(choiceStr.indexOf("E")!= -1)
+			{
+				times[1] = "20:00";
+				if(choiceStr.indexOf("M")!= -1)
+				{
+					times[0] = "8:00";
+				}
+			}
+			else if(choiceStr.indexOf("M")!= -1)
+			{
+				times[0] = "8:00";
+				if(choiceStr.indexOf("E")!= -1)
+				{
+					times[1] = "20:00";
+				}
+			}
+			return times;
+		}
+		else if(choiceStr.indexOf("E")!= -1)
+		{
+			times[0] = "16:00";
+			times[1] = "20:00";
+			if(choiceStr.indexOf("A")!= -1)
+			{
+				times[0] = "12:00";
+				if(choiceStr.indexOf("M")!= -1)
+				{
+					times[0] = "8:00";
+				}
+			}
+			else if(choiceStr.indexOf("M")!= -1)
+			{
+				times[0] = "8:00";
+				if(choiceStr.indexOf("A")!= -1)
+				{
+					times[0] = "12:00";
+				}
+			}
+			return times;
+		}
+		else
+		{
+			System.out.println("ERROR: Should not be here");
+			return null;
+		}
+	}
 
+	/**
+	 * @author Luke Mason
+	 * @param choiceStr //Accepts alphabet {M, A, E}
+	 * @return false if string contains wrong alphabet or any duplicate symbol or length is > 3 or length is < 1
+	 */
+	public boolean checkWorkTimeChoice(String choiceStr)
+	{
+		int amount = 0; 
+		int amount2 = 0;
+		int amount3 = 0 ;
+		int amount4 = choiceStr.length() - choiceStr.replace("M","").replace("A","").replace("E","").length();
+		
+		if(choiceStr.length()==3)
+		{
+			amount = choiceStr.length() - choiceStr.replace("M","").replace("A","").length();
+			amount2 = choiceStr.length() - choiceStr.replace("M","").replace("E","").length();
+			amount3 = choiceStr.length() - choiceStr.replace("E","").replace("A","").length();
+			if(amount != 2 || amount2 != 2 || amount3 != 2 || amount4 != 3)
+			{
+				System.out.println("Invalid input!");
+				return false;
+			}
+		}
+		if(choiceStr.equals("ME")||choiceStr.equals("EM")||choiceStr.equals("MM")||choiceStr.equals("EE")||choiceStr.equals("AA"))
+		{
+			System.out.println("Invalid input!");
+			return false;
+		}
+		if(choiceStr.length() == 1 && amount4 != 1)
+		{
+			System.out.println("Invalid input!");
+			return false;
+		}
+		if(choiceStr.length()>3 || choiceStr.length()< 1)
+		{
+			System.out.println("Invalid input!");
+			return false;
+		}
+		return true;
+	}
 	/*public boolean isOfTypeInt(int num)
 	{
 		try

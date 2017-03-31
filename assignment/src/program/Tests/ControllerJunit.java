@@ -2,86 +2,214 @@ package program.Tests;
 
 import static org.junit.Assert.*;
 
-import java.util.ArrayList;
-import java.util.Calendar;
+/*import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
 
-import org.apache.log4j.Logger;
-import org.junit.After;
+import org.junit.After;*/
 import org.junit.Before;
 import org.junit.Test;
 import program.Controller;
-import program.DatabaseConnection;
-import program.EmployeeWorkingTime;
-import program.Main;
 public class ControllerJunit {
 	
-	private static Logger log = Logger.getLogger(Main.class);
 	Controller controller = new Controller();
-	DatabaseConnection connect = new DatabaseConnection();
 	
 	@Before
 	public void setUp()
 	{
-
+		
 	}
 	@Test
-	public void testCheckInputToContainNonAlphabetChar() 
+	public void testCheckInputToContainNonAlphabetChar1() 
 	{
 		assertFalse(controller.checkInputToContainInvalidChar("Luke"));
+	}
+	@Test
+	public void testCheckInputToContainNonAlphabetChar2() 
+	{
 		assertFalse(controller.checkInputToContainInvalidChar("LukeyyyMason"));
-		
+	}
+	@Test
+	public void testCheckInputToContainNonAlphabetChar3() 
+	{
 		assertTrue(controller.checkInputToContainInvalidChar(""));
+	}
+	@Test
+	public void testCheckInputToContainNonAlphabetChar4() 
+	{
 		assertTrue(controller.checkInputToContainInvalidChar(" "));
+	}
+	@Test
+	public void testCheckInputToContainNonAlphabetChar5() 
+	{
 		assertTrue(controller.checkInputToContainInvalidChar("1010101LUKE"));
+	}
+	@Test
+	public void testCheckInputToContainNonAlphabetChar6() 
+	{
 		assertTrue(controller.checkInputToContainInvalidChar("LUKEEEEEEEEEEEEEEEEEEEEEEEEEEE                                        "));
+	}
+	@Test
+	public void testCheckInputToContainNonAlphabetChar7() 
+	{
 		assertTrue(controller.checkInputToContainInvalidChar("luke%@#$"));
 	}
-
 	@Test
 	public void testChangeInputIntoValidDouble() 
 	{
 		assertTrue(-1.0 == controller.changeInputIntoValidDouble("..0"));
-		assertTrue(-1.0 == controller.changeInputIntoValidDouble("0.."));
-		assertTrue(-1.0 == controller.changeInputIntoValidDouble("5..0"));
-		assertTrue(-1.0 == controller.changeInputIntoValidDouble("5.3.2"));
-		assertTrue(-1.0 == controller.changeInputIntoValidDouble("..532"));
-		assertTrue(-1.0 == controller.changeInputIntoValidDouble(""));
-		assertTrue(-1.0 == controller.changeInputIntoValidDouble("lel"));
-		assertTrue(-1.0 == controller.changeInputIntoValidDouble("$"));
-		assertTrue(-1.0 == controller.changeInputIntoValidDouble("100$"));
-		assertTrue(-1.0 == controller.changeInputIntoValidDouble("-1"));
-		assertTrue(-1.0 == controller.changeInputIntoValidDouble("10001"));
-		
-		assertTrue(0.0 == controller.changeInputIntoValidDouble("0."));
-		assertTrue(0.0 == controller.changeInputIntoValidDouble(".0"));
-		assertTrue(1000.0 == controller.changeInputIntoValidDouble("1000"));
-		assertTrue(10.0 == controller.changeInputIntoValidDouble("10"));
-		assertTrue(0.0 == controller.changeInputIntoValidDouble("0"));
-		
 	}
 	@Test
-	public void testChangeInputIntoValidInt() 
+	public void testChangeInputIntoValidDouble2() 
+	{
+		assertTrue(-1.0 == controller.changeInputIntoValidDouble("0.."));
+	}
+	@Test
+	public void testChangeInputIntoValidDouble3() 
+	{
+		assertTrue(-1.0 == controller.changeInputIntoValidDouble("5..0"));
+	}
+	@Test
+	public void testChangeInputIntoValidDouble4() 
+	{
+		assertTrue(-1.0 == controller.changeInputIntoValidDouble("5.3.2"));
+	}
+	@Test
+	public void testChangeInputIntoValidDouble5() 
+	{
+		assertTrue(-1.0 == controller.changeInputIntoValidDouble("..532"));
+	}
+	@Test
+	public void testChangeInputIntoValidDouble6() 
+	{
+		assertTrue(-1.0 == controller.changeInputIntoValidDouble(""));
+	}
+	@Test
+	public void testChangeInputIntoValidDouble7() 
+	{
+		assertTrue(-1.0 == controller.changeInputIntoValidDouble("lel"));
+	}
+	@Test
+	public void testChangeInputIntoValidDouble8() 
+	{
+		assertTrue(-1.0 == controller.changeInputIntoValidDouble("$"));
+	}
+	@Test
+	public void testChangeInputIntoValidDouble9() 
+	{
+		assertTrue(-1.0 == controller.changeInputIntoValidDouble("100$"));
+	}
+	@Test
+	public void testChangeInputIntoValidDouble10() 
+	{
+		assertTrue(-1.0 == controller.changeInputIntoValidDouble("-1"));
+	}
+	@Test
+	public void testChangeInputIntoValidDouble11() 
+	{
+		assertTrue(-1.0 == controller.changeInputIntoValidDouble("10001"));
+	}
+	@Test
+	public void testChangeInputIntoValidDouble12() 
+	{
+		assertTrue(0.0 == controller.changeInputIntoValidDouble("0."));
+	}
+	@Test
+	public void testChangeInputIntoValidDouble13() 
+	{
+		assertTrue(0.0 == controller.changeInputIntoValidDouble(".0"));
+	}
+	@Test
+	public void testChangeInputIntoValidDouble14() 
+	{
+		assertTrue(1000.0 == controller.changeInputIntoValidDouble("1000"));
+	}
+	@Test
+	public void testChangeInputIntoValidDouble15() 
+	{
+		assertTrue(10.0 == controller.changeInputIntoValidDouble("10"));
+	}
+	@Test
+	public void testChangeInputIntoValidDouble16() 
+	{
+		assertTrue(0.0 == controller.changeInputIntoValidDouble("0"));
+	}
+	@Test
+	public void testChangeInputIntoValidInt1() 
 	{
 		assertTrue(-1 == controller.changeInputIntoValidInt("..0"));
-		assertTrue(-1 == controller.changeInputIntoValidInt("0.."));
-		assertTrue(-1 == controller.changeInputIntoValidInt("5..0"));
-		assertTrue(-1 == controller.changeInputIntoValidInt("5.3.2"));
-		assertTrue(-1 == controller.changeInputIntoValidInt("..532"));
-		assertTrue(-1 == controller.changeInputIntoValidInt(""));
-		assertTrue(-1 == controller.changeInputIntoValidInt("lel"));
-		assertTrue(-1 == controller.changeInputIntoValidInt("$"));
-		assertTrue(-1 == controller.changeInputIntoValidInt("100$"));
-		assertTrue(-1 == controller.changeInputIntoValidInt("-1"));
-		assertTrue(-1 == controller.changeInputIntoValidInt("0."));
-		assertTrue(-1 == controller.changeInputIntoValidInt(".0"));
-		
-		assertTrue(10000 == controller.changeInputIntoValidInt("10000"));
-		assertTrue(10 == controller.changeInputIntoValidInt("10"));
-		assertTrue(0 == controller.changeInputIntoValidInt("0"));	
 	}
 	@Test
+	public void testChangeInputIntoValidInt2() 
+	{
+		assertTrue(-1 == controller.changeInputIntoValidInt("0.."));
+	}
+	@Test
+	public void testChangeInputIntoValidInt3() 
+	{
+		assertTrue(-1 == controller.changeInputIntoValidInt("5..0"));
+	}
+	@Test
+	public void testChangeInputIntoValidInt4() 
+	{
+		assertTrue(-1 == controller.changeInputIntoValidInt("5.3.2"));
+	}
+	@Test
+	public void testChangeInputIntoValidInt5() 
+	{
+		assertTrue(-1 == controller.changeInputIntoValidInt("..532"));
+	}
+	@Test
+	public void testChangeInputIntoValidInt6() 
+	{
+		assertTrue(-1 == controller.changeInputIntoValidInt(""));
+	}
+	@Test
+	public void testChangeInputIntoValidInt7() 
+	{
+		assertTrue(-1 == controller.changeInputIntoValidInt("lel"));
+	}
+	@Test
+	public void testChangeInputIntoValidInt8() 
+	{
+		assertTrue(-1 == controller.changeInputIntoValidInt("$"));
+	}
+	@Test
+	public void testChangeInputIntoValidInt9() 
+	{
+		assertTrue(-1 == controller.changeInputIntoValidInt("100$"));
+	}
+	@Test
+	public void testChangeInputIntoValidInt10() 
+	{
+		assertTrue(-1 == controller.changeInputIntoValidInt("-1"));
+	}
+	@Test
+	public void testChangeInputIntoValidInt11() 
+	{
+		assertTrue(-1 == controller.changeInputIntoValidInt("0."));
+	}
+	@Test
+	public void testChangeInputIntoValidInt12() 
+	{
+		assertTrue(-1 == controller.changeInputIntoValidInt(".0"));
+	}
+	@Test
+	public void testChangeInputIntoValidInt13() 
+	{
+		assertTrue(10000 == controller.changeInputIntoValidInt("10000"));
+	}
+	@Test
+	public void testChangeInputIntoValidInt14() 
+	{
+		assertTrue(10 == controller.changeInputIntoValidInt("10"));
+	}
+	@Test
+	public void testChangeInputIntoValidInt15() 
+	{
+		assertTrue(0 == controller.changeInputIntoValidInt("0"));
+	}
+	/*@Test
 	public void testCheckNewDate()
 	{
 		Date date;
@@ -110,7 +238,7 @@ public class ControllerJunit {
 		date =e.getTime();
 		assertFalse(controller.checkNewDate(date));
 		
-	}
+	}*/
 	@Test
 	public void testDateConvertFunc()
 	{
@@ -144,23 +272,266 @@ public class ControllerJunit {
 		assertEquals(null,controller.convertStringToTime("2012"));
 		
 	}
-	
 	@Test
-	public void testDisplayAvailFunc()
+	public void testCheckWorkTimeChoice1()
 	{
-		ArrayList<EmployeeWorkingTime> workDays = connect.getEmployeeWorkingTimes(1);
-		//connect.addEmployeeWorkingTime(1,"28/03/2017","9:50","17:25");
-		//connect.addEmployeeWorkingTime(1,"29/03/2017","8:30","14:30");
-		assertEquals("09:50", controller.getTime("start", "28/03/2017", workDays));
-		assertEquals("08:30", controller.getTime("start", "29/03/2017", workDays));
-		assertEquals("17:25", controller.getTime("end", "28/03/2017", workDays));
-		assertEquals("14:30", controller.getTime("end", "29/03/2017", workDays));
-		
-		assertEquals("28/03/2017",controller.matchDate("28/03/2017", workDays));
-		assertEquals("29/03/2017",controller.matchDate("29/03/2017", workDays));
-		
+		assertTrue(controller.checkWorkTimeChoice("MAE"));
 	}
-
+	@Test
+	public void testCheckWorkTimeChoice2()
+	{
+		assertTrue(controller.checkWorkTimeChoice("MEA"));
+	}
+	@Test
+	public void testCheckWorkTimeChoice3()
+	{
+		assertTrue(controller.checkWorkTimeChoice("AME"));
+	}
+	@Test
+	public void testCheckWorkTimeChoice4()
+	{
+		assertTrue(controller.checkWorkTimeChoice("AEM"));
+	}
+	@Test
+	public void testCheckWorkTimeChoice5()
+	{
+		assertTrue(controller.checkWorkTimeChoice("EAM"));
+	}
+	@Test
+	public void testCheckWorkTimeChoice6()
+	{
+		assertTrue(controller.checkWorkTimeChoice("EMA"));
+	}
+	@Test
+	public void testCheckWorkTimeChoice7()
+	{
+		assertTrue(controller.checkWorkTimeChoice("MA"));
+	}
+	@Test
+	public void testCheckWorkTimeChoice8()
+	{
+		assertFalse(controller.checkWorkTimeChoice("ME"));
+	}
+	@Test
+	public void testCheckWorkTimeChoice9()
+	{
+		assertTrue(controller.checkWorkTimeChoice("AM"));
+	}
+	@Test
+	public void testCheckWorkTimeChoice10()
+	{
+		assertTrue(controller.checkWorkTimeChoice("AE"));
+	}
+	@Test
+	public void testCheckWorkTimeChoice11()
+	{
+		assertTrue(controller.checkWorkTimeChoice("EA"));
+	}
+	@Test
+	public void testCheckWorkTimeChoice12()
+	{
+		assertFalse(controller.checkWorkTimeChoice("EM"));
+	}
+	@Test
+	public void testCheckWorkTimeChoice13()
+	{
+		assertTrue(controller.checkWorkTimeChoice("M"));
+	}
+	@Test
+	public void testCheckWorkTimeChoice14()
+	{
+		assertTrue(controller.checkWorkTimeChoice("A"));
+	}
+	@Test
+	public void testCheckWorkTimeChoice15()
+	{
+		assertTrue(controller.checkWorkTimeChoice("E"));
+	}
+	@Test
+	public void testCheckWorkTimeChoice16()
+	{
+		assertFalse(controller.checkWorkTimeChoice("MM"));
+	}
+	@Test
+	public void testCheckWorkTimeChoice17()
+	{
+		assertFalse(controller.checkWorkTimeChoice("EE"));
+	}
+	@Test
+	public void testCheckWorkTimeChoice18()
+	{
+		assertFalse(controller.checkWorkTimeChoice("AA"));
+	}
+	@Test
+	public void testCheckWorkTimeChoice19()
+	{
+		assertFalse(controller.checkWorkTimeChoice("MAM"));
+	}
+	@Test
+	public void testCheckWorkTimeChoice20()
+	{
+		assertFalse(controller.checkWorkTimeChoice("AMA"));
+	}
+	@Test
+	public void testCheckWorkTimeChoice21()
+	{
+		assertFalse(controller.checkWorkTimeChoice("EEA"));
+	}
+	@Test
+	public void testCheckWorkTimeChoice22()
+	{
+		assertFalse(controller.checkWorkTimeChoice("MMMM"));
+	}
+	@Test
+	public void testCheckWorkTimeChoice23()
+	{
+		assertFalse(controller.checkWorkTimeChoice(""));
+	}
+	@Test
+	public void testCheckWorkTimeChoice26()
+	{
+		assertFalse(controller.checkWorkTimeChoice("f"));
+	}
+	@Test
+	public void testCheckWorkTimeChoice27()
+	{
+		assertFalse(controller.checkWorkTimeChoice("$"));
+	}
+	@Test
+	public void testCheckWorkTimeChoice28()
+	{
+		assertFalse(controller.checkWorkTimeChoice("ASE"));
+	}
+	@Test
+	public void testCheckWorkTimeChoice29()
+	{
+		assertFalse(controller.checkWorkTimeChoice("M.A"));
+	}
+	@Test
+	public void testAllocateWorkTimes1()
+	{
+		String[] times = new String[2];
+		times = controller.allocateWorkTimes("M");
+		String start = times[0];
+		String end = times[1];
+		assertEquals(start, "8:00");
+		assertEquals(end, "12:00");
+	}
+	@Test
+	public void testAllocateWorkTimes2()
+	{
+		String[] times = new String[2];
+		times = controller.allocateWorkTimes("A");
+		String start = times[0];
+		String end = times[1];
+		assertEquals(start, "12:00");
+		assertEquals(end, "16:00");
+	}
+	@Test
+	public void testAllocateWorkTimes3()
+	{
+		String[] times = new String[2];
+		times = controller.allocateWorkTimes("E");
+		String start = times[0];
+		String end = times[1];
+		assertEquals(start, "16:00");
+		assertEquals(end, "20:00");
+	}
+	@Test
+	public void testAllocateWorkTimes4()
+	{
+		String[] times = new String[2];
+		times = controller.allocateWorkTimes("MA");
+		String start = times[0];
+		String end = times[1];
+		assertEquals(start, "8:00");
+		assertEquals(end, "16:00");
+	}
+	@Test
+	public void testAllocateWorkTimes5()
+	{
+		String[] times = new String[2];
+		times = controller.allocateWorkTimes("AM");
+		String start = times[0];
+		String end = times[1];
+		assertEquals(start, "8:00");
+		assertEquals(end, "16:00");
+	}
+	@Test
+	public void testAllocateWorkTimes6()
+	{
+		String[] times = new String[2];
+		times = controller.allocateWorkTimes("AE");
+		String start = times[0];
+		String end = times[1];
+		assertEquals(start, "12:00");
+		assertEquals(end, "20:00");
+	}
+	@Test
+	public void testAllocateWorkTimes7()
+	{
+		String[] times = new String[2];
+		times = controller.allocateWorkTimes("EA");
+		String start = times[0];
+		String end = times[1];
+		assertEquals(start, "12:00");
+		assertEquals(end, "20:00");
+	}
+	@Test
+	public void testAllocateWorkTimes8()
+	{
+		String[] times = new String[2];
+		times = controller.allocateWorkTimes("MAE");
+		String start = times[0];
+		String end = times[1];
+		assertEquals(start, "8:00");
+		assertEquals(end, "20:00");
+	}
+	public void testAllocateWorkTimes9()
+	{
+		String[] times = new String[2];
+		times = controller.allocateWorkTimes("MEA");
+		String start = times[0];
+		String end = times[1];
+		assertEquals(start, "8:00");
+		assertEquals(end, "20:00");
+	}
+	public void testAllocateWorkTimes10()
+	{
+		String[] times = new String[2];
+		times = controller.allocateWorkTimes("AME");
+		String start = times[0];
+		String end = times[1];
+		assertEquals(start, "8:00");
+		assertEquals(end, "20:00");
+	}
+	public void testAllocateWorkTimes11()
+	{
+		String[] times = new String[2];
+		times = controller.allocateWorkTimes("AEM");
+		String start = times[0];
+		String end = times[1];
+		assertEquals(start, "8:00");
+		assertEquals(end, "20:00");
+	}
+	public void testAllocateWorkTimes12()
+	{
+		String[] times = new String[2];
+		times = controller.allocateWorkTimes("EAM");
+		String start = times[0];
+		String end = times[1];
+		assertEquals(start, "8:00");
+		assertEquals(end, "20:00");
+	}
+	public void testAllocateWorkTimes13()
+	{
+		String[] times = new String[2];
+		times = controller.allocateWorkTimes("EMA");
+		String start = times[0];
+		String end = times[1];
+		assertEquals(start, "8:00");
+		assertEquals(end, "20:00");
+	}
 	/*
 	@Test
 	public void testEmpID() throws SQLException{

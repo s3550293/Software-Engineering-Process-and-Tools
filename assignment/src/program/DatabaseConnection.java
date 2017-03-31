@@ -56,7 +56,7 @@ public class DatabaseConnection
 			 */
 			inject.executeUpdate(query);
 			//System.out.println("User Added");
-			log.info("User Added");
+			log.info("User Added\n");
 		}
 		catch(SQLException sqle)
 		{
@@ -109,8 +109,8 @@ public class DatabaseConnection
 	 */
 	public ArrayList<Employee> getEmployees(String name)
 	{
+		log.info("IN getEmployees\n");
 		ArrayList<Employee> databaseEmployee = new ArrayList<Employee>();
-		int i = 0;
 		int id = 0;
 		double payRate = 0;
 		String query = "SELECT * FROM EMPLOYEES WHERE name like ? "; 
@@ -134,6 +134,7 @@ public class DatabaseConnection
 			//System.out.println("Getting Employee: "+sqle.getMessage());
 			log.warn(sqle.getMessage());
 		}
+		log.info("OUT getEmployees\n");
 		return databaseEmployee;
 	}
 
@@ -144,6 +145,7 @@ public class DatabaseConnection
 	 */
 	public Employee getEmployee(int employeeID)
 	{
+		log.info("IN getEmployee\n");
 		Employee databaseEmployee = null;
 		int id = 0;
 		String name = "";
@@ -169,6 +171,7 @@ public class DatabaseConnection
 			//System.out.println("Getting Employee: "+sqle.getMessage());
 			log.warn(sqle.getMessage());
 		}
+		log.info("OUT getEmployee\n");
 		return databaseEmployee;
 	}
 	
@@ -179,6 +182,7 @@ public class DatabaseConnection
 	 */
 	public void addEmployee(String name, double payRate)
 	{
+		log.info("IN addEmployee\n");
 		String query = "INSERT INTO EMPLOYEES(name, payRate) " + "VALUES ('" + name + "'," + payRate + ");";
 		try(Connection connect = this.connect(); Statement inject = connect.createStatement())
 		{
@@ -190,6 +194,7 @@ public class DatabaseConnection
 			//System.out.println(sqle.getMessage());
 			log.warn(sqle.getMessage());
 		}
+		log.info("OUT addEmployee\n");
 	}
 	
 	/**
@@ -201,6 +206,7 @@ public class DatabaseConnection
 	 */
 	public void addEmployeeWorkingTime(int empID, String date, String startTime, String endTime)
 	{
+		log.info("IN addEmployeeWorkingTimeToDatabase\n");
 		String query = "INSERT INTO EMPLOYEES_WORKING_TIMES(employeeID, date, startTime, endTime) " + "VALUES ("+ empID +",'"+ date +"','"+ startTime +"','"+ endTime +"');";
 		try(Connection connect = this.connect(); Statement inject = connect.createStatement())
 		{
@@ -214,6 +220,7 @@ public class DatabaseConnection
 			log.warn(sqle.getMessage());
 			log.info(date);
 		}
+		log.info("OUT addEmployeeWorkingTimeToDatabase\n");
 	}
 	
 	/**
@@ -222,6 +229,7 @@ public class DatabaseConnection
 	 */
 	public void deleteUser(String userName)
 	{
+		log.info("IN deleteUser\n");
 		String query = "DELETE FROM users WHERE username LIKE '" + userName + "'";
 		try(Connection connect = this.connect(); Statement inject = connect.createStatement())
 		{
@@ -233,6 +241,7 @@ public class DatabaseConnection
 			//System.out.println(sqle.getMessage());
 			log.warn(sqle.getMessage());
 		}
+		log.info("OUT deleteUser\n");
 	}
 	
 	/**
@@ -251,6 +260,7 @@ public class DatabaseConnection
 	 */
 	public ArrayList<EmployeeWorkingTime> getEmployeeWorkingTimes(int employeeId)
 	{
+		log.info("IN getEmployeeWorkingTimes\n");
 		ArrayList<EmployeeWorkingTime> databaseWorkingTime = new ArrayList<EmployeeWorkingTime>();
 		int id = 0;
 		int empID = 0;
@@ -279,23 +289,24 @@ public class DatabaseConnection
 			//System.out.println("Getting Working Time: "+sqle.getMessage());
 			log.warn(sqle.getMessage());
 		}
+		log.info("OUT getEmployeeWorkingTimes\n");
 		return databaseWorkingTime;
 	}
 	
-	/**
+	/*/**
 	 * Rounds a double to x amount of decimal places then return the rounded double
 	 * @param value
 	 * @param places
 	 * @return
 	 */
-	public static double round(double value, int places) {
+	/*public static double round(double value, int places) {
 	    if (places < 0) throw new IllegalArgumentException();
 
 	    long factor = (long) Math.pow(10, places);
 	    value = value * factor;
 	    long tmp = Math.round(value);
 	    return (double) tmp / factor;
-	}
+	}*/
 	
 	/**
 	 * Drops table name from database
@@ -331,7 +342,7 @@ public class DatabaseConnection
 		{
 			inject.executeUpdate(query);
 			//System.out.println("Table "+ tableName +"");
-			log.info("User "+username+" Dropped");
+			log.info("User "+username+" Dropped\n");
 			return true;
 		}
 		catch(SQLException sqle)
@@ -351,6 +362,7 @@ public class DatabaseConnection
 	 */
 	public void addBooking (int userId, String date, String startTime, String endTime, String status)
 	{
+		log.info("IN addBookingToDatabase\n");
 		//bookingID is made in the database
 		String query = "INSERT INTO BOOKINGS (userID,date,startTime,endTime,Desc)" + "VALUES(" + userId + ",'" + date + "','" + startTime + "','" + endTime + "','" + status + "');";
 		try(Connection connect = this.connect(); Statement inject = connect.createStatement())
@@ -362,6 +374,7 @@ public class DatabaseConnection
 		{
 			System.out.println(sqle.getMessage());
 		}
+		log.info("OUT addBookingToDatabase\n");
 	}
 	
 	/**

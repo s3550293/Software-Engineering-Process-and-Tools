@@ -9,6 +9,8 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Date;
 
+import org.apache.log4j.Logger;
+
 /*
  * follow this link to find out how to add tables and access tables
  * http://www.sqlitetutorial.net/sqlite-java/
@@ -22,6 +24,7 @@ import java.util.Date;
  */
 public class DatabaseConnection
 {
+	private static Logger log = Logger.getLogger(Main.class);
 	private Controller controller = new Controller();
 	public DatabaseConnection(){}
 	private Connection connect()
@@ -34,7 +37,8 @@ public class DatabaseConnection
         try {
             connect = DriverManager.getConnection(url);
         } catch (SQLException sqle) {
-            System.out.println(sqle.getMessage());
+            //System.out.println(sqle.getMessage());
+            log.warn(sqle.getMessage());
         }
         return connect;
 	}
@@ -51,11 +55,13 @@ public class DatabaseConnection
 			 * Sets the '?' values into the query
 			 */
 			inject.executeUpdate(query);
-			System.out.println("User Added");
+			//System.out.println("User Added");
+			log.info("User Added");
 		}
 		catch(SQLException sqle)
 		{
-			System.out.println(sqle.getMessage());
+			//System.out.println(sqle.getMessage());
+			log.warn(sqle.getMessage());
 		}
 	}
 	
@@ -90,7 +96,8 @@ public class DatabaseConnection
 		}
 		catch(SQLException sqle)
 		{
-			System.out.println("Getting User: "+sqle.getMessage());
+			//System.out.println("Getting User: "+sqle.getMessage());
+			log.warn(sqle.getMessage());
 		}
 		return databaseUser;
 	}
@@ -102,8 +109,8 @@ public class DatabaseConnection
 	 */
 	public ArrayList<Employee> getEmployees(String name)
 	{
+		log.info("IN getEmployees\n");
 		ArrayList<Employee> databaseEmployee = new ArrayList<Employee>();
-		int i = 0;
 		int id = 0;
 		double payRate = 0;
 		String query = "SELECT * FROM EMPLOYEES WHERE name like ? "; 
@@ -124,8 +131,10 @@ public class DatabaseConnection
 		}
 		catch(SQLException sqle)
 		{
-			System.out.println("Getting Employee: "+sqle.getMessage());
+			//System.out.println("Getting Employee: "+sqle.getMessage());
+			log.warn(sqle.getMessage());
 		}
+		log.info("OUT getEmployees\n");
 		return databaseEmployee;
 	}
 
@@ -136,6 +145,7 @@ public class DatabaseConnection
 	 */
 	public Employee getEmployee(int employeeID)
 	{
+		log.info("IN getEmployee\n");
 		Employee databaseEmployee = null;
 		int id = 0;
 		String name = "";
@@ -158,8 +168,10 @@ public class DatabaseConnection
 		}
 		catch(SQLException sqle)
 		{
-			System.out.println("Getting Employee: "+sqle.getMessage());
+			//System.out.println("Getting Employee: "+sqle.getMessage());
+			log.warn(sqle.getMessage());
 		}
+		log.info("OUT getEmployee\n");
 		return databaseEmployee;
 	}
 	
@@ -170,6 +182,7 @@ public class DatabaseConnection
 	 */
 	public void addEmployee(String name, double payRate)
 	{
+		log.info("IN addEmployee\n");
 		String query = "INSERT INTO EMPLOYEES(name, payRate) " + "VALUES ('" + name + "'," + payRate + ");";
 		try(Connection connect = this.connect(); Statement inject = connect.createStatement())
 		{
@@ -178,8 +191,10 @@ public class DatabaseConnection
 		}
 		catch(SQLException sqle)
 		{
-			System.out.println(sqle.getMessage());
+			//System.out.println(sqle.getMessage());
+			log.warn(sqle.getMessage());
 		}
+		log.info("OUT addEmployee\n");
 	}
 	
 	/**
@@ -191,6 +206,7 @@ public class DatabaseConnection
 	 */
 	public void addEmployeeWorkingTime(int empID, String date, String startTime, String endTime)
 	{
+		log.info("IN addEmployeeWorkingTimeToDatabase\n");
 		String query = "INSERT INTO EMPLOYEES_WORKING_TIMES(employeeID, date, startTime, endTime) " + "VALUES ("+ empID +",'"+ date +"','"+ startTime +"','"+ endTime +"');";
 		try(Connection connect = this.connect(); Statement inject = connect.createStatement())
 		{
@@ -199,9 +215,12 @@ public class DatabaseConnection
 		}
 		catch(SQLException sqle)
 		{
-			System.out.println(sqle.getMessage());
-			System.out.println(date);
+			//System.out.println(sqle.getMessage());
+			//System.out.println(date);
+			log.warn(sqle.getMessage());
+			log.info(date);
 		}
+		log.info("OUT addEmployeeWorkingTimeToDatabase\n");
 	}
 	
 	/**
@@ -210,6 +229,7 @@ public class DatabaseConnection
 	 */
 	public void deleteUser(String userName)
 	{
+		log.info("IN deleteUser\n");
 		String query = "DELETE FROM users WHERE username LIKE '" + userName + "'";
 		try(Connection connect = this.connect(); Statement inject = connect.createStatement())
 		{
@@ -218,8 +238,19 @@ public class DatabaseConnection
 		}
 		catch(SQLException sqle)
 		{
-			System.out.println(sqle.getMessage());
+			//System.out.println(sqle.getMessage());
+			log.warn(sqle.getMessage());
 		}
+		log.info("OUT deleteUser\n");
+	}
+	
+	/**
+	 * Delete Booking from database
+	 * @param id - allows the user to delete a select booking
+	 */
+	public void deleteBooking(int id)
+	{
+		
 	}
 	
 	/**
@@ -229,6 +260,7 @@ public class DatabaseConnection
 	 */
 	public ArrayList<EmployeeWorkingTime> getEmployeeWorkingTimes(int employeeId)
 	{
+		log.info("IN getEmployeeWorkingTimes\n");
 		ArrayList<EmployeeWorkingTime> databaseWorkingTime = new ArrayList<EmployeeWorkingTime>();
 		int id = 0;
 		int empID = 0;
@@ -254,25 +286,27 @@ public class DatabaseConnection
 		}
 		catch(SQLException sqle)
 		{
-			System.out.println("Getting Working Time: "+sqle.getMessage());
+			//System.out.println("Getting Working Time: "+sqle.getMessage());
+			log.warn(sqle.getMessage());
 		}
+		log.info("OUT getEmployeeWorkingTimes\n");
 		return databaseWorkingTime;
 	}
 	
-	/**
+	/*/**
 	 * Rounds a double to x amount of decimal places then return the rounded double
 	 * @param value
 	 * @param places
 	 * @return
 	 */
-	public static double round(double value, int places) {
+	/*public static double round(double value, int places) {
 	    if (places < 0) throw new IllegalArgumentException();
 
 	    long factor = (long) Math.pow(10, places);
 	    value = value * factor;
 	    long tmp = Math.round(value);
 	    return (double) tmp / factor;
-	}
+	}*/
 	
 	/**
 	 * Drops table name from database
@@ -290,7 +324,31 @@ public class DatabaseConnection
 		}
 		catch(SQLException sqle)
 		{
-			System.out.println(sqle.getMessage());
+			//System.out.println(sqle.getMessage());
+			log.warn(sqle.getMessage());
+			return false;
+		}
+	}
+	
+	/**
+	 * Drops table name from database
+	 * @param username
+	 * @return
+	 */
+	public boolean dropUser(String username)
+	{
+		String query = "DELETE FROM USERS WHERE username like '"+ username +"' ";
+		try(Connection connect = this.connect(); Statement inject = connect.createStatement())
+		{
+			inject.executeUpdate(query);
+			//System.out.println("Table "+ tableName +"");
+			log.info("User "+username+" Dropped");
+			return true;
+		}
+		catch(SQLException sqle)
+		{
+			//System.out.println(sqle.getMessage());
+			log.warn(sqle.getMessage());
 			return false;
 		}
 	}
@@ -302,10 +360,11 @@ public class DatabaseConnection
 	 * @param endTime
 	 * @param description
 	 */
-	public void addBooking (int userId, Date date, String startTime, String endTime, String description)
+	public void addBooking (int userId, String date, String startTime, String endTime, String status)
 	{
+		log.info("IN addBookingToDatabase\n");
 		//bookingID is made in the database
-		String query = "INSERT INTO BOOKINGS (userID,date,startTime,endTime,Desc)" + "VALUES(" + userId + "," + date + ",'" + startTime + "','" + endTime + "','" + description + "');";
+		String query = "INSERT INTO BOOKINGS (userID,date,startTime,endTime,Desc)" + "VALUES(" + userId + ",'" + date + "','" + startTime + "','" + endTime + "','" + status + "');";
 		try(Connection connect = this.connect(); Statement inject = connect.createStatement())
 		{
 			inject.executeUpdate(query);
@@ -315,5 +374,123 @@ public class DatabaseConnection
 		{
 			System.out.println(sqle.getMessage());
 		}
+		log.info("OUT addBookingToDatabase\n");
+	}
+	
+	/**
+	 * Gets the employee's working times from database
+	 * @param cusID
+	 * @return ArrayList <Booking> Objects
+	 */
+	public ArrayList<Booking> getBooking (int customerID)
+	{
+		ArrayList<Booking> databaseBookingTime = new ArrayList<Booking>();
+		int bookingID = 0;
+		int cusID = 0;
+		Date date, startTime, endTime;
+		String desc;
+		String query = "SELECT * FROM BOOKINGS WHERE userID = ? "; 
+
+		try (Connection connect = this.connect(); PreparedStatement  inject  = connect.prepareStatement(query))
+		{
+			//Sets '?' to user name in the query
+			//crates a user from the found information
+			inject.setInt(1,customerID);
+			ResultSet output = inject.executeQuery();
+			while (output.next())
+			{
+				bookingID = output.getInt(1);
+				cusID = output.getInt(2);
+				date = controller.convertStringToDate(output.getString(3));
+				startTime = controller.convertStringToTime(output.getString(4));
+				endTime = controller.convertStringToTime(output.getString(5));
+				desc=output.getString(6);
+				databaseBookingTime.add(new Booking(bookingID,cusID,date,startTime,endTime,desc));				
+			}
+			output.close();
+		}
+		catch(SQLException sqle)
+		{
+			System.out.println("Getting Booking Time: "+sqle.getMessage());
+		}
+		return databaseBookingTime;
+	}
+	
+	/**
+	 * Gets all booking object from database
+	 * @param cusID
+	 * @return ArrayList <Booking> Objects
+	 */
+	public ArrayList<Booking> getAllBooking ()
+	{
+		ArrayList<Booking> databaseBookingTime = new ArrayList<Booking>();
+		int bookingID = 0;
+		int cusID = 0;
+		Date date, startTime, endTime;
+		String desc;
+		String query = "SELECT * FROM BOOKINGS"; 
+
+		try (Connection connect = this.connect(); PreparedStatement  inject  = connect.prepareStatement(query))
+		{
+			//Sets '?' to user name in the query
+			//crates a user from the found information
+			//inject.setInt(1,customerID);
+			ResultSet output = inject.executeQuery();
+			while (output.next())
+			{
+				bookingID = output.getInt(1);
+				cusID = output.getInt(2);
+				date = controller.convertStringToDate(output.getString(3));
+				startTime = controller.convertStringToTime(output.getString(4));
+				endTime = controller.convertStringToTime(output.getString(5));
+				desc=output.getString(6);
+				databaseBookingTime.add(new Booking(bookingID,cusID,date,startTime,endTime,desc));				
+			}
+			output.close();
+		}
+		catch(SQLException sqle)
+		{
+			System.out.println("Getting Booking Time: "+sqle.getMessage());
+		}
+		return databaseBookingTime;
+	}
+	
+	/**
+	 * Gets one booking from database
+	 * @param bookID
+	 * @return one <Booking> Object
+	 */
+	public Booking getOneBooking(int bookID)
+	{
+		Booking getBooking = null;
+		int bookingID = 0;
+		int cusID = 0;
+		Date date, startTime, endTime;
+		String desc;
+		String query = "SELECT * FROM BOOKINGS WHERE id = ?"; 
+
+		try (Connection connect = this.connect(); PreparedStatement  inject  = connect.prepareStatement(query))
+		{
+			//Sets '?' to user name in the query
+			//crates a user from the found information
+			inject.setInt(1, bookID);
+			ResultSet output = inject.executeQuery();
+			while (output.next())
+			{
+				bookingID = output.getInt(1);
+				cusID = output.getInt(2);
+				date = controller.convertStringToDate(output.getString(3));
+				startTime = controller.convertStringToTime(output.getString(4));
+				endTime = controller.convertStringToTime(output.getString(5));
+				desc=output.getString(6);
+				getBooking = new Booking(bookingID,cusID,date,startTime,endTime,desc);				
+			}
+			output.close();
+		}
+		catch(SQLException sqle)
+		{
+			System.out.println("Getting Booking Time: "+sqle.getMessage());
+		}
+		return getBooking;
 	}
 }

@@ -2,8 +2,11 @@ package program;
 
 import java.util.Scanner;
 
+import org.apache.log4j.Logger;
+
 public class Register 
 {
+	private static Logger log = Logger.getLogger(Main.class);
 	private boolean usernameLoop = true;
 	private boolean accountPasswordLoop = true;
 	private DatabaseConnection connect = new DatabaseConnection();

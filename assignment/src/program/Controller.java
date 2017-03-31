@@ -6,13 +6,15 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.GregorianCalendar;
+//import java.util.GregorianCalendar;
 import java.util.Scanner;
 
-import org.sqlite.util.StringUtils;
+import org.apache.log4j.Logger;
+
 
 public class Controller
 {
+	private static Logger log = Logger.getLogger(Main.class);
 	public Controller(){}
 
 	Scanner kb = new Scanner(System.in);
@@ -321,16 +323,16 @@ public class Controller
 		}
 	}
 
-	/**
+	/*/**
 	 * @author Luke Mason
 	 * Checking date and it's format before converting, if okay, then convert,
 	 * @param date1
-	 * @return false if date is > 30 days in future or if date < current date
+	 * @return false if date is > 7 days in future or if date < current date
 	 */
-	public boolean checkNewDate(Date date1)
+	/*public boolean checkNewDate(Date date1)
 	{
 		Calendar c = new GregorianCalendar();
-		c.add(Calendar.DATE, 30);
+		c.add(Calendar.DATE, 7);
 		Date thirtyDaysIntoFuture = c.getTime();
 
 		Calendar b = new GregorianCalendar();
@@ -338,7 +340,7 @@ public class Controller
 
 		if (date1.after(thirtyDaysIntoFuture))
 		{
-			System.out.println("This date is more than 30 days in advance, Try again");
+			System.out.println("This date is more than 7 days in advance, Try again");
 			return false;
 		}
 		if (date1.before(currentTime))
@@ -347,7 +349,7 @@ public class Controller
 			return false;
 		}
 		return true;
-	}
+	}*/
 
 	/**
 	 * @author Luke Mason, David Heang
@@ -357,8 +359,7 @@ public class Controller
 	 */
 	public boolean addWorkingTimesForNextMonth(int employeeId)
 	{
-		@SuppressWarnings("resource")
-		Scanner sc = new Scanner(System.in);
+		log.info("IN addWorkingTimesForNextMonth");
 		Controller controller = new Controller();
 		DatabaseConnection connect = new DatabaseConnection();
 
@@ -367,7 +368,6 @@ public class Controller
 		String newDateStr = "";
 		String newStartTimeStr = "";
 		String newFinishTimeStr = "";
-		int count =1;
 		boolean loop = false;
 		do//Loop, exit with /exit
 		{
@@ -379,6 +379,7 @@ public class Controller
 					SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
 					String[] dateArray = new String[7];
 					Calendar c = Calendar.getInstance();
+					System.out.println("----Next 7 Days----");
 					for(int i = 1;i<=7; i++)
 					{
 						dateArray[i-1] = sdf.format(c.getTime());//puts each date from every loop into array
@@ -387,10 +388,11 @@ public class Controller
 						c.add(Calendar.DAY_OF_MONTH, i);
 					}
 					System.out.println("\n/exit to save and exit to main menu\n");
-					System.out.print("Enter which day you want to assign the employee to >> ");
+					System.out.print("Select a day >> ");
 					String choiceStr = kb.nextLine();
 					if (choiceStr.equalsIgnoreCase("/exit"))
 					{
+						log.info("OUT addWorkingTimesForNextMonth");
 						return true;
 					}
 					int choice = controller.changeInputIntoValidInt(choiceStr);
@@ -406,7 +408,7 @@ public class Controller
 				do
 				{
 					valid2 = true;
-					System.out.println("\n");
+					System.out.print("\n");
 					System.out.println("M - Morning: 8am - 12pm");
 					System.out.println("A - Afternoon: 12pm - 4pm");
 					System.out.println("E - Evening: 4pm - 8pm");
@@ -418,6 +420,7 @@ public class Controller
 					choiceStr = choiceStr.replace(" ", "").replace(",","");
 					if (choiceStr.equalsIgnoreCase("/exit"))
 					{
+						log.info("OUT addWorkingTimesForNextMonth");
 						return true;
 					}
 					if(choiceStr.equalsIgnoreCase("/back"))
@@ -465,13 +468,20 @@ public class Controller
 				}
 			}
 			while(!valid);
-			++count;//counts what loop number is current and used to display to user
 		}while(loop);//can only use /exit to get out of loop/function
 		System.out.println("Save and Exitting to main menu ...");
+		log.info("OUT addWorkingTimesForNextMonth");
 		return false;
 	}
+	
+	/**
+	 * @author Luke Mason
+	 * @param choiceStr
+	 * @return two string in array, startTime = [0] and endTime - [1]
+	 */
 	public String[] allocateWorkTimes(String choiceStr)
 	{
+		log.info("IN allocateWorkTimes");
 		String[] times = new String[2];
 		if(choiceStr.indexOf("M")!= -1)
 		{
@@ -493,6 +503,7 @@ public class Controller
 					times[1] = "16:00";
 				}
 			}
+			log.info("OUT allocateWorkTimes");
 			return times;
 		}
 		else if(choiceStr.indexOf("A")!= -1)
@@ -515,6 +526,7 @@ public class Controller
 					times[1] = "20:00";
 				}
 			}
+			log.info("OUT allocateWorkTimes");
 			return times;
 		}
 		else if(choiceStr.indexOf("E")!= -1)
@@ -537,11 +549,13 @@ public class Controller
 					times[0] = "12:00";
 				}
 			}
+			log.info("OUT allocateWorkTimes");
 			return times;
 		}
 		else
 		{
 			System.out.println("ERROR: Should not be here");
+			log.info("OUT allocateWorkTimes");
 			return null;
 		}
 	}
@@ -553,6 +567,7 @@ public class Controller
 	 */
 	public boolean checkWorkTimeChoice(String choiceStr)
 	{
+		log.info("IN checkWorkTimeChoice");
 		int amount = 0; 
 		int amount2 = 0;
 		int amount3 = 0 ;
@@ -566,26 +581,37 @@ public class Controller
 			if(amount != 2 || amount2 != 2 || amount3 != 2 || amount4 != 3)
 			{
 				System.out.println("Invalid input!");
+				log.info("OUT checkWorkTimeChoice");
 				return false;
 			}
 		}
 		if(choiceStr.equals("ME")||choiceStr.equals("EM")||choiceStr.equals("MM")||choiceStr.equals("EE")||choiceStr.equals("AA"))
 		{
 			System.out.println("Invalid input!");
+			log.info("OUT checkWorkTimeChoice");
 			return false;
 		}
 		if(choiceStr.length() == 1 && amount4 != 1)
 		{
 			System.out.println("Invalid input!");
+			log.info("OUT checkWorkTimeChoice");
 			return false;
 		}
 		if(choiceStr.length()>3 || choiceStr.length()< 1)
 		{
 			System.out.println("Invalid input!");
+			log.info("OUT checkWorkTimeChoice");
 			return false;
 		}
+		log.info("OUT checkWorkTimeChoice");
 		return true;
 	}
+	
+	/*/**
+	 * @author David Heang
+	 * @param num
+	 * @return 
+	 */
 	/*public boolean isOfTypeInt(int num)
 	{
 		try
@@ -596,8 +622,11 @@ public class Controller
 		{
 			return false;
 		}
-	}
+	}*/
 
+	/*/**
+	 * @author David Heang
+	 */
 	/*public boolean addWorkingTimesForEmployee()
 	{
 		@SuppressWarnings("resource")
@@ -777,12 +806,10 @@ public class Controller
 		boolean loopflag = true;
 		while (loopflag)
 		{
-			Scanner sc = new Scanner(System.in);
 			DatabaseConnection connect = new DatabaseConnection();
 			ArrayList<Employee> emList = connect.getEmployees("");
 			SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
 			Calendar c = Calendar.getInstance();
-			boolean flag = true;
 			String days[] = new String[7];
 			String today;
 			for (int i = 0; i < 7; i++)
@@ -832,7 +859,7 @@ public class Controller
 			do
 			{
 				System.out.println("\nPlease enter employee id to view more or 'quit' to quit");
-				input = sc.nextLine();
+				input = kb.nextLine();
 				if (input.equalsIgnoreCase("quit"))
 				{
 					return;
@@ -878,13 +905,13 @@ public class Controller
 	}
 
 	/**
-	 * @author Bryan Soh
+	 * @author Joseph Garner
 	 * 
 	 * @param date
 	 * @param workDays
 	 * @return
 	 */
-	private String matchDate(String date, ArrayList<EmployeeWorkingTime> workDays)
+	public String matchDate(String date, ArrayList<EmployeeWorkingTime> workDays)
 	{
 		for (EmployeeWorkingTime ew : workDays)
 		{
@@ -899,14 +926,14 @@ public class Controller
 
 	
 	/**
-	 * @author Bryan Soh
+	 * @author Joseph Garner
 	 * 
 	 * @param time
 	 * @param date
 	 * @param workDays
 	 * @return
 	 */
-	private String getTime(String time, String date, ArrayList<EmployeeWorkingTime> workDays)
+	public String getTime(String time, String date, ArrayList<EmployeeWorkingTime> workDays)
 	{
 		if (time.equalsIgnoreCase("start"))
 		{
@@ -928,6 +955,14 @@ public class Controller
 			}
 		}
 		return "";
+	}
+	
+	public void checkBooking()
+	{
+		//get customers
+		//display booking days
+		//prompt user input
+		//display customer booking
 	}
 
 }

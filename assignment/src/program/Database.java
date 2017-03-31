@@ -6,8 +6,12 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.sql.Statement;
 
+import org.apache.log4j.Logger;
+
 public class Database
 {
+	private static Logger log = Logger.getLogger(Main.class);
+	
 	/*
 	 * this class is to only be used once at the start
 	 * Use DatabaseConneciton when accessing the database
@@ -55,15 +59,15 @@ public class Database
 		 * 
 		 * creating tables for users and user details to be remembered later
 		 */
-		String queryUser = "CREATE TABLE IF NOT EXISTS users ("
+		String queryUser = "CREATE TABLE IF NOT EXISTS USERS ("
 						+"userID integer PRIMARY KEY AUTOINCREMENT,"
-						+"username text NOT NULL,"
-						+"password text NOT NULL,"
+						+"username VARCHAR(30) NOT NULL,"
+						+"password VARCHAR(30) NOT NULL,"
 						+"accountType integer NOT NULL);";
-		String queryUserDetails = "CREATE TABLE IF NOT EXISTS clientdetails ("
+		String queryUserDetails = "CREATE TABLE IF NOT EXISTS CLIENTDETAILS ("
 						+"id integer NOT NULL,"
-						+"username text NOT NULL,"
-						+"Address text NOT NULL,"
+						+"username VARCHAR(30) NOT NULL,"
+						+"Address VARCHAR(30) NOT NULL,"
 						+"Phone number boolean NOT NULL,"
 						+ "FOREIGN KEY(id) REFERENCES users(userID));";
 		String queryEmployees = "CREATE TABLE IF NOT EXISTS EMPLOYEES ("
@@ -75,16 +79,16 @@ public class Database
 							+"id integer PRIMARY KEY AUTOINCREMENT,"
 							+"employeeID integer NOT NULL,"
 							+"date VARCHAR(20) NOT NULL,"
-							+"startTime text NOT NULL,"
-							+"endTime text NOT NULL,"
+							+"startTime VARCHAR(20) NOT NULL,"
+							+"endTime VARCHAR(20) NOT NULL,"
 							+"FOREIGN KEY(employeeID) REFERENCES employees(employeeID));";
 		String queryBookings = "CREATE TABLE IF NOT EXISTS BOOKINGS ("
 								+"id integer PRIMARY KEY AUTOINCREMENT,"
 								+"userID integer NOT NULL,"
 								+"date VARCHAR(20) NOT NULL,"
-								+"startTime text NOT NULL,"
-								+"endTime text NOT NULL,"
-								+"desc text,"
+								+"startTime VARCHAR(20) NOT NULL,"
+								+"endTime VARCHAR(20) NOT NULL,"
+								+"status VARCHAR(20),"
 								+"FOREIGN KEY (userID) REFERENCES users(userID));";
 		
 		
@@ -95,27 +99,33 @@ public class Database
 		{
 			//Creating Table 'USERS'
 			smt.executeUpdate(queryUser);
-			System.out.println("Table 'Users' added");
+			//System.out.println("Table 'Users' added");
+			log.info("Table 'Users' added");
 			
 			//Creating Table 'USERS_DETAILS'
 			smt.executeUpdate(queryUserDetails);
-			System.out.println("Table 'User Details' added");
+			//System.out.println("Table 'User Details' added");
+			log.info("Table 'User Details' added");
 			
 			//Creating Table 'EMPLOYEES'
 			smt.executeUpdate(queryEmployees);
-			System.out.println("Table 'EMPLOYEES' added");
+			//System.out.println("Table 'EMPLOYEES' added");
+			log.info("Table 'EMPLOYEES' added");
 			
 			//Creating Table 'EMPLOYEES_WORKING_TIMES'
 			smt.executeUpdate(queryEmployeesWorkingTimes);
-			System.out.println("Table 'EMPLOYEES_WORKING_TIMES' added");
+			//System.out.println("Table 'EMPLOYEES_WORKING_TIMES' added");
+			log.info("Table 'EMPLOYEES_WORKING_TIMES' added");
 			
 			//Creating Table 'BOOKINGS'
 			smt.executeUpdate(queryBookings);
-			System.out.println("Table 'BOOKINGS' added");
+			//System.out.println("Table 'BOOKINGS' added");
+			log.info("Table 'BOOKINGS' added");
 		}
 		catch(SQLException sqle)
 		{
-			System.out.println("ERROR: couldn't add table: "+sqle.getMessage());
+			//System.out.println("ERROR: couldn't add table: "+sqle.getMessage());
+			log.warn("ERROR: couldn't add table: "+sqle.getMessage());
 		}
 	}
 	/**
@@ -175,7 +185,7 @@ public class Database
 		String queryBookings = "CREATE TABLE IF NOT EXISTS BOOKINGS ("
 				+"id integer PRIMARY KEY AUTOINCREMENT,"
 				+"userID integer NOT NULL,"
-				+"date VARCHAR(20) NOT NULL,"
+				+"date text NOT NULL,"
 				+"startTime text NOT NULL,"
 				+"endTime text NOT NULL,"
 				+"desc text,"

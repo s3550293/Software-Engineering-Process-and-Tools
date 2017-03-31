@@ -2,8 +2,11 @@ package program;
 
 import java.util.Scanner;
 
+import org.apache.log4j.Logger;
+
 public class Client extends User
 {
+	private static Logger log = Logger.getLogger(Main.class);
 	public Client(){}
 	
 	public void customerMenu(){

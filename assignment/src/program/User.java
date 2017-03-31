@@ -4,7 +4,7 @@ import org.apache.log4j.Logger;
 
 public class User
 {
-	private static Logger log = Logger.getLogger(Main.class);
+	private static Logger log = Logger.getLogger(User.class);
 	/*
 	 * Protected values used by child classes
 	 */

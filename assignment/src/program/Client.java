@@ -6,7 +6,7 @@ import org.apache.log4j.Logger;
 
 public class Client extends User
 {
-	private static Logger log = Logger.getLogger(Main.class);
+	private static Logger log = Logger.getLogger(Client.class);
 	public Client(){}
 	
 	public void customerMenu(){

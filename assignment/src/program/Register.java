@@ -4,9 +4,12 @@ import java.util.Scanner;
 
 import org.apache.log4j.Logger;
 
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 public class Register 
 {
-	private static Logger log = Logger.getLogger(Main.class);
+	private static Logger log = Logger.getLogger(Register.class);
 	private boolean usernameLoop = true;
 	private boolean accountPasswordLoop = true;
 	private DatabaseConnection connect = new DatabaseConnection();
@@ -46,17 +49,6 @@ public class Register
 				}
 			}
 			while(accountPasswordLoop);
-			//set the account type will loop until customer enters the correct 
-			/*
-			do
-			{
-				System.out.print("are you a business owner [y/n]: ");
-				_choice = userInput.next().charAt(0);;
-				userInput.nextLine();
-				accountType = setAccountType(_choice);
-			}
-			while(accountTypeLoop);
-			*/
 			System.out.println("Confirm");
 			String _acc;
 			//create a string that can be printed to display account type
@@ -107,17 +99,55 @@ public class Register
 		return output;
 	}
 	//Checks the length of the password
-	public boolean checkPassword(String _passwod)
+	public boolean checkPassword(String _password)
 	{
-		int length = _passwod.length();
-		if(length >= 6)
+		boolean upper=false;
+		boolean lower=false;
+		boolean number=false;
+		for (char c : _password.toCharArray()) {
+		      if (Character.isUpperCase(c)) {
+		        upper = true;
+		      } else if (Character.isLowerCase(c)) {
+		        lower = true;
+		      } else if (Character.isDigit(c)) {
+		        number = true;
+		      }
+		    }
+		int length = _password.length();
+		if(length >= 6 && upper && lower && number)
 		{
+			log.debug("Upper = "+upper+" Lower = "+lower+" Number = "+number+" Password = "+_password);
 			return true;
 		}
-		else
+		else if(length < 6)
 		{
 			System.out.println("Password is too short please enter a shorter password");
+			log.debug("Upper = "+upper+" Lower = "+lower+" Number = "+number+" Password = "+_password);
 			return false;
+		}
+		else if(!upper)
+		{
+			System.out.println("Password must contain Uppercase characters");
+			log.debug("Upper = "+upper+" Lower = "+lower+" Number = "+number+" Password = "+_password);
+			return false;
+		}
+		else if(!lower)
+		{
+			System.out.println("Password must contain lowercase characters");
+			log.debug("Upper = "+upper+" Lower = "+lower+" Number = "+number+" Password = "+_password);
+			return false;
+		}
+		else if(!number)
+		{
+			System.out.println("Password must contain a number");
+			log.debug("Upper = "+upper+" Lower = "+lower+" Number = "+number+" Password = "+_password);
+			return false;
+		}
+		else
+		{ 
+			System.out.println("Password must contain Uppercase, lowercase and a number");
+			log.debug("Upper = "+upper+" Lower = "+lower+" Number = "+number+" Password = "+_password);
+			return false; 
 		}
 	}
 }

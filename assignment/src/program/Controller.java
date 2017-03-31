@@ -6,10 +6,11 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.GregorianCalendar;
+//import java.util.GregorianCalendar;
 import java.util.Scanner;
 
 import org.apache.log4j.Logger;
+
 
 public class Controller
 {
@@ -197,6 +198,7 @@ public class Controller
 	 */
 	public boolean addWorkingTimesForEmployeeByName()
 	{
+		log.info("IN addWorkingTimesForEmployeeByName\n");
 		DatabaseConnection connect = new DatabaseConnection();
 		String employeeName;
 		boolean loopAgain;
@@ -204,7 +206,7 @@ public class Controller
 		do//Loop prompt for employee username search
 		{
 			loopAgain = false;
-			System.out.println("~~~Search for Employee~~~[/exit to quit]");
+			System.out.println("/exit to exit");
 			System.out.print("Employee Name >> ");
 			employeeName = kb.nextLine().toLowerCase();
 			// Attempting to see if the input is valid
@@ -213,11 +215,10 @@ public class Controller
 			if (employeeName.equalsIgnoreCase("/exit"))//exit command
 			{
 				System.out.println("Exitting to main menu...");
-
+				log.info("OUT addWorkingTimesForEmployeeByName\n");
 				return true;
 			}
 			ArrayList<Employee> employees = connect.getEmployees(employeeName);
-			System.out.println("~~~LIST OF EMPLOYEES~~~");
 			if (employees.size() == 0)//if array list is empty then the user is prompted to try again
 			{
 				System.out.println(
@@ -225,11 +226,15 @@ public class Controller
 				loopAgain = true;
 				continue;
 			}
-			for (Employee employee : employees)//Displays all employees toString in the array list
+			else
 			{
-				System.out.println(employee.toString());
+				System.out.println("~~~LIST OF EMPLOYEES~~~\n");
+				for (Employee employee : employees)//Displays all employees toString in the array list
+				{
+					System.out.println(employee.toString());
+				}
+				System.out.println("\n~~~~~~~~~~END~~~~~~~~~~");
 			}
-			System.out.println("~~~~~~~~~~END~~~~~~~~~~");
 			do//prompting user to pick an employee or /again to search for employees again
 			{
 				loopAgain2 = false;
@@ -239,6 +244,7 @@ public class Controller
 				if (employeeId.equalsIgnoreCase("/exit"))//exit command
 				{
 					System.out.println("Exitting to main menu...");
+					log.info("OUT addWorkingTimesForEmployeeByName\n");
 					return true;
 				}
 				if (employeeId.equalsIgnoreCase("/again"))//lets user search for employee again
@@ -271,6 +277,7 @@ public class Controller
 				}
 			} while (loopAgain2);
 		} while (loopAgain);
+		log.info("OUT addWorkingTimesForEmployeeByName\n");
 		return false;
 	}
 
@@ -282,6 +289,7 @@ public class Controller
 	 */
 	public double changeInputIntoValidDouble(String string)
 	{
+		log.info("IN changeStringToDouble\n");
 		try
 		{
 			Double input = Double.parseDouble(string);
@@ -289,11 +297,13 @@ public class Controller
 			// used as inputs in this project
 			if (input < 0 || input > 1000)
 			{
+				log.info("OUT changeStringToDouble\n");
 				return -1;
 			}
 			return input;
 		} catch (NumberFormatException e)
 		{
+			log.info("OUT changeStringToDouble\n");
 			return -1;
 		}
 	}
@@ -306,6 +316,7 @@ public class Controller
 	 */
 	public int changeInputIntoValidInt(String string)
 	{
+		log.info("IN changeStringToINT\n");
 		try
 		{
 			Integer input = Integer.parseInt(string);
@@ -313,25 +324,27 @@ public class Controller
 			// used as inputs in this project
 			if (input < 0)
 			{
+				log.info("OUT changeStringToINT\n");
 				return -1;
 			}
 			return input;
 		} catch (NumberFormatException e)
 		{
+			log.info("OUT changeStringToINT\n");
 			return -1;
 		}
 	}
 
-	/**
+	/*/**
 	 * @author Luke Mason
 	 * Checking date and it's format before converting, if okay, then convert,
 	 * @param date1
-	 * @return false if date is > 30 days in future or if date < current date
+	 * @return false if date is > 7 days in future or if date < current date
 	 */
-	public boolean checkNewDate(Date date1)
+	/*public boolean checkNewDate(Date date1)
 	{
 		Calendar c = new GregorianCalendar();
-		c.add(Calendar.DATE, 30);
+		c.add(Calendar.DATE, 7);
 		Date thirtyDaysIntoFuture = c.getTime();
 
 		Calendar b = new GregorianCalendar();
@@ -339,7 +352,7 @@ public class Controller
 
 		if (date1.after(thirtyDaysIntoFuture))
 		{
-			System.out.println("This date is more than 30 days in advance, Try again");
+			System.out.println("This date is more than 7 days in advance, Try again");
 			return false;
 		}
 		if (date1.before(currentTime))
@@ -348,7 +361,7 @@ public class Controller
 			return false;
 		}
 		return true;
-	}
+	}*/
 
 	/**
 	 * @author Luke Mason, David Heang
@@ -358,219 +371,259 @@ public class Controller
 	 */
 	public boolean addWorkingTimesForNextMonth(int employeeId)
 	{
-		@SuppressWarnings("resource")
-		Scanner sc = new Scanner(System.in);
+		log.info("IN addWorkingTimesForNextMonth\n");
 		Controller controller = new Controller();
 		DatabaseConnection connect = new DatabaseConnection();
 
 		// check if the input employeeId exists in database
-		boolean valid, valid2;
-		int year = 2017, month = 1, day = 1;
-		Date startTime = null, finishTime = null, newDate = null;
-		Business bmenu = new Business();
-		String newDateStr;
-		String newStartTimeStr;
-		String newFinishTimeStr;
-		int count =1;
-		boolean infiniteloop = true;
-		do //Infinite Loop, exit with /exit
+		boolean valid = false, valid2 = false;
+		String newDateStr = "";
+		String newStartTimeStr = "";
+		String newFinishTimeStr = "";
+		boolean loop = false;
+		do//Loop, exit with /exit
 		{
-			System.out.println("/exit TO SAVE & EXIT ANYTIME");
-			System.out.println("~~~~Adding Work Time "+count+" ~~~~");
-			do//Loop year,month,day (date) until date is valid
-			{
-				valid = false;//resetting valid to false for next loop
-				while (valid == false)//Loop until year is valid
+			do{
+				valid2 = true;
+				do
 				{
-					System.out.print("Please Enter year:\nyear >> ");
-					String yearStr = sc.nextLine();
-					if (yearStr.equalsIgnoreCase("/exit"))//exit command
-					{
-						return true;
-					}
-					//converting to integer, returns -1 if the input is invalid
-					year = controller.changeInputIntoValidInt(yearStr);
-					if (year > 0)
-					{
-						valid = true;
-					} 
-					else
-					{
-						System.out.println("Innappropriate year!");
-						valid = false;
-					}
-	
-				
-				}
-				valid = false;//resetting valid to false for next loop
-				while (valid == false)//Loop until month is valid
-				{
-					System.out.print("Please Enter month (1-12):\nmonth >> ");
-					String monthStr = sc.nextLine();
-					if (monthStr.equalsIgnoreCase("/exit"))//exit command
-					{
-						return true;
-					}
-					//converting to integer, returns -1 if the input is invalid
-					month = controller.changeInputIntoValidInt(monthStr);
-					if (month > 0 && month < 13)
-					{
-						valid = true;
-					} else
-					{
-						System.out.println("Innappropriate month!");
-						valid = false;
-					}
-					
-				}
-				valid = false;//resetting valid to false for next loop
-				while (valid == false)//Loop until day is valid
-				{
-					System.out.print("Please Enter day:\nday >> ");
-					String dayStr = sc.nextLine();
-					if (dayStr.equalsIgnoreCase("/exit"))
-					{
-						return true;
-					}
-					//converting to integer, returns -1 if the input is invalid
-					day = controller.changeInputIntoValidInt(dayStr);
-					if (day > 0 && day < 32)
-					{
-						valid = true;
-					} else
-					{
-						System.out.println("Innappropriate day!");
-						valid = false;
-					}
-				
-				}
-	
-				// Making a date from year, month and day integers
-				Calendar cal = Calendar.getInstance();
-				cal.set(Calendar.YEAR, year);
-				cal.set(Calendar.MONTH, month-1);//january = 0, so we -1
-				cal.set(Calendar.DAY_OF_MONTH, day);
-				newDate = cal.getTime();
-				if (!checkNewDate(newDate))
-				{
-					valid = false;
-				}
-			} while (!valid);//If chrckNewDate is false then it loops to beginning
-			do//Loop for startTime and EndTime (shouldn't get used since there is no restriction to what end time and start time can be)
-			{
-				valid2 = false;//resetting valid to false for next loop
-				valid = false;//resetting valid to false for next loop
-				while (valid == false)//Loop start time hours and minutes until valid
-				{
-					int hours = 0;
-					int minutes = 0;
 					valid = true;
-					do//Loop start time hours until valid
+					SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+					String[] dateArray = new String[7];
+					Calendar c = Calendar.getInstance();
+					System.out.println("----Next 7 Days----");
+					for(int i = 1;i<=7; i++)
 					{
-						valid = true;
-						System.out.print("Please Enter start time (0-23)\nHours >> ");
-						String startTimeHourStr = sc.nextLine();
-						if (startTimeHourStr.equalsIgnoreCase("/exit"))//exit command
-						{
-							return true;
-						}
-						hours = changeInputIntoValidInt(startTimeHourStr);
-						if (hours < 0 || hours > 23)
-						{
-							System.out.println("Incorrect amount of hours, Try Again");
-							valid = false;
-						}
-					} while (!valid);
-					do//Loop start time minutes until valid
+						dateArray[i-1] = sdf.format(c.getTime());//puts each date from every loop into array
+						String time = sdf.format(c.getTime());
+						System.out.println(i+": " + time);
+						c.add(Calendar.DAY_OF_MONTH, i);
+					}
+					System.out.println("\n/exit to save and exit to main menu\n");
+					System.out.print("Select a day >> ");
+					String choiceStr = kb.nextLine();
+					if (choiceStr.equalsIgnoreCase("/exit"))
 					{
-						valid = true;
-						System.out.print("Minutes(0-59) >> ");
-						String startTimeMinStr = sc.nextLine();
-						if (startTimeMinStr.equalsIgnoreCase("/exit"))//exit command
-						{
-							return true;
-						}
-						minutes = changeInputIntoValidInt(startTimeMinStr);
-						if (minutes < 0 || minutes > 59)
-						{
-							System.out.println("Incorrect amount of minutes, Try Again");
-							valid = false;
-						}
-					} while (!valid);
-					//converting single integers to 2 char long strings e.g 1 = "01", 4 = "04"
-					String hoursStr = String.format("%02d", hours);
-					String minsStr = String.format("%02d", minutes);
-					String startTimeStr = hoursStr + ":" + minsStr;//concatenating hours and minutes e.g 01:04
-					startTime = convertStringToTime(startTimeStr);//converting string into Time to double check the formating is correct
-					if (startTime == null)
+						log.info("OUT addWorkingTimesForNextMonth\n");
+						return true;
+					}
+					int choice = controller.changeInputIntoValidInt(choiceStr);
+					if (choice < 1 || choice > 7)
 					{
-						System.out.println("This time is not in the correct format HH:MM, Try Again");
+						System.out.println("Invalid input!");
 						valid = false;
 						continue;
 					}
+					newDateStr = dateArray[choice-1];
 				}
-				valid = false;//resetting valid to false for next loop
-				while (valid == false)//Loop finish time hours and minutes until valid
+				while(!valid);
+				do
 				{
-					int hours = 0;
-					int minutes = 0;
-					valid = true;
-					do//loop finish time hours until valid
+					valid2 = true;
+					System.out.print("\n");
+					System.out.println("M - Morning: 8am - 12pm");
+					System.out.println("A - Afternoon: 12pm - 4pm");
+					System.out.println("E - Evening: 4pm - 8pm");
+					System.out.println("\n/exit to save and exit to main menu");
+					System.out.println("/back to re-enter Time block(s) again\n");
+					System.out.println("\"ME\" or \"EM\" are invalid time blocks");
+					System.out.print("Choose time blocks to assign employee\n Type answer as a word - e.g MAE or EA etc >> ");
+					String choiceStr = kb.nextLine().toUpperCase();
+					choiceStr = choiceStr.replace(" ", "").replace(",","");
+					if (choiceStr.equalsIgnoreCase("/exit"))
+					{
+						log.info("OUT addWorkingTimesForNextMonth\n");
+						return true;
+					}
+					if(choiceStr.equalsIgnoreCase("/back"))
 					{
 						valid = true;
-						System.out.print("Please Enter finish time\nHours >> ");
-						String startTimeHourStr = sc.nextLine();
-						if (startTimeHourStr.equalsIgnoreCase("/exit"))//exit command
-						{
-							return true;
-						}
-						hours = changeInputIntoValidInt(startTimeHourStr);
-						if (hours < 0 || hours > 23)
-						{
-							System.out.println("Incorrect amount of hours, Try Again");
-							valid = false;
-						}
-					} while (!valid);
-					do//loop finish time minutes until valid
+						valid2 = false;
+						continue;
+					}
+					valid = checkWorkTimeChoice(choiceStr);
+					if(!valid){continue;}
+					String[] times = new String[2];
+					times = allocateWorkTimes(choiceStr);
+					if(times == null)
 					{
-						valid = true;
-						System.out.print("Minutes >> ");
-						String finishTimeMinStr = sc.nextLine();
-						if (finishTimeMinStr.equalsIgnoreCase("/exit"))//exit command
-						{
-							return true;
-						}
-						minutes = changeInputIntoValidInt(finishTimeMinStr);
-						if (minutes < 0 || minutes > 59)
-						{
-							System.out.println("Incorrect amount of minutes, Try Again");
-							valid = false;
-						}
-					} while (!valid);
-					//converting single integers to 2 char long strings e.g 1 = "01", 4 = "04"
-					String hoursStr = String.format("%02d", hours);
-					String minsStr = String.format("%02d", minutes);
-					String finishTimeStr = hoursStr + ":" + minsStr;//concatenating hours and minutes e.g 01:04
-					finishTime = convertStringToTime(finishTimeStr);//converting string into Time to double check the formating is correct
-					if (finishTime == null)
-					{
-						System.out.println("This time is not in the correct format HH:MM, Try Again");
 						valid = false;
 						continue;
 					}
+					newStartTimeStr = times[0];
+				    newFinishTimeStr = times[1];
 				}
-	
-			} while (valid2);
-	
-			newDateStr = convertDateToString(newDate);//converting double checked date format into string
-			newStartTimeStr = convertTimeToString(startTime);//converting double checked date format into string
-			newFinishTimeStr = convertTimeToString(finishTime);//converting double checked date format into string
+				while(!valid);
+			}
+			while(!valid2);//Used for /back command
 			connect.addEmployeeWorkingTime(employeeId, newDateStr, newStartTimeStr, newFinishTimeStr);
-			++count;//counts what loop number is current and used to display to user
-		}while(infiniteloop);//can only use /exit to get out of loop/function
+			System.out.println("Employee Work time: "+newStartTimeStr+" - "+newFinishTimeStr+" is now added on "+newDateStr);
+			do
+			{
+				valid = true;
+				System.out.println("\nWould you like to add another work time for the employee?");
+				System.out.println("1. Yes");
+				System.out.println("2. No");
+				String choiceStr = kb.nextLine();
+				int choice = controller.changeInputIntoValidInt(choiceStr);
+				if (choice < 1 || choice > 2)
+				{
+					System.out.println("Please enter in 1 or 2");
+					valid = false;
+					continue;
+				}
+				switch(choice)
+				{
+					case 1: loop = true; break;
+					case 2: loop = false; break;
+					default: System.out.println("Please enter in 1 or 2"); valid = false;
+				}
+			}
+			while(!valid);
+		}while(loop);//can only use /exit to get out of loop/function
+		System.out.println("Save and Exitting to main menu ...");
+		log.info("OUT addWorkingTimesForNextMonth\n");
 		return false;
 	}
+	
+	/**
+	 * @author Luke Mason
+	 * @param choiceStr
+	 * @return two string in array, startTime = [0] and endTime - [1]
+	 */
+	public String[] allocateWorkTimes(String choiceStr)
+	{
+		log.info("IN allocateWorkTimes\n");
+		String[] times = new String[2];
+		if(choiceStr.indexOf("M")!= -1)
+		{
+			times[0] = "8:00";
+			times[1] = "12:00";
+			if(choiceStr.indexOf("A")!= -1)
+			{
+				times[1] = "16:00";
+				if(choiceStr.indexOf("E")!= -1)
+				{
+					times[1] = "20:00";
+				}
+			}
+			else if(choiceStr.indexOf("E")!= -1)
+			{
+				times[1] = "20:00";
+				if(choiceStr.indexOf("A")!= -1)
+				{
+					times[1] = "16:00";
+				}
+			}
+			log.info("OUT allocateWorkTimes\n");
+			return times;
+		}
+		else if(choiceStr.indexOf("A")!= -1)
+		{
+			times[0] = "12:00";
+			times[1] = "16:00";
+			if(choiceStr.indexOf("E")!= -1)
+			{
+				times[1] = "20:00";
+				if(choiceStr.indexOf("M")!= -1)
+				{
+					times[0] = "8:00";
+				}
+			}
+			else if(choiceStr.indexOf("M")!= -1)
+			{
+				times[0] = "8:00";
+				if(choiceStr.indexOf("E")!= -1)
+				{
+					times[1] = "20:00";
+				}
+			}
+			log.info("OUT allocateWorkTimes\n");
+			return times;
+		}
+		else if(choiceStr.indexOf("E")!= -1)
+		{
+			times[0] = "16:00";
+			times[1] = "20:00";
+			if(choiceStr.indexOf("A")!= -1)
+			{
+				times[0] = "12:00";
+				if(choiceStr.indexOf("M")!= -1)
+				{
+					times[0] = "8:00";
+				}
+			}
+			else if(choiceStr.indexOf("M")!= -1)
+			{
+				times[0] = "8:00";
+				if(choiceStr.indexOf("A")!= -1)
+				{
+					times[0] = "12:00";
+				}
+			}
+			log.info("OUT allocateWorkTimes\n");
+			return times;
+		}
+		else
+		{
+			System.out.println("ERROR: Should not be here");
+			log.info("OUT allocateWorkTimes\n");
+			return null;
+		}
+	}
 
+	/**
+	 * @author Luke Mason
+	 * @param choiceStr //Accepts alphabet {M, A, E}
+	 * @return false if string contains wrong alphabet or any duplicate symbol or length is > 3 or length is < 1
+	 */
+	public boolean checkWorkTimeChoice(String choiceStr)
+	{
+		log.info("IN checkWorkTimeChoice\n");
+		int amount = 0; 
+		int amount2 = 0;
+		int amount3 = 0 ;
+		int amount4 = choiceStr.length() - choiceStr.replace("M","").replace("A","").replace("E","").length();
+		
+		if(choiceStr.length()==3)
+		{
+			amount = choiceStr.length() - choiceStr.replace("M","").replace("A","").length();
+			amount2 = choiceStr.length() - choiceStr.replace("M","").replace("E","").length();
+			amount3 = choiceStr.length() - choiceStr.replace("E","").replace("A","").length();
+			if(amount != 2 || amount2 != 2 || amount3 != 2 || amount4 != 3)
+			{
+				System.out.println("Invalid input!");
+				log.info("OUT checkWorkTimeChoice\n");
+				return false;
+			}
+		}
+		if(choiceStr.equals("ME")||choiceStr.equals("EM")||choiceStr.equals("MM")||choiceStr.equals("EE")||choiceStr.equals("AA"))
+		{
+			System.out.println("Invalid input!");
+			log.info("OUT checkWorkTimeChoice\n");
+			return false;
+		}
+		if(choiceStr.length() == 1 && amount4 != 1)
+		{
+			System.out.println("Invalid input!");
+			log.info("OUT checkWorkTimeChoice\n");
+			return false;
+		}
+		if(choiceStr.length()>3 || choiceStr.length()< 1)
+		{
+			System.out.println("Invalid input!");
+			log.info("OUT checkWorkTimeChoice\n");
+			return false;
+		}
+		log.info("OUT checkWorkTimeChoice\n");
+		return true;
+	}
+	
+	/*/**
+	 * @author David Heang
+	 * @param num
+	 * @return 
+	 */
 	/*public boolean isOfTypeInt(int num)
 	{
 		try
@@ -581,8 +634,11 @@ public class Controller
 		{
 			return false;
 		}
-	}
+	}*/
 
+	/*/**
+	 * @author David Heang
+	 */
 	/*public boolean addWorkingTimesForEmployee()
 	{
 		@SuppressWarnings("resource")
@@ -762,12 +818,10 @@ public class Controller
 		boolean loopflag = true;
 		while (loopflag)
 		{
-			Scanner sc = new Scanner(System.in);
 			DatabaseConnection connect = new DatabaseConnection();
 			ArrayList<Employee> emList = connect.getEmployees("");
 			SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
 			Calendar c = Calendar.getInstance();
-			boolean flag = true;
 			String days[] = new String[7];
 			String today;
 			for (int i = 0; i < 7; i++)
@@ -817,7 +871,7 @@ public class Controller
 			do
 			{
 				System.out.println("\nPlease enter employee id to view more or 'quit' to quit");
-				input = sc.nextLine();
+				input = kb.nextLine();
 				if (input.equalsIgnoreCase("quit"))
 				{
 					return;
@@ -915,12 +969,218 @@ public class Controller
 		return "";
 	}
 	
-	public void checkBooking()
+	public void checkPreviousBooking()
 	{
-		//get customers
-		//display booking days
-		//prompt user input
-		//display customer booking
+		boolean loopflag = true;
+		while (loopflag)
+		{
+			//get all the bookings 
+			//display all the bookings within 7days before and after
+			Scanner sc = new Scanner(System.in);
+			DatabaseConnection connect = new DatabaseConnection();
+			ArrayList<Booking> bookList = connect.getAllBooking();
+			SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+			Calendar c = Calendar.getInstance();
+			boolean flag = true;
+			String pDays[] = new String[6];
+			String today;
+			for (int i = 0; i <6 ; i++)
+			{
+				c.add(Calendar.DATE, -1);
+				today = sdf.format(c.getTime());
+				pDays[i] = today;
+			}
+			
+			System.out.printf("\n%s", "ID");
+			System.out.printf("%-2s %s", "", "Customer ID");
+			System.out.printf("%-20s %s", "", pDays[0]);
+			System.out.printf("%-3s %s", "", pDays[1]);
+			System.out.printf("%-3s %s", "", pDays[2]);
+			System.out.printf("%-3s %s", "", pDays[3]);
+			System.out.printf("%-3s %s", "", pDays[4]);
+			System.out.printf("%-3s %s", "", pDays[5]);
+			System.out.print(
+					"-------------------------------------------------------------------------------------------------------------------------------------");
+			for (Booking b : bookList)
+			{
+				System.out.printf("\n%d %-2s %-20s", b.getBookingID(), "", b.getCustomerId());
+				
+				for (int j = 0; j < 6; j++)
+				{
+					String bookedDays=convertDateToString(b.getDate());
+					if (!bookList.isEmpty())
+					{
+						if (pDays[j]==bookedDays)
+						{
+							System.out.printf("%-8s %-5s", "", "Booked");
+						} else
+						{
+							System.out.printf("%-8s %-5s", "", "-----");
+						}
+					} else
+					{
+						System.out.printf("%-8s %-5s", "", "-----");
+					}
+				}
+			}
+			
+			Booking bookings = new Booking();
+			boolean tryLoop = true;
+			String input;
+			int bookKey = 0;
+			do
+			{
+				System.out.println("\nPlease enter booking id to view more or 'quit' to quit");
+				input = sc.nextLine();
+				if (input.equalsIgnoreCase("quit"))
+				{
+					return;
+				} else
+				{
+
+					try
+					{
+						bookKey = Integer.parseInt(input);
+						tryLoop = false;
+					} catch (Exception e)
+					{
+						System.out.println("Invalid Input");
+					}
+				}
+			} while (tryLoop);
+			bookings = connect.getOneBooking(bookKey);
+			System.out.printf("\nBookID: %-15s CusID: %-2.2f\n", bookings.getBookingID(), bookings.getCustomerId());
+			System.out.printf("\n%-15s %-15s %s\n", "Date", "Start Time", "End Time");
+			System.out.println("----------------------------------------------------");
+			for (int j = 0; j < 6; j++)
+			{
+				System.out.printf("%s", pDays[j]);
+				if (bookings==null)
+				{
+					if (pDays[j]==convertDateToString(bookings.getDate()))
+					{
+						String startTime=convertTimeToString(bookings.getStartTime());
+						String endTime=convertTimeToString(bookings.getEndTime());
+						System.out.printf("%6s %-15s %s\n", "",startTime,
+								endTime);
+					} else
+					{
+						System.out.printf("%6s %-15s %s\n", "", "-----", "-----");
+					}
+				} else
+				{
+					System.out.printf("%6s %-15s %s\n", "", "-----", "-----");
+				}
+			}
+		}	
+	}
+	
+	
+	public void checkNextBooking()
+	{
+		boolean loopflag = true;
+		while (loopflag)
+		{
+			//get all the bookings 
+			//display all the bookings within 7days before and after
+			Scanner sc = new Scanner(System.in);
+			DatabaseConnection connect = new DatabaseConnection();
+			ArrayList<Booking> bookList = connect.getAllBooking();
+			SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+			Calendar c = Calendar.getInstance();
+			boolean flag = true;
+			String nDays[] = new String[7];
+			String today;
+			for (int i = 0; i <7 ; i++)
+			{
+				c.add(Calendar.DATE, 1);
+				today = sdf.format(c.getTime());
+				nDays[i] = today;
+			}
+			
+			System.out.printf("\n%s", "ID");
+			System.out.printf("%-2s %s", "", "Customer ID");
+			System.out.printf("%-20s %s", "", nDays[0]);
+			System.out.printf("%-3s %s", "", nDays[1]);
+			System.out.printf("%-3s %s", "", nDays[2]);
+			System.out.printf("%-3s %s", "", nDays[3]);
+			System.out.printf("%-3s %s", "", nDays[4]);
+			System.out.printf("%-3s %s", "", nDays[5]);
+			System.out.printf("%-3s %s\n", "", nDays[6]);
+			System.out.print(
+					"-------------------------------------------------------------------------------------------------------------------------------------");
+			for (Booking b : bookList)
+			{
+				System.out.printf("\n%d %-2s %-20s", b.getBookingID(), "", b.getCustomerId());
+				
+				for (int j = 0; j < 7; j++)
+				{
+					String bookedDays=convertDateToString(b.getDate());
+					if (!bookList.isEmpty())
+					{
+						if (nDays[j]==bookedDays)
+						{
+							System.out.printf("%-8s %-5s", "", "Booked");
+						} else
+						{
+							System.out.printf("%-8s %-5s", "", "-----");
+						}
+					} else
+					{
+						System.out.printf("%-8s %-5s", "", "-----");
+					}
+				}
+			}
+			
+			Booking bookings = new Booking();
+			boolean tryLoop = true;
+			String input;
+			int bookKey = 0;
+			do
+			{
+				System.out.println("\nPlease enter booking id to view more or 'quit' to quit");
+				input = sc.nextLine();
+				if (input.equalsIgnoreCase("quit"))
+				{
+					return;
+				} else
+				{
+
+					try
+					{
+						bookKey = Integer.parseInt(input);
+						tryLoop = false;
+					} catch (Exception e)
+					{
+						System.out.println("Invalid Input");
+					}
+				}
+			} while (tryLoop);
+			bookings = connect.getOneBooking(bookKey);
+			System.out.printf("\nBookID: %-15s CusID: %-2.2f\n", bookings.getBookingID(), bookings.getCustomerId());
+			System.out.printf("\n%-15s %-15s %s\n", "Date", "Start Time", "End Time");
+			System.out.println("----------------------------------------------------");
+			for (int j = 0; j < 7; j++)
+			{
+				System.out.printf("%s", nDays[j]);
+				if (bookings==null)
+				{
+					if (nDays[j]==convertDateToString(bookings.getDate()))
+					{
+						String startTime=convertTimeToString(bookings.getStartTime());
+						String endTime=convertTimeToString(bookings.getEndTime());
+						System.out.printf("%6s %-15s %s\n", "",startTime,
+								endTime);
+					} else
+					{
+						System.out.printf("%6s %-15s %s\n", "", "-----", "-----");
+					}
+				} else
+				{
+					System.out.printf("%6s %-15s %s\n", "", "-----", "-----");
+				}
+			}
+		}	
 	}
 
 }

@@ -1118,10 +1118,12 @@ public class Controller
 					String bookedDays=convertDateToString(b.getDate());
 					if (!bookList.isEmpty())
 					{
-						if (nDays[j]==bookedDays)
+						if (nDays[j].equals(bookedDays) && b.getStatus().equals("active"))
 						{
 							System.out.printf("%-8s %-5s", "", "Booked");
-						} else
+							
+						}
+						else
 						{
 							System.out.printf("%-8s %-5s", "", "-----");
 						}
@@ -1145,7 +1147,6 @@ public class Controller
 					return;
 				} else
 				{
-
 					try
 					{
 						bookKey = Integer.parseInt(input);
@@ -1157,20 +1158,25 @@ public class Controller
 				}
 			} while (tryLoop);
 			bookings = connect.getOneBooking(bookKey);
-			System.out.printf("\nBookID: %-15s CusID: %-2.2f\n", bookings.getBookingID(), bookings.getCustomerId());
+			System.out.printf("\nBookID: %-15s CusID: %-2d\n", bookings.getBookingID(), bookings.getCustomerId());
 			System.out.printf("\n%-15s %-15s %s\n", "Date", "Start Time", "End Time");
 			System.out.println("----------------------------------------------------");
 			for (int j = 0; j < 7; j++)
 			{
 				System.out.printf("%s", nDays[j]);
-				if (bookings==null)
+				if (bookings!=null)
 				{
-					if (nDays[j]==convertDateToString(bookings.getDate()))
+					if (nDays[j].equals(convertDateToString(bookings.getDate())))
 					{
-						String startTime=convertTimeToString(bookings.getStartTime());
-						String endTime=convertTimeToString(bookings.getEndTime());
-						System.out.printf("%6s %-15s %s\n", "",startTime,
-								endTime);
+						if(bookings.getStatus().equals("active")){
+							String startTime=convertTimeToString(bookings.getStartTime());
+							String endTime=convertTimeToString(bookings.getEndTime());
+							System.out.printf("%6s %-15s %s\n", "",startTime,
+									endTime);
+						}else
+						{
+							System.out.printf("%6s %-15s %s\n", "", "-----", "-----");
+						}
 					} else
 					{
 						System.out.printf("%6s %-15s %s\n", "", "-----", "-----");
@@ -1183,4 +1189,11 @@ public class Controller
 		}	
 	}
 
+	public void cancelBooking(){
+		checkNextBooking();
+		DatabaseConnection conn = new DatabaseConnection();
+		ArrayList<Booking> bookingList = new ArrayList<Booking>();
+		
+		
+	}
 }

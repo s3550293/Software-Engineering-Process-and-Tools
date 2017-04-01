@@ -1118,10 +1118,12 @@ public class Controller
 					String bookedDays=convertDateToString(b.getDate());
 					if (!bookList.isEmpty())
 					{
-						if (nDays[j].equals(bookedDays))
+						if (nDays[j].equals(bookedDays) && b.getStatus().equals("active"))
 						{
 							System.out.printf("%-8s %-5s", "", "Booked");
-						} else
+							
+						}
+						else
 						{
 							System.out.printf("%-8s %-5s", "", "-----");
 						}
@@ -1166,10 +1168,15 @@ public class Controller
 				{
 					if (nDays[j].equals(convertDateToString(bookings.getDate())))
 					{
-						String startTime=convertTimeToString(bookings.getStartTime());
-						String endTime=convertTimeToString(bookings.getEndTime());
-						System.out.printf("%6s %-15s %s\n", "",startTime,
-								endTime);
+						if(bookings.getStatus().equals("active")){
+							String startTime=convertTimeToString(bookings.getStartTime());
+							String endTime=convertTimeToString(bookings.getEndTime());
+							System.out.printf("%6s %-15s %s\n", "",startTime,
+									endTime);
+						}else
+						{
+							System.out.printf("%6s %-15s %s\n", "", "-----", "-----");
+						}
 					} else
 					{
 						System.out.printf("%6s %-15s %s\n", "", "-----", "-----");

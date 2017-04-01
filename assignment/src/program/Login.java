@@ -163,5 +163,6 @@ public class Login
 		connect.addEmployeeWorkingTime(2,"26/03/2017","11:30","15:30");
 		connect.addBooking(1, "07/04/2017", "10:30", "11:30", "active");
 		connect.addBooking(2, "08/04/2017", "11:30", "12:30", "active");
+		connect.cancelBooking(4);
 	}
 }

@@ -1118,7 +1118,7 @@ public class Controller
 					String bookedDays=convertDateToString(b.getDate());
 					if (!bookList.isEmpty())
 					{
-						if (nDays[j]==bookedDays)
+						if (nDays[j].equals(bookedDays))
 						{
 							System.out.printf("%-8s %-5s", "", "Booked");
 						} else
@@ -1145,7 +1145,6 @@ public class Controller
 					return;
 				} else
 				{
-
 					try
 					{
 						bookKey = Integer.parseInt(input);
@@ -1157,15 +1156,15 @@ public class Controller
 				}
 			} while (tryLoop);
 			bookings = connect.getOneBooking(bookKey);
-			System.out.printf("\nBookID: %-15s CusID: %-2.2f\n", bookings.getBookingID(), bookings.getCustomerId());
+			System.out.printf("\nBookID: %-15s CusID: %-2d\n", bookings.getBookingID(), bookings.getCustomerId());
 			System.out.printf("\n%-15s %-15s %s\n", "Date", "Start Time", "End Time");
 			System.out.println("----------------------------------------------------");
 			for (int j = 0; j < 7; j++)
 			{
 				System.out.printf("%s", nDays[j]);
-				if (bookings==null)
+				if (bookings!=null)
 				{
-					if (nDays[j]==convertDateToString(bookings.getDate()))
+					if (nDays[j].equals(convertDateToString(bookings.getDate())))
 					{
 						String startTime=convertTimeToString(bookings.getStartTime());
 						String endTime=convertTimeToString(bookings.getEndTime());
@@ -1183,4 +1182,11 @@ public class Controller
 		}	
 	}
 
+	public void cancelBooking(){
+		checkNextBooking();
+		DatabaseConnection conn = new DatabaseConnection();
+		ArrayList<Booking> bookingList = new ArrayList<Booking>();
+		
+		
+	}
 }

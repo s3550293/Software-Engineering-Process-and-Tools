@@ -1192,26 +1192,30 @@ public class Controller
 	public void checkBooking()
 	{
 		Scanner sc = new Scanner(System.in);
-		System.out.println("Enter 'p' for past 7 days/ 'n' for next 7 days"); 
-		String input = sc.nextLine().toLowerCase();
-		boolean pass=false;
-		do{
-			if(input=="p")
+		boolean tryLoop = true;
+		String input;
+		do
+		{
+			System.out.println("\nPlease enter 'p' or 'n'");
+			input = sc.nextLine();
+			if (input.equalsIgnoreCase("quit"))
 			{
-				checkPreviousBooking();
-				pass=true;
-			}
-			else if(input=="n")
+				return;
+			} else
 			{
-				checkNextBooking();
-				pass=true;
+
+				try
+				{
+					input="p";
+					checkPreviousBooking();
+					tryLoop = false;
+				} catch (Exception e)
+				{
+					System.out.println("Invalid Input");
+				}
 			}
-			else
-			{
-				pass=false;
-				System.out.println("Invalid Input. Try again.");
-			}
-		}while(!pass);
+		} while (tryLoop);
+		
 	}
 
 	public void cancelBooking(){

@@ -48,11 +48,10 @@ public class Main
 		Login login = new Login();
 		login.loginMenu();
 		*/
-		Controller cont = new Controller();
+		//Controller cont = new Controller();
 		//cont.addNewEmployee();
-        cont.checkBooking();
-		/*Login menu = new Login();
-		menu.loginMenu();*/
+		Login menu = new Login();
+		menu.loginMenu();
 		
 	}
 }

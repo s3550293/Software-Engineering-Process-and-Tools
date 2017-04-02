@@ -1196,7 +1196,7 @@ public class Controller
 		String input;
 		do
 		{
-			System.out.println("\nPlease enter 'p' or 'n'");
+			System.out.println("\nPlease enter 'p' to view past 7 days or 'n' to view next 7 days");
 			input = sc.nextLine();
 			if (input.equalsIgnoreCase("quit"))
 			{
@@ -1204,14 +1204,15 @@ public class Controller
 			} else
 			{
 
-				try
+				if(input=="p")
 				{
-					input="p";
 					checkPreviousBooking();
-					tryLoop = false;
-				} catch (Exception e)
+					tryLoop=false;
+				}
+				else if (input=="n")
 				{
-					System.out.println("Invalid Input");
+					checkNextBooking();
+					tryLoop=false;
 				}
 			}
 		} while (tryLoop);

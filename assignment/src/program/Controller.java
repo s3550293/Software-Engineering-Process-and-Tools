@@ -1188,6 +1188,31 @@ public class Controller
 			}
 		}	
 	}
+	
+	public void checkBooking()
+	{
+		Scanner sc = new Scanner(System.in);
+		System.out.println("Enter 'p' for past 7 days/ 'n' for next 7 days"); 
+		String input = sc.nextLine().toLowerCase();
+		boolean pass=false;
+		do{
+			if(input=="p")
+			{
+				checkPreviousBooking();
+				pass=true;
+			}
+			else if(input=="n")
+			{
+				checkNextBooking();
+				pass=true;
+			}
+			else
+			{
+				pass=false;
+				System.out.println("Invalid Input. Try again.");
+			}
+		}while(!pass);
+	}
 
 	public void cancelBooking(){
 		checkNextBooking();

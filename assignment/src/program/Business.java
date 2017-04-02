@@ -38,7 +38,7 @@ public class Business
 				controller.addNewEmployee();
 				break;
 			case 3:
-				//Todo
+				controller.checkBooking();
 				break;
 			case 4:
 				//Todo

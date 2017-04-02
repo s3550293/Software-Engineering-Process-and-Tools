@@ -9,6 +9,7 @@ import java.sql.Connection;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.Date;
 import java.sql.DriverManager;
 
 import org.apache.log4j.Logger;
@@ -96,6 +97,9 @@ public class DatabaseConnectionJUnit {
 		connect.addEmployee("Jane Smith", 24.57);
 		connect.addEmployeeWorkingTime(1,"03/12/2017","9:50","17:25");//Assigning employee Luke with 2 working times
 		connect.addEmployeeWorkingTime(1,"02/03/2017","8:30","14:30");
+		connect.addBooking(1, "04/04/2017", "10:30", "12:00", "active");
+		connect.addBooking(2, "04/05/2017", "11:30", "12:30", "active");
+		connect.addBooking(3, "05/04/2017", "10:30", "12:00", "active");
 	}
 	@Test
 	public void testTestEmployeeAttributesLuke1()
@@ -270,41 +274,71 @@ public class DatabaseConnectionJUnit {
 		assertEquals("17:25", controller.convertTimeToString(emplWorking.getEndTime()));
 	}
 	@Test
-	public void testAddBookingToDatabase ()
-	{
-		//addBooking (integer userId, Date date, String startTime, String endTime, String description)
+	public void testAddBookingToDatabase_CustomerID()
+	{	
+		ArrayList<Booking> bookingLists = new ArrayList<Booking>();
+		bookingLists = connect.getAllBooking();
+		
+		assertEquals(bookingLists.get(0).getCustomerId(),1);
+		assertEquals(bookingLists.get(1).getCustomerId(),2);
+		assertEquals(bookingLists.get(2).getCustomerId(),3);
 	}
 	
 	@Test
-	public void testCancelBooking()
+	public void testAddBookingToDatabase_Date()
 	{
-		System.out.println("\n\nCancel Bookings\n--------------");
-		ArrayList<Booking> books = new ArrayList<Booking>();
-		Booking b1 = new Booking();
+		ArrayList<Booking> bookingLists = new ArrayList<Booking>();
+		bookingLists = connect.getAllBooking();
 		
-		//Add bookings
-		connect.addBooking(1, "04/04/17", "10:30", "12:00", "active");
-		connect.addBooking(2, "04/04/17", "11:30", "12:00", "active");
-		connect.addBooking(3, "05/04/17", "10:30", "12:00", "active");
-		connect.addBooking(4, "05/04/17", "11:30", "12:00", "active");
-		books = connect.getAllBooking();
-		for(Booking b: books){
-			System.out.println("id " + b.getBookingID() + " : "+b.getStatus());
-		}
-		//Cancel bookings
+		assertEquals(controller.convertDateToString(bookingLists.get(0).getDate()),"04/04/2017");
+		assertEquals(controller.convertDateToString(bookingLists.get(1).getDate()),"04/05/2017");
+		assertEquals(controller.convertDateToString(bookingLists.get(2).getDate()),"05/04/2017");
+	}
+	
+	@Test
+	public void testAddBookingToDatabase_StartTimeAndEndTime()
+	{
+		ArrayList<Booking> bookingLists = new ArrayList<Booking>();
+		bookingLists = connect.getAllBooking();
+		
+		assertEquals(controller.convertTimeToString(bookingLists.get(0).getStartTime()),"10:30");
+		assertEquals(controller.convertTimeToString(bookingLists.get(0).getEndTime()),"12:00");
+		assertEquals(controller.convertTimeToString(bookingLists.get(1).getStartTime()),"11:30");
+		assertEquals(controller.convertTimeToString(bookingLists.get(1).getEndTime()),"12:30");
+		assertEquals(controller.convertTimeToString(bookingLists.get(2).getStartTime()),"10:30");
+		assertEquals(controller.convertTimeToString(bookingLists.get(2).getEndTime()),"12:00");
+	}
+	
+	@Test
+	public void testAddBookingToDatabase_Status()
+	{
+		ArrayList<Booking> bookingLists = new ArrayList<Booking>();
+		bookingLists = connect.getAllBooking();
+		
+		assertEquals(bookingLists.get(0).getStatus(), "active");
+		assertEquals(bookingLists.get(1).getStatus(), "active");
+		assertEquals(bookingLists.get(2).getStatus(), "active");
+	}
+	
+	@Test
+	public void testCancelBooking_BookIDExists()
+	{
+		ArrayList<Booking> books = new ArrayList<Booking>();
 		assertTrue(connect.cancelBooking(1));
 		assertTrue(connect.cancelBooking(3));
-		assertTrue(connect.cancelBooking(4));
+		
 		books = connect.getAllBooking();
-		for(Booking b: books){
-			System.out.println("id " + b.getBookingID() + " : "+b.getStatus());
-		}
-		//Compare results
 		assertEquals("cancel",books.get(0).getStatus());
 		assertEquals("active",books.get(1).getStatus());
-		assertEquals("cancel",books.get(2).getStatus());
-		assertEquals("cancel",books.get(3).getStatus());
-		
+		assertEquals("cancel",books.get(2).getStatus());	
+	}
+	
+	@Test
+	public void testCancelBooking_BookIDNotExist(){
+		assertFalse(connect.cancelBooking(111));
+		assertFalse(connect.cancelBooking(122));
+		assertFalse(connect.cancelBooking(0));
+		assertFalse(connect.cancelBooking(9999));
 	}
 	
 	@After

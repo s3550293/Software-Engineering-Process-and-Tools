@@ -509,7 +509,7 @@ public class DatabaseConnection
 			}
 		}
 		if(exists == false){
-			System.out.println("\nBook ID does not exists!");
+			System.out.println("\nBook ID " + bookID + " does not exists!");
 			return false;
 		}
 		String query = "UPDATE BOOKINGS SET status = 'cancel' WHERE id = " + bookID;

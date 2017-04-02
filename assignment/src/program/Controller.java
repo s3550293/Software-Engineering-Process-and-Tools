@@ -1075,7 +1075,6 @@ public class Controller
 		}	
 	}
 	
-	
 	public void checkNextBooking()
 	{
 		boolean loopflag = true;
@@ -1204,12 +1203,12 @@ public class Controller
 			} else
 			{
 
-				if(input=="p")
+				if(input.equals("p"))
 				{
 					checkPreviousBooking();
 					tryLoop=false;
 				}
-				else if (input=="n")
+				else if (input.equals("n"))
 				{
 					checkNextBooking();
 					tryLoop=false;
@@ -1219,11 +1218,144 @@ public class Controller
 		
 	}
 
+	public int checkNextBooking_GetBookID()
+	{
+		boolean loopflag = true;
+		while (loopflag)
+		{
+			//get all the bookings 
+			//display all the bookings within 7days before and after
+			Scanner sc = new Scanner(System.in);
+			DatabaseConnection connect = new DatabaseConnection();
+			ArrayList<Booking> bookList = connect.getAllBooking();
+			SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+			Calendar c = Calendar.getInstance();
+			boolean flag = true;
+			String nDays[] = new String[7];
+			String today;
+			for (int i = 0; i <7 ; i++)
+			{
+				c.add(Calendar.DATE, 1);
+				today = sdf.format(c.getTime());
+				nDays[i] = today;
+			}
+			
+			System.out.printf("\n%s", "ID");
+			System.out.printf("%-2s %s", "", "Customer ID");
+			System.out.printf("%-20s %s", "", nDays[0]);
+			System.out.printf("%-3s %s", "", nDays[1]);
+			System.out.printf("%-3s %s", "", nDays[2]);
+			System.out.printf("%-3s %s", "", nDays[3]);
+			System.out.printf("%-3s %s", "", nDays[4]);
+			System.out.printf("%-3s %s", "", nDays[5]);
+			System.out.printf("%-3s %s\n", "", nDays[6]);
+			System.out.print(
+					"-------------------------------------------------------------------------------------------------------------------------------------");
+			for (Booking b : bookList)
+			{
+				System.out.printf("\n%d %-2s %-20s", b.getBookingID(), "", b.getCustomerId());
+				
+				for (int j = 0; j < 7; j++)
+				{
+					String bookedDays=convertDateToString(b.getDate());
+					if (!bookList.isEmpty())
+					{
+						if (nDays[j].equals(bookedDays) && b.getStatus().equals("active"))
+						{
+							System.out.printf("%-8s %-5s", "", "Booked");
+							
+						}
+						else
+						{
+							System.out.printf("%-8s %-5s", "", "-----");
+						}
+					} else
+					{
+						System.out.printf("%-8s %-5s", "", "-----");
+					}
+				}
+			}
+			
+			Booking bookings = new Booking();
+			boolean tryLoop = true;
+			String input;
+			int bookKey = 0;
+			do
+			{
+				System.out.println("\nPlease enter booking id to view more or 'quit' to quit");
+				input = sc.nextLine();
+				if (input.equalsIgnoreCase("quit"))
+				{
+					Business bo = new Business();
+					bo.companyMenu();
+				} 
+				else
+				{
+					try
+					{
+						bookKey = Integer.parseInt(input);
+						tryLoop = false;
+					} catch (NullPointerException e)
+					{
+						System.out.println("Invalid Input");
+					}
+				}
+			} while (tryLoop);
+			bookings = connect.getOneBooking(bookKey);
+			System.out.printf("\nBookID: %-15s CusID: %-2d\n", bookings.getBookingID(), bookings.getCustomerId());
+			System.out.printf("\n%-15s %-15s %s\n", "Date", "Start Time", "End Time");
+			System.out.println("----------------------------------------------------");
+			for (int j = 0; j < 7; j++)
+			{
+				System.out.printf("%s", nDays[j]);
+				if (bookings!=null)
+				{
+					if (nDays[j].equals(convertDateToString(bookings.getDate())))
+					{
+						if(bookings.getStatus().equals("active")){
+							String startTime=convertTimeToString(bookings.getStartTime());
+							String endTime=convertTimeToString(bookings.getEndTime());
+							System.out.printf("%6s %-15s %s\n", "",startTime,
+									endTime);
+						}else
+						{
+							System.out.printf("%6s %-15s %s\n", "", "-----", "-----");
+						}
+					} else
+					{
+						System.out.printf("%6s %-15s %s\n", "", "-----", "-----");
+					}
+				} else
+				{
+					System.out.printf("%6s %-15s %s\n", "", "-----", "-----");
+				}
+			}
+			return bookKey;
+		}
+		return 0;	
+	}
+	
 	public void cancelBooking(){
-		checkNextBooking();
 		DatabaseConnection conn = new DatabaseConnection();
-		ArrayList<Booking> bookingList = new ArrayList<Booking>();
+		Scanner sc = new Scanner(System.in);
+		Boolean loop = false;
 		
+		do{
+			int bookID = checkNextBooking_GetBookID();
+			System.out.println("\nPlease enter 'cancel' to cancel book id " + bookID + " or 'return'");
+			String input = sc.nextLine();
+			if(input.equalsIgnoreCase("cancel")){
+				conn.cancelBooking(bookID);
+				
+			}else if(input.equalsIgnoreCase("return"))
+			{
+				loop = false;
+			}else{
+				System.out.println("Please enter an appropriate input!");
+				continue;
+			}
+				
+		}while(loop == false);
 		
 	}
 }

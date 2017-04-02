@@ -500,7 +500,18 @@ public class DatabaseConnection
 	 * @return true or false
 	 */
 	public boolean cancelBooking(int bookID){
-		
+		ArrayList<Booking> bookList = new ArrayList<Booking>();
+		bookList = getAllBooking();
+		Boolean exists = false;
+		for(Booking b : bookList){
+			if(b.getBookingID() == bookID){
+				exists = true;
+			}
+		}
+		if(exists == false){
+			System.out.println("\nBook ID does not exists!");
+			return false;
+		}
 		String query = "UPDATE BOOKINGS SET status = 'cancel' WHERE id = " + bookID;
 		
 		try(Connection connect = this.connect(); Statement inject = connect.createStatement())

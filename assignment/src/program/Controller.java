@@ -998,12 +998,12 @@ public class Controller
 			System.out.printf("%-3s %s", "", pDays[2]);
 			System.out.printf("%-3s %s", "", pDays[3]);
 			System.out.printf("%-3s %s", "", pDays[4]);
-			System.out.printf("%-3s %s", "", pDays[5]);
+			System.out.printf("%-3s %s\n", "", pDays[5]);
 			System.out.print(
-					"-------------------------------------------------------------------------------------------------------------------------------------");
+					"---------------------------------------------------------------------------------------------------------------------");
 			for (Booking b : bookList)
 			{
-				System.out.printf("\n%d %-2s %-20s", b.getBookingID(), "", b.getCustomerId());
+				System.out.printf("\n%d %-2s %-24s", b.getBookingID(), "", b.getCustomerId());
 				
 				for (int j = 0; j < 6; j++)
 				{
@@ -1035,7 +1035,8 @@ public class Controller
 				if (input.equalsIgnoreCase("quit"))
 				{
 					return;
-				} else
+				}
+				else
 				{
 
 					try
@@ -1107,10 +1108,10 @@ public class Controller
 			System.out.printf("%-3s %s", "", nDays[5]);
 			System.out.printf("%-3s %s\n", "", nDays[6]);
 			System.out.print(
-					"-------------------------------------------------------------------------------------------------------------------------------------");
+					"----------------------------------------------------------------------------------------------------------------------------------");
 			for (Booking b : bookList)
 			{
-				System.out.printf("\n%d %-2s %-20s", b.getBookingID(), "", b.getCustomerId());
+				System.out.printf("\n%d %-2s %-24s", b.getBookingID(), "", b.getCustomerId());
 				
 				for (int j = 0; j < 7; j++)
 				{

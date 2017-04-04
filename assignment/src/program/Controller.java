@@ -1043,83 +1043,7 @@ public class Controller
 				today = sdf.format(c.getTime());
 				pDays[i] = today;
 			}
-
-			System.out.printf("\n%s", "ID");
-			System.out.printf("%-2s %s", "", "Customer ID");
-			System.out.printf("%-20s %s", "", pDays[0]);
-			System.out.printf("%-3s %s", "", pDays[1]);
-			System.out.printf("%-3s %s", "", pDays[2]);
-			System.out.printf("%-3s %s", "", pDays[3]);
-			System.out.printf("%-3s %s", "", pDays[4]);
-			System.out.printf("%-3s %s\n", "", pDays[5]);
-			System.out.print(
-					"---------------------------------------------------------------------------------------------------------------------");
-			for (Booking b : bookList) {
-				System.out.printf("\n%d %-2s %-24s", b.getBookingID(), "", b.getCustomerId());
-
-				for (int j = 0; j < 6; j++) {
-					String bookedDays = convertDateToString(b.getDate());
-					if (!bookList.isEmpty()) {
-						if (pDays[j] == bookedDays) {
-							System.out.printf("%-8s %-5s", "", "Booked");
-						} else {
-							System.out.printf("%-8s %-5s", "", "-----");
-						}
-					} else {
-						System.out.printf("%-8s %-5s", "", "-----");
-					}
-				}
-			}
-			boolean tryLoop = true;
-			do{
-			Booking bookings = new Booking();
-			String input;
-			int bookKey = 0;
-			System.out.println("\nPlease enter booking id to view more or 'quit' to quit");
-			input = sc.nextLine();
-			if (input.equalsIgnoreCase("quit")) {
-				return;
-			}
-			
-			  try { 
-				  Integer.parseInt(input); } catch(NumberFormatException e) {
-				  	tryLoop=true;
-				  	System.out.println("Invalid Input");
-					  ; break; }
-			 
-			bookKey = Integer.parseInt(input);
-			for (int b = 0; b < bookList.size(); b++) {
-				if (bookList.get(b).getBookingID() == bookKey) {
-					bookings = connect.getOneBooking(bookKey);
-					System.out.printf("\nBookID: %-15s CusID: %-2s\n", bookings.getBookingID(),
-							bookings.getCustomerId());
-					System.out.printf("\n%-15s %-15s %s\n", "Date", "Start Time", "End Time");
-					System.out.println("----------------------------------------------------");
-					for (int j = 0; j < 6; j++) {
-						System.out.printf("%s", pDays[j]);
-						if (bookings != null) {
-							if (pDays[j].equals(convertDateToString(bookings.getDate()))) {
-								String startTime = convertTimeToString(bookings.getStartTime());
-								String endTime = convertTimeToString(bookings.getEndTime());
-								System.out.printf("%6s %-15s %s\n", "", startTime, endTime);
-							} else {
-								System.out.printf("%6s %-15s %s\n", "", "-----", "-----");
-							}
-						} else {
-							System.out.printf("%6s %-15s %s\n", "", "-----", "-----");
-						}
-					}
-					tryLoop=false;
-					b = bookList.size();
-				}
-			}
-			if(tryLoop)
-			{
-				System.out.println("Invalid Input");
-				loopflag=true;
-				break;
-			}
-		}while(tryLoop);
+			displayBooking(6,pDays);
 		}
 	}
 	
@@ -1130,12 +1054,10 @@ public class Controller
 		{
 			//get all the bookings 
 			//display all the bookings within 7days before and after
-			Scanner sc = new Scanner(System.in);
 			DatabaseConnection connect = new DatabaseConnection();
 			ArrayList<Booking> bookList = connect.getAllBooking();
 			SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
 			Calendar c = Calendar.getInstance();
-			boolean flag = true;
 			String nDays[] = new String[7];
 			String today;
 			for (int i = 0; i <7 ; i++)
@@ -1144,35 +1066,94 @@ public class Controller
 				today = sdf.format(c.getTime());
 				nDays[i] = today;
 			}
-			
-			displayDetailedBooking_Date(bookList, nDays);
-			Booking bookings = new Booking();
-			boolean tryLoop = true;
-			do{
-			String input;
-			int bookKey = 0;
-			System.out.println("\nPlease enter booking id to view more or 'quit' to quit");
-			input = sc.nextLine();
-			if (input.equalsIgnoreCase("quit")) {
-				return;
-			}
-			
-			try 
-			{ 
-				  Integer.parseInt(input); 
-			} 
-			catch(NumberFormatException e) 
-			{
-				  	tryLoop=true;
-				  	System.out.println("Invalid Input");
-					break; 
-			}
-			bookKey = Integer.parseInt(input);
-			displayDetailedBooking_StartEndTime(bookKey,bookings, input,bookList,nDays,tryLoop,loopflag);
-		}while(tryLoop);
+			displayBooking(7,nDays);
 		}
 	}
 	
+	public void displayBooking(int amt, String[] days){
+		Scanner sc = new Scanner(System.in);
+		boolean loopflag = true;
+		DatabaseConnection connect = new DatabaseConnection();
+		ArrayList<Booking> bookList = connect.getAllBooking();
+		Business business=new Business();
+		System.out.printf("\n%s", "ID");
+		System.out.printf("%-2s %s", "", "Customer ID");
+		System.out.printf("%-20s %s", "", days[0]);
+		for(int i=1;i<amt;i++)
+		{
+			System.out.printf("%-3s %s", "", days[i]);
+		}
+		System.out.print(
+				"\n----------------------------------------------------------------------------------------------------------------------------------------");
+		for (Booking b : bookList) {
+			System.out.printf("\n%d %-2s %-24s", b.getBookingID(), "", b.getCustomerId());
+
+			for (int j = 0; j < 6; j++) {
+				String bookedDays = convertDateToString(b.getDate());
+				if (!bookList.isEmpty()) {
+					if (days[j] .equals(bookedDays)) {
+						System.out.printf("%-8s %-5s", "", "Booked");
+					} else {
+						System.out.printf("%-8s %-5s", "", "-----");
+					}
+				} else {
+					System.out.printf("%-8s %-5s", "", "-----");
+				}
+			}
+		}
+		boolean tryLoop = true;
+		do{
+		Booking bookings = new Booking();
+		String input;
+		int bookKey = 0;
+		System.out.println("\nPlease enter booking id to view more or 'quit' to quit");
+		input = sc.nextLine();
+		if (input.equalsIgnoreCase("quit")) {
+			 business.companyMenu();
+		}
+		
+		  try { 
+			  Integer.parseInt(input); } catch(NumberFormatException e) {
+			  	tryLoop=true;
+			  	System.out.println("Invalid Input");
+				  ; break; }
+		 
+		bookKey = Integer.parseInt(input);
+		for (int b = 0; b < bookList.size(); b++) {
+			if (bookList.get(b).getBookingID() == bookKey) {
+				bookings = connect.getOneBooking(bookKey);
+				System.out.printf("\nBookID: %-15s CusID: %-2s\n", bookings.getBookingID(),
+						bookings.getCustomerId());
+				System.out.printf("\n%-15s %-15s %s\n", "Date", "Start Time", "End Time");
+				System.out.println("----------------------------------------------------");
+				for (int j = 0; j < 6; j++) {
+					System.out.printf("%s", days[j]);
+					if (bookings != null) {
+						if (days[j].equals(convertDateToString(bookings.getDate()))) {
+							String startTime = convertTimeToString(bookings.getStartTime());
+							String endTime = convertTimeToString(bookings.getEndTime());
+							System.out.printf("%6s %-15s %s\n", "", startTime, endTime);
+						} else {
+							System.out.printf("%6s %-15s %s\n", "", "-----", "-----");
+						}
+					} else {
+						System.out.printf("%6s %-15s %s\n", "", "-----", "-----");
+					}
+				}
+				tryLoop=false;
+				b = bookList.size();
+			}
+		}
+		if(tryLoop)
+		{
+			System.out.println("Invalid Input");
+			loopflag=true;
+			break;
+		}
+	}while(tryLoop);
+		
+		
+	}
 	public void checkBooking()
 	{
 		Scanner sc = new Scanner(System.in);

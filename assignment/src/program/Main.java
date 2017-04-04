@@ -21,7 +21,7 @@ public class Main
 	 */
 	public static void main(String[] args)
 	{
-		log.setLevel(Level.DEBUG);
+		log.setLevel(Level.WARN);
         BasicConfigurator.configure();
         log.info("Program Launch");
 		/*

@@ -2,6 +2,7 @@ package program;
 
 import java.util.Scanner;
 
+import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 
 public class Business
@@ -10,7 +11,7 @@ public class Business
 	private static Logger log = Logger.getLogger(Business.class);
 	private boolean flag = true;
 	private Controller controller = new Controller();
-	public Business(){}
+	public Business(){log.setLevel(Level.WARN);}
 	public void companyMenu()
 	{
 		@SuppressWarnings("resource")

@@ -9,13 +9,14 @@ import java.util.Date;
 //import java.util.GregorianCalendar;
 import java.util.Scanner;
 
+import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 
 
 public class Controller
 {
 	private static Logger log = Logger.getLogger(Controller.class);
-	public Controller(){}
+	public Controller(){log.setLevel(Level.WARN);}
 
 	Scanner kb = new Scanner(System.in);
 
@@ -840,8 +841,7 @@ public class Controller
 			System.out.printf("%-3s %s", "", days[4]);
 			System.out.printf("%-3s %s", "", days[5]);
 			System.out.printf("%-3s %s\n", "", days[6]);
-			System.out.print(
-					"-------------------------------------------------------------------------------------------------------------------------------------");
+			System.out.print("-------------------------------------------------------------------------------------------------------------------------------------");
 			ArrayList<EmployeeWorkingTime> workDays = new ArrayList<EmployeeWorkingTime>();
 			for (Employee e : emList)
 			{
@@ -865,7 +865,8 @@ public class Controller
 				}
 
 			}
-			/*Employee employee = new Employee();
+			/*
+			Employee employee = new Employee();
 			boolean tryLoop = true;
 			String input;
 			int empKey = 0;
@@ -882,8 +883,16 @@ public class Controller
 					try
 					{
 						empKey = Integer.parseInt(input);
-						tryLoop = false;
-					} catch (Exception e)
+						if(connect.getEmployee(empKey).getId() == 0)
+						{
+							System.out.println("Invalid Input");
+						}
+						else
+						{
+							tryLoop = false;
+						}
+					} 
+					catch (Exception e)
 					{
 						System.out.println("Invalid Input");
 					}
@@ -972,6 +981,7 @@ public class Controller
 		}while(tryLoop);
 		}
 	}
+	
 
 	/**
 	 * @author Joseph Garner

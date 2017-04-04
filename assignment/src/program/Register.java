@@ -2,6 +2,7 @@ package program;
 
 import java.util.Scanner;
 
+import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 
 import java.util.regex.Matcher;
@@ -14,7 +15,7 @@ public class Register
 	private boolean accountPasswordLoop = true;
 	private DatabaseConnection connect = new DatabaseConnection();
 	
-	public Register(){}
+	public Register(){log.setLevel(Level.WARN);}
 	
 	
 	public void registerUser()

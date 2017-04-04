@@ -6,6 +6,7 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.sql.Statement;
 
+import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 
 public class Database
@@ -18,7 +19,9 @@ public class Database
 	 */
 	public Database(String filename)
 	{
+		log.setLevel(Level.WARN);
 		createNewDatabase(filename);
+		
 	}
 	/*
 	 * connect to the database

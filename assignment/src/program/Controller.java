@@ -508,120 +508,57 @@ public class Controller
 				}
 
 			}
-			/*
-			Employee employee = new Employee();
 			boolean tryLoop = true;
-			String input;
-			int empKey = 0;
-			do
-			{
+			do {
+				Employee employee = new Employee();
+				String input;
+				int empKey = 0;
 				System.out.println("\nPlease enter employee id to view more or 'quit' to quit");
-				input = kb.nextLine();
-				if (input.equalsIgnoreCase("quit"))
-				{
+				input = sc.nextLine();
+				if (input.equalsIgnoreCase("quit")) {
 					return;
-				} else
-				{
-
-					try
-					{
-						empKey = Integer.parseInt(input);
-						if(connect.getEmployee(empKey).getId() == 0)
-						{
-							System.out.println("Invalid Input");
-						}
-						else
-						{
-							tryLoop = false;
-						}
-					} 
-					catch (Exception e)
-					{
-						System.out.println("Invalid Input");
-					}
 				}
-			} while (tryLoop);
-			employee = connect.getEmployee(empKey);
-			workDays = connect.getEmployeeWorkingTimes(empKey);
-			System.out.printf("\nName: %-15s Payrate: %-2.2f\n", employee.getName(), employee.getPayRate());
-			System.out.printf("\n%-15s %-15s %s\n", "Date", "Start Time", "End Time");
-			System.out.println("----------------------------------------------------");
-			for (int j = 0; j < 7; j++)
-			{
-				System.out.printf("%s", days[j]);
-				if (!workDays.isEmpty())
-				{
-					if (days[j].equals(matchDate(days[j], workDays)))
-					{
-						System.out.printf("%6s %-15s %s\n", "", getTime("start", days[j], workDays),
-								getTime("end", days[j], workDays));
-					} else
-					{
-						System.out.printf("%6s %-15s %s\n", "", "-----", "-----");
-					}
-				} else
-				{
-					System.out.printf("%6s %-15s %s\n", "", "-----", "-----");
-				}
-			}
 
-			// sc.close();
-		}
-	}*/
-	boolean tryLoop = true;
-			do{
-			Employee employee = new Employee();
-			String input;
-			int empKey = 0;
-			System.out.println("\nPlease enter employee id to view more or 'quit' to quit");
-			input = sc.nextLine();
-			if (input.equalsIgnoreCase("quit")) {
-				return;
-			}
-			
-			  try { 
-				  Integer.parseInt(input); } catch(NumberFormatException e) {
-				  	tryLoop=true;
-				  	System.out.println("Invalid Input");
-					  ; break; }
-			 
-			empKey = Integer.parseInt(input);
-			for (int b = 0; b < emList.size(); b++) {
-				if (emList.get(b).getId()== empKey) {
-					employee = connect.getEmployee(empKey);
-					workDays = connect.getEmployeeWorkingTimes(empKey);
-					System.out.printf("\nName: %-15s Payrate: %-2.2f\n", employee.getName(), employee.getPayRate());
-					System.out.printf("\n%-15s %-15s %s\n", "Date", "Start Time", "End Time");
-					System.out.println("----------------------------------------------------");
-					for (int j = 0; j < 7; j++)
-					{
-						System.out.printf("%s", days[j]);
-						if (!workDays.isEmpty())
-						{
-							if (days[j].equals(matchDate(days[j], workDays)))
-							{
-								System.out.printf("%6s %-15s %s\n", "", getTime("start", days[j], workDays),
-										getTime("end", days[j], workDays));
-							} else
-							{
+				try {
+					Integer.parseInt(input);
+				} catch (NumberFormatException e) {
+					tryLoop = true;
+					System.out.println("Invalid Input");
+					;
+					break;
+				}
+
+				empKey = Integer.parseInt(input);
+				for (int b = 0; b < emList.size(); b++) {
+					if (emList.get(b).getId() == empKey) {
+						employee = connect.getEmployee(empKey);
+						workDays = connect.getEmployeeWorkingTimes(empKey);
+						System.out.printf("\nName: %-15s Payrate: %-2.2f\n", employee.getName(), employee.getPayRate());
+						System.out.printf("\n%-15s %-15s %s\n", "Date", "Start Time", "End Time");
+						System.out.println("----------------------------------------------------");
+						for (int j = 0; j < 7; j++) {
+							System.out.printf("%s", days[j]);
+							if (!workDays.isEmpty()) {
+								if (days[j].equals(matchDate(days[j], workDays))) {
+									System.out.printf("%6s %-15s %s\n", "", getTime("start", days[j], workDays),
+											getTime("end", days[j], workDays));
+								} else {
+									System.out.printf("%6s %-15s %s\n", "", "-----", "-----");
+								}
+							} else {
 								System.out.printf("%6s %-15s %s\n", "", "-----", "-----");
 							}
-						} else
-						{
-							System.out.printf("%6s %-15s %s\n", "", "-----", "-----");
 						}
+						tryLoop = false;
+						b = workDays.size();
 					}
-					tryLoop=false;
-					b = workDays.size();
 				}
-			}
-			if(tryLoop)
-			{
-				System.out.println("Invalid Input");
-				loopflag=true;
-				break;
-			}
-		}while(tryLoop);
+				if (tryLoop) {
+					System.out.println("Invalid Input");
+					loopflag = true;
+					break;
+				}
+			} while (tryLoop);
 		}
 	}
 

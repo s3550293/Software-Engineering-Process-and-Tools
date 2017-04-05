@@ -9,6 +9,7 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Date;
 
+import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 
 /*
@@ -26,7 +27,7 @@ public class DatabaseConnection
 {
 	private static Logger log = Logger.getLogger(DatabaseConnection.class);
 	private Controller controller = new Controller();
-	public DatabaseConnection(){}
+	public DatabaseConnection(){log.setLevel(Level.WARN);}
 	private Connection connect()
 	{
 		/*

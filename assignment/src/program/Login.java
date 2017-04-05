@@ -2,6 +2,7 @@ package program;
 
 import java.util.*;
 
+import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 
 public class Login
@@ -9,8 +10,8 @@ public class Login
 	private static Logger log = Logger.getLogger(Login.class);
 	private Register reg = new Register();
 	private Business bmenu = new Business();
-	private Client cmenu = new Client();
-	public Login(){}
+	private Customer cmenu = new Customer();
+	public Login(){log.setLevel(Level.WARN);}
 	/*
 	 * loginMenu displays the user login menu to the user
 	 */
@@ -153,14 +154,14 @@ public class Login
 		db.createTable("company.db");
 		DatabaseConnection connect = new DatabaseConnection();
 		connect.addUser("William", "Apples22", 0);
-		connect.addUser("bo1","123456",1);
+		connect.addUser("admin","Monday10!",1);
 		connect.addEmployee("Luke Charles",100);
 		connect.addEmployee("David Smith",100);
-		connect.addEmployeeWorkingTime(1,"28/03/2017","9:50","17:25");
-		connect.addEmployeeWorkingTime(1,"29/03/2017","8:30","14:30");
+		connect.addEmployeeWorkingTime(1,"05/04/2017","9:50","17:25");
+		connect.addEmployeeWorkingTime(1,"10/04/2017","8:30","14:30");
 
-		connect.addEmployeeWorkingTime(2,"01/04/2017","10:30","12:30");
-		connect.addEmployeeWorkingTime(2,"26/03/2017","11:30","15:30");
+		connect.addEmployeeWorkingTime(2,"06/04/2017","10:30","12:30");
+		connect.addEmployeeWorkingTime(2,"07/03/2017","11:30","15:30");
 		connect.addBooking(1, "07/04/2017", "10:30", "11:30", "active");
 		connect.addBooking(2, "08/04/2017", "11:30", "12:30", "active");
 		connect.cancelBooking(4);

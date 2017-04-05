@@ -2,13 +2,14 @@ package program;
 
 import java.util.Scanner;
 
+import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 
 public class Client extends User
 {
 	private static Logger log = Logger.getLogger(Client.class);
-	public Client(){}
-	
+	public Client(){log.setLevel(Level.WARN);}
+	/*
 	public void customerMenu(){
 		Scanner scanner = new Scanner(System.in);
 		
@@ -32,5 +33,6 @@ public class Client extends User
 		}
 		scanner.close();
 	}
+	*/
 
 }

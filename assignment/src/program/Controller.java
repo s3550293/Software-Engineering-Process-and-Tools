@@ -9,13 +9,14 @@ import java.util.Date;
 //import java.util.GregorianCalendar;
 import java.util.Scanner;
 
+import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 
 
 public class Controller
 {
 	private static Logger log = Logger.getLogger(Controller.class);
-	public Controller(){}
+	public Controller(){log.setLevel(Level.WARN);}
 
 	Scanner kb = new Scanner(System.in);
 
@@ -461,6 +462,7 @@ public class Controller
 		boolean loopflag = true;
 		while (loopflag)
 		{
+			Scanner sc = new Scanner(System.in);
 			DatabaseConnection connect = new DatabaseConnection();
 			ArrayList<Employee> emList = connect.getEmployees("");
 			SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
@@ -482,8 +484,7 @@ public class Controller
 			System.out.printf("%-3s %s", "", days[4]);
 			System.out.printf("%-3s %s", "", days[5]);
 			System.out.printf("%-3s %s\n", "", days[6]);
-			System.out.print(
-					"-------------------------------------------------------------------------------------------------------------------------------------");
+			System.out.print("-------------------------------------------------------------------------------------------------------------------------------------");
 			ArrayList<EmployeeWorkingTime> workDays = new ArrayList<EmployeeWorkingTime>();
 			for (Employee e : emList)
 			{
@@ -507,6 +508,7 @@ public class Controller
 				}
 
 			}
+			/*
 			Employee employee = new Employee();
 			boolean tryLoop = true;
 			String input;
@@ -524,8 +526,16 @@ public class Controller
 					try
 					{
 						empKey = Integer.parseInt(input);
-						tryLoop = false;
-					} catch (Exception e)
+						if(connect.getEmployee(empKey).getId() == 0)
+						{
+							System.out.println("Invalid Input");
+						}
+						else
+						{
+							tryLoop = false;
+						}
+					} 
+					catch (Exception e)
 					{
 						System.out.println("Invalid Input");
 					}
@@ -556,6 +566,62 @@ public class Controller
 			}
 
 			// sc.close();
+		}
+	}*/
+	boolean tryLoop = true;
+			do{
+			Employee employee = new Employee();
+			String input;
+			int empKey = 0;
+			System.out.println("\nPlease enter employee id to view more or 'quit' to quit");
+			input = sc.nextLine();
+			if (input.equalsIgnoreCase("quit")) {
+				return;
+			}
+			
+			  try { 
+				  Integer.parseInt(input); } catch(NumberFormatException e) {
+				  	tryLoop=true;
+				  	System.out.println("Invalid Input");
+					  ; break; }
+			 
+			empKey = Integer.parseInt(input);
+			for (int b = 0; b < emList.size(); b++) {
+				if (emList.get(b).getId()== empKey) {
+					employee = connect.getEmployee(empKey);
+					workDays = connect.getEmployeeWorkingTimes(empKey);
+					System.out.printf("\nName: %-15s Payrate: %-2.2f\n", employee.getName(), employee.getPayRate());
+					System.out.printf("\n%-15s %-15s %s\n", "Date", "Start Time", "End Time");
+					System.out.println("----------------------------------------------------");
+					for (int j = 0; j < 7; j++)
+					{
+						System.out.printf("%s", days[j]);
+						if (!workDays.isEmpty())
+						{
+							if (days[j].equals(matchDate(days[j], workDays)))
+							{
+								System.out.printf("%6s %-15s %s\n", "", getTime("start", days[j], workDays),
+										getTime("end", days[j], workDays));
+							} else
+							{
+								System.out.printf("%6s %-15s %s\n", "", "-----", "-----");
+							}
+						} else
+						{
+							System.out.printf("%6s %-15s %s\n", "", "-----", "-----");
+						}
+					}
+					tryLoop=false;
+					b = workDays.size();
+				}
+			}
+			if(tryLoop)
+			{
+				System.out.println("Invalid Input");
+				loopflag=true;
+				break;
+			}
+		}while(tryLoop);
 		}
 	}
 

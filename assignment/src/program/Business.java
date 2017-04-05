@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Scanner;
 
+import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 
 public class Business
@@ -13,7 +14,7 @@ public class Business
 	private static Logger log = Logger.getLogger(Business.class);
 	private boolean flag = true;
 	private Controller controller = new Controller();
-	public Business(){}
+	public Business(){log.setLevel(Level.WARN);}
 	public void companyMenu()
 	{
 		@SuppressWarnings("resource")
@@ -301,7 +302,7 @@ public class Business
 	}
 
 	/**
-	 * @author Luke Mason, David Heang
+	 * @author Luke Mason, David (Panhaseth Heang)
 	 * UI for adding employee working times for next month
 	 * @param employeeId
 	 * @return only returns false if user somehow breaks out of infinite loop with out exiting function

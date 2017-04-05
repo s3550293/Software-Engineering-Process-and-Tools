@@ -15,6 +15,7 @@ public class Login
 	/*
 	 * loginMenu displays the user login menu to the user
 	 */
+	int counter=0;
 	public void loginMenu()
 	{
 		boolean flag = true; //Boolean set for the while loop to keep looping until the user makes the correct choice
@@ -79,6 +80,12 @@ public class Login
 		else if(result == 1){
 			bmenu.companyMenu();
 		}else{
+			if(counter==9)
+			{
+				System.out.println("Too many failed attempts. Exiting..");
+				System.exit(0);
+			}
+			counter+=1;
 			tryAgainMenu();
 		}
 		//scanner.close();

@@ -677,11 +677,16 @@ public class Controller
 		}
 		return "";
 	}
+	
+	/**
+	 * @author Bryan
+	 * Loop to display bookings for previous 7days
+	 * @param 
+	 * @return 
+	 */
 	public void checkPreviousBooking() {
 		boolean loopflag = true;
 		while (loopflag) {
-			// get all the bookings
-			// display all the bookings within 7days before and after
 			Scanner sc = new Scanner(System.in);
 			DatabaseConnection connect = new DatabaseConnection();
 			ArrayList<Booking> bookList = connect.getAllBooking();
@@ -698,13 +703,17 @@ public class Controller
 		}
 	}
 	
+	/**
+	 * @author Bryan
+	 * Loop to display bookings for next 7days
+	 * @param 
+	 * @return 
+	 */
 	public void checkNextBooking()
 	{
 		boolean loopflag = true;
 		while (loopflag)
 		{
-			//get all the bookings 
-			//display all the bookings within 7days before and after
 			DatabaseConnection connect = new DatabaseConnection();
 			ArrayList<Booking> bookList = connect.getAllBooking();
 			SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
@@ -720,6 +729,13 @@ public class Controller
 			displayBooking(7,nDays);
 		}
 	}
+	
+	/**
+	 * @author Bryan
+	 * Method to display bookings
+	 * @param int, String[]
+	 * @return void
+	 */
 	
 	public void displayBooking(int amt, String[] days){
 		Scanner sc = new Scanner(System.in);
@@ -805,6 +821,12 @@ public class Controller
 		
 		
 	}
+	/**
+	 * @author Bryan
+	 * Prompt user for previous or next 7 days booking
+	 * @param 
+	 * @return void
+	 */
 	public void checkBooking()
 	{
 		Scanner sc = new Scanner(System.in);

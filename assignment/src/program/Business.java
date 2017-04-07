@@ -443,46 +443,13 @@ public class Business
 			Calendar c = Calendar.getInstance();
 			String days[] = new String[7];
 			String today;
-			for (int i = 0; i < 7; i++)
-			{
-				c.add(Calendar.DATE, 1);
+			for (int i = 0; i < 7; i++) {
 				today = sdf.format(c.getTime());
+				c.add(Calendar.DATE, 1);
 				days[i] = today;
 			}
-			System.out.printf("\n%s", "ID");
-			System.out.printf("%-2s %s", "", "Employee");
-			System.out.printf("%-20s %s", "", days[0]);
-			System.out.printf("%-3s %s", "", days[1]);
-			System.out.printf("%-3s %s", "", days[2]);
-			System.out.printf("%-3s %s", "", days[3]);
-			System.out.printf("%-3s %s", "", days[4]);
-			System.out.printf("%-3s %s", "", days[5]);
-			System.out.printf("%-3s %s\n", "", days[6]);
-			System.out.print("-------------------------------------------------------------------------------------------------------------------------------------");
 			ArrayList<EmployeeWorkingTime> workDays = new ArrayList<EmployeeWorkingTime>();
-			for (Employee e : emList)
-			{
-				System.out.printf("\n%d %-2s %-20s", e.getId(), "", e.getName());
-				workDays = connect.getEmployeeWorkingTimes(e.getId());
-				for (int j = 0; j < 7; j++)
-				{
-					if (!workDays.isEmpty())
-					{
-						if (days[j].equals(controller.matchDate(days[j], workDays)))
-						{
-							System.out.printf("%-8s %-5s", "", "Avail");
-						} else
-						{
-							System.out.printf("%-8s %-5s", "", "-----");
-						}
-					} else
-					{
-						System.out.printf("%-8s %-5s", "", "-----");
-					}
-				}
-
-			}
-			
+			controller.displayDetailedWorking_Date(days, emList, workDays);
 			boolean tryLoop = true;
 			do {
 				Employee employee = new Employee();
@@ -504,35 +471,8 @@ public class Business
 				}
 
 				empKey = Integer.parseInt(input);
-				for (int b = 0; b < emList.size(); b++) {
-					if (emList.get(b).getId() == empKey) {
-						employee = connect.getEmployee(empKey);
-						workDays = connect.getEmployeeWorkingTimes(empKey);
-						System.out.printf("\nName: %-15s Payrate: %-2.2f\n", employee.getName(), employee.getPayRate());
-						System.out.printf("\n%-15s %-15s %s\n", "Date", "Start Time", "End Time");
-						System.out.println("----------------------------------------------------");
-						for (int j = 0; j < 7; j++) {
-							System.out.printf("%s", days[j]);
-							if (!workDays.isEmpty()) {
-								if (days[j].equals(controller.matchDate(days[j], workDays))) {
-									System.out.printf("%6s %-15s %s\n", "", controller.getTime("start", days[j], workDays),
-											controller.getTime("end", days[j], workDays));
-								} else {
-									System.out.printf("%6s %-15s %s\n", "", "-----", "-----");
-								}
-							} else {
-								System.out.printf("%6s %-15s %s\n", "", "-----", "-----");
-							}
-						}
-						tryLoop = false;
-						b = workDays.size();
-					}
-				}
-				if (tryLoop) {
-					System.out.println("Invalid Input");
-					loopflag = true;
-					break;
-				}
+				
+				controller.displayDetailedWorking_Time( empKey,  employee, input,emList,workDays, days,  tryLoop,  loopflag);
 			} while (tryLoop);
 		}
 	}

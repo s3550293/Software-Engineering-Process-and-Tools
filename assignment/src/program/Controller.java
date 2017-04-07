@@ -520,14 +520,14 @@ public class Controller
 			ArrayList<Booking> bookList = connect.getAllBooking();
 			SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
 			Calendar c = Calendar.getInstance();
-			String pDays[] = new String[6];
+			String pDays[] = new String[7];
 			String today;
-			for (int i = 0; i < 6; i++) {
+			for (int i = 0; i < 7; i++) {
 				c.add(Calendar.DATE, -1);
 				today = sdf.format(c.getTime());
 				pDays[i] = today;
 			}
-			displayBooking(6,pDays);
+			displayBooking(pDays);
 		}
 	}
 	
@@ -550,11 +550,11 @@ public class Controller
 			String today;
 			for (int i = 0; i <7 ; i++)
 			{
-				c.add(Calendar.DATE, 1);
 				today = sdf.format(c.getTime());
+				c.add(Calendar.DATE, 1);
 				nDays[i] = today;
 			}
-			displayBooking(7,nDays);
+			displayBooking(nDays);
 		}
 	}
 	
@@ -565,37 +565,15 @@ public class Controller
 	 * @return void
 	 */
 	
-	public void displayBooking(int amt, String[] days){
+	public void displayBooking(String[] days){
 		Scanner sc = new Scanner(System.in);
 		boolean loopflag = true;
 		DatabaseConnection connect = new DatabaseConnection();
 		ArrayList<Booking> bookList = connect.getAllBooking();
 		Business business=new Business();
-		System.out.printf("\n%s", "ID");
-		System.out.printf("%-2s %s", "", "Customer ID");
-		System.out.printf("%-20s %s", "", days[0]);
-		for(int i=1;i<amt;i++)
-		{
-			System.out.printf("%-3s %s", "", days[i]);
-		}
-		System.out.print(
-				"\n----------------------------------------------------------------------------------------------------------------------------------------");
-		for (Booking b : bookList) {
-			System.out.printf("\n%d %-2s %-24s", b.getBookingID(), "", b.getCustomerId());
-
-			for (int j = 0; j < 6; j++) {
-				String bookedDays = convertDateToString(b.getDate());
-				if (!bookList.isEmpty()) {
-					if (days[j] .equals(bookedDays)) {
-						System.out.printf("%-8s %-5s", "", "Booked");
-					} else {
-						System.out.printf("%-8s %-5s", "", "-----");
-					}
-				} else {
-					System.out.printf("%-8s %-5s", "", "-----");
-				}
-			}
-		}
+		//display bookings within selected dates
+		displayDetailedBooking_Date(bookList, days);
+		
 		boolean tryLoop = true;
 		do{
 		Booking bookings = new Booking();
@@ -614,37 +592,8 @@ public class Controller
 				  ; break; }
 		 
 		bookKey = Integer.parseInt(input);
-		for (int b = 0; b < bookList.size(); b++) {
-			if (bookList.get(b).getBookingID() == bookKey) {
-				bookings = connect.getOneBooking(bookKey);
-				System.out.printf("\nBookID: %-15s CusID: %-2s\n", bookings.getBookingID(),
-						bookings.getCustomerId());
-				System.out.printf("\n%-15s %-15s %s\n", "Date", "Start Time", "End Time");
-				System.out.println("----------------------------------------------------");
-				for (int j = 0; j < 6; j++) {
-					System.out.printf("%s", days[j]);
-					if (bookings != null) {
-						if (days[j].equals(convertDateToString(bookings.getDate()))) {
-							String startTime = convertTimeToString(bookings.getStartTime());
-							String endTime = convertTimeToString(bookings.getEndTime());
-							System.out.printf("%6s %-15s %s\n", "", startTime, endTime);
-						} else {
-							System.out.printf("%6s %-15s %s\n", "", "-----", "-----");
-						}
-					} else {
-						System.out.printf("%6s %-15s %s\n", "", "-----", "-----");
-					}
-				}
-				tryLoop=false;
-				b = bookList.size();
-			}
-		}
-		if(tryLoop)
-		{
-			System.out.println("Invalid Input");
-			loopflag=true;
-			break;
-		}
+		//display bookings times within a day
+		displayDetailedBooking_StartEndTime(bookKey,bookings, input,bookList,days,tryLoop,loopflag);
 	}while(tryLoop);
 		
 		
@@ -720,20 +669,18 @@ public class Controller
 		System.out.printf("\n%s", "ID");
 		System.out.printf("%-2s %s", "", "Customer ID");
 		System.out.printf("%-20s %s", "", nDays[0]);
-		System.out.printf("%-3s %s", "", nDays[1]);
-		System.out.printf("%-3s %s", "", nDays[2]);
-		System.out.printf("%-3s %s", "", nDays[3]);
-		System.out.printf("%-3s %s", "", nDays[4]);
-		System.out.printf("%-3s %s", "", nDays[5]);
-		System.out.printf("%-3s %s\n", "", nDays[6]);
+		for(int i=1;i<nDays.length;i++)
+		{
+			System.out.printf("%-3s %s", "", nDays[i]);
+		}
 		System.out.print(
-				"----------------------------------------------------------------------------------------------------------------------------------");
+				"\n----------------------------------------------------------------------------------------------------------------------------------------");
 		
 		for (Booking b : bookList)
 		{
 			System.out.printf("\n%d %-2s %-24s", b.getBookingID(), "", b.getCustomerId());
 			
-			for (int j = 0; j < 7; j++)
+			for (int j = 0; j < nDays.length; j++)
 			{
 				String bookedDays=convertDateToString(b.getDate());
 				if (!bookList.isEmpty())
@@ -773,7 +720,7 @@ public class Controller
 						bookings.getCustomerId());
 				System.out.printf("\n%-15s %-15s %s\n", "Date", "Start Time", "End Time");
 				System.out.println("----------------------------------------------------");
-				for (int j = 0; j < 7; j++) {
+				for (int j = 0; j < nDays.length; j++) {
 					System.out.printf("%s", nDays[j]);
 					if (bookings != null) {
 						if (nDays[j].equals(convertDateToString(bookings.getDate()))) {
@@ -830,5 +777,67 @@ public class Controller
 				
 		}while(loop == false);
 		
+	}
+
+	public void displayDetailedWorking_Date(String[] days,ArrayList<Employee> emList,ArrayList<EmployeeWorkingTime> workDays) {
+		DatabaseConnection connect = new DatabaseConnection();
+		System.out.printf("\n%s", "ID");
+		System.out.printf("%-2s %s", "", "Employee");
+		System.out.printf("%-20s %s", "", days[0]);
+		for (int i = 1; i < days.length; i++) {
+			System.out.printf("%-3s %s", "", days[i]);
+		}
+		System.out.print(
+				"\n----------------------------------------------------------------------------------------------------------------------------------------");
+		for (Employee e : emList) {
+			System.out.printf("\n%d %-2s %-20s", e.getId(), "", e.getName());
+			workDays = connect.getEmployeeWorkingTimes(e.getId());
+			for (int j = 0; j < 7; j++) {
+				if (!workDays.isEmpty()) {
+					if (days[j].equals(matchDate(days[j], workDays))) {
+						System.out.printf("%-8s %-5s", "", "Avail");
+					} else {
+						System.out.printf("%-8s %-5s", "", "-----");
+					}
+				} else {
+					System.out.printf("%-8s %-5s", "", "-----");
+				}
+			}
+
+		}
+	}
+	
+	public void displayDetailedWorking_Time(int empKey, Employee employee, String input, ArrayList<Employee> emList,ArrayList<EmployeeWorkingTime> workDays, String days[], Boolean tryLoop, Boolean loopflag){
+		DatabaseConnection connect = new DatabaseConnection();
+		
+		for (int b = 0; b < emList.size(); b++) {
+			if (emList.get(b).getId() == empKey) {
+				employee = connect.getEmployee(empKey);
+				workDays = connect.getEmployeeWorkingTimes(empKey);
+				System.out.printf("\nName: %-15s Payrate: %-2.2f\n", employee.getName(), employee.getPayRate());
+				System.out.printf("\n%-15s %-15s %s\n", "Date", "Start Time", "End Time");
+				System.out.println("----------------------------------------------------");
+				for (int j = 0; j < 7; j++) {
+					System.out.printf("%s", days[j]);
+					if (!workDays.isEmpty()) {
+						if (days[j].equals(matchDate(days[j], workDays))) {
+							System.out.printf("%6s %-15s %s\n", "", getTime("start", days[j], workDays),
+									getTime("end", days[j], workDays));
+						} else {
+							System.out.printf("%6s %-15s %s\n", "", "-----", "-----");
+						}
+					} else {
+						System.out.printf("%6s %-15s %s\n", "", "-----", "-----");
+					}
+				}
+				tryLoop = false;
+				b = workDays.size();
+			}
+		}
+		if (tryLoop) {
+			System.out.println("Invalid Input");
+			loopflag=true;
+			tryLoop = false;
+		}
 	}
 }

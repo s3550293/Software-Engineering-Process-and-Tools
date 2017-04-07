@@ -36,13 +36,13 @@ public class Business
 			switch(selection)
 			{
 			case 1:
-				controller.displayAvailability();
+				displayAvailability();
 				break;
 			case 2:
 				addNewEmployee();
 				break;
 			case 3:
-				controller.checkBooking();
+				checkBooking();
 				break;
 			case 4:
 				//Todo
@@ -424,6 +424,99 @@ public class Business
 		System.out.println("Save and Exitting to main menu ...");
 		log.info("OUT addWorkingTimesForNextMonth\n");
 		return false;
+	}
+	
+	/**
+	 * @author Bryan Soh
+	 * 
+	 * @return
+	 */
+	public void displayAvailability()
+	{
+		boolean loopflag = true;
+		while (loopflag)
+		{
+			Scanner sc = new Scanner(System.in);
+			DatabaseConnection connect = new DatabaseConnection();
+			ArrayList<Employee> emList = connect.getEmployees("");
+			SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+			Calendar c = Calendar.getInstance();
+			String days[] = new String[7];
+			String today;
+			for (int i = 0; i < 7; i++) {
+				today = sdf.format(c.getTime());
+				c.add(Calendar.DATE, 1);
+				days[i] = today;
+			}
+			ArrayList<EmployeeWorkingTime> workDays = new ArrayList<EmployeeWorkingTime>();
+			controller.displayDetailedWorking_Date(days, emList, workDays);
+			boolean tryLoop = true;
+			do {
+				Employee employee = new Employee();
+				String input;
+				int empKey = 0;
+				System.out.println("\nPlease enter employee id to view more or 'quit' to quit");
+				input = sc.nextLine();
+				if (input.equalsIgnoreCase("quit")) {
+					return;
+				}
+
+				try {
+					Integer.parseInt(input);
+				} catch (NumberFormatException e) {
+					tryLoop = true;
+					System.out.println("Invalid Input");
+					;
+					break;
+				}
+
+				empKey = Integer.parseInt(input);
+				
+				controller.displayDetailedWorking_Time( empKey,  employee, input,emList,workDays, days,  tryLoop,  loopflag);
+				if(tryLoop)
+				{
+					System.out.println("Invalid Input");
+					loopflag=true;
+					break;
+				}	
+			} while (tryLoop);
+		}
+	}
+	
+	/**
+	 * @author Bryan
+	 * Prompt user for previous or next 7 days booking
+	 * @param 
+	 * @return void
+	 */
+	public void checkBooking()
+	{
+		Scanner sc = new Scanner(System.in);
+		boolean tryLoop = true;
+		String input;
+		do
+		{
+			System.out.println("\nPlease enter 'p' to view past 7 days or 'n' to view next 7 days");
+			input = sc.nextLine();
+			if (input.equalsIgnoreCase("quit"))
+			{
+				return;
+			} else
+			{
+
+				if(input.equals("p"))
+				{
+					controller.checkPreviousBooking();
+					tryLoop=false;
+				}
+				else if (input.equals("n"))
+				{
+					controller.checkNextBooking();
+					tryLoop=false;
+				}
+			}
+		} while (tryLoop);
+		
 	}
 	
 	

@@ -778,7 +778,14 @@ public class Controller
 		}while(loop == false);
 		
 	}
+	
 
+	/**
+	 * @author Bryan Soh, David(Panhaseth Heang)
+	 * Display date overview table of availability for 7 days
+	 * @param 
+	 * @return 
+	 */
 	public void displayDetailedWorking_Date(String[] days,ArrayList<Employee> emList,ArrayList<EmployeeWorkingTime> workDays) {
 		DatabaseConnection connect = new DatabaseConnection();
 		System.out.printf("\n%s", "ID");
@@ -807,6 +814,12 @@ public class Controller
 		}
 	}
 	
+	/**
+	 * @author Bryan Soh,David(Panhaseth Heang)
+	 * A detailed display after user select employee id, shows start time and end time of booking
+	 * @param 
+	 * @return 
+	 */
 	public void displayDetailedWorking_Time(int empKey, Employee employee, String input, ArrayList<Employee> emList,ArrayList<EmployeeWorkingTime> workDays, String days[], Boolean tryLoop, Boolean loopflag){
 		DatabaseConnection connect = new DatabaseConnection();
 		

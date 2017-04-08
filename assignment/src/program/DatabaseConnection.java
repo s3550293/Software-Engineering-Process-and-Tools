@@ -25,15 +25,16 @@ import org.apache.log4j.Logger;
  */
 public class DatabaseConnection
 {
+	private String filename;
 	private static Logger log = Logger.getLogger(DatabaseConnection.class);
 	private Controller controller = new Controller();
-	public DatabaseConnection(){log.setLevel(Level.WARN);}
+	public DatabaseConnection(String filename){log.setLevel(Level.WARN); this.filename = filename;}
 	private Connection connect()
 	{
 		/*
 		 * creates a connection to the database to be used multiple times in the class
 		 */
-		String url = "jdbc:sqlite:db/company.db";
+		String url = "jdbc:sqlite:db/"+filename;
         Connection connect = null;
         try {
             connect = DriverManager.getConnection(url);
@@ -49,7 +50,7 @@ public class DatabaseConnection
 		/*
 		 * account type boolean 1 for business owner 0 for user
 		 */
-		String query = "INSERT INTO users(username, password, accountType) " + "VALUES('"+username+"','"+password+"','"+accountType+"')";
+		String query = "INSERT INTO USERS(username, password, accountType) " + "VALUES('"+username+"','"+password+"','"+accountType+"')";
 		try(Connection connect = this.connect(); Statement inject = connect.createStatement())
 		{
 			/*
@@ -57,7 +58,7 @@ public class DatabaseConnection
 			 */
 			inject.executeUpdate(query);
 			//System.out.println("User Added");
-			log.info("User Added\n");
+			log.debug("User Added\n");
 		}
 		catch(SQLException sqle)
 		{
@@ -361,11 +362,11 @@ public class DatabaseConnection
 	 * @param endTime
 	 * @param description
 	 */
-	public void addBooking (int userId, String date, String startTime, String endTime, String status)
+	public void addBooking (int userId, String date, String startTime, String endTime, int service,String status)
 	{
 		log.info("IN addBookingToDatabase\n");
 		//bookingID is made in the database
-		String query = "INSERT INTO BOOKINGS (userID,date,startTime,endTime,status)" + "VALUES(" + userId + ",'" + date + "','" + startTime + "','" + endTime + "','" + status + "');";
+		String query = "INSERT INTO BOOKINGS (userID,date,startTime,endTime, serviceID,status)" + "VALUES(" + userId + ",'" + date + "','" + startTime + "','" + endTime + "'," +service+",'" + status + "');";
 		try(Connection connect = this.connect(); Statement inject = connect.createStatement())
 		{
 			inject.executeUpdate(query);

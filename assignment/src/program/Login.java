@@ -8,12 +8,13 @@ public class Login
 {
 	private static Logger log = Logger.getLogger(Login.class);
 	private Register reg = new Register();
-	private Business bmenu = new Business();
-	private Client cmenu = new Client();
+	private BusinessMenu bmenu = new BusinessMenu();
+	private CustomerMenu cmenu = new CustomerMenu();
 	public Login(){}
 	/*
 	 * loginMenu displays the user login menu to the user
 	 */
+	@SuppressWarnings("resource")
 	public void loginMenu()
 	{
 		boolean flag = true; //Boolean set for the while loop to keep looping until the user makes the correct choice
@@ -59,7 +60,7 @@ public class Login
 		}
 		//userInput.close();
 	}
-	
+	@SuppressWarnings("resource")
 	public void login()
 	{
 
@@ -85,7 +86,7 @@ public class Login
 	
 	public int logInProcess(String userName, String pass){
 		boolean passCheck = false;
-		DatabaseConnection connect = new DatabaseConnection();
+		DatabaseConnection connect = new DatabaseConnection("company.db");
 		
 	
 		if(userName.equals(connect.getUser(userName).getUsername()))
@@ -119,7 +120,7 @@ public class Login
 		return -1;
 	}
 
-	
+	@SuppressWarnings("resource")
 	public void tryAgainMenu()
 	{
 		Scanner scanner = new Scanner(System.in);
@@ -151,18 +152,17 @@ public class Login
 	{
 		Database db = new Database("company.db");
 		db.createTable("company.db");
-		DatabaseConnection connect = new DatabaseConnection();
+		DatabaseConnection connect = new DatabaseConnection("company.db");
 		connect.addUser("William", "Apples22", 0);
 		connect.addUser("bo1","123456",1);
 		connect.addEmployee("Luke Charles",100);
 		connect.addEmployee("David Smith",100);
-		connect.addEmployeeWorkingTime(1,"28/03/2017","9:50","17:25");
-		connect.addEmployeeWorkingTime(1,"29/03/2017","8:30","14:30");
+		connect.addEmployeeWorkingTime(1,"13/04/2017","9:50","17:25");
+		connect.addEmployeeWorkingTime(1,"14/04/2017","8:30","14:30");
 
-		connect.addEmployeeWorkingTime(2,"01/04/2017","10:30","12:30");
-		connect.addEmployeeWorkingTime(2,"26/03/2017","11:30","15:30");
-		connect.addBooking(1, "07/04/2017", "10:30", "11:30", "active");
-		connect.addBooking(2, "08/04/2017", "11:30", "12:30", "active");
-		connect.cancelBooking(4);
+		connect.addEmployeeWorkingTime(2,"16/04/2017","10:30","12:30");
+		connect.addEmployeeWorkingTime(2,"12/04/2017","11:30","15:30");
+		connect.addBooking(1, "15/04/2017", "10:30", "11:30", 0,"active");
+		connect.addBooking(2, "12/04/2017", "14:30", "15:30", 0,"active");
 	}
 }

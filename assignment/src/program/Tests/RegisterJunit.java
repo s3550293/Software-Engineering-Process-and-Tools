@@ -7,15 +7,13 @@ import org.apache.log4j.BasicConfigurator;
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 import org.junit.*;
-import program.Database;
 import program.DatabaseConnection;
-import program.Main;
 
 public class RegisterJunit
 {
 	private static Logger log = Logger.getLogger(RegisterJunit.class);
 	Register reg = new Register();
-	DatabaseConnection connect = new DatabaseConnection();
+	DatabaseConnection connect = new DatabaseConnection("company.db");
 	@BeforeClass
 	public static void ini()
 	{

@@ -9,10 +9,8 @@ import java.sql.Connection;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
-import java.util.Date;
 import java.sql.DriverManager;
 
-import org.apache.log4j.Logger;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -21,11 +19,9 @@ import program.Database;
 import program.DatabaseConnection;
 import program.Employee;
 import program.EmployeeWorkingTime;
-import program.Main;
 
 public class DatabaseConnectionJUnit {
 	
-	private static Logger log = Logger.getLogger(Main.class);
 	Controller controller = new Controller();
 	private Connection connect()
 	{
@@ -68,7 +64,7 @@ public class DatabaseConnectionJUnit {
 		return counter;
 	}
 	*/
-	DatabaseConnection connect = new DatabaseConnection();
+	DatabaseConnection connect = new DatabaseConnection("company.db");
 	
 	@Before
 	public void setUp()
@@ -97,9 +93,9 @@ public class DatabaseConnectionJUnit {
 		connect.addEmployee("Jane Smith", 24.57);
 		connect.addEmployeeWorkingTime(1,"03/12/2017","9:50","17:25");//Assigning employee Luke with 2 working times
 		connect.addEmployeeWorkingTime(1,"02/03/2017","8:30","14:30");
-		connect.addBooking(1, "04/04/2017", "10:30", "12:00", "active");
-		connect.addBooking(2, "04/05/2017", "11:30", "12:30", "active");
-		connect.addBooking(3, "05/04/2017", "10:30", "12:00", "active");
+		connect.addBooking(1, "04/04/2017", "10:30", "12:00", 0,"active");
+		connect.addBooking(2, "04/05/2017", "11:30", "12:30", 0,"active");
+		connect.addBooking(3, "05/04/2017", "10:30", "12:00", 0,"active");
 	}
 	@Test
 	public void testTestEmployeeAttributesLuke1()

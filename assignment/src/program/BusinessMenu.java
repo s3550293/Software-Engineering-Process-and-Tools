@@ -2,15 +2,11 @@ package program;
 
 import java.util.Scanner;
 
-import org.apache.log4j.Logger;
-
-public class Business
+public class BusinessMenu
 {
-	
-	private static Logger log = Logger.getLogger(Business.class);
 	private boolean flag = true;
 	private Controller controller = new Controller();
-	public Business(){}
+	public BusinessMenu(){}
 	public void companyMenu()
 	{
 		@SuppressWarnings("resource")

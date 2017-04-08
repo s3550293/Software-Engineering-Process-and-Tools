@@ -4,15 +4,12 @@ import java.util.Scanner;
 
 import org.apache.log4j.Logger;
 
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
 public class Register 
 {
 	private static Logger log = Logger.getLogger(Register.class);
 	private boolean usernameLoop = true;
 	private boolean accountPasswordLoop = true;
-	private DatabaseConnection connect = new DatabaseConnection();
+	private DatabaseConnection connect = new DatabaseConnection("company.db");
 	
 	public Register(){}
 	

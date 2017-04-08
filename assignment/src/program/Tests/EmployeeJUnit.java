@@ -2,15 +2,12 @@ package program.Tests;
 
 import static org.junit.Assert.*;
 
-import org.apache.log4j.Logger;
 import org.junit.*;
 
 import program.Employee;
-import program.Main;
 
 public class EmployeeJUnit 
 {
-	private static Logger log = Logger.getLogger(Main.class);
 	Employee employee;
 	Employee employee2;
 	Employee employee3;

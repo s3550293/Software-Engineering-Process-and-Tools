@@ -29,6 +29,7 @@ public class Database
 		 * sets the url and name of the database
 		 * if the database doesn't exist one will be created
 		 */
+		//String url = "jdbc:sqlite:"+System.getProperty("user.home")+"/.resourcing/"+filename;
 		String url = "jdbc:sqlite:db/"+filename;
 		try(Connection connect = DriverManager.getConnection(url))
 		{
@@ -69,7 +70,7 @@ public class Database
 						+"username VARCHAR(30) NOT NULL,"
 						+"Address VARCHAR(30) NOT NULL,"
 						+"Phone number boolean NOT NULL,"
-						+ "FOREIGN KEY(id) REFERENCES users(userID));";
+						+ "FOREIGN KEY(id) REFERENCES USERS(userID));";
 		String queryEmployees = "CREATE TABLE IF NOT EXISTS EMPLOYEES ("
 				+"employeeID integer PRIMARY KEY AUTOINCREMENT,"
 				+"name VARCHAR(40) NOT NULL,"
@@ -81,15 +82,26 @@ public class Database
 							+"date VARCHAR(20) NOT NULL,"
 							+"startTime VARCHAR(20) NOT NULL,"
 							+"endTime VARCHAR(20) NOT NULL,"
-							+"FOREIGN KEY(employeeID) REFERENCES employees(employeeID));";
+							+"FOREIGN KEY(employeeID) REFERENCES EMPLOYEES(employeeID));";
 		String queryBookings = "CREATE TABLE IF NOT EXISTS BOOKINGS ("
 								+"id integer PRIMARY KEY AUTOINCREMENT,"
 								+"userID integer NOT NULL,"
 								+"date VARCHAR(20) NOT NULL,"
 								+"startTime VARCHAR(20) NOT NULL,"
 								+"endTime VARCHAR(20) NOT NULL,"
+								+"serviceID integer NOT NULL,"
 								+"status VARCHAR(20),"
-								+"FOREIGN KEY (userID) REFERENCES users(userID));";
+								+"FOREIGN KEY (userID) REFERENCES USERS(userID));";
+		String queryServices = "CREATE TABLE IF NOT EXISTS SERVICES ("
+								+ "id integer PRIMARY KEY AUTOINCREMENT,"
+								+ "service VARCHAR(40) NOT NULL,"
+								+ "length integer NOT NULL,"
+								+ "cost double NOT NULL);";
+		String queryBookingServiceLink = "CREATE TABLE IF NOT EXISTS BSLINK ("
+										+ "bookingID integer NOT NULL,"
+										+ "serviceID integer NOT NULL,"
+										+ "FOREIGN KEY(bookingID) REFERENCES BOOKINGS(id),"
+										+ "FOREIGN KEY(serviceID) REFERENCES SERVICES(id));";
 		
 		
 		/*
@@ -99,28 +111,29 @@ public class Database
 		{
 			//Creating Table 'USERS'
 			smt.executeUpdate(queryUser);
-			//System.out.println("Table 'Users' added");
-			log.info("Table 'Users' added");
+			log.debug("Table 'Users' added");
 			
 			//Creating Table 'USERS_DETAILS'
 			smt.executeUpdate(queryUserDetails);
-			//System.out.println("Table 'User Details' added");
-			log.info("Table 'User Details' added");
+			log.debug("Table 'User Details' added");
 			
 			//Creating Table 'EMPLOYEES'
 			smt.executeUpdate(queryEmployees);
-			//System.out.println("Table 'EMPLOYEES' added");
-			log.info("Table 'EMPLOYEES' added");
+			log.debug("Table 'EMPLOYEES' added");
 			
 			//Creating Table 'EMPLOYEES_WORKING_TIMES'
 			smt.executeUpdate(queryEmployeesWorkingTimes);
-			//System.out.println("Table 'EMPLOYEES_WORKING_TIMES' added");
-			log.info("Table 'EMPLOYEES_WORKING_TIMES' added");
+			log.debug("Table 'EMPLOYEES_WORKING_TIMES' added");
 			
 			//Creating Table 'BOOKINGS'
 			smt.executeUpdate(queryBookings);
-			//System.out.println("Table 'BOOKINGS' added");
-			log.info("Table 'BOOKINGS' added");
+			log.debug("Table 'BOOKINGS' added");
+			
+			smt.executeUpdate(queryServices);
+			log.debug("Table 'SERVICES' added");
+			
+			smt.executeUpdate(queryBookingServiceLink);
+			log.debug("Table 'BS LINK' added");
 		}
 		catch(SQLException sqle)
 		{

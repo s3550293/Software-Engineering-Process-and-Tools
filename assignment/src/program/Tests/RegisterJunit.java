@@ -7,9 +7,7 @@ import org.apache.log4j.BasicConfigurator;
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 import org.junit.*;
-import program.Database;
 import program.DatabaseConnection;
-import program.Main;
 
 public class RegisterJunit
 {

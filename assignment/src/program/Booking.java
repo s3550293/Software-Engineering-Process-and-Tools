@@ -2,12 +2,9 @@ package program;
 
 import java.util.Date;
 
-import org.apache.log4j.Logger;
 
 public class Booking {
-	
-	private static Logger log = Logger.getLogger(Booking.class);
-	private int bookingID, cusID;
+	private int bookingID, cusID, employeeID;
 	private Date date, startTime, endTime;
 	private String status;
 	
@@ -22,7 +19,10 @@ public class Booking {
 		this.status = status;
 	}
 
-	
+	public int getEmployeeID()
+	{
+		return employeeID;
+	}
 	public int getBookingID()
 	{
 		return bookingID;

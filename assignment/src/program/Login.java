@@ -9,13 +9,14 @@ public class Login
 {
 	private static Logger log = Logger.getLogger(Login.class);
 	private Register reg = new Register();
-	private Business bmenu = new Business();
-	private Customer cmenu = new Customer();
+	private BusinessMenu bmenu = new BusinessMenu();
+	private CustomerMenu cmenu = new CustomerMenu();
 	public Login(){log.setLevel(Level.WARN);}
 	/*
 	 * loginMenu displays the user login menu to the user
 	 */
 	int counter=0;
+	@SuppressWarnings("resource")
 	public void loginMenu()
 	{
 		boolean flag = true; //Boolean set for the while loop to keep looping until the user makes the correct choice
@@ -61,7 +62,7 @@ public class Login
 		}
 		//userInput.close();
 	}
-	
+	@SuppressWarnings("resource")
 	public void login()
 	{
 
@@ -127,7 +128,7 @@ public class Login
 		return -1;
 	}
 
-	
+	@SuppressWarnings("resource")
 	public void tryAgainMenu()
 	{
 		Scanner scanner = new Scanner(System.in);
@@ -164,13 +165,13 @@ public class Login
 		connect.addUser("admin","Monday10!",1);
 		connect.addEmployee("Luke Charles",100);
 		connect.addEmployee("David Smith",100);
-		connect.addEmployeeWorkingTime(1,"05/04/2017","9:50","17:25");
-		connect.addEmployeeWorkingTime(1,"10/04/2017","8:30","14:30");
+		connect.addEmployeeWorkingTime(1,"05/04/2017","9:00","17:00");
+		connect.addEmployeeWorkingTime(1,"10/04/2017","8:00","14:00");
 
 		connect.addEmployeeWorkingTime(2,"06/04/2017","10:30","12:30");
 		connect.addEmployeeWorkingTime(2,"07/03/2017","11:30","15:30");
-		connect.addBooking(1, "07/04/2017", "10:30", "11:30", "active");
-		connect.addBooking(2, "08/04/2017", "11:30", "12:30", "active");
+		connect.addBooking(1, "11/04/2017", "10:00", "11:00",0, "active");
+		connect.addBooking(2, "15/04/2017", "11:00", "12:00",0, "active");
 		connect.cancelBooking(4);
 	}
 }

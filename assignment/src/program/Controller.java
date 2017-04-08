@@ -102,34 +102,6 @@ public class Controller
 		}
 	}
 
-	/*/**
-	 * @author Luke Mason
-	 * Checking date and it's format before converting, if okay, then convert,
-	 * @param date1
-	 * @return false if date is > 7 days in future or if date < current date
-	 */
-	/*public boolean checkNewDate(Date date1)
-	{
-		Calendar c = new GregorianCalendar();
-		c.add(Calendar.DATE, 7);
-		Date thirtyDaysIntoFuture = c.getTime();
-
-		Calendar b = new GregorianCalendar();
-		Date currentTime = b.getTime();
-
-		if (date1.after(thirtyDaysIntoFuture))
-		{
-			System.out.println("This date is more than 7 days in advance, Try again");
-			return false;
-		}
-		if (date1.before(currentTime))
-		{
-			System.out.println("You can't set a date in the past!, Try again");
-			return false;
-		}
-		return true;
-	}*/
-
 	/**
 	 * @author Luke Mason
 	 * @param choiceStr
@@ -262,72 +234,6 @@ public class Controller
 		log.info("OUT checkWorkTimeChoice\n");
 		return true;
 	}
-	
-	/*/**
-	 * @author David Heang
-	 * @param num
-	 * @return 
-	 */
-	/*public boolean isOfTypeInt(int num)
-	{
-		try
-		{
-			Integer.valueOf(num);
-			return true;
-		} catch (NumberFormatException numberFormatException)
-		{
-			return false;
-		}
-	}*/
-
-	/*/**
-	 * @author David Heang
-	 */
-	/*public boolean addWorkingTimesForEmployee()
-	{
-		@SuppressWarnings("resource")
-		Scanner kb = new Scanner(System.in);
-		DatabaseConnection connect = new DatabaseConnection();
-		String employeeName;
-		boolean loopAgain;
-		do
-		{
-			loopAgain = false;
-			System.out.print("Search - Enter in Employee's name [/exit to quit] >> ");
-			employeeName = kb.nextLine().toLowerCase();
-			if (employeeName.equalsIgnoreCase("/exit"))
-			{
-				System.out.println("Exitting to main menu...");
-				return false;
-			}
-			// Attempting to see if the input is valid
-			// Checking to see if the input contains any non-alphabetical
-			// characters e.g ?>!#%$#12345
-			if (checkInputToContainInvalidChar(employeeName))
-			{
-				System.out.println("The name you have entered contains non-alphabetical characters");
-				System.out.println("Please try again");
-				loopAgain = true;
-			}
-		} while (loopAgain);
-		connect.getEmployees(employeeName);
-		/*
-		 * do { loopAgain = false; System.out.print("Enter in the pay rate of "
-		 * + employeeName + " [/exit to quit] >> "); employeePayRate =
-		 * kb.nextLine(); //Attempting to change string into an integer
-		 * //Checking to see if the amount contains any non-digit characters
-		 * if(employeePayRate.equalsIgnoreCase("/exit")) {
-		 * System.out.println("Exitting to main menu...");
-		 *
-		 * return false; } employeePayRate2 =
-		 * changeInputIntoValidDouble(employeePayRate); if(employeePayRate2<0) {
-		 * System.out.
-		 * println("The amount you have entered contains invalid characters, is less than 0 or greater that 10000 "
-		 * ); System.out.println("Please try again"); loopAgain = true; } }
-		 * while(loopAgain);
-		 
-		return false;
-	}*/
 
 	/**
 	 * @author Joseph Garner
@@ -367,16 +273,16 @@ public class Controller
 	/**
 	 * @author Joseph Garner
 	 * Use Convert String to Time when entering into the database
-	 * @param time
+	 * @param string
 	 * @return Date time
 	 */
-	public Date convertStringToTime(String time)
+	public Date convertStringToTime(String string)
 	{
 		Date _time = null;
 		DateFormat sdf = new SimpleDateFormat("HH:mm");
 		try
 		{
-			_time = sdf.parse(time);
+			_time = sdf.parse(string);
 		} catch (ParseException e)
 		{
 			System.out.println(e.getMessage());
@@ -515,9 +421,6 @@ public class Controller
 	public void checkPreviousBooking() {
 		boolean loopflag = true;
 		while (loopflag) {
-			Scanner sc = new Scanner(System.in);
-			DatabaseConnection connect = new DatabaseConnection();
-			ArrayList<Booking> bookList = connect.getAllBooking();
 			SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
 			Calendar c = Calendar.getInstance();
 			String pDays[] = new String[7];
@@ -542,8 +445,6 @@ public class Controller
 		boolean loopflag = true;
 		while (loopflag)
 		{
-			DatabaseConnection connect = new DatabaseConnection();
-			ArrayList<Booking> bookList = connect.getAllBooking();
 			SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
 			Calendar c = Calendar.getInstance();
 			String nDays[] = new String[7];
@@ -564,13 +465,13 @@ public class Controller
 	 * @param int, String[]
 	 * @return void
 	 */
-	
+	@SuppressWarnings("resource")
 	public void displayBooking(String[] days){
 		Scanner sc = new Scanner(System.in);
 		boolean loopflag = true;
 		DatabaseConnection connect = new DatabaseConnection();
 		ArrayList<Booking> bookList = connect.getAllBooking();
-		Business business=new Business();
+		BusinessMenu business=new BusinessMenu();
 		//display bookings within selected dates
 		displayDetailedBooking_Date(bookList, days);
 		
@@ -611,6 +512,7 @@ public class Controller
 	 * @param 
 	 * @return integer(book id)
 	 */
+	@SuppressWarnings("resource")
 	public int checkNextBooking_GetBookID()
 	{
 		boolean loopflag = true;
@@ -623,7 +525,6 @@ public class Controller
 			ArrayList<Booking> bookList = connect.getAllBooking();
 			SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
 			Calendar c = Calendar.getInstance();
-			boolean flag = true;
 			String nDays[] = new String[7];
 			String today;
 			for (int i = 0; i <7 ; i++)
@@ -752,6 +653,7 @@ public class Controller
 	 * @param 
 	 * @return
 	 */
+	@SuppressWarnings("resource")
 	public void cancelBooking(){
 		DatabaseConnection conn = new DatabaseConnection();
 		Scanner sc = new Scanner(System.in);
@@ -847,5 +749,29 @@ public class Controller
 				b = workDays.size();
 			}
 		}
+	}
+	
+	public Boolean checkBookingStartTime(Date time, Date date)
+	{
+		SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+		String _date = sdf.format(date);
+		sdf = new SimpleDateFormat("HH:mm");
+		String _time = sdf.format(time);
+		log.debug("Time: "+_time+" Date: "+_date);
+		DatabaseConnection connect = new DatabaseConnection();
+		Boolean val = true;
+		for(Booking b: connect.getAllBooking())
+		{
+			log.debug("Booking ID: "+b.getBookingID());
+			if(convertDateToString(b.getDate()).equals(_date))
+			{
+				if(convertTimeToString(b.getStartTime()).equals(_time))
+				{
+					return false;
+				}
+			}
+		}
+		
+		return val;
 	}
 }

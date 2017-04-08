@@ -2,7 +2,6 @@ package program.Tests;
 
 import static org.junit.Assert.*;
 
-import org.apache.log4j.Logger;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -10,11 +9,9 @@ import org.junit.Test;
 import program.Database;
 import program.DatabaseConnection;
 import program.Login;
-import program.Main;
 
 public class LoginTest {
 
-	private static Logger log = Logger.getLogger(Main.class);
 	Login ln = new Login();
 	Database data = new Database("Test.db");
 	DatabaseConnection connect = new DatabaseConnection();

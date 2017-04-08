@@ -8,13 +8,13 @@ import java.util.Scanner;
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 
-public class Business
+public class BusinessMenu
 {
 	
-	private static Logger log = Logger.getLogger(Business.class);
+	private static Logger log = Logger.getLogger(BusinessMenu.class);
 	private boolean flag = true;
 	private Controller controller = new Controller();
-	public Business(){log.setLevel(Level.WARN);}
+	public BusinessMenu(){log.setLevel(Level.WARN);}
 	public void companyMenu()
 	{
 		@SuppressWarnings("resource")
@@ -431,6 +431,7 @@ public class Business
 	 * 
 	 * @return
 	 */
+	@SuppressWarnings("resource")
 	public void displayAvailability()
 	{
 		boolean loopflag = true;
@@ -489,6 +490,7 @@ public class Business
 	 * @param 
 	 * @return void
 	 */
+	@SuppressWarnings("resource")
 	public void checkBooking()
 	{
 		Scanner sc = new Scanner(System.in);

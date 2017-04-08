@@ -515,9 +515,6 @@ public class Controller
 	public void checkPreviousBooking() {
 		boolean loopflag = true;
 		while (loopflag) {
-			Scanner sc = new Scanner(System.in);
-			DatabaseConnection connect = new DatabaseConnection();
-			ArrayList<Booking> bookList = connect.getAllBooking();
 			SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
 			Calendar c = Calendar.getInstance();
 			String pDays[] = new String[7];
@@ -542,8 +539,6 @@ public class Controller
 		boolean loopflag = true;
 		while (loopflag)
 		{
-			DatabaseConnection connect = new DatabaseConnection();
-			ArrayList<Booking> bookList = connect.getAllBooking();
 			SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
 			Calendar c = Calendar.getInstance();
 			String nDays[] = new String[7];
@@ -564,13 +559,13 @@ public class Controller
 	 * @param int, String[]
 	 * @return void
 	 */
-	
+	@SuppressWarnings("resource")
 	public void displayBooking(String[] days){
 		Scanner sc = new Scanner(System.in);
 		boolean loopflag = true;
 		DatabaseConnection connect = new DatabaseConnection();
 		ArrayList<Booking> bookList = connect.getAllBooking();
-		Business business=new Business();
+		BusinessMenu business=new BusinessMenu();
 		//display bookings within selected dates
 		displayDetailedBooking_Date(bookList, days);
 		
@@ -611,6 +606,7 @@ public class Controller
 	 * @param 
 	 * @return integer(book id)
 	 */
+	@SuppressWarnings("resource")
 	public int checkNextBooking_GetBookID()
 	{
 		boolean loopflag = true;
@@ -623,7 +619,6 @@ public class Controller
 			ArrayList<Booking> bookList = connect.getAllBooking();
 			SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
 			Calendar c = Calendar.getInstance();
-			boolean flag = true;
 			String nDays[] = new String[7];
 			String today;
 			for (int i = 0; i <7 ; i++)
@@ -752,6 +747,7 @@ public class Controller
 	 * @param 
 	 * @return
 	 */
+	@SuppressWarnings("resource")
 	public void cancelBooking(){
 		DatabaseConnection conn = new DatabaseConnection();
 		Scanner sc = new Scanner(System.in);

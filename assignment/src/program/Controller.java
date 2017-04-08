@@ -273,16 +273,16 @@ public class Controller
 	/**
 	 * @author Joseph Garner
 	 * Use Convert String to Time when entering into the database
-	 * @param time
+	 * @param string
 	 * @return Date time
 	 */
-	public Date convertStringToTime(String time)
+	public Date convertStringToTime(String string)
 	{
 		Date _time = null;
 		DateFormat sdf = new SimpleDateFormat("HH:mm");
 		try
 		{
-			_time = sdf.parse(time);
+			_time = sdf.parse(string);
 		} catch (ParseException e)
 		{
 			System.out.println(e.getMessage());
@@ -738,11 +738,27 @@ public class Controller
 		}
 	}
 	
-	public Boolean[] checkBookingTime(String mae)
+	public Boolean checkBookingStartTime(Date time, Date date)
 	{
-		Boolean[] returnList = new Boolean[7];
+		SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+		String _date = sdf.format(date);
+		sdf = new SimpleDateFormat("HH:mm");
+		String _time = sdf.format(time);
+		log.debug("Time: "+_time+" Date: "+_date);
+		DatabaseConnection connect = new DatabaseConnection();
+		Boolean val = true;
+		for(Booking b: connect.getAllBooking())
+		{
+			log.debug("Booking ID: "+b.getBookingID());
+			if(convertDateToString(b.getDate()).equals(_date))
+			{
+				if(convertTimeToString(b.getStartTime()).equals(_time))
+				{
+					return false;
+				}
+			}
+		}
 		
-		
-		return returnList;
+		return val;
 	}
 }

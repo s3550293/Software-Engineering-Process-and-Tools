@@ -1,5 +1,6 @@
 package program;
 
+import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
@@ -34,7 +35,7 @@ public class CustomerMenu
 			switch (selection)
 			{
 			case 1:
-				customerBooking();
+				displayBookingTimes();
 				break;
 			case 2:
 				System.out.println("You are successfully logged out!");
@@ -58,6 +59,8 @@ public class CustomerMenu
 		Calendar c = Calendar.getInstance();
 		String days[] = new String[7];
 		String today;
+		String day = "";
+		int date = 0;
 		for (int i = 0; i < 7; i++)
 		{
 			c.add(Calendar.DATE, 1);
@@ -79,14 +82,25 @@ public class CustomerMenu
 				{
 					System.out.printf("\n%d.", j + 1);
 					System.out.printf("%-2s %s", "", days[j]);
+					System.out.printf("%-10s %s", "", "Avail");
+					System.out.printf("%-5s %s", "", "Avail");
+					System.out.printf("%-7s %s\n", "", "Avail");
 				}
+				System.out.println("Enter Date Number:");
+				day = kb.nextLine();
+				System.out.println("\n\nM - Morning: 8am - 12pm");
+				System.out.println("A - Afternoon: 12pm - 4pm");
+				System.out.println("E - Evening: 4pm - 8pm");
+				System.out.println("Choose time to book - e.g MAE or EA etc");
 				str = kb.nextLine();
-				if (controller.checkWorkTimeChoice(str))
+				if (controller.checkWorkTimeChoice(str) && controller.changeInputIntoValidInt(day) > 0)
 				{
+					date = controller.changeInputIntoValidInt(day);
 					break;
 				} else
 				{
 					System.out.println("Invalid input please chose again");
+					day = "";
 				}
 			} while (true);
 			do
@@ -99,113 +113,42 @@ public class CustomerMenu
 				int count = 1;
 				calstart.setTime(controller.convertStringToTime(time[0]));
 				calend.setTime(controller.convertStringToTime(time[1]));
-				System.out.println("Booking Time");
+				System.out.println("\nBooking Time");
 				System.out.printf("\n%s", "NO.");
 				System.out.printf("%-2s %s", "", "Time");
 				System.out.printf("%-15s %s", "", "Availability");
 				System.out.print("\n---------------------------------------------------------");
-				while(displayloop)
+				while (displayloop)
 				{
-					if(calstart == calend)
+					if (controller.convertTimeToString(calstart.getTime())
+							.equals(controller.convertTimeToString(calend.getTime())))
 					{
 						break;
-					}
-					else{
-						System.out.printf("\n%d.", count);
+					} 
+					else
+					{
+						System.out.printf("\n%2d.", count);
 						System.out.printf("%-2s %-10s", "", controller.convertTimeToString(calstart.getTime()));
-						System.out.printf("%-10s %s", "", "Avail");
+						if(controller.checkBookingStartTime(calstart.getTime(),controller.convertStringToDate(days[date - 1])))
+						{
+							System.out.printf("%-10s %s", "", "Avail\n");
+						}
+						else if(!controller.checkBookingStartTime(calstart.getTime(),controller.convertStringToDate(days[date - 1])))
+						{
+							System.out.printf("%-10s %s", "", "-----\n");
+						}
+						
+						calstart.add(Calendar.MINUTE, 60);
 						count++;
 					}
 				}
+				kb.nextLine();
+				return;
+
 			} while (true);
 		}
 
 	}
 
-	@SuppressWarnings("resource")
-	private void customerBooking()
-	{
-		Scanner kb = new Scanner(System.in);
-		Calendar c = Calendar.getInstance();
-		String days[] = new String[7];
-		String today;
-		for (int i = 0; i < 7; i++)
-		{
-			c.add(Calendar.DATE, 1);
-			SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
-			today = sdf.format(c.getTime());
-			days[i] = today;
-		}
-		System.out.printf("\n%s", "NO.");
-		System.out.printf("%-2s %s", "", "Date");
-		System.out.printf("%-15s %s", "", "Morning");
-		System.out.printf("%-3s %s", "", "Afternoon");
-		System.out.printf("%-3s %s", "", "Evening");
-		System.out.print("\n---------------------------------------------------------");
-		for (int j = 0; j < 7; j++)
-		{
-			if (j == 3)
-			{
-				System.out.printf("\n%d.", j + 1);
-				System.out.printf("%-2s %s", "", days[j]);
-				System.out.printf("%-10s %s", "", "Avail");
-				System.out.printf("%-5s %s", "", "-----");
-				System.out.printf("%-7s %s", "", "Avail");
-			} else
-			{
-				System.out.printf("\n%d.", j + 1);
-				System.out.printf("%-2s %s", "", days[j]);
-				System.out.printf("%-10s %s", "", "Avail");
-				System.out.printf("%-5s %s", "", "Avail");
-				System.out.printf("%-7s %s", "", "Avail");
-			}
-		}
-		System.out.println("\n\nM - Morning: 8am - 12pm");
-		System.out.println("A - Afternoon: 12pm - 4pm");
-		System.out.println("E - Evening: 4pm - 8pm");
-		System.out.println("Choose time to book - e.g MAE or EA etc");
-		kb.nextLine();
-		System.out.println("You selected " + days[3] + " M");
-		System.out.println("\nSelect Services");
-		System.out.printf("\n%s", "NO.");
-		System.out.printf("%-2s %s", "", "Service Name");
-		System.out.printf("%-12s %s", "", "Length");
-		System.out.printf("%-3s %s", "", "Price");
-		System.out.print("\n---------------------------------------------------------");
-		System.out.printf("\n%s", "1.");
-		System.out.printf("%-2s %-10s", "", "Clean");
-		System.out.printf("%-15s %s", "", "30min");
-		System.out.printf("%-5s %s", "", "$90");
-		System.out.printf("\n%s", "2.");
-		System.out.printf("%-2s %-10s", "", "Root Canal");
-		System.out.printf("%-15s %s", "", "90min");
-		System.out.printf("%-5s %s", "", "$300");
-		System.out.printf("\n%s", "1.");
-		System.out.printf("%-2s %-10s", "", "Checkup");
-		System.out.printf("%-15s %s", "", "10min");
-		System.out.printf("%-5s %s", "", "$500");
-		System.out.println("\n\nSelect Service");
-		kb.nextLine();
-		System.out.println("You selected Root Canal\n");
-		System.out.println("Booking Time");
-		System.out.printf("\n%s", "NO.");
-		System.out.printf("%-2s %s", "", "Time");
-		System.out.printf("%-15s %s", "", "Availability");
-		System.out.print("\n---------------------------------------------------------");
-		System.out.printf("\n%s.", "1");
-		System.out.printf("%-2s %-10s", "", "8:00");
-		System.out.printf("%-10s %s", "", "Avail");
-		System.out.printf("\n%s.", "2");
-		System.out.printf("%-2s %-10s", "", "9:00");
-		System.out.printf("%-10s %s", "", "-----");
-		System.out.printf("\n%s.", "3");
-		System.out.printf("%-2s %-10s", "", "10:00");
-		System.out.printf("%-10s %s", "", "Avail");
-		System.out.printf("\n%s.", "4");
-		System.out.printf("%-2s %-10s", "", "11:00");
-		System.out.printf("%-10s %s", "", "-----\n");
-		kb.nextLine();
-
-	}
 
 }

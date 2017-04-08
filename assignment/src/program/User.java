@@ -1,14 +1,13 @@
 package program;
 
-import org.apache.log4j.Logger;
 
 public class User
 {
-	private static Logger log = Logger.getLogger(User.class);
 	/*
 	 * Protected values used by child classes
 	 */
 	protected int _id;
+	protected String _fname, _lname, _phone, _payment;
 	protected String _username, _password;
 	protected int _accountType;
 	public User(int id, String username, String password, int accountType)
@@ -23,6 +22,13 @@ public class User
 		_username = username;
 		_password = password;
 		_accountType = accountType;
+	}
+	public User(int id, String fname, String lname, String phone)
+	{
+		_id = id;
+		_fname = fname;
+		_lname = lname;
+		_phone = phone;
 	}
 	public User(){}
 	
@@ -44,4 +50,10 @@ public class User
 	{
 		return _password;
 	}
+	public String getFName(){return _fname;}
+	public String getLName(){return _lname;}
+	public String getPhone(){return _phone;}
+	public void setFName(String fname){_fname = fname;}
+	public void setLName(String lname){_lname = lname;}
+	public void setPhone(String phone){_phone = phone;}
 }

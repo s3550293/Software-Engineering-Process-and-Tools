@@ -5,9 +5,6 @@ import java.util.Scanner;
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
 public class Register 
 {
 	private static Logger log = Logger.getLogger(Register.class);

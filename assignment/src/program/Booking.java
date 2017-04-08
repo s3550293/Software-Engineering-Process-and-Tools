@@ -4,7 +4,7 @@ import java.util.Date;
 
 
 public class Booking {
-	private int bookingID, cusID;
+	private int bookingID, cusID, employeeID;
 	private Date date, startTime, endTime;
 	private String status;
 	
@@ -19,7 +19,10 @@ public class Booking {
 		this.status = status;
 	}
 
-	
+	public int getEmployeeID()
+	{
+		return employeeID;
+	}
 	public int getBookingID()
 	{
 		return bookingID;

@@ -365,7 +365,7 @@ public class DatabaseConnection
 	{
 		log.info("IN addBookingToDatabase\n");
 		//bookingID is made in the database
-		String query = "INSERT INTO BOOKINGS (userID,date,startTime,endTime, service,status)" + "VALUES(" + userId + ",'" + date + "','" + startTime + "','" + endTime + "',"+service+",'" + status + "');";
+		String query = "INSERT INTO BOOKINGS (userID,date,startTime,endTime, serviceID,status)" + "VALUES(" + userId + ",'" + date + "','" + startTime + "','" + endTime + "',"+service+",'" + status + "');";
 		try(Connection connect = this.connect(); Statement inject = connect.createStatement())
 		{
 			inject.executeUpdate(query);

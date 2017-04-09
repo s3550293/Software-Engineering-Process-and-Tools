@@ -2,6 +2,9 @@ package program;
 
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
+
+import java.io.File;
+
 import org.apache.log4j.BasicConfigurator;
 
 /**
@@ -35,12 +38,12 @@ public class Main
         /*
          * This code will create the directory where the database will be stored when the user runs the jar
          */
-        /*
+        
         File varTmpDir = new File(System.getProperty("user.home")+"/resourcing");
         if(varTmpDir.exists() == false) {
             new File(System.getProperty("user.home")+"/resourcing").mkdir();
         }
-		*/
+		
 
 		Login menu = new Login();
 		menu.loginMenu();

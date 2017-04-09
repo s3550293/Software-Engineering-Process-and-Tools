@@ -1,9 +1,7 @@
 package program;
 
-import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.Scanner;
 
 import org.apache.log4j.Level;
@@ -39,9 +37,7 @@ public class CustomerMenu
 				break;
 			case 2:
 				System.out.println("You are successfully logged out!");
-				Login ln = new Login();
-				ln.loginMenu();
-				break;
+				return;
 			default:
 				System.out.println("Option not available, please choose again");
 			}

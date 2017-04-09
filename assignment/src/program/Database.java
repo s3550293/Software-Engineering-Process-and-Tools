@@ -33,7 +33,7 @@ public class Database
 		 * sets the url and name of the database if the database doesn't exist
 		 * one will be created
 		 */
-		String url = "jdbc:sqlite:db/" + filename;
+		String url = "jdbc:sqlite:"+System.getProperty("user.home")+"/resourcing/" + filename;
 		try (Connection connect = DriverManager.getConnection(url))
 		{
 			/*
@@ -57,7 +57,7 @@ public class Database
 	 */
 	public void createTable(String filename)
 	{
-		String url = "jdbc:sqlite:db/" + filename;
+		String url = "jdbc:sqlite:"+System.getProperty("user.home")+"/resourcing/" + filename;
 		/*
 		 * account type boolean 1 for business owner 0 for user
 		 * 

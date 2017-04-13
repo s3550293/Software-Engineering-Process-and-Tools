@@ -465,21 +465,23 @@ public class BusinessMenu
 				try {
 					Integer.parseInt(input);
 				} catch (NumberFormatException e) {
-					tryLoop = true;
-					System.out.println("Invalid Input");
-					;
+					loopflag = true;
+					System.out.println("Invalid Input.");
 					break;
 				}
 
 				empKey = Integer.parseInt(input);
 				
-				controller.displayDetailedWorking_Time( empKey,  employee, input,emList,workDays, days,  tryLoop,  loopflag);
-				if(tryLoop)
+				if(controller.displayDetailedWorking_Time( empKey,  employee, input,emList,workDays, days,  tryLoop,  loopflag))
 				{
 					System.out.println("Invalid Input");
 					loopflag=true;
 					break;
-				}	
+				}
+				else{
+					loopflag=true;
+					break;
+				}
 			} while (tryLoop);
 		}
 	}

@@ -485,22 +485,27 @@ public class Controller
 		if (input.equalsIgnoreCase("quit")) {
 			 business.companyMenu();
 		}
-		
-		  try { 
-			  Integer.parseInt(input); } catch(NumberFormatException e) {
-			  	tryLoop=true;
-			  	System.out.println("Invalid Input");
-				  ; break; }
+		try {
+			Integer.parseInt(input);
+		} catch (NumberFormatException e) {
+			loopflag = true;
+			System.out.println("Invalid Input.");
+			break;
+		}
 		 
 		bookKey = Integer.parseInt(input);
 		//display bookings times within a day
-		displayDetailedBooking_StartEndTime(bookKey,bookings, input,bookList,days,tryLoop,loopflag);
-		if(tryLoop)
+		
+		if(displayDetailedBooking_StartEndTime(bookKey,bookings, input,bookList,days,tryLoop,loopflag))
 		{
 			System.out.println("Invalid Input");
 			loopflag=true;
 			break;
-		}	
+		}
+		else{
+			loopflag=true;
+			break;
+		}
 	}while(tryLoop);
 		
 		
@@ -589,10 +594,8 @@ public class Controller
 			
 			for (int j = 0; j < nDays.length; j++)
 			{
-				String bookedDays=convertDateToString(b.getDate());
-				if (!bookList.isEmpty())
-				{
-					if (nDays[j].equals(bookedDays) && b.getStatus().equals("active"))
+				//String bookedDays=convertDateToString(b.getDate());
+					if (convertDateToString(b.getDate()).equals(nDays[j])&&b.getStatus().equalsIgnoreCase("active"))
 					{
 						System.out.printf("%-8s %-5s", "", "Booked");
 						
@@ -601,13 +604,10 @@ public class Controller
 					{
 						System.out.printf("%-8s %-5s", "", "-----");
 					}
-				} else
-				{
-					System.out.printf("%-8s %-5s", "", "-----");
-				}
+				} 
 			}
 		}
-	}
+	
 	
 	/**
 	 * @author Bryan Soh, David(Panhaseth Heang)
@@ -615,7 +615,7 @@ public class Controller
 	 * @param 
 	 * @return 
 	 */
-	public void displayDetailedBooking_StartEndTime(int bookKey, Booking bookings, String input, ArrayList<Booking> bookList, String nDays[], Boolean tryLoop, Boolean loopflag)
+	public boolean displayDetailedBooking_StartEndTime(int bookKey, Booking bookings, String input, ArrayList<Booking> bookList, String nDays[], Boolean tryLoop, Boolean loopflag)
 	{
 		
 		DatabaseConnection connect = new DatabaseConnection();
@@ -645,6 +645,7 @@ public class Controller
 				b = bookList.size();
 			}
 		}
+		return tryLoop;
 	}
 	
 	/**
@@ -722,7 +723,7 @@ public class Controller
 	 * @param 
 	 * @return 
 	 */
-	public void displayDetailedWorking_Time(int empKey, Employee employee, String input, ArrayList<Employee> emList,ArrayList<EmployeeWorkingTime> workDays, String days[], Boolean tryLoop, Boolean loopflag){
+	public boolean displayDetailedWorking_Time(int empKey, Employee employee, String input, ArrayList<Employee> emList,ArrayList<EmployeeWorkingTime> workDays, String days[], Boolean tryLoop, Boolean loopflag){
 		DatabaseConnection connect = new DatabaseConnection();
 		
 		for (int b = 0; b < emList.size(); b++) {
@@ -746,9 +747,10 @@ public class Controller
 					}
 				}
 				tryLoop = false;
-				b = workDays.size();
+				b = emList.size();
 			}
 		}
+		return tryLoop;
 	}
 	
 	public Boolean checkBookingStartTime(Date time, Date date)

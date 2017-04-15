@@ -1,9 +1,7 @@
 package program;
 
-import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.Scanner;
 
 import org.apache.log4j.Level;

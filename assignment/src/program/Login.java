@@ -49,7 +49,7 @@ public class Login
 						System.exit(0);
 						break;
 					case 4:
-						ini();
+						//ini();
 						break;
 					default:
 						System.out.println("option not available, please choose again");
@@ -155,23 +155,5 @@ public class Login
 			System.out.println("Option not available, please choose again");
 		}
 		//scanner.close();
-	}
-	public void ini()
-	{
-		Database db = new Database("company.db");
-		db.createTable("company.db");
-		DatabaseConnection connect = new DatabaseConnection();
-		connect.addUser("William", "Apples22", 0);
-		connect.addUser("admin","Monday10!",1);
-		connect.addEmployee("Luke Charles",100);
-		connect.addEmployee("David Smith",100);
-		connect.addEmployeeWorkingTime(1,"05/04/2017","9:00","17:00");
-		connect.addEmployeeWorkingTime(1,"10/04/2017","8:00","14:00");
-
-		connect.addEmployeeWorkingTime(2,"06/04/2017","10:30","12:30");
-		connect.addEmployeeWorkingTime(2,"07/03/2017","11:30","15:30");
-		connect.addBooking(1, "11/04/2017", "10:00", "11:00",0, "active");
-		connect.addBooking(2, "15/04/2017", "11:00", "12:00",0, "active");
-		connect.cancelBooking(4);
 	}
 }

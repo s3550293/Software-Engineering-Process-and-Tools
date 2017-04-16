@@ -19,7 +19,7 @@ public class MainApplication extends Application {
         Parent root = FXMLLoader.load(getClass().getResource("mainLayout.fxml"));
         primaryStage.setTitle("Application");
         primaryStage.setScene(new Scene(root));
-        //primaryStage.getIcons().add(new Image("/Images/ic_date_range_black_48dp_2x.png"));
+        primaryStage.getIcons().add(new Image("images/ic_collections_bookmark_black_48dp_2x.png"));
         primaryStage.setMinWidth(800);
         primaryStage.setMinHeight(600);
         primaryStage.show();

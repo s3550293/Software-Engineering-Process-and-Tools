@@ -17,10 +17,19 @@ public class LoginController {
 	@FXML
 	Button btnLogin, btnRegister;
 	
+	/**
+	 * Logs User in
+	 * @author [Programmer]
+	 */
 	@FXML
 	public void loginAction() {
 		//TODO
 	}
+	
+	/**
+	 * Loads Register window
+	 * @author [Programmer]
+	 */
 	@FXML
 	public void registerAction(){
 		//TODO

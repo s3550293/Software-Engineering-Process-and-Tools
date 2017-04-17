@@ -43,7 +43,7 @@ public class LoginController {
 		//TODO
 		try {
             Stage secondaryStage = new Stage();
-            //secondaryStage.getIcons().add(new Image("images/ic_collections_bookmark_black_48dp_2x.png"));
+            secondaryStage.getIcons().add(new Image("images/ic_collections_bookmark_black_48dp_2x.png"));
             Parent root = FXMLLoader.load(getClass().getResource("registerLayout.fxml"));
             secondaryStage.setTitle("Register");
             secondaryStage.setResizable(false);

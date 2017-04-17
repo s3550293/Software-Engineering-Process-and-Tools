@@ -37,7 +37,10 @@ public class MainController implements Initializable{
 	@FXML
 	TextField txtSearchBookings;
 	
-	
+	/**
+	 * initializes the stage
+	 * @author [Programmer]
+	 */
 	public void initialize(URL url, ResourceBundle rb)
 	{
 		stkBusiness.setVisible(true);
@@ -47,6 +50,11 @@ public class MainController implements Initializable{
 
 	}
 	
+	/**
+	 * Returns User to login
+	 * @author [Programmer]
+	 */
+	@FXML
 	public boolean login()
 	{
 		log.debug("Login Started");

@@ -16,7 +16,7 @@
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.StackPane?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="450.0" prefWidth="475.0" stylesheets="@Theme.css" xmlns="http://javafx.com/javafx/8.0.121" xmlns:fx="http://javafx.com/fxml/1">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="450.0" prefWidth="475.0" stylesheets="@Theme.css" xmlns="http://javafx.com/javafx/8.0.121" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.RegisterController">
    <children>
       <StackPane layoutX="157.0" layoutY="150.0" prefHeight="150.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
@@ -58,7 +58,7 @@
                         </FlowPane>
                         <FlowPane alignment="CENTER_LEFT" prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1">
                            <children>
-                              <TextField>
+                              <TextField fx:id="txtRegUsername">
                                  <FlowPane.margin>
                                     <Insets left="10.0" />
                                  </FlowPane.margin>
@@ -76,7 +76,7 @@
                         </FlowPane>
                         <FlowPane alignment="CENTER_LEFT" prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="1">
                            <children>
-                              <TextField>
+                              <TextField fx:id="txtRegEmail">
                                  <FlowPane.margin>
                                     <Insets left="10.0" />
                                  </FlowPane.margin>
@@ -94,7 +94,7 @@
                         </FlowPane>
                         <FlowPane alignment="CENTER_LEFT" prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="2">
                            <children>
-                              <DatePicker>
+                              <DatePicker fx:id="dpRegDOB">
                                  <FlowPane.margin>
                                     <Insets left="10.0" />
                                  </FlowPane.margin>
@@ -112,7 +112,7 @@
                         </FlowPane>
                         <FlowPane alignment="CENTER_LEFT" prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="3">
                            <children>
-                              <ComboBox prefHeight="31.0" prefWidth="191.0">
+                              <ComboBox fx:id="cmbRegGender" prefHeight="31.0" prefWidth="191.0">
                                  <FlowPane.margin>
                                     <Insets left="10.0" />
                                  </FlowPane.margin>
@@ -130,7 +130,7 @@
                         </FlowPane>
                         <FlowPane alignment="CENTER_LEFT" prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="4">
                            <children>
-                              <PasswordField>
+                              <PasswordField fx:id="pfRegPassword">
                                  <FlowPane.margin>
                                     <Insets left="10.0" />
                                  </FlowPane.margin>
@@ -148,7 +148,7 @@
                         </FlowPane>
                         <FlowPane alignment="CENTER_LEFT" prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="5">
                            <children>
-                              <PasswordField>
+                              <PasswordField fx:id="pfRegConfPassword">
                                  <FlowPane.margin>
                                     <Insets left="10.0" />
                                  </FlowPane.margin>
@@ -161,12 +161,12 @@
                <bottom>
                   <FlowPane alignment="CENTER_RIGHT" prefHeight="51.0" prefWidth="400.0" BorderPane.alignment="CENTER">
                      <children>
-                        <Button mnemonicParsing="false" text="Back to login">
+                        <Button fx:id="btnCancel" mnemonicParsing="false" text="Back to login">
                            <FlowPane.margin>
                               <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
                            </FlowPane.margin>
                         </Button>
-                        <Button mnemonicParsing="false" text="Register">
+                        <Button fx:id="btnRegister" mnemonicParsing="false" text="Register">
                            <FlowPane.margin>
                               <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
                            </FlowPane.margin>

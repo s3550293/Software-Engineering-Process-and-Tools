@@ -284,7 +284,8 @@ public class Business
 					} else if (exit.equalsIgnoreCase("n"))
 					{
 						continue;
-					} else
+					} 
+					else
 					{
 						System.out.println("Please enter in \"y\" or \"n\" only");
 						loopAgain = true;

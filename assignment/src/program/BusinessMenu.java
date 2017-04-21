@@ -169,11 +169,6 @@ public class BusinessMenu
 				 */
 				public boolean checkEmployeeFirstOrLastName(String employeeFLName)
 				{
-					if(employeeFLName.length()<1 || employeeFLName.length()>50 )
-					{
-						//ERROR MESSAGE
-						return false;
-					}
 					if (controller.checkInputToContainInvalidChar(employeeFLName))//checking for invalid characters
 					{
 						//ERROR MESSAGE

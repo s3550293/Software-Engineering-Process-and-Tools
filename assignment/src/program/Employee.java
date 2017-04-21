@@ -1,10 +1,7 @@
 package program;
 
-import org.apache.log4j.Logger;
 
 public class Employee {
-
-	private static Logger log = Logger.getLogger(Employee.class);
 	/*
 	 * Protected values used by child classes
 	 */

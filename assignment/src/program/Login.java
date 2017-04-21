@@ -9,12 +9,14 @@ public class Login
 {
 	private static Logger log = Logger.getLogger(Login.class);
 	private Register reg = new Register();
-	private Business bmenu = new Business();
-	private Customer cmenu = new Customer();
+	private BusinessMenu bmenu = new BusinessMenu();
+	private CustomerMenu cmenu = new CustomerMenu();
 	public Login(){log.setLevel(Level.WARN);}
 	/*
 	 * loginMenu displays the user login menu to the user
 	 */
+	int counter=0;
+	@SuppressWarnings("resource")
 	public void loginMenu()
 	{
 		boolean flag = true; //Boolean set for the while loop to keep looping until the user makes the correct choice
@@ -47,7 +49,7 @@ public class Login
 						System.exit(0);
 						break;
 					case 4:
-						ini();
+						//ini();
 						break;
 					default:
 						System.out.println("option not available, please choose again");
@@ -60,7 +62,7 @@ public class Login
 		}
 		//userInput.close();
 	}
-	
+	@SuppressWarnings("resource")
 	public void login()
 	{
 
@@ -79,6 +81,12 @@ public class Login
 		else if(result == 1){
 			bmenu.companyMenu();
 		}else{
+			if(counter==9)
+			{
+				System.out.println("Too many failed attempts. Exiting..");
+				System.exit(0);
+			}
+			counter+=1;
 			tryAgainMenu();
 		}
 		//scanner.close();
@@ -120,7 +128,7 @@ public class Login
 		return -1;
 	}
 
-	
+	@SuppressWarnings("resource")
 	public void tryAgainMenu()
 	{
 		Scanner scanner = new Scanner(System.in);
@@ -147,23 +155,5 @@ public class Login
 			System.out.println("Option not available, please choose again");
 		}
 		//scanner.close();
-	}
-	public void ini()
-	{
-		Database db = new Database("company.db");
-		db.createTable("company.db");
-		DatabaseConnection connect = new DatabaseConnection();
-		connect.addUser("William", "Apples22", 0);
-		connect.addUser("admin","Monday10!",1);
-		connect.addEmployee("Luke Charles",100);
-		connect.addEmployee("David Smith",100);
-		connect.addEmployeeWorkingTime(1,"05/04/2017","9:50","17:25");
-		connect.addEmployeeWorkingTime(1,"10/04/2017","8:30","14:30");
-
-		connect.addEmployeeWorkingTime(2,"06/04/2017","10:30","12:30");
-		connect.addEmployeeWorkingTime(2,"07/03/2017","11:30","15:30");
-		connect.addBooking(1, "07/04/2017", "10:30", "11:30", "active");
-		connect.addBooking(2, "08/04/2017", "11:30", "12:30", "active");
-		connect.cancelBooking(4);
 	}
 }

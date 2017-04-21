@@ -102,34 +102,6 @@ public class Controller
 		}
 	}
 
-	/*/**
-	 * @author Luke Mason
-	 * Checking date and it's format before converting, if okay, then convert,
-	 * @param date1
-	 * @return false if date is > 7 days in future or if date < current date
-	 */
-	/*public boolean checkNewDate(Date date1)
-	{
-		Calendar c = new GregorianCalendar();
-		c.add(Calendar.DATE, 7);
-		Date thirtyDaysIntoFuture = c.getTime();
-
-		Calendar b = new GregorianCalendar();
-		Date currentTime = b.getTime();
-
-		if (date1.after(thirtyDaysIntoFuture))
-		{
-			System.out.println("This date is more than 7 days in advance, Try again");
-			return false;
-		}
-		if (date1.before(currentTime))
-		{
-			System.out.println("You can't set a date in the past!, Try again");
-			return false;
-		}
-		return true;
-	}*/
-
 	/**
 	 * @author Luke Mason
 	 * @param choiceStr
@@ -262,72 +234,6 @@ public class Controller
 		log.info("OUT checkWorkTimeChoice\n");
 		return true;
 	}
-	
-	/*/**
-	 * @author David Heang
-	 * @param num
-	 * @return 
-	 */
-	/*public boolean isOfTypeInt(int num)
-	{
-		try
-		{
-			Integer.valueOf(num);
-			return true;
-		} catch (NumberFormatException numberFormatException)
-		{
-			return false;
-		}
-	}*/
-
-	/*/**
-	 * @author David Heang
-	 */
-	/*public boolean addWorkingTimesForEmployee()
-	{
-		@SuppressWarnings("resource")
-		Scanner kb = new Scanner(System.in);
-		DatabaseConnection connect = new DatabaseConnection();
-		String employeeName;
-		boolean loopAgain;
-		do
-		{
-			loopAgain = false;
-			System.out.print("Search - Enter in Employee's name [/exit to quit] >> ");
-			employeeName = kb.nextLine().toLowerCase();
-			if (employeeName.equalsIgnoreCase("/exit"))
-			{
-				System.out.println("Exitting to main menu...");
-				return false;
-			}
-			// Attempting to see if the input is valid
-			// Checking to see if the input contains any non-alphabetical
-			// characters e.g ?>!#%$#12345
-			if (checkInputToContainInvalidChar(employeeName))
-			{
-				System.out.println("The name you have entered contains non-alphabetical characters");
-				System.out.println("Please try again");
-				loopAgain = true;
-			}
-		} while (loopAgain);
-		connect.getEmployees(employeeName);
-		/*
-		 * do { loopAgain = false; System.out.print("Enter in the pay rate of "
-		 * + employeeName + " [/exit to quit] >> "); employeePayRate =
-		 * kb.nextLine(); //Attempting to change string into an integer
-		 * //Checking to see if the amount contains any non-digit characters
-		 * if(employeePayRate.equalsIgnoreCase("/exit")) {
-		 * System.out.println("Exitting to main menu...");
-		 *
-		 * return false; } employeePayRate2 =
-		 * changeInputIntoValidDouble(employeePayRate); if(employeePayRate2<0) {
-		 * System.out.
-		 * println("The amount you have entered contains invalid characters, is less than 0 or greater that 10000 "
-		 * ); System.out.println("Please try again"); loopAgain = true; } }
-		 * while(loopAgain);
-		 
-		return false;
-	}*/
 
 	/**
 	 * @author Joseph Garner
@@ -367,16 +273,16 @@ public class Controller
 	/**
 	 * @author Joseph Garner
 	 * Use Convert String to Time when entering into the database
-	 * @param time
+	 * @param string
 	 * @return Date time
 	 */
-	public Date convertStringToTime(String time)
+	public Date convertStringToTime(String string)
 	{
 		Date _time = null;
 		DateFormat sdf = new SimpleDateFormat("HH:mm");
 		try
 		{
-			_time = sdf.parse(time);
+			_time = sdf.parse(string);
 		} catch (ParseException e)
 		{
 			System.out.println(e.getMessage());
@@ -452,178 +358,6 @@ public class Controller
 		return val;
 	}
 
-	/**
-	 * @author Bryan Soh
-	 * 
-	 * @return
-	 */
-	public void displayAvailability()
-	{
-		boolean loopflag = true;
-		while (loopflag)
-		{
-			Scanner sc = new Scanner(System.in);
-			DatabaseConnection connect = new DatabaseConnection();
-			ArrayList<Employee> emList = connect.getEmployees("");
-			SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
-			Calendar c = Calendar.getInstance();
-			String days[] = new String[7];
-			String today;
-			for (int i = 0; i < 7; i++)
-			{
-				c.add(Calendar.DATE, 1);
-				today = sdf.format(c.getTime());
-				days[i] = today;
-			}
-			System.out.printf("\n%s", "ID");
-			System.out.printf("%-2s %s", "", "Employee");
-			System.out.printf("%-20s %s", "", days[0]);
-			System.out.printf("%-3s %s", "", days[1]);
-			System.out.printf("%-3s %s", "", days[2]);
-			System.out.printf("%-3s %s", "", days[3]);
-			System.out.printf("%-3s %s", "", days[4]);
-			System.out.printf("%-3s %s", "", days[5]);
-			System.out.printf("%-3s %s\n", "", days[6]);
-			System.out.print("-------------------------------------------------------------------------------------------------------------------------------------");
-			ArrayList<EmployeeWorkingTime> workDays = new ArrayList<EmployeeWorkingTime>();
-			for (Employee e : emList)
-			{
-				System.out.printf("\n%d %-2s %-20s", e.getId(), "", e.getName());
-				workDays = connect.getEmployeeWorkingTimes(e.getId());
-				for (int j = 0; j < 7; j++)
-				{
-					if (!workDays.isEmpty())
-					{
-						if (days[j].equals(matchDate(days[j], workDays)))
-						{
-							System.out.printf("%-8s %-5s", "", "Avail");
-						} else
-						{
-							System.out.printf("%-8s %-5s", "", "-----");
-						}
-					} else
-					{
-						System.out.printf("%-8s %-5s", "", "-----");
-					}
-				}
-
-			}
-			/*
-			Employee employee = new Employee();
-			boolean tryLoop = true;
-			String input;
-			int empKey = 0;
-			do
-			{
-				System.out.println("\nPlease enter employee id to view more or 'quit' to quit");
-				input = kb.nextLine();
-				if (input.equalsIgnoreCase("quit"))
-				{
-					return;
-				} else
-				{
-
-					try
-					{
-						empKey = Integer.parseInt(input);
-						if(connect.getEmployee(empKey).getId() == 0)
-						{
-							System.out.println("Invalid Input");
-						}
-						else
-						{
-							tryLoop = false;
-						}
-					} 
-					catch (Exception e)
-					{
-						System.out.println("Invalid Input");
-					}
-				}
-			} while (tryLoop);
-			employee = connect.getEmployee(empKey);
-			workDays = connect.getEmployeeWorkingTimes(empKey);
-			System.out.printf("\nName: %-15s Payrate: %-2.2f\n", employee.getName(), employee.getPayRate());
-			System.out.printf("\n%-15s %-15s %s\n", "Date", "Start Time", "End Time");
-			System.out.println("----------------------------------------------------");
-			for (int j = 0; j < 7; j++)
-			{
-				System.out.printf("%s", days[j]);
-				if (!workDays.isEmpty())
-				{
-					if (days[j].equals(matchDate(days[j], workDays)))
-					{
-						System.out.printf("%6s %-15s %s\n", "", getTime("start", days[j], workDays),
-								getTime("end", days[j], workDays));
-					} else
-					{
-						System.out.printf("%6s %-15s %s\n", "", "-----", "-----");
-					}
-				} else
-				{
-					System.out.printf("%6s %-15s %s\n", "", "-----", "-----");
-				}
-			}
-
-			// sc.close();
-		}
-	}*/
-	boolean tryLoop = true;
-			do{
-			Employee employee = new Employee();
-			String input;
-			int empKey = 0;
-			System.out.println("\nPlease enter employee id to view more or 'quit' to quit");
-			input = sc.nextLine();
-			if (input.equalsIgnoreCase("quit")) {
-				return;
-			}
-			
-			  try { 
-				  Integer.parseInt(input); } catch(NumberFormatException e) {
-				  	tryLoop=true;
-				  	System.out.println("Invalid Input");
-					  ; break; }
-			 
-			empKey = Integer.parseInt(input);
-			for (int b = 0; b < emList.size(); b++) {
-				if (emList.get(b).getId()== empKey) {
-					employee = connect.getEmployee(empKey);
-					workDays = connect.getEmployeeWorkingTimes(empKey);
-					System.out.printf("\nName: %-15s Payrate: %-2.2f\n", employee.getName(), employee.getPayRate());
-					System.out.printf("\n%-15s %-15s %s\n", "Date", "Start Time", "End Time");
-					System.out.println("----------------------------------------------------");
-					for (int j = 0; j < 7; j++)
-					{
-						System.out.printf("%s", days[j]);
-						if (!workDays.isEmpty())
-						{
-							if (days[j].equals(matchDate(days[j], workDays)))
-							{
-								System.out.printf("%6s %-15s %s\n", "", getTime("start", days[j], workDays),
-										getTime("end", days[j], workDays));
-							} else
-							{
-								System.out.printf("%6s %-15s %s\n", "", "-----", "-----");
-							}
-						} else
-						{
-							System.out.printf("%6s %-15s %s\n", "", "-----", "-----");
-						}
-					}
-					tryLoop=false;
-					b = workDays.size();
-				}
-			}
-			if(tryLoop)
-			{
-				System.out.println("Invalid Input");
-				loopflag=true;
-				break;
-			}
-		}while(tryLoop);
-		}
-	}
 
 	/**
 	 * @author Joseph Garner
@@ -677,81 +411,70 @@ public class Controller
 		}
 		return "";
 	}
+	
+	/**
+	 * @author Bryan
+	 * Loop to display bookings for previous 7days
+	 * @param 
+	 * @return 
+	 */
 	public void checkPreviousBooking() {
 		boolean loopflag = true;
 		while (loopflag) {
-			// get all the bookings
-			// display all the bookings within 7days before and after
-			Scanner sc = new Scanner(System.in);
-			DatabaseConnection connect = new DatabaseConnection();
-			ArrayList<Booking> bookList = connect.getAllBooking();
 			SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
 			Calendar c = Calendar.getInstance();
-			String pDays[] = new String[6];
+			String pDays[] = new String[7];
 			String today;
-			for (int i = 0; i < 6; i++) {
+			for (int i = 0; i < 7; i++) {
 				c.add(Calendar.DATE, -1);
 				today = sdf.format(c.getTime());
 				pDays[i] = today;
 			}
-			displayBooking(6,pDays);
+			displayBooking(pDays);
 		}
 	}
 	
+	/**
+	 * @author Bryan
+	 * Loop to display bookings for next 7days
+	 * @param 
+	 * @return 
+	 */
 	public void checkNextBooking()
 	{
 		boolean loopflag = true;
 		while (loopflag)
 		{
-			//get all the bookings 
-			//display all the bookings within 7days before and after
-			DatabaseConnection connect = new DatabaseConnection();
-			ArrayList<Booking> bookList = connect.getAllBooking();
 			SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
 			Calendar c = Calendar.getInstance();
 			String nDays[] = new String[7];
 			String today;
 			for (int i = 0; i <7 ; i++)
 			{
-				c.add(Calendar.DATE, 1);
 				today = sdf.format(c.getTime());
+				c.add(Calendar.DATE, 1);
 				nDays[i] = today;
 			}
-			displayBooking(7,nDays);
+			displayBooking(nDays);
 		}
 	}
 	
-	public void displayBooking(int amt, String[] days){
+	/**
+	 * @author Bryan
+	 * Method to display bookings
+	 * @param int, String[]
+	 * @return void
+	 */
+	@SuppressWarnings("resource")
+	public void displayBooking(String[] days){
 		Scanner sc = new Scanner(System.in);
 		boolean loopflag = true;
 		DatabaseConnection connect = new DatabaseConnection();
 		ArrayList<Booking> bookList = connect.getAllBooking();
-		Business business=new Business();
-		System.out.printf("\n%s", "ID");
-		System.out.printf("%-2s %s", "", "Customer ID");
-		System.out.printf("%-20s %s", "", days[0]);
-		for(int i=1;i<amt;i++)
-		{
-			System.out.printf("%-3s %s", "", days[i]);
-		}
-		System.out.print(
-				"\n----------------------------------------------------------------------------------------------------------------------------------------");
-		for (Booking b : bookList) {
-			System.out.printf("\n%d %-2s %-24s", b.getBookingID(), "", b.getCustomerId());
-
-			for (int j = 0; j < 6; j++) {
-				String bookedDays = convertDateToString(b.getDate());
-				if (!bookList.isEmpty()) {
-					if (days[j] .equals(bookedDays)) {
-						System.out.printf("%-8s %-5s", "", "Booked");
-					} else {
-						System.out.printf("%-8s %-5s", "", "-----");
-					}
-				} else {
-					System.out.printf("%-8s %-5s", "", "-----");
-				}
-			}
-		}
+		BusinessMenu business=new BusinessMenu();
+		//display bookings within selected dates
+		displayDetailedBooking_Date(bookList, days);
+		
 		boolean tryLoop = true;
 		do{
 		Booking bookings = new Booking();
@@ -762,76 +485,29 @@ public class Controller
 		if (input.equalsIgnoreCase("quit")) {
 			 business.companyMenu();
 		}
-		
-		  try { 
-			  Integer.parseInt(input); } catch(NumberFormatException e) {
-			  	tryLoop=true;
-			  	System.out.println("Invalid Input");
-				  ; break; }
+		try {
+			Integer.parseInt(input);
+		} catch (NumberFormatException e) {
+			loopflag = true;
+			System.out.println("Invalid Input.");
+			break;
+		}
 		 
 		bookKey = Integer.parseInt(input);
-		for (int b = 0; b < bookList.size(); b++) {
-			if (bookList.get(b).getBookingID() == bookKey) {
-				bookings = connect.getOneBooking(bookKey);
-				System.out.printf("\nBookID: %-15s CusID: %-2s\n", bookings.getBookingID(),
-						bookings.getCustomerId());
-				System.out.printf("\n%-15s %-15s %s\n", "Date", "Start Time", "End Time");
-				System.out.println("----------------------------------------------------");
-				for (int j = 0; j < 6; j++) {
-					System.out.printf("%s", days[j]);
-					if (bookings != null) {
-						if (days[j].equals(convertDateToString(bookings.getDate()))) {
-							String startTime = convertTimeToString(bookings.getStartTime());
-							String endTime = convertTimeToString(bookings.getEndTime());
-							System.out.printf("%6s %-15s %s\n", "", startTime, endTime);
-						} else {
-							System.out.printf("%6s %-15s %s\n", "", "-----", "-----");
-						}
-					} else {
-						System.out.printf("%6s %-15s %s\n", "", "-----", "-----");
-					}
-				}
-				tryLoop=false;
-				b = bookList.size();
-			}
-		}
-		if(tryLoop)
+		//display bookings times within a day
+		
+		if(displayDetailedBooking_StartEndTime(bookKey,bookings, input,bookList,days,tryLoop,loopflag))
 		{
 			System.out.println("Invalid Input");
 			loopflag=true;
 			break;
 		}
+		else{
+			loopflag=true;
+			break;
+		}
 	}while(tryLoop);
 		
-		
-	}
-	public void checkBooking()
-	{
-		Scanner sc = new Scanner(System.in);
-		boolean tryLoop = true;
-		String input;
-		do
-		{
-			System.out.println("\nPlease enter 'p' to view past 7 days or 'n' to view next 7 days");
-			input = sc.nextLine();
-			if (input.equalsIgnoreCase("quit"))
-			{
-				return;
-			} else
-			{
-
-				if(input.equals("p"))
-				{
-					checkPreviousBooking();
-					tryLoop=false;
-				}
-				else if (input.equals("n"))
-				{
-					checkNextBooking();
-					tryLoop=false;
-				}
-			}
-		} while (tryLoop);
 		
 	}
 
@@ -841,6 +517,7 @@ public class Controller
 	 * @param 
 	 * @return integer(book id)
 	 */
+	@SuppressWarnings("resource")
 	public int checkNextBooking_GetBookID()
 	{
 		boolean loopflag = true;
@@ -853,7 +530,6 @@ public class Controller
 			ArrayList<Booking> bookList = connect.getAllBooking();
 			SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
 			Calendar c = Calendar.getInstance();
-			boolean flag = true;
 			String nDays[] = new String[7];
 			String today;
 			for (int i = 0; i <7 ; i++)
@@ -905,25 +581,21 @@ public class Controller
 		System.out.printf("\n%s", "ID");
 		System.out.printf("%-2s %s", "", "Customer ID");
 		System.out.printf("%-20s %s", "", nDays[0]);
-		System.out.printf("%-3s %s", "", nDays[1]);
-		System.out.printf("%-3s %s", "", nDays[2]);
-		System.out.printf("%-3s %s", "", nDays[3]);
-		System.out.printf("%-3s %s", "", nDays[4]);
-		System.out.printf("%-3s %s", "", nDays[5]);
-		System.out.printf("%-3s %s\n", "", nDays[6]);
+		for(int i=1;i<nDays.length;i++)
+		{
+			System.out.printf("%-3s %s", "", nDays[i]);
+		}
 		System.out.print(
-				"----------------------------------------------------------------------------------------------------------------------------------");
+				"\n----------------------------------------------------------------------------------------------------------------------------------------");
 		
 		for (Booking b : bookList)
 		{
 			System.out.printf("\n%d %-2s %-24s", b.getBookingID(), "", b.getCustomerId());
 			
-			for (int j = 0; j < 7; j++)
+			for (int j = 0; j < nDays.length; j++)
 			{
-				String bookedDays=convertDateToString(b.getDate());
-				if (!bookList.isEmpty())
-				{
-					if (nDays[j].equals(bookedDays) && b.getStatus().equals("active"))
+				//String bookedDays=convertDateToString(b.getDate());
+					if (convertDateToString(b.getDate()).equals(nDays[j])&&b.getStatus().equalsIgnoreCase("active"))
 					{
 						System.out.printf("%-8s %-5s", "", "Booked");
 						
@@ -932,13 +604,10 @@ public class Controller
 					{
 						System.out.printf("%-8s %-5s", "", "-----");
 					}
-				} else
-				{
-					System.out.printf("%-8s %-5s", "", "-----");
-				}
+				} 
 			}
 		}
-	}
+	
 	
 	/**
 	 * @author Bryan Soh, David(Panhaseth Heang)
@@ -946,7 +615,7 @@ public class Controller
 	 * @param 
 	 * @return 
 	 */
-	public void displayDetailedBooking_StartEndTime(int bookKey, Booking bookings, String input, ArrayList<Booking> bookList, String nDays[], Boolean tryLoop, Boolean loopflag)
+	public boolean displayDetailedBooking_StartEndTime(int bookKey, Booking bookings, String input, ArrayList<Booking> bookList, String nDays[], Boolean tryLoop, Boolean loopflag)
 	{
 		
 		DatabaseConnection connect = new DatabaseConnection();
@@ -958,7 +627,7 @@ public class Controller
 						bookings.getCustomerId());
 				System.out.printf("\n%-15s %-15s %s\n", "Date", "Start Time", "End Time");
 				System.out.println("----------------------------------------------------");
-				for (int j = 0; j < 7; j++) {
+				for (int j = 0; j < nDays.length; j++) {
 					System.out.printf("%s", nDays[j]);
 					if (bookings != null) {
 						if (nDays[j].equals(convertDateToString(bookings.getDate()))) {
@@ -976,12 +645,7 @@ public class Controller
 				b = bookList.size();
 			}
 		}
-		if(tryLoop)
-		{
-			System.out.println("Invalid Input");
-			loopflag=true;
-			tryLoop = false;
-		}	
+		return tryLoop;
 	}
 	
 	/**
@@ -990,6 +654,7 @@ public class Controller
 	 * @param 
 	 * @return
 	 */
+	@SuppressWarnings("resource")
 	public void cancelBooking(){
 		DatabaseConnection conn = new DatabaseConnection();
 		Scanner sc = new Scanner(System.in);
@@ -1015,5 +680,100 @@ public class Controller
 				
 		}while(loop == false);
 		
+	}
+	
+
+	/**
+	 * @author Bryan Soh, David(Panhaseth Heang)
+	 * Display date overview table of availability for 7 days
+	 * @param 
+	 * @return 
+	 */
+	public void displayDetailedWorking_Date(String[] days,ArrayList<Employee> emList,ArrayList<EmployeeWorkingTime> workDays) {
+		DatabaseConnection connect = new DatabaseConnection();
+		System.out.printf("\n%s", "ID");
+		System.out.printf("%-2s %s", "", "Employee");
+		System.out.printf("%-20s %s", "", days[0]);
+		for (int i = 1; i < days.length; i++) {
+			System.out.printf("%-3s %s", "", days[i]);
+		}
+		System.out.print(
+				"\n----------------------------------------------------------------------------------------------------------------------------------------");
+		for (Employee e : emList) {
+			System.out.printf("\n%d %-2s %-20s", e.getId(), "", e.getName());
+			workDays = connect.getEmployeeWorkingTimes(e.getId());
+			for (int j = 0; j < 7; j++) {
+				if (!workDays.isEmpty()) {
+					if (days[j].equals(matchDate(days[j], workDays))) {
+						System.out.printf("%-8s %-5s", "", "Avail");
+					} else {
+						System.out.printf("%-8s %-5s", "", "-----");
+					}
+				} else {
+					System.out.printf("%-8s %-5s", "", "-----");
+				}
+			}
+
+		}
+	}
+	
+	/**
+	 * @author Bryan Soh,David(Panhaseth Heang)
+	 * A detailed display after user select employee id, shows start time and end time of booking
+	 * @param 
+	 * @return 
+	 */
+	public boolean displayDetailedWorking_Time(int empKey, Employee employee, String input, ArrayList<Employee> emList,ArrayList<EmployeeWorkingTime> workDays, String days[], Boolean tryLoop, Boolean loopflag){
+		DatabaseConnection connect = new DatabaseConnection();
+		
+		for (int b = 0; b < emList.size(); b++) {
+			if (emList.get(b).getId() == empKey) {
+				employee = connect.getEmployee(empKey);
+				workDays = connect.getEmployeeWorkingTimes(empKey);
+				System.out.printf("\nName: %-15s Payrate: %-2.2f\n", employee.getName(), employee.getPayRate());
+				System.out.printf("\n%-15s %-15s %s\n", "Date", "Start Time", "End Time");
+				System.out.println("----------------------------------------------------");
+				for (int j = 0; j < 7; j++) {
+					System.out.printf("%s", days[j]);
+					if (!workDays.isEmpty()) {
+						if (days[j].equals(matchDate(days[j], workDays))) {
+							System.out.printf("%6s %-15s %s\n", "", getTime("start", days[j], workDays),
+									getTime("end", days[j], workDays));
+						} else {
+							System.out.printf("%6s %-15s %s\n", "", "-----", "-----");
+						}
+					} else {
+						System.out.printf("%6s %-15s %s\n", "", "-----", "-----");
+					}
+				}
+				tryLoop = false;
+				b = emList.size();
+			}
+		}
+		return tryLoop;
+	}
+	
+	public Boolean checkBookingStartTime(Date time, Date date)
+	{
+		SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+		String _date = sdf.format(date);
+		sdf = new SimpleDateFormat("HH:mm");
+		String _time = sdf.format(time);
+		log.debug("Time: "+_time+" Date: "+_date);
+		DatabaseConnection connect = new DatabaseConnection();
+		Boolean val = true;
+		for(Booking b: connect.getAllBooking())
+		{
+			log.debug("Booking ID: "+b.getBookingID());
+			if(convertDateToString(b.getDate()).equals(_date))
+			{
+				if(convertTimeToString(b.getStartTime()).equals(_time))
+				{
+					return false;
+				}
+			}
+		}
+		
+		return val;
 	}
 }

@@ -3,6 +3,8 @@ package program;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Iterator;
+import java.util.ListIterator;
 import java.util.Scanner;
 
 import org.apache.log4j.Level;
@@ -39,7 +41,7 @@ public class BusinessMenu
 				displayAvailability();
 				break;
 			case 2:
-				addNewEmployee();
+				//addNewEmployee();
 				break;
 			case 3:
 				checkBooking();
@@ -51,7 +53,7 @@ public class BusinessMenu
 				controller.cancelBooking();
 				break;
 			case 6:
-				addWorkingTimesForEmployeeByName();
+				//addWorkingTimesForEmployeeByName();
 				break;
 			case 7:
 				flag = false;
@@ -73,276 +75,232 @@ public class BusinessMenu
 	
 	/**
 	 *@author Luke Mason
-	 * Finds all employees by name input from UI and prints them to screen
-	 * Calls add employee work time function to add a work times for next month
-	 * @return true when /exit is called
+	 * Find Employees By Name, Then pick One employee By ID
+	 * @param String employeeName
+	 * @param String employeeId
 	 */
-	public boolean addWorkingTimesForEmployeeByName()
-	{
-		@SuppressWarnings("resource")
-		Scanner kb = new Scanner(System.in);
-		log.info("IN addWorkingTimesForEmployeeByName\n");
-		DatabaseConnection connect = new DatabaseConnection();
-		String employeeName;
-		boolean loopAgain;
-		boolean loopAgain2;
-		do//Loop prompt for employee username search
-		{
-			loopAgain = false;
-			System.out.println("/exit to exit");
-			System.out.print("Employee Name >> ");
-			employeeName = kb.nextLine().toLowerCase();
-			// Attempting to see if the input is valid
-			// Checking to see if the input contains any non-alphabetical
-			// characters e.g ?>!#%$#12345
-			if (employeeName.equalsIgnoreCase("/exit"))//exit command
-			{
-				System.out.println("Exitting to main menu...");
-				log.info("OUT addWorkingTimesForEmployeeByName\n");
-				return true;
-			}
-			ArrayList<Employee> employees = connect.getEmployees(employeeName);
-			if (employees.size() == 0)//if array list is empty then the user is prompted to try again
-			{
-				System.out.println(
-						"Sorry but there are no matches for the name '" + employeeName + "'\n Please Try again");
-				loopAgain = true;
-				continue;
-			}
-			else
-			{
-				System.out.println("~~~LIST OF EMPLOYEES~~~\n");
-				for (Employee employee : employees)//Displays all employees toString in the array list
+				/**
+				 * Checks to see if there is 0 matches with the input name
+				 * @param employeeName
+				 * @return false when 0 matches, true when 1 or more matches
+				 */
+				public boolean checkEmployeesWithName(String employeeName)
 				{
-					System.out.println(employee.toString());
-				}
-				System.out.println("\n~~~~~~~~~~END~~~~~~~~~~");
-			}
-			do//prompting user to pick an employee or /again to search for employees again
-			{
-				loopAgain2 = false;
-				System.out.println("Which employee would you like to add working times for [/again to search again]?");
-				System.out.print("Employee's ID >> ");
-				String employeeId = kb.nextLine();
-				if (employeeId.equalsIgnoreCase("/exit"))//exit command
-				{
-					System.out.println("Exitting to main menu...");
-					log.info("OUT addWorkingTimesForEmployeeByName\n");
+					DatabaseConnection connect = new DatabaseConnection();
+					ArrayList<Employee> employees = connect.getEmployees(employeeName);
+					if (employees.size() == 0)//if array list is empty then the user is prompted to try again
+					{
+						//ERROR MESSAGE
+						//System.out.println("Sorry but there are no matches for the name '" + employeeName + "'\n Please Try again");
+						return false;
+					}
 					return true;
 				}
-				if (employeeId.equalsIgnoreCase("/again"))//lets user search for employee again
+				/**
+				 * Finds all employees by name input from UI and prints them to screen 
+				 * @param employeeName
+				 * @return array list employees so that the next function can use that list
+				 */
+				public ArrayList<Employee> viewEmployeesWithName(String employeeName)
 				{
-					loopAgain2 = false;
-					loopAgain = true;
-					continue;
-				}
-				int id = controller.changeInputIntoValidInt(employeeId);//Converting id into a valid integer
-				if (id < 0)//if id is invalid, prompts user for id again
-				{
-					System.out.println("Invalid ID, Try again");
-					loopAgain2 = true;
-					continue;
-				}
-				boolean idExists = false;
-				for (Employee employee : employees)//checks to see if id exists in the selection of employees in array
-				{
-					if (employee.getId() == id)//calls working time functions and starts adding them for matched employee
+					DatabaseConnection connect = new DatabaseConnection();
+					log.info("IN viewEmployeesWithName\n");
+					ArrayList<Employee> employees = connect.getEmployees(employeeName);
+					//System.out.println("~~~LIST OF EMPLOYEES~~~\n");
+					for (Employee employee : employees)//Displays all employees toString in the array list
 					{
-						idExists = true;
-						addWorkingTimesForNextMonth(id);
+						System.out.println(employee.toString());
+						//Prints Each Employee's Details
 					}
+					//System.out.println("\n~~~~~~~~~~END~~~~~~~~~~");
+					return employees;
 				}
-				if (!idExists)//if id is not matched, prompts user to try again
+				/**
+				 * Converts string ID to Int ID
+				 * @param employeeId
+				 * @return
+				 */
+				public int StrIdToInt(String employeeId)
 				{
-					System.out.println(
-							"ID MISMATCH: There is no ID that matches an employee you have just searched for\n Try Again");
-					loopAgain2 = true;
+					int id = controller.changeInputIntoValidInt(employeeId);//Converting id into a valid integer
+					return id;
 				}
-			} while (loopAgain2);
-		} while (loopAgain);
+				/**
+				 * Shows if employeeID matches an employee in the list
+				 * @param employees
+				 * @param employeeId
+				 * @return False when employeeId does not match a shown employee from viewEmployeesWithName, True when matched.
+				 */
+				public boolean CheckPickEmployeeFromList(ArrayList<Employee> employees, int employeeId)
+	{
+		if (employeeId < 0)//if id is invalid, prompts user for id again
+		{
+			//System.out.println("Invalid ID, Try again");
+			//ERROR MESSAGE
+			return false;
+		}
+		for (Employee employee : employees)//checks to see if id exists in the selection of employees in array
+		{
+			if (employee.getId() == employeeId)//calls working time functions and starts adding them for matched employee
+			{
+				return true;
+			}
+		}
+		//System.out.println("ID MISMATCH: There is no ID that matches an employee you have just searched for\n Try Again");
+		//ERROR MESSAGE
 		log.info("OUT addWorkingTimesForEmployeeByName\n");
 		return false;
 	}
 	
-	 /**
+	
+
+
+
+
+	/**
 	 * @author Luke Mason
-	 * Prompts user for sufficient information in order to add a new employee to database
+	 * Used to check information to add a new employee to database
 	 * @return false if the program breaks out of loop. True if /exit is called or user exits
 	 */
-	public boolean addNewEmployee()
-	{
-		@SuppressWarnings("resource")
-		Scanner kb = new Scanner(System.in);
-		DatabaseConnection connect = new DatabaseConnection();
-		boolean loopAgain;
-		String employeeFName;
-		String employeeLName;
-		String employeeName;
-		String employeePayRate;
-		double employeePayRate2;
-		// Loop until first name is valid
-		do
-		{
-			loopAgain = false;
-			System.out.print("Enter in the new employee's first name only [/exit to quit] >> ");
-			employeeFName = kb.nextLine().toLowerCase();
-			if (employeeFName.equalsIgnoreCase("/exit"))
-			{
-				System.out.println("Exitting to main menu...");//exit command
-
-				return false;
-			}
-			if (controller.checkInputToContainInvalidChar(employeeFName))//checking for invalid characters
-			{
-				System.out.println("The name you have entered contains non-alphabetical characters");
-				System.out.println("Please try again");
-				loopAgain = true;
-			}
-		} while (loopAgain);
-		do//Loop until last name is valid
-		{
-			loopAgain = false;
-			System.out.print("Enter in the new employee's last name only [/exit to quit] >> ");
-			employeeLName = kb.nextLine().toLowerCase();
-			if (employeeLName.equalsIgnoreCase("/exit"))//exit command
-			{
-				System.out.println("Exitting to main menu...");
-
-				return false;
-			}
-			if (controller.checkInputToContainInvalidChar(employeeLName))//checking for invalid characters
-			{
-				System.out.println("The name you have entered contains non-alphabetical characters");
-				System.out.println("Please try again");
-				loopAgain = true;
-			}
-		} while (loopAgain);
-		employeeName = employeeFName + " " + employeeLName;//concatenating first and last name into name
-		do//Loop until pay rate is valid
-		{
-			loopAgain = false;
-			System.out.print("Enter in the pay rate of " + employeeName + " [/exit to quit] >> ");
-			employeePayRate = kb.nextLine();
-			// Attempting to change string into an integer
-			// Checking to see if the amount contains any non-digit characters
-			if (employeePayRate.equalsIgnoreCase("/exit"))
-			{
-				System.out.println("Exitting to main menu...");//exit command
-
-				return false;
-			}
-			employeePayRate2 = controller.changeInputIntoValidDouble(employeePayRate);//checking for invalid input
-			if (employeePayRate2 < 0)
-			{
-				System.out.println(
-						"The amount you have entered contains invalid characters, is less than 0 or greater that 1000 ");
-				System.out.println("Please try again");
-				loopAgain = true;
-			}
-		} while (loopAgain);
-		do//Loop until valid option is selected
-		{
-			loopAgain = false;
-			System.out.println("What would you like to do now?");
-			System.out.println("1. Save and Add " + employeeName + "'s working times for the next month");
-			System.out.println("2. Save and Exit");
-			System.out.println("3. Exit without Saving");
-			System.out.print("Select an option >> ");
-			int answer = kb.nextInt();
-			kb.nextLine();
-			switch (answer)
-			{
-			case 1:
-				connect.addEmployee(employeeName, employeePayRate2);//adding employee
-				ArrayList<Employee> employees = connect.getEmployees(employeeName);//adding working times to employee just made
-				if(employees.size() > 1)//If employee just made has exact same name as an existing employee then returns to main menu
+	/**
+				 * Error checks the first OR last name
+				 * @param employeeFLName
+				 * @return false when invalid name, True when valid
+				 */
+				public boolean checkEmployeeFirstOrLastName(String employeeFLName)
 				{
-					System.out.println("ERROR: There are two employees in the database with the same name, cannot add working times");
+					if(employeeFLName.length()<1 || employeeFLName.length()>50 )
+					{
+						//ERROR MESSAGE
+						return false;
+					}
+					if (controller.checkInputToContainInvalidChar(employeeFLName))//checking for invalid characters
+					{
+						//ERROR MESSAGE
+						//System.out.println("The name you have entered contains non-alphabetical characters");
+						//System.out.println("Please try again");
+						return false;
+					}
 					return true;
 				}
-				for (Employee employee : employees) 
+			
+				/**
+				 * Convert string to Double
+				 * @param employeePayRate
+				 * @return double
+				 */
+				public double strPayRateToDouble(String employeePayRate)
 				{
-					if(addWorkingTimesForNextMonth(employee.getId()))//exit command is called  
-					  {
-						  System.out.println("Saved and exiting to main menu");
-					  }
+					double employeePayRate2 = controller.changeInputIntoValidDouble(employeePayRate);//checking for invalid input
+					return employeePayRate2;
 				}
-				return true;
-			case 2:
-				connect.addEmployee(employeeName, employeePayRate2);//adding employee
-				System.out.println("Employee " + employeeName + " added!");
-				return true;
-			case 3:
-				do//Loop until input is valid
+				/**
+				 * Checks if employee pay rate is less than 0 (Error)
+				 * @param employeePayRate
+				 * @return
+				 */
+				public boolean checkEmployeePayRate(double employeePayRate)
 				{
-					loopAgain = false;
-					System.out.print("Are you sure you don't want to save the employee to the database?(Y/N)");
-					String exit = kb.nextLine();
-					if (exit.equalsIgnoreCase("y"))
+					if (employeePayRate < 0)
 					{
+						//ERROR MESSAGE
+						//System.out.println("The amount you have entered contains invalid characters, is less than 0 or greater that 1000 ");
+						//System.out.println("Please try again");
 						return false;
-					} else if (exit.equalsIgnoreCase("n"))
-					{
-						continue;
-					} else
-					{
-						System.out.println("Please enter in \"y\" or \"n\" only");
-						loopAgain = true;
 					}
-				} while (loopAgain);
-			default:
-				System.out.println("Invalid option, Try again");
-				loopAgain = true;
-				break;
-			}
-		} while (loopAgain);
-		System.out.println("Unexpected Error: Please consult the developers");
-
-		return false;
+					return true;
+				}
+				/**
+				 * Adds an employee to database
+				 * @param employeeFName
+				 * @param employeeLName
+				 * @param employeePayRate
+				 */
+				public void option1AddEmployee(String employeeFName,String employeeLName,double employeePayRate)
+				{
+					DatabaseConnection connect = new DatabaseConnection();
+					String employeeName = employeeFName + " " + employeeLName;//concatenating first and last name into name
+					connect.addEmployee(employeeName, employeePayRate);//adding employee
+				}
+				/**
+				 * Adds employee to database and calls change Work Time roster for employee
+				 * @param employeeFName
+				 * @param employeeLName
+				 * @param employeePayRate
+				 */
+				public void option2AddEmployeeAndWorkingTimes(String employeeFName,String employeeLName,double employeePayRate)
+				{
+					DatabaseConnection connect = new DatabaseConnection();
+					option1AddEmployee(employeeFName,employeeLName,employeePayRate);
+					String employeeName = employeeFName + " " + employeeLName;//concatenating first and last name into name
+					ArrayList<Employee> employees = connect.getEmployees(employeeName);//adding working times to employee just made
+					ListIterator<Employee> employees2 = employees.listIterator();
+					//This is for if more than one employee has the same name as searched
+					while(employees2.hasNext())
+					{
+						//Adds working times to the LAST employee (should be the recent one just added)
+						if(!employees2.hasNext())
+						{
+							//changeWorkingTimeRoster(((Employee) employees2).getId()); 
+						} 
+					}
+				}
+				
+				public void option3Exit()
+	{
+		//Are you sure you want to exit and NOT save? Yes, No
+		//This GUI could be used for the BACK button or any other exit button
 	}
 
+	
+	
+	
 	/**
 	 * @author Luke Mason, David (Panhaseth Heang)
 	 * UI for adding employee working times for next month
 	 * @param employeeId
 	 * @return only returns false if user somehow breaks out of infinite loop with out exiting function
 	 */
-	public boolean addWorkingTimesForNextMonth(int employeeId)
+	/*public boolean changeWorkingTimeRoster(int employeeId)
 	{
-		@SuppressWarnings("resource")
-		Scanner kb = new Scanner(System.in);
+		//@SuppressWarnings("resource")
+		//Scanner kb = new Scanner(System.in);
 		log.info("IN addWorkingTimesForNextMonth\n");
 		Controller controller = new Controller();
 		DatabaseConnection connect = new DatabaseConnection();
 
 		// check if the input employeeId exists in database
-		boolean valid = false, valid2 = false;
+		//boolean valid = false, valid2 = false;
 		String newDateStr = "";
 		String newStartTimeStr = "";
 		String newFinishTimeStr = "";
-		boolean loop = false;
-		do//Loop, exit with /exit
+		//boolean loop = false;
+		//do//Loop, exit with /exit
+		//{
+		//	do{
+		//		valid2 = true;
+		//		do
+			//	{
+				//	valid = true;
+	public void viewNext7Days()
+	{
+		SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+		String[] dateArray = new String[7];
+		Calendar c = Calendar.getInstance();
+		System.out.println("----Next 7 Days----");
+		for(int i = 1;i<=7; i++)
 		{
-			do{
-				valid2 = true;
-				do
-				{
-					valid = true;
-					SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
-					String[] dateArray = new String[7];
-					Calendar c = Calendar.getInstance();
-					System.out.println("----Next 7 Days----");
-					for(int i = 1;i<=7; i++)
-					{
-						dateArray[i-1] = sdf.format(c.getTime());//puts each date from every loop into array
-						String time = sdf.format(c.getTime());
-						System.out.println(i+": " + time);
-						c.add(Calendar.DAY_OF_MONTH, 1);
-					}
-					System.out.println("\n/exit to save and exit to main menu\n");
-					System.out.print("Select a day >> ");
-					String choiceStr = kb.nextLine();
-					if (choiceStr.equalsIgnoreCase("/exit"))
+			dateArray[i-1] = sdf.format(c.getTime());//puts each date from every loop into array
+			String time = sdf.format(c.getTime());
+			//System.out.println(i+": " + time);
+			//PRINT EACH DAY OUT TO GUI
+			c.add(Calendar.DAY_OF_MONTH, 1);
+		}
+	}
+					//System.out.println("\n/exit to save and exit to main menu\n");
+					//System.out.print("Select a day >> ");
+					//String choiceStr = kb.nextLine();
+					/*if (choiceStr.equalsIgnoreCase("/exit"))
 					{
 						log.info("OUT addWorkingTimesForNextMonth\n");
 						return true;
@@ -424,8 +382,9 @@ public class BusinessMenu
 		System.out.println("Save and Exitting to main menu ...");
 		log.info("OUT addWorkingTimesForNextMonth\n");
 		return false;
-	}
+	}*/
 	
+
 	/**
 	 * @author Bryan Soh
 	 * 

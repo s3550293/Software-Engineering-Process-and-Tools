@@ -167,3 +167,28 @@
 .button:default:hover {
     -fx-background-color: derive(-fx-focus-color,30%);
 }
+
+/*TOGGLE BUTTON*/
+.toggle-button:selected{
+  -fx-background-radius: 0;
+  -fx-background-color: #00CD66;
+  -fx-background-color:
+        -fx-shadow-highlight-color,
+        linear-gradient(to bottom, derive(#00CD66,-90%) 0%, derive(#00CD66,-60%) 100%),
+        linear-gradient(to bottom, derive(#00CD66,-60%) 0%, derive(#00CD66,-35%) 50%, derive(#00CD66,-30%) 98%, derive(#00CD66,-50%) 100%),
+        linear-gradient(to right, rgba(0,0,0,0.2) 0%, rgba(0,0,0,0) 40%, rgba(0,0,0,0) 190%, rgba(0,0,0,0.3) 200%);
+    -fx-background-insets: 0 0 0 0, 0, 0, 0;
+  -fx-font-family: "Segoe UI", Helvetica, Arial, sans-serif;
+  -fx-font-size: 11pt;
+  -fx-font-weight: bold;
+  -fx-text-fill: #4EEE94;
+  -fx-background-radius: 0px, 0px, 0px, 0px;
+}
+.toggle-button{
+  -fx-background-radius: 1;
+  -fx-background-color: derive(#EE5C42,40%);
+  -fx-font-family: "Segoe UI", Helvetica, Arial, sans-serif;
+  -fx-font-size: 11pt;
+  -fx-text-fill: #5E2612;
+  -fx-background-insets: 0 0 0 0, 0, 1, 2;
+}

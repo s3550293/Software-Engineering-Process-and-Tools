@@ -23,6 +23,7 @@
 .tab-pane .tab:selected
 {
     -fx-background-color: derive(#446CB3,30%);
+    -fx-text-fill: white;
 }
 .tab .tab-label {
     -fx-alignment: CENTER;
@@ -70,6 +71,12 @@
     -fx-font-size: 24pt;
     -fx-font-family: "Segoe UI Light";
     -fx-text-fill: #1d1d1d;
+    -fx-opacity: 1;
+}
+.lable-error{
+	-fx-font-size: 11pt;
+    -fx-font-family: "Segoe UI Light";
+    -fx-text-fill: #ff0000;
     -fx-opacity: 1;
 }
 

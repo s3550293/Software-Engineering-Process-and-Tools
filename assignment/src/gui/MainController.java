@@ -10,9 +10,13 @@ import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.CheckBox;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
+import javafx.scene.control.ToggleButton;
 import javafx.scene.image.Image;
+import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.GridPane;
 import javafx.scene.layout.StackPane;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
@@ -29,13 +33,29 @@ public class MainController implements Initializable{
 	StackPane stkBusiness, stkCustomer;
 	
 	@FXML
+	BorderPane boardPaneEmpAdd, boardPaneEmpOverview;
+	
+	@FXML
 	Button btnRefreshBooking, btnSearchBookings, btnCancelBooking, btnLogout;
 	
 	@FXML
 	ListView<Booking> listviewBookings;
 	
 	@FXML
-	TextField txtSearchBookings;
+	TextField txtSearchBookings, txtaddEmpFirstName, txtAddEmpLastName, txtAddEmpPayRate;
+	
+	@FXML
+	CheckBox chkbxAddWorkingTimes;
+	
+	@FXML
+	GridPane gridpWorkingTimes;
+	
+	@FXML
+	ToggleButton btnSunMorning, btnSunAfternoon, btnSunEvening, btnMonMorning, btnMonAfternoon, btnMonEvening, btnTueMorning, btnTueAfternoon, btnTueEvening;
+	@FXML
+	ToggleButton btnWedMorning, btnWedAfternoon, btnWedEvening, btnThurMorning, btnThurAfternoon, btnThurEvening, btnFriMorning, btnFriAfternoon, btnFriEvening;
+	@FXML
+	ToggleButton btnSatMorning, btnSatAfternoon, btnSatEvening;
 	
 	/**
 	 * initializes the stage
@@ -113,5 +133,45 @@ public class MainController implements Initializable{
 	public void refreshBookingView()
 	{
 		//TODO
+	}
+	
+	/**
+	 * Shows add employee
+	 * note tabs should be disabled
+	 * @author [Programmer]
+	 */
+	@FXML
+	public void showAddNewEmp()
+	{
+		boardPaneEmpAdd.setVisible(true);
+		boardPaneEmpOverview.setVisible(false);
+	}
+	
+	/**
+	 * Returns User to manage employees
+	 * @author [Programmer]
+	 */
+	@FXML
+	public void cancelAddNewEmp()
+	{
+		boardPaneEmpAdd.setVisible(false);
+		boardPaneEmpOverview.setVisible(true);
+	}
+	
+	/**
+	 * Enables and disables working times
+	 * @author [Programmer]
+	 */
+	@FXML
+	public void allowWorkingTimes()
+	{
+		if(chkbxAddWorkingTimes.isSelected())
+		{
+			gridpWorkingTimes.setDisable(false);
+		}
+		else
+		{
+			gridpWorkingTimes.setDisable(true);
+		}
 	}
 }

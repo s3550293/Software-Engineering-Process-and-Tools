@@ -22,7 +22,7 @@
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.StackPane?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="650.0" prefWidth="800.0" stylesheets="@Theme.css" xmlns="http://javafx.com/javafx/8.0.102" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.MainController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="650.0" prefWidth="800.0" stylesheets="@Theme.css" xmlns="http://javafx.com/javafx/8.0.121" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.MainController">
    <children>
       <StackPane fx:id="stkBusiness" prefHeight="150.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
@@ -117,10 +117,6 @@
                                 <content>
                                   <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                                        <children>
-<<<<<<< HEAD
-                                          <Button layoutX="61.0" layoutY="108.0" mnemonicParsing="false" prefHeight="32.0" prefWidth="310.0" text="Add a New Employee" />
-                                          <Button layoutX="61.0" layoutY="189.0" mnemonicParsing="false" prefHeight="32.0" prefWidth="310.0" text="Change Working Times For an Employee" />
-=======
                                           <BorderPane fx:id="boardPaneEmpOverview" prefHeight="200.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                                              <center>
                                                 <FlowPane alignment="CENTER" prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
@@ -455,7 +451,6 @@
                                              </bottom>
                                           </BorderPane>
                                           <BorderPane fx:id="boardPaneEmpAddTime" prefHeight="200.0" prefWidth="200.0" visible="false" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
->>>>>>> branch 'master' of https://github.com/s3550293/Software-Engineering-Process-and-Tools.git
                                        </children></AnchorPane>
                                 </content>
                               </Tab>

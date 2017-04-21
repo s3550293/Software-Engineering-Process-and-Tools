@@ -36,13 +36,13 @@ public class Business
 			switch(selection)
 			{
 			case 1:
-				controller.displayAvailability();
+				//controller.displayAvailability();
 				break;
 			case 2:
 				addNewEmployee();
 				break;
 			case 3:
-				controller.checkBooking();
+				//controller.checkBooking();
 				break;
 			case 4:
 				//Todo

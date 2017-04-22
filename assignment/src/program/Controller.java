@@ -12,11 +12,16 @@ import java.util.Scanner;
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 
+import javafx.scene.control.Alert;
+
 
 public class Controller
 {
 	private static Logger log = Logger.getLogger(Controller.class);
 	public Controller(){log.setLevel(Level.WARN);}
+	private static User _user = null;
+	public User getUser(){return _user;}
+	public void setUser(User user){_user = user;}
 
 	Scanner kb = new Scanner(System.in);
 
@@ -776,4 +781,33 @@ public class Controller
 		
 		return val;
 	}
+	
+	/**
+	 * displays an alert box to the user
+	 * @author Joseph Garner
+	 */
+	public void messageBox(String type, String title, String header, String message)
+    {
+        Alert alert = null;
+        if(type.equals("INFO"))
+        {
+            alert = new Alert(Alert.AlertType.INFORMATION);
+        }
+        else if(type.equals("WARN"))
+        {
+            alert = new Alert(Alert.AlertType.WARNING);
+        }
+        else if(type.equals("ERROR"))
+        {
+            alert = new Alert(Alert.AlertType.ERROR);
+        }
+        else
+        {
+            alert = new Alert(Alert.AlertType.INFORMATION);
+        }
+        alert.setTitle(title);
+        alert.setHeaderText(header);
+        alert.setContentText(message);
+        alert.showAndWait();
+    }
 }

@@ -6,6 +6,7 @@ import java.util.ResourceBundle;
 
 import org.apache.log4j.Logger;
 
+import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -18,9 +19,15 @@ import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import program.Controller;
+import program.Login;
+
 
 public class LoginController implements Initializable {
 	public static Logger log = Logger.getLogger(LoginController.class);
+	private Login loginFuction = new Login();
+	private Controller program = new Controller();
+	private int loginCount = 0;
 	
 	@FXML
 	TextField txtUserLogin;
@@ -38,11 +45,33 @@ public class LoginController implements Initializable {
 	
 	/**
 	 * Logs User in
-	 * @author [Programmer]
+	 * @author Joseph Garner
 	 */
 	@FXML
 	public void loginAction() {
 		//TODO
+		Stage loginstage = (Stage) btnLogin.getScene().getWindow();
+		int loginCheck = loginFuction.logInProcess(txtUserLogin.getText(), txtPassLogin.getText());
+		if(loginCount < 10){
+			if(loginCheck == -2){
+				lblError.setVisible(true);
+				loginCount += 1;
+			}
+			else if(loginCheck == 1 || loginCheck == 0){
+				lblError.setVisible(false);
+				loginstage.close();
+			}
+			else{
+				lblError.setVisible(true);
+				loginCount += 1;
+			}
+		}
+		else{
+			program.messageBox("WARN", "Login Error", "Maximum login attempts reached", "The maximum login attemps has been reached, the program will now terminate");
+			Platform.exit();
+			System.exit(0);
+		}
+		
 	}
 	
 	/**

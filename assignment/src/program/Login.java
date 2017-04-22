@@ -11,6 +11,8 @@ public class Login
 	private Register reg = new Register();
 	private BusinessMenu bmenu = new BusinessMenu();
 	private CustomerMenu cmenu = new CustomerMenu();
+	private Controller controller = new Controller();
+	
 	public Login(){log.setLevel(Level.WARN);}
 	/*
 	 * loginMenu displays the user login menu to the user
@@ -39,7 +41,7 @@ public class Login
 				switch(choice)
 				{
 					case 1:
-						login();
+						//login();
 						break;
 					case 2:
 						reg.registerUser();
@@ -62,6 +64,7 @@ public class Login
 		}
 		//userInput.close();
 	}
+	/*
 	@SuppressWarnings("resource")
 	public void login()
 	{
@@ -91,6 +94,7 @@ public class Login
 		}
 		//scanner.close();
 	}
+	*/
 	
 	public int logInProcess(String userName, String pass){
 		boolean passCheck = false;
@@ -105,15 +109,16 @@ public class Login
 				{
 					passCheck=true;
 					if(connect.getUser(userName).getAccountType() == 1){
+						controller.setUser(connect.getUser(userName));
 						return 1;
-						
 					}else{
+						controller.setUser(connect.getUser(userName));
 						return 0;
 					}
 				}
 				else
 				{
-					System.out.printf("\n%-1s %s\n", "", "Incorrect Password");
+					//System.out.printf("\n%-1s %s\n", "", "Incorrect Password");
 					return -2;
 				}
 			}
@@ -145,7 +150,7 @@ public class Login
 			reg.registerUser();
 			break;
 		case 2:
-			login();
+			//login();
 			break;
 		case 3:
 			System.out.println("Exit the program...");

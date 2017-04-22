@@ -80,7 +80,7 @@
                                                             <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
                                                          </FlowPane.margin>
                                                       </TextField>
-                                                      <Button fx:id="btnSearchBookings" mnemonicParsing="false" text="Search">
+                                                      <Button fx:id="btnSearchBookings" mnemonicParsing="false" onAction="#searchBookings" text="Search">
                                                          <FlowPane.margin>
                                                             <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
                                                          </FlowPane.margin>
@@ -89,7 +89,7 @@
                                                 </FlowPane>
                                                 <FlowPane alignment="CENTER_LEFT" prefHeight="35.0" prefWidth="419.0">
                                                    <children>
-                                                      <Button fx:id="btnRefreshBooking" mnemonicParsing="false" text="Refresh">
+                                                      <Button fx:id="btnRefreshBooking" mnemonicParsing="false" onAction="#refreshBookingView" text="Refresh">
                                                          <FlowPane.margin>
                                                             <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
                                                          </FlowPane.margin>
@@ -102,7 +102,7 @@
                                        <bottom>
                                           <FlowPane alignment="CENTER_RIGHT" prefHeight="49.0" prefWidth="800.0" BorderPane.alignment="CENTER">
                                              <children>
-                                                <Button fx:id="btnCancelBooking" mnemonicParsing="false" text="Cancel Booking">
+                                                <Button fx:id="btnCancelBooking" mnemonicParsing="false" onAction="#cancelBooking" text="Cancel Booking">
                                                    <FlowPane.margin>
                                                       <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
                                                    </FlowPane.margin>
@@ -151,7 +151,7 @@
                                                    <children>
                                                       <FlowPane prefHeight="49.0" prefWidth="200.0">
                                                          <children>
-                                                            <Button mnemonicParsing="false" text="Refresh">
+                                                            <Button fx:id="btnRefreshEmployee" mnemonicParsing="false" onAction="#refreshBookingView" text="Refresh">
                                                                <FlowPane.margin>
                                                                   <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
                                                                </FlowPane.margin>
@@ -160,12 +160,12 @@
                                                       </FlowPane>
                                                       <FlowPane alignment="CENTER_RIGHT" prefHeight="35.0" prefWidth="200.0" GridPane.columnIndex="1">
                                                          <children>
-                                                            <TextField fx:id="txtSearchBookings1">
+                                                            <TextField fx:id="txtSearchEmployee">
                                                                <FlowPane.margin>
                                                                   <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
                                                                </FlowPane.margin>
                                                             </TextField>
-                                                            <Button fx:id="btnSearchBookings1" mnemonicParsing="false" text="Search">
+                                                            <Button fx:id="btnSearchEmployee" mnemonicParsing="false" onAction="#searchEmployee" text="Search">
                                                                <FlowPane.margin>
                                                                   <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
                                                                </FlowPane.margin>
@@ -490,11 +490,6 @@
                                        </children></AnchorPane>
                                 </content>
                               </Tab>
-                            <Tab text="Check Employee Availability">
-                              <content>
-                                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
-                              </content>
-                            </Tab>
                           </tabs>
                         </TabPane>
                      </center>

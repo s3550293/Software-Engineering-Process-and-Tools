@@ -49,6 +49,7 @@ public class RegisterController implements Initializable {
 	@FXML
 	public void cancel() {
 		//TODO
+		
 	}
 
 	/**

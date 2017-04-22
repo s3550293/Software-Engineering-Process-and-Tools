@@ -64,7 +64,7 @@
                                           </ListView>
                                        </center>
                                        <top>
-                                          <GridPane prefHeight="40.0" prefWidth="803.0" BorderPane.alignment="CENTER">
+                                          <GridPane prefHeight="49.0" prefWidth="800.0" BorderPane.alignment="CENTER">
                                              <columnConstraints>
                                                 <ColumnConstraints hgrow="SOMETIMES" maxWidth="436.0" minWidth="10.0" prefWidth="419.0" />
                                                 <ColumnConstraints hgrow="SOMETIMES" maxWidth="743.0" minWidth="10.0" prefWidth="381.0" />
@@ -80,7 +80,7 @@
                                                             <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
                                                          </FlowPane.margin>
                                                       </TextField>
-                                                      <Button fx:id="btnSearchBookings" mnemonicParsing="false" text="Search">
+                                                      <Button fx:id="btnSearchBookings" mnemonicParsing="false" onAction="#searchBookings" text="Search">
                                                          <FlowPane.margin>
                                                             <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
                                                          </FlowPane.margin>
@@ -89,7 +89,7 @@
                                                 </FlowPane>
                                                 <FlowPane alignment="CENTER_LEFT" prefHeight="35.0" prefWidth="419.0">
                                                    <children>
-                                                      <Button fx:id="btnRefreshBooking" mnemonicParsing="false" text="Refresh">
+                                                      <Button fx:id="btnRefreshBooking" mnemonicParsing="false" onAction="#refreshBookingView" text="Refresh">
                                                          <FlowPane.margin>
                                                             <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
                                                          </FlowPane.margin>
@@ -102,7 +102,7 @@
                                        <bottom>
                                           <FlowPane alignment="CENTER_RIGHT" prefHeight="49.0" prefWidth="800.0" BorderPane.alignment="CENTER">
                                              <children>
-                                                <Button fx:id="btnCancelBooking" mnemonicParsing="false" text="Cancel Booking">
+                                                <Button fx:id="btnCancelBooking" mnemonicParsing="false" onAction="#cancelBooking" text="Cancel Booking">
                                                    <FlowPane.margin>
                                                       <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
                                                    </FlowPane.margin>
@@ -118,15 +118,8 @@
                                   <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                                        <children>
                                           <BorderPane fx:id="boardPaneEmpOverview" prefHeight="200.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-                                             <center>
-                                                <FlowPane alignment="CENTER" prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
-                                                   <children>
-                                                      <Label text="View Employee Details to go here" />
-                                                   </children>
-                                                </FlowPane>
-                                             </center>
                                              <bottom>
-                                                <FlowPane alignment="CENTER" prefHeight="77.0" prefWidth="800.0" BorderPane.alignment="CENTER">
+                                                <FlowPane alignment="CENTER" prefHeight="49.0" prefWidth="800.0" BorderPane.alignment="CENTER">
                                                    <children>
                                                       <Button fx:id="btnAddEmp" mnemonicParsing="false" onAction="#showAddNewEmp" text="Add New Employee">
                                                          <FlowPane.margin>
@@ -146,6 +139,49 @@
                                                    </children>
                                                 </FlowPane>
                                              </bottom>
+                                             <top>
+                                                <GridPane prefHeight="49.0" BorderPane.alignment="CENTER">
+                                                  <columnConstraints>
+                                                    <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                                                    <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                                                  </columnConstraints>
+                                                  <rowConstraints>
+                                                    <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                                  </rowConstraints>
+                                                   <children>
+                                                      <FlowPane prefHeight="49.0" prefWidth="200.0">
+                                                         <children>
+                                                            <Button fx:id="btnRefreshEmployee" mnemonicParsing="false" onAction="#refreshBookingView" text="Refresh">
+                                                               <FlowPane.margin>
+                                                                  <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                                                               </FlowPane.margin>
+                                                            </Button>
+                                                         </children>
+                                                      </FlowPane>
+                                                      <FlowPane alignment="CENTER_RIGHT" prefHeight="35.0" prefWidth="200.0" GridPane.columnIndex="1">
+                                                         <children>
+                                                            <TextField fx:id="txtSearchEmployee">
+                                                               <FlowPane.margin>
+                                                                  <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                                                               </FlowPane.margin>
+                                                            </TextField>
+                                                            <Button fx:id="btnSearchEmployee" mnemonicParsing="false" onAction="#searchEmployee" text="Search">
+                                                               <FlowPane.margin>
+                                                                  <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                                                               </FlowPane.margin>
+                                                            </Button>
+                                                         </children>
+                                                      </FlowPane>
+                                                   </children>
+                                                </GridPane>
+                                             </top>
+                                             <center>
+                                                <ListView prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+                                                   <BorderPane.margin>
+                                                      <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                                                   </BorderPane.margin>
+                                                </ListView>
+                                             </center>
                                           </BorderPane>
                                           <BorderPane fx:id="boardPaneEmpAdd" layoutX="200.0" layoutY="184.0" prefHeight="200.0" prefWidth="200.0" visible="false" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                                              <center>
@@ -454,11 +490,6 @@
                                        </children></AnchorPane>
                                 </content>
                               </Tab>
-                            <Tab text="Check Employee Availability">
-                              <content>
-                                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
-                              </content>
-                            </Tab>
                           </tabs>
                         </TabPane>
                      </center>

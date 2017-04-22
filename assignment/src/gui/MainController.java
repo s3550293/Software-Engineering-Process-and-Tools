@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 
+import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -21,12 +22,14 @@ import javafx.scene.layout.StackPane;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import program.Booking;
+import program.Controller;
 
 import org.apache.log4j.Logger;
 
 public class MainController implements Initializable{
 	
 	private  static Logger log = Logger.getLogger(MainController.class);
+	private Controller program = new Controller();
 	public MainController() {}
 	
 	@FXML
@@ -36,13 +39,13 @@ public class MainController implements Initializable{
 	BorderPane boardPaneEmpAdd, boardPaneEmpOverview;
 	
 	@FXML
-	Button btnRefreshBooking, btnSearchBookings, btnCancelBooking, btnLogout;
+	Button btnRefreshBooking, btnSearchBookings, btnCancelBooking, btnLogout, btnRefreshEmployee, btnSearchEmployee;
 	
 	@FXML
 	ListView<Booking> listviewBookings;
 	
 	@FXML
-	TextField txtSearchBookings, txtaddEmpFirstName, txtAddEmpLastName, txtAddEmpPayRate;
+	TextField txtSearchBookings, txtaddEmpFirstName, txtAddEmpLastName, txtAddEmpPayRate, txtSearchEmployee;
 	
 	@FXML
 	CheckBox chkbxAddWorkingTimes;
@@ -66,9 +69,27 @@ public class MainController implements Initializable{
 		stkBusiness.setVisible(true);
 		stkCustomer.setVisible(false);
 		refreshBookingView();
-		login();
+		boolean var = login();
+		if(var == true){
+			if(program.getUser().getAccountType() == 1){
+				stkBusiness.setVisible(true);
+				stkCustomer.setVisible(false);
+			}
+			else{
+				stkBusiness.setVisible(false);
+				stkCustomer.setVisible(true);
+			}
+		}
+		else{
+			Platform.exit();
+			System.exit(0);
+		}
 
 	}
+	
+	/**************
+	 * 	LOGIN
+	 **************/
 	
 	/**
 	 * Returns User to login
@@ -87,15 +108,6 @@ public class MainController implements Initializable{
             secondaryStage.setScene(new Scene(root));
             secondaryStage.initModality(Modality.APPLICATION_MODAL);
             secondaryStage.showAndWait();
-            /*
-             * TODO
-            if( User exists ) {
-                show correct window
-                set user to logged in user
-                return true
-                log.debug("logging: login success");
-            }
-            */
             return false;
         }
 		catch(IOException ioe) {
@@ -104,6 +116,10 @@ public class MainController implements Initializable{
         log.debug("false");
         return false;
 	}
+	
+	/**************
+	 * 	BOOKINGS
+	 **************/
 	
 	/**
 	 * Program Allows the user to search and displays bookings
@@ -140,11 +156,16 @@ public class MainController implements Initializable{
 	 * note tabs should be disabled
 	 * @author [Programmer]
 	 */
+	
+	/**************
+	 * 	EMPLOYEE
+	 **************/
 	@FXML
 	public void showAddNewEmp()
 	{
 		boardPaneEmpAdd.setVisible(true);
 		boardPaneEmpOverview.setVisible(false);
+		//TODO
 	}
 	
 	/**
@@ -156,6 +177,7 @@ public class MainController implements Initializable{
 	{
 		boardPaneEmpAdd.setVisible(false);
 		boardPaneEmpOverview.setVisible(true);
+		//TODO
 	}
 	
 	/**
@@ -173,5 +195,46 @@ public class MainController implements Initializable{
 		{
 			gridpWorkingTimes.setDisable(true);
 		}
+		//TODO
+	}
+	
+	/**
+	 * Resets the filtered employee list view
+	 * @author [Programmer]
+	 */
+	@FXML
+	public void refreshEmployeeView()
+	{
+		//TODO
+	}
+	
+	/**
+	 * Filters the list of employees
+	 * @author [Programmer]
+	 */
+	@FXML
+	public void searchEmployee()
+	{
+		//TODO
+	}
+	
+	/**
+	 * Views Employees Details
+	 * @author [Programmer]
+	 */
+	@FXML
+	public void viewEmpDetails()
+	{
+		
+	}
+	
+	/**
+	 * Deletes Employee
+	 * @author [Programmer]
+	 */
+	@FXML
+	public void deleteEmplyee()
+	{
+		
 	}
 }

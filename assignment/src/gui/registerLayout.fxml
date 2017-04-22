@@ -94,7 +94,7 @@
                         </FlowPane>
                         <FlowPane alignment="CENTER_LEFT" prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="2">
                            <children>
-                              <DatePicker fx:id="dpRegDOB">
+                              <DatePicker fx:id="dpRegDOB" prefHeight="31.0" prefWidth="188.0">
                                  <FlowPane.margin>
                                     <Insets left="10.0" />
                                  </FlowPane.margin>

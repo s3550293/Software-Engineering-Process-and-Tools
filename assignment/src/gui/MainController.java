@@ -23,6 +23,7 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 import program.Booking;
 import program.Controller;
+import program.BusinessMenu;
 
 import org.apache.log4j.Logger;
 
@@ -154,7 +155,7 @@ public class MainController implements Initializable{
 	/**
 	 * Shows add employee
 	 * note tabs should be disabled
-	 * @author [Programmer]
+	 * @author [Luke Mason]
 	 */
 	
 	/**************
@@ -163,14 +164,39 @@ public class MainController implements Initializable{
 	@FXML
 	public void showAddNewEmp()
 	{
+		BusinessMenu bMenu = new BusinessMenu();
 		boardPaneEmpAdd.setVisible(true);
 		boardPaneEmpOverview.setVisible(false);
+		String strFirstName = txtaddEmpFirstName.getText();
+		String strLastName = txtAddEmpLastName.getText();
+		double payRate = bMenu.strPayRateToDouble(txtAddEmpPayRate.getText());
+		
+		//Step 1
+		boolean firstName = bMenu.checkEmployeeFirstOrLastName(strFirstName);
+		//Step 2
+		boolean lastName = bMenu.checkEmployeeFirstOrLastName(strLastName);
+		//Step 3
+		boolean PayRate = bMenu.checkEmployeePayRate(payRate);
+		//Step 4
+		if(PayRate&&lastName&&firstName)//If all inputs are valid
+		{
+			//Add FXML buttons for the two options shown in the gui design on trello
+			//Save and Exit button
+			
+			//button1AddEmp().option1AddEmployee(strFirstName, strLastName, payRate);
+			
+			//Add working times button
+			
+			//button2AddEmp().option2AddEmployeeAndWorkingTimes(strFirstName, strLastName, payRate);
+		}
+
+		
 		//TODO
 	}
 	
 	/**
 	 * Returns User to manage employees
-	 * @author [Programmer]
+	 * @author [Luke Mason]
 	 */
 	@FXML
 	public void cancelAddNewEmp()

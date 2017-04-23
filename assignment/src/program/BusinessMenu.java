@@ -91,7 +91,7 @@ public class BusinessMenu
 					if (employees.size() == 0)//if array list is empty then the user is prompted to try again
 					{
 						//ERROR MESSAGE
-						//System.out.println("Sorry but there are no matches for the name '" + employeeName + "'\n Please Try again");
+						controller.messageBox("WARN", "Match Error", "Employee name entered has no matches","Sorry but there are no matches for the name '" + employeeName + ", Please Try again");
 						return false;
 					}
 					return true;
@@ -132,25 +132,25 @@ public class BusinessMenu
 				 * @return False when employeeId does not match a shown employee from viewEmployeesWithName, True when matched.
 				 */
 				public boolean CheckPickEmployeeFromList(ArrayList<Employee> employees, int employeeId)
-	{
-		if (employeeId < 0)//if id is invalid, prompts user for id again
-		{
-			//System.out.println("Invalid ID, Try again");
-			//ERROR MESSAGE
-			return false;
-		}
-		for (Employee employee : employees)//checks to see if id exists in the selection of employees in array
-		{
-			if (employee.getId() == employeeId)//calls working time functions and starts adding them for matched employee
-			{
-				return true;
-			}
-		}
-		//System.out.println("ID MISMATCH: There is no ID that matches an employee you have just searched for\n Try Again");
-		//ERROR MESSAGE
-		log.info("OUT addWorkingTimesForEmployeeByName\n");
-		return false;
-	}
+				{
+					if (employeeId < 0)//if id is invalid, prompts user for id again
+					{
+						controller.messageBox("WARN", "Choosing Error", "EmployeeID entered is not valid","EmployeeID entered is not valid, Try again");
+						//ERROR MESSAGE
+						return false;
+					}
+					for (Employee employee : employees)//checks to see if id exists in the selection of employees in array
+					{
+						if (employee.getId() == employeeId)//calls working time functions and starts adding them for matched employee
+						{
+							return true;
+						}
+					}
+					//System.out.println("ID MISMATCH: There is no ID that matches an employee you have just searched for\n Try Again");
+					//ERROR MESSAGE
+					log.info("OUT addWorkingTimesForEmployeeByName\n");
+					return false;
+				}
 	
 	
 
@@ -172,8 +172,7 @@ public class BusinessMenu
 					if (controller.checkInputToContainInvalidChar(employeeFLName))//checking for invalid characters
 					{
 						//ERROR MESSAGE
-						//System.out.println("The name you have entered contains non-alphabetical characters");
-						//System.out.println("Please try again");
+						controller.messageBox("WARN", "Match Error", "Employee name Contains invalid characters","The name you have entered contains non-alphabetical characters, Please try again");
 						return false;
 					}
 					return true;
@@ -199,6 +198,7 @@ public class BusinessMenu
 					if (employeePayRate < 0)
 					{
 						//ERROR MESSAGE
+						controller.messageBox("WARN", "Pay Rate Error", "Employee pay rate is invalid","The amount you have entered contains invalid characters, is less than 0 or is greater than 1000, Please Try Again");
 						//System.out.println("The amount you have entered contains invalid characters, is less than 0 or greater that 1000 ");
 						//System.out.println("Please try again");
 						return false;
@@ -236,6 +236,7 @@ public class BusinessMenu
 						//Adds working times to the LAST employee (should be the recent one just added)
 						if(!employees2.hasNext())
 						{
+							//allowWorkingTimes();
 							//changeWorkingTimeRoster(((Employee) employees2).getId()); 
 						} 
 					}

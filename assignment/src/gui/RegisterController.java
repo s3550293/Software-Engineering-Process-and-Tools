@@ -161,8 +161,10 @@ public class RegisterController implements Initializable {
         	program.messageBox("ERROR", "Error", "Invalid Password", "Password must be longer then 6 characters and contain Uppercase, lowercase and number characters");
             return;
         }
-        if(pfRegPassword.getText() != pfRegConfPassword.getText())
+        if(!pfRegPassword.getText().toString().equals(pfRegConfPassword.getText().toString()))
         {
+        	log.debug("LOGGER: Password:"+pfRegPassword.getText());
+        	log.debug("LOGGER: Conf Password:"+pfRegConfPassword.getText());
         	program.messageBox("ERROR", "Error", "Passwords Do No Match", "");
             return;
         }

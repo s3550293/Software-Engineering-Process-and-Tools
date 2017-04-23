@@ -63,28 +63,49 @@ public class Database
 		 * 
 		 * creating tables for users and user details to be remembered later
 		 */
-		String queryUser = "CREATE TABLE IF NOT EXISTS USERS (" + "userID integer PRIMARY KEY AUTOINCREMENT,"
-				+ "username VARCHAR(30) NOT NULL," + "password VARCHAR(30) NOT NULL,"
+		String queryUser = "CREATE TABLE IF NOT EXISTS USERS (" + 
+		 "userID integer PRIMARY KEY AUTOINCREMENT,"
+				+ "username VARCHAR(30) NOT NULL," 
+				+ "password VARCHAR(30) NOT NULL,"
 				+ "accountType integer NOT NULL);";
-		String queryUserDetails = "CREATE TABLE IF NOT EXISTS CLIENTDETAILS (" + "id integer NOT NULL,"
-				+ "username VARCHAR(30) NOT NULL," + "Address VARCHAR(30) NOT NULL," + "Phone number boolean NOT NULL,"
+		String queryUserDetails = "CREATE TABLE IF NOT EXISTS CLIENTDETAILS (" 
+				+ "id integer NOT NULL,"
+				+ "FName VARCHAR(30) NOT NULL,"
+				+ "LName VARCHAR(30) NOT NULL," 
+				+ "Email VARCHAR(30) NOT NULL," 
+				+ "Phone VARCHAR(30) NOT NULL,"
+				+ "DOB VARCHAR(30) NOT NULL,"
+				+ "Gender VARCHAR(30) NOT NULL,"
 				+ "FOREIGN KEY(id) REFERENCES USERS(userID));";
 		String queryEmployees = "CREATE TABLE IF NOT EXISTS EMPLOYEES ("
-				+ "employeeID integer PRIMARY KEY AUTOINCREMENT," + "name VARCHAR(40) NOT NULL,"
+				+ "employeeID integer PRIMARY KEY AUTOINCREMENT," 
+				+ "name VARCHAR(40) NOT NULL,"
 				+ "payRate DOUBLE NOT NULL);";
 
 		String queryEmployeesWorkingTimes = "CREATE TABLE IF NOT EXISTS EMPLOYEES_WORKING_TIMES ("
-				+ "id integer PRIMARY KEY AUTOINCREMENT," + "employeeID integer NOT NULL,"
-				+ "date VARCHAR(20) NOT NULL," + "startTime VARCHAR(20) NOT NULL," + "endTime VARCHAR(20) NOT NULL,"
+				+ "id integer PRIMARY KEY AUTOINCREMENT," 
+				+ "employeeID integer NOT NULL,"
+				+ "date VARCHAR(20) NOT NULL," 
+				+ "startTime VARCHAR(20) NOT NULL," 
+				+ "endTime VARCHAR(20) NOT NULL,"
 				+ "FOREIGN KEY(employeeID) REFERENCES EMPLOYEES(employeeID));";
-		String queryBookings = "CREATE TABLE IF NOT EXISTS BOOKINGS (" + "id integer PRIMARY KEY AUTOINCREMENT,"
-				+ "userID integer NOT NULL," + "date VARCHAR(20) NOT NULL," + "startTime VARCHAR(20) NOT NULL,"
-				+ "endTime VARCHAR(20) NOT NULL," + "serviceID integer NOT NULL," + "status VARCHAR(20),"
+		String queryBookings = "CREATE TABLE IF NOT EXISTS BOOKINGS (" 
+				+ "id integer PRIMARY KEY AUTOINCREMENT,"
+				+ "userID integer NOT NULL," + "date VARCHAR(20) NOT NULL," 
+				+ "startTime VARCHAR(20) NOT NULL,"
+				+ "endTime VARCHAR(20) NOT NULL," 
+				+ "serviceID integer NOT NULL," 
+				+ "status VARCHAR(20),"
 				+ "FOREIGN KEY (userID) REFERENCES USERS(userID));";
-		String queryServices = "CREATE TABLE IF NOT EXISTS SERVICES (" + "id integer PRIMARY KEY AUTOINCREMENT,"
-				+ "service VARCHAR(40) NOT NULL," + "length integer NOT NULL," + "cost double NOT NULL);";
-		String queryBookingServiceLink = "CREATE TABLE IF NOT EXISTS BSLINK (" + "bookingID integer NOT NULL,"
-				+ "serviceID integer NOT NULL," + "FOREIGN KEY(bookingID) REFERENCES BOOKINGS(id),"
+		String queryServices = "CREATE TABLE IF NOT EXISTS SERVICES (" 
+				+ "id integer PRIMARY KEY AUTOINCREMENT,"
+				+ "service VARCHAR(40) NOT NULL,"
+				+ "length integer NOT NULL,"
+				+ "cost double NOT NULL);";
+		String queryBookingServiceLink = "CREATE TABLE IF NOT EXISTS BSLINK (" 
+				+ "bookingID integer NOT NULL,"
+				+ "serviceID integer NOT NULL," 
+				+ "FOREIGN KEY(bookingID) REFERENCES BOOKINGS(id),"
 				+ "FOREIGN KEY(serviceID) REFERENCES SERVICES(id));";
 
 		/*

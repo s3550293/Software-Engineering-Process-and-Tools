@@ -44,12 +44,45 @@ public class DatabaseConnection
         return connect;
 	}
 	
+	/**
+	 * Adds User to database
+	 * @param username
+	 * @param password
+	 * @param accountType
+	 */
 	public void addUser(String username, String password, int accountType)
 	{
 		/*
 		 * account type boolean 1 for business owner 0 for user
 		 */
 		String query = "INSERT INTO users(username, password, accountType) " + "VALUES('"+username+"','"+password+"','"+accountType+"')";
+		try(Connection connect = this.connect(); Statement inject = connect.createStatement())
+		{
+			/*
+			 * Sets the '?' values into the query
+			 */
+			inject.executeUpdate(query);
+			//System.out.println("User Added");
+			log.info("User Added\n");
+		}
+		catch(SQLException sqle)
+		{
+			//System.out.println(sqle.getMessage());
+			log.warn(sqle.getMessage());
+		}
+	}
+	/**
+	 * Adds User to database
+	 * @param username
+	 * @param password
+	 * @param accountType
+	 */
+	public void addUserDetails(int id, String fname, String lname, String email, String phone, String dob, String gender)
+	{
+		/*
+		 * account type boolean 1 for business owner 0 for user
+		 */
+		String query = "INSERT INTO CLIENTDETAILS(id, FName, LName, Email, Phone, DOB, Gender) " + "VALUES("+id+",'"+fname+"','"+lname+"','"+email+"','"+phone+"','"+dob+"','"+gender+"')";
 		try(Connection connect = this.connect(); Statement inject = connect.createStatement())
 		{
 			/*

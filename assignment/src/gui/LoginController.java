@@ -56,12 +56,15 @@ public class LoginController implements Initializable {
 			if(loginCheck == -2){
 				lblError.setVisible(true);
 				loginCount += 1;
+				log.debug("LOGGER: login count - "+loginCount);
 			}
 			else if(loginCheck == 1 || loginCheck == 0){
+				log.debug("LOGGER: Login is equal to 1 or 0");
 				lblError.setVisible(false);
 				loginstage.close();
 			}
 			else{
+				log.debug("LOGGER: Login returning a value different from -2, 1 or 0");
 				lblError.setVisible(true);
 				loginCount += 1;
 			}

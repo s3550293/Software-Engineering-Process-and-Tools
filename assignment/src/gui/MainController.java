@@ -6,6 +6,8 @@ import java.util.ResourceBundle;
 import java.util.*;
 
 import javafx.application.Platform;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -16,6 +18,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
+import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.ToggleButton;
@@ -39,6 +42,7 @@ public class MainController implements Initializable{
 	private  static Logger log = Logger.getLogger(MainController.class);
 	private Controller program = new Controller();
 	private DatabaseConnection connection = new DatabaseConnection();
+	private Employee employee = null;
 	public MainController() {}
 	
 	@FXML
@@ -48,7 +52,10 @@ public class MainController implements Initializable{
 	BorderPane boardPaneEmpAdd, boardPaneEmpOverview;
 	
 	@FXML
-	Button btnRefreshBooking, btnSearchBookings, btnCancelBooking, btnLogout, btnRefreshEmployee, btnSearchEmployee, btnConfirm;
+	Button btnRefreshBooking, btnSearchBookings, btnCancelBooking, btnLogout, btnRefreshEmployee, btnSearchEmployee, btnConfirm, btnViewEmpDetails;
+	
+	@FXML
+	Label lblEmployeeID, lblEmployeeName, lblEmployeePayrate;
 	
 	@FXML
 	ListView<Booking> listviewBookings;
@@ -74,7 +81,7 @@ public class MainController implements Initializable{
 	
 	/**
 	 * initializes the stage
-	 * @author [Programmer]
+	 * @author Joseph
 	 */
 	public void initialize(URL url, ResourceBundle rb)
 	{
@@ -96,14 +103,26 @@ public class MainController implements Initializable{
 			Platform.exit();
 			System.exit(0);
 		}
-		loadListView("");
+		loadListViewEmp("");
+		listviewEmployees.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<Employee>() {
+            @Override
+            public void changed(ObservableValue<? extends Employee> observable, Employee oldValue, Employee newValue) {
+                if (newValue != null) {
+                	employee = newValue;
+                	lblEmployeeID.setText(Integer.toString(employee.getId()));
+                	lblEmployeeName.setText(employee.getName());
+                	lblEmployeePayrate.setText(Double.toString(employee.getPayRate()));
+                }
+            }
+        });
+		loadListViewBook();
+		
 
 	}
-	private void loadListView(String name){
-		/*
-            //ArrayList<Employee> empArray = new ArrayList<>(connection.getEmployees(name));
-            ObservableList<Employee> empList = FXCollections.observableList(connection.getEmployees(name));
-            log.debug("LOGGER: List length:"+);
+	private void loadListViewEmp(String name){
+            ArrayList<Employee> empArray = new ArrayList<>(connection.getEmployees(name));
+            ObservableList<Employee> empList = FXCollections.observableList(empArray);
+            log.debug("LOGGER: List length:"+empArray.size());
             if(empList != null)
             {
             	listviewEmployees.setItems(empList);
@@ -127,8 +146,35 @@ public class MainController implements Initializable{
             else{
             	log.warn("Unable to load Employees");
             }
-            */
 	}
+	private void loadListViewBook(){
+        ArrayList<Booking> bookArray = new ArrayList<>(connection.getAllBooking());
+        ObservableList<Booking> bookList = FXCollections.observableList(bookArray);
+        log.debug("LOGGER: List length:"+bookArray.size());
+        if(bookList != null)
+        {
+        	listviewBookings.setItems(bookList);
+        	listviewBookings.setCellFactory(new Callback<ListView<Booking>, ListCell<Booking>>() {
+                @Override
+                public ListCell<Booking> call(ListView<Booking> p) {
+
+                    ListCell<Booking> cell = new ListCell<Booking>() {
+                        @Override
+                        protected void updateItem(Booking t, boolean bln) {
+                            super.updateItem(t, bln);
+                            if (t != null) {
+                                setText(t.getBookingID() + " " + t.getCustomerId() + " " + program.convertDateToString(t.getDate()) + " "+ program.convertTimeToString(t.getStartTime())+" "+ t.getStatus());
+                            }
+                        }
+                    };
+                    return cell;
+                }
+            });
+        }
+        else{
+        	log.warn("Unable to load Employees");
+        }
+}
 	
 	/**************
 	 * 	LOGIN

@@ -11,7 +11,6 @@ import program.DatabaseConnection;
 import java.io.File;
 
 public class PreLoader extends Preloader{
-	
     ProgressBar bar;
     Stage stage;
 

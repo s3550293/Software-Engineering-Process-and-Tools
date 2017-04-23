@@ -32,6 +32,8 @@ public class User
 	}
 	public User(){}
 	
+	public int getID(){return _id;}
+	
 	public String toString()
 	{
 		return _username + " " + _password + " " + _accountType;

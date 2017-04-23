@@ -1,31 +1,48 @@
 package gui;
 
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.ResourceBundle;
 
 import org.apache.log4j.Logger;
 
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
+import javafx.stage.Stage;
+import program.Controller;
+import program.Register;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 
 public class RegisterController implements Initializable {
 
 	public static Logger log = Logger.getLogger(RegisterController.class);
+	private Controller program = new Controller();
+	private Register regProgram = new Register();
 
 	@FXML
-	TextField txtRegUsername, txtRegEmail;
+	TextField txtRegUsername, txtRegEmail, txtFirstName, txtLastName, txtMobileNumber;
 
 	@FXML
 	DatePicker dpRegDOB;
 
 	@FXML
 	ComboBox<String> cmbRegGender;
-
+	@FXML
+	ComboBox<String> cmbDay;
+	@FXML
+	ComboBox<String> cmbMonth;
+	@FXML
+	ComboBox<String> cmbYear;
+	
 	@FXML
 	PasswordField pfRegPassword, pfRegConfPassword;
 
@@ -35,10 +52,53 @@ public class RegisterController implements Initializable {
 	/**
 	 * initializes the stage
 	 * 
-	 * @author [Programmer]
+	 * @author Joseph Ganer
 	 */
 	public void initialize(URL url, ResourceBundle rb) {
 		// TODO
+		List<String> listDay = new ArrayList<String>();
+		for(int i =1; i<32;i++){listDay.add(Integer.toString(i));}
+		ObservableList<String> obListDay = FXCollections.observableList(listDay);
+		cmbDay.setItems(obListDay);
+		List<String> listMonth = new ArrayList<String>();
+		for(int i =1; i<13;i++){listMonth.add(Integer.toString(i));}
+		ObservableList<String> obListMonth = FXCollections.observableList(listMonth);
+		cmbMonth.setItems(obListMonth);
+		List<String> list = new ArrayList<String>();
+		for(int i =2017; i>1900;i--){list.add(Integer.toString(i));}
+		ObservableList<String> obList = FXCollections.observableList(list);
+		cmbYear.setItems(obList);
+		
+		cmbMonth.valueProperty().addListener(new ChangeListener<String>() {
+	        @Override public void changed(ObservableValue ov, String t, String t1) {
+	        	if(t1 == "4" || t1 == "6" || t1 == "10" || t1 == "11"){
+	        		cmbDay.getItems().clear();
+	        		List<String> listDay = new ArrayList<String>();
+	        		for(int i =1; i<31;i++){listDay.add(Integer.toString(i));}
+	        		ObservableList<String> obListDay = FXCollections.observableList(listDay);
+	        		cmbDay.setItems(obListDay);
+	        	}
+	        	else if(t1 == "2"){
+	        		cmbDay.getItems().clear();
+	        		List<String> listDay = new ArrayList<String>();
+	        		for(int i =1; i<28;i++){listDay.add(Integer.toString(i));}
+	        		ObservableList<String> obListDay = FXCollections.observableList(listDay);
+	        		cmbDay.setItems(obListDay);
+	        	}
+	        	else{
+	        		List<String> listDay = new ArrayList<String>();
+	        		for(int i =1; i<31;i++){listDay.add(Integer.toString(i));}
+	        		ObservableList<String> obListDay = FXCollections.observableList(listDay);
+	        		cmbDay.setItems(obListDay);
+	        	}
+	        }
+		});
+		List<String> gender = new ArrayList<String>();
+		gender.add("Female");
+		gender.add("Male");
+		gender.add("Other");
+		ObservableList<String> obListGen = FXCollections.observableList(gender);
+		cmbRegGender.setItems(obListGen);
 	}
 
 	/**
@@ -48,8 +108,8 @@ public class RegisterController implements Initializable {
 	 */
 	@FXML
 	public void cancel() {
-		//TODO
-		
+		Stage regStage = (Stage) btnCancel.getScene().getWindow();
+		regStage.close();
 	}
 
 	/**
@@ -60,6 +120,56 @@ public class RegisterController implements Initializable {
 	@FXML
 	public void register() {
 		//TODO
+		String date = null;
+		log.debug("LOGGER: entered createUser function");
+        if (program.checkInputToContainInvalidChar(txtFirstName.getText().toString())) {
+            program.messageBox("ERROR", "Error", "First Name field is empty or contains an invalid character", "");
+            return;
+        }
+        if (program.checkInputToContainInvalidChar(txtLastName.getText().toString())) {
+            program.messageBox("ERROR", "Error", "Last Name field is empty or contains an invalid character", "");
+            return;
+        }
+        if (regProgram.checkTakenUsername(txtRegUsername.getText().toString())) {
+            program.messageBox("ERROR", "Error", "Invalid Username", "");
+            return;
+        }
+        if (program.checkEmail(txtRegEmail.getText().toString())) {
+            program.messageBox("ERROR", "Error", "Invalid Email", "");
+            return;
+        }
+        if(txtMobileNumber.getText().length() != 10)
+        {
+        	program.messageBox("ERROR", "Error", "Invalid Phone Number", "");
+            return;
+        }
+        if(program.changeInputIntoValidInt(txtMobileNumber.getText().toString()) == -1)
+        {
+        	program.messageBox("ERROR", "Error", "Invalid Phone Number", "");
+            return;
+        }
+        if(cmbDay.getSelectionModel().getSelectedItem() == null || cmbMonth.getSelectionModel().getSelectedItem() == null || cmbYear.getSelectionModel().getSelectedItem() == null){
+        	program.messageBox("ERROR", "Error", "Invalid Date", "");
+            return;
+        }
+        if(cmbRegGender.getSelectionModel().getSelectedItem() == null)
+        {
+        	program.messageBox("ERROR", "Error", "Invalid Gender", "");
+            return;
+        }
+        if(!regProgram.checkPassword(pfRegPassword.getText())){
+        	program.messageBox("ERROR", "Error", "Invalid Password", "Password must be longer then 6 characters and contain Uppercase, lowercase and number characters");
+            return;
+        }
+        if(pfRegPassword.getText() != pfRegConfPassword.getText())
+        {
+        	program.messageBox("ERROR", "Error", "Passwords Do No Match", "");
+            return;
+        }
+        date = cmbDay.getSelectionModel().getSelectedItem() + "/" + cmbMonth.getSelectionModel().getSelectedItem() + "/" + cmbYear.getSelectionModel().getSelectedItem();
+        regProgram.registerUser(txtFirstName.getText(), txtLastName.getText(), txtRegUsername.getText(), txtRegEmail.getText(), txtMobileNumber.getText(), date, cmbRegGender.getSelectionModel().getSelectedItem(), pfRegPassword.getText());
+        program.messageBox("INFO", "User Added", "User Added", "You have successfully created an account");
+        cancel();
 	}
 
 }

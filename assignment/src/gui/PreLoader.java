@@ -11,7 +11,6 @@ import program.DatabaseConnection;
 import java.io.File;
 
 public class PreLoader extends Preloader{
-	
     ProgressBar bar;
     Stage stage;
 
@@ -57,8 +56,12 @@ public class PreLoader extends Preloader{
 		DatabaseConnection connect = new DatabaseConnection();
 		connect.addUser("William", "Apples22", 0);
 		connect.addUser("admin","Monday10!",1);
-		connect.addEmployee("Luke Charles",100);
-		connect.addEmployee("David Smith",100);
+		
+		connect.addEmployee("Luke Charles",25);
+		connect.addEmployee("David Smith",43);
+		connect.addEmployee("Will Turner",15);
+		connect.addEmployee("Null Pointer",42);
+		
 		connect.addEmployeeWorkingTime(1,"05/04/2017","9:00","17:00");
 		connect.addEmployeeWorkingTime(1,"10/04/2017","8:00","14:00");
 

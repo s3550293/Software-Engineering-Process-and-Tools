@@ -44,7 +44,7 @@ public class Login
 						//login();
 						break;
 					case 2:
-						reg.registerUser();
+						//reg.registerUser();
 						break;
 					case 3:
 						System.out.println("Exit the program...");
@@ -147,7 +147,7 @@ public class Login
 		switch(option)
 		{
 		case 1:
-			reg.registerUser();
+			//reg.registerUser();
 			break;
 		case 2:
 			//login();

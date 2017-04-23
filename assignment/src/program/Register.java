@@ -1,84 +1,20 @@
 package program;
 
-import java.util.Scanner;
-
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 
 public class Register 
 {
 	private static Logger log = Logger.getLogger(Register.class);
-	private boolean usernameLoop = true;
-	private boolean accountPasswordLoop = true;
 	private DatabaseConnection connect = new DatabaseConnection();
 	
 	public Register(){log.setLevel(Level.WARN);}
 	
 	
-	public void registerUser()
+	public void registerUser(String fname, String lname, String username, String email, String mobilenumber, String dob, String gender, String password)
 	{
-		boolean flag = true;
-		String _username = "";
-		String _password = "";
-		char _choice = 'y';
-		int accountType = 0;
-		@SuppressWarnings("resource")
-		Scanner userInput = new Scanner(System.in);
-		while(flag)
-		{
-			boolean flag_2 = true;
-			System.out.printf("\n%-1s %s\n", "", "Register");
-			System.out.printf("%s\n","---------------------------");
-			//Checks if username already exsists
-			do
-			{
-				System.out.print("Enter username: ");
-				_username = userInput.nextLine();
-				checkTakenUsername(_username);
-			}
-			while(usernameLoop);
-			do
-			{
-				System.out.print("Enter password: ");
-				_password = userInput.nextLine();
-				if(checkPassword(_password) == true)
-				{
-					accountPasswordLoop = false;
-				}
-			}
-			while(accountPasswordLoop);
-			System.out.println("Confirm");
-			String _acc;
-			//create a string that can be printed to display account type
-			if(accountType == 1){ _acc = "Business"; }else{ _acc = "Customer"; }
-			System.out.println("Username: "+_username+" Password: "+_password+" Account Type: "+_acc);
-			System.out.print("[y/n]");
-			_choice = userInput.next().charAt(0);
-			userInput.nextLine();
-			//comfirming
-			while(flag_2)
-			{
-				switch(_choice)
-				{
-					case 'y':
-					case 'Y':
-						flag = false;
-						connect.addUser(_username, _password, accountType);
-						System.out.println("Account created!");
-						flag_2 = false;
-						flag = false;
-						break;
-					case 'n':
-					case 'N':
-						//do nothing, let loop;
-						break;
-					default:
-						System.out.print("Error");
-						break;
-						
-				}
-			}
-		}
+		connect.addUser(username, password, 0);
+		connect.addUserDetails(connect.getUser(username).getID(),fname,lname, email, mobilenumber, dob, gender);	
 	}
 	
 	//This method checks if the username is equal to one already in the database
@@ -87,7 +23,6 @@ public class Register
 		boolean output = true;
 		if(!username.equalsIgnoreCase(connect.getUser(username).getUsername()))
 		{
-			usernameLoop = false;
 			output = false;
 		}
 		else

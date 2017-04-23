@@ -21,7 +21,9 @@ public class MainApplication extends Application {
         primaryStage.setScene(new Scene(root));
         primaryStage.getIcons().add(new Image("images/ic_collections_bookmark_black_48dp_2x.png"));
         primaryStage.setMinWidth(800);
-        primaryStage.setMinHeight(600);
+        primaryStage.setMinHeight(650);
+        primaryStage.setMaxWidth(1000);
+        primaryStage.setMaxHeight(850);
         primaryStage.show();
 
     }

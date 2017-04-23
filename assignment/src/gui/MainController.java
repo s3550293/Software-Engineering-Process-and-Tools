@@ -3,27 +3,37 @@ package gui;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
+import java.util.*;
 
 import javafx.application.Platform;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+import javafx.util.Callback;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
+import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.ToggleButton;
+import javafx.scene.control.ListCell;
 import javafx.scene.image.Image;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.StackPane;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+
 import program.Booking;
+import program.Employee;
 import program.Controller;
-import program.BusinessMenu;
+import program.DatabaseConnection;
 
 import org.apache.log4j.Logger;
 
@@ -31,6 +41,8 @@ public class MainController implements Initializable{
 	
 	private  static Logger log = Logger.getLogger(MainController.class);
 	private Controller program = new Controller();
+	private DatabaseConnection connection = new DatabaseConnection();
+	private Employee employee = null;
 	public MainController() {}
 	
 	@FXML
@@ -40,10 +52,16 @@ public class MainController implements Initializable{
 	BorderPane boardPaneEmpAdd, boardPaneEmpOverview;
 	
 	@FXML
-	Button btnRefreshBooking, btnSearchBookings, btnCancelBooking, btnLogout, btnRefreshEmployee, btnSearchEmployee;
+	Button btnRefreshBooking, btnSearchBookings, btnCancelBooking, btnLogout, btnRefreshEmployee, btnSearchEmployee, btnConfirm, btnViewEmpDetails;
+	
+	@FXML
+	Label lblEmployeeID, lblEmployeeName, lblEmployeePayrate;
 	
 	@FXML
 	ListView<Booking> listviewBookings;
+	
+	@FXML
+	ListView<Employee> listviewEmployees;
 	
 	@FXML
 	TextField txtSearchBookings, txtaddEmpFirstName, txtAddEmpLastName, txtAddEmpPayRate, txtSearchEmployee;
@@ -63,7 +81,7 @@ public class MainController implements Initializable{
 	
 	/**
 	 * initializes the stage
-	 * @author [Programmer]
+	 * @author Joseph
 	 */
 	public void initialize(URL url, ResourceBundle rb)
 	{
@@ -72,21 +90,91 @@ public class MainController implements Initializable{
 		refreshBookingView();
 		boolean var = login();
 		if(var == true){
-			if(program.getUser().getAccountType() == 1){
-				stkBusiness.setVisible(true);
-				stkCustomer.setVisible(false);
-			}
-			else{
-				stkBusiness.setVisible(false);
-				stkCustomer.setVisible(true);
-			}
+				if(program.getUser().getAccountType() == 1){
+					stkBusiness.setVisible(true);
+					stkCustomer.setVisible(false);
+				}
+				else{
+					stkBusiness.setVisible(false);
+					stkCustomer.setVisible(true);
+				}
 		}
 		else{
 			Platform.exit();
 			System.exit(0);
 		}
+		loadListViewEmp("");
+		listviewEmployees.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<Employee>() {
+            @Override
+            public void changed(ObservableValue<? extends Employee> observable, Employee oldValue, Employee newValue) {
+                if (newValue != null) {
+                	employee = newValue;
+                	lblEmployeeID.setText(Integer.toString(employee.getId()));
+                	lblEmployeeName.setText(employee.getName());
+                	lblEmployeePayrate.setText(Double.toString(employee.getPayRate()));
+                }
+            }
+        });
+		loadListViewBook();
+		
 
 	}
+	private void loadListViewEmp(String name){
+            ArrayList<Employee> empArray = new ArrayList<>(connection.getEmployees(name));
+            ObservableList<Employee> empList = FXCollections.observableList(empArray);
+            log.debug("LOGGER: List length:"+empArray.size());
+            if(empList != null)
+            {
+            	listviewEmployees.setItems(empList);
+	            listviewEmployees.setCellFactory(new Callback<ListView<Employee>, ListCell<Employee>>() {
+	                @Override
+	                public ListCell<Employee> call(ListView<Employee> p) {
+	
+	                    ListCell<Employee> cell = new ListCell<Employee>() {
+	                        @Override
+	                        protected void updateItem(Employee t, boolean bln) {
+	                            super.updateItem(t, bln);
+	                            if (t != null) {
+	                                setText(t.getId() + " " + t.getName() + " " + t.getPayRate());
+	                            }
+	                        }
+	                    };
+	                    return cell;
+	                }
+	            });
+            }
+            else{
+            	log.warn("Unable to load Employees");
+            }
+	}
+	private void loadListViewBook(){
+        ArrayList<Booking> bookArray = new ArrayList<>(connection.getAllBooking());
+        ObservableList<Booking> bookList = FXCollections.observableList(bookArray);
+        log.debug("LOGGER: List length:"+bookArray.size());
+        if(bookList != null)
+        {
+        	listviewBookings.setItems(bookList);
+        	listviewBookings.setCellFactory(new Callback<ListView<Booking>, ListCell<Booking>>() {
+                @Override
+                public ListCell<Booking> call(ListView<Booking> p) {
+
+                    ListCell<Booking> cell = new ListCell<Booking>() {
+                        @Override
+                        protected void updateItem(Booking t, boolean bln) {
+                            super.updateItem(t, bln);
+                            if (t != null) {
+                                setText(t.getBookingID() + " " + t.getCustomerId() + " " + program.convertDateToString(t.getDate()) + " "+ program.convertTimeToString(t.getStartTime())+" "+ t.getStatus());
+                            }
+                        }
+                    };
+                    return cell;
+                }
+            });
+        }
+        else{
+        	log.warn("Unable to load Employees");
+        }
+}
 	
 	/**************
 	 * 	LOGIN
@@ -109,7 +197,9 @@ public class MainController implements Initializable{
             secondaryStage.setScene(new Scene(root));
             secondaryStage.initModality(Modality.APPLICATION_MODAL);
             secondaryStage.showAndWait();
-            return false;
+            if(program.getUser() != null){
+            	return true;
+            }
         }
 		catch(IOException ioe) {
             log.warn(ioe.getMessage());
@@ -155,7 +245,7 @@ public class MainController implements Initializable{
 	/**
 	 * Shows add employee
 	 * note tabs should be disabled
-	 * @author [Luke Mason]
+	 * @author [Programmer]
 	 */
 	
 	/**************
@@ -164,39 +254,14 @@ public class MainController implements Initializable{
 	@FXML
 	public void showAddNewEmp()
 	{
-		BusinessMenu bMenu = new BusinessMenu();
 		boardPaneEmpAdd.setVisible(true);
 		boardPaneEmpOverview.setVisible(false);
-		String strFirstName = txtaddEmpFirstName.getText();
-		String strLastName = txtAddEmpLastName.getText();
-		double payRate = bMenu.strPayRateToDouble(txtAddEmpPayRate.getText());
-		
-		//Step 1
-		boolean firstName = bMenu.checkEmployeeFirstOrLastName(strFirstName);
-		//Step 2
-		boolean lastName = bMenu.checkEmployeeFirstOrLastName(strLastName);
-		//Step 3
-		boolean PayRate = bMenu.checkEmployeePayRate(payRate);
-		//Step 4
-		if(PayRate&&lastName&&firstName)//If all inputs are valid
-		{
-			//Add FXML buttons for the two options shown in the gui design on trello
-			//Save and Exit button
-			
-			//button1AddEmp().option1AddEmployee(strFirstName, strLastName, payRate);
-			
-			//Add working times button
-			
-			//button2AddEmp().option2AddEmployeeAndWorkingTimes(strFirstName, strLastName, payRate);
-		}
-
-		
 		//TODO
 	}
 	
 	/**
 	 * Returns User to manage employees
-	 * @author [Luke Mason]
+	 * @author [Programmer]
 	 */
 	@FXML
 	public void cancelAddNewEmp()
@@ -221,6 +286,16 @@ public class MainController implements Initializable{
 		{
 			gridpWorkingTimes.setDisable(true);
 		}
+		//TODO
+	}
+	
+	/**
+	 * Creates an Employee
+	 * @author [Programmer]
+	 */
+	@FXML 
+	public void createEmp()
+	{
 		//TODO
 	}
 	
@@ -251,7 +326,7 @@ public class MainController implements Initializable{
 	@FXML
 	public void viewEmpDetails()
 	{
-		
+		//TODO
 	}
 	
 	/**
@@ -261,6 +336,6 @@ public class MainController implements Initializable{
 	@FXML
 	public void deleteEmplyee()
 	{
-		
+		//TODO
 	}
 }

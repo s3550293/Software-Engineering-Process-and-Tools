@@ -6,7 +6,6 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
-//import java.util.GregorianCalendar;
 import java.util.Scanner;
 
 import org.apache.log4j.Level;
@@ -37,16 +36,21 @@ public class Controller
 		{
 			return true;
 		}
+		if( (int) string.charAt(0) == 32 || (int) string.charAt(1) == 32)
+		{
+			return true;
+		}
 		for (int i = 0; i < string.length(); i++)
 		{
 			if ((int) string.charAt(i) < 97 || (int) string.charAt(i) > 122)// checks if the letter is not a lowercase letter
 			{
 				if ((int) string.charAt(i) < 65 || (int) string.charAt(i) > 90)// checks if the letter is not an upper case letter
 				{
-					/*if ((int) string.charAt(i) != 32)// checks if the char is
+					if ((int) string.charAt(i) != 32)// checks if the char is
+					{
 					// not a 'space'
-					{*/
 						return true;
+					}
 				}
 			}
 		}	
@@ -810,4 +814,20 @@ public class Controller
         alert.setContentText(message);
         alert.showAndWait();
     }
+	
+	/**
+	 * displays an alert box to the user
+	 * @author Joseph Garner
+	 */
+	public boolean checkEmail(String email)
+	{
+		for (int i = 0; i < email.length(); i++)
+		{
+			if (email.charAt(i) == '@')
+			{
+				return false;
+			}
+		}
+		return true;
+	}
 }

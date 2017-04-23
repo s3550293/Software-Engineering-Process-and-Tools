@@ -561,4 +561,22 @@ public class DatabaseConnection
 			return false;
 		}
 	}
+	/**
+	 * @author Luke Mason
+	 * @param EmployeeID
+	 * @return
+	 */
+	public boolean clearWorkTimes(int EmployeeID)
+	{
+		return false;
+	}
+	/**
+	 * @author Luke Mason
+	 * @param date
+	 * @return
+	 */
+	public boolean set7DayRosterTime(String date, String startTime, String endTime)
+	{
+		return false;
+	}
 }

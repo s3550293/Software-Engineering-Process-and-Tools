@@ -3,11 +3,14 @@ package program;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.ListIterator;
 import java.util.Scanner;
 
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
+
+import javafx.scene.control.ToggleButton;
 
 public class BusinessMenu
 {
@@ -15,6 +18,7 @@ public class BusinessMenu
 	private static Logger log = Logger.getLogger(BusinessMenu.class);
 	private boolean flag = true;
 	private Controller controller = new Controller();
+	DatabaseConnection connect = new DatabaseConnection();
 	public BusinessMenu(){log.setLevel(Level.WARN);}
 	public void companyMenu()
 	{
@@ -222,7 +226,7 @@ public class BusinessMenu
 				 * @param employeeLName
 				 * @param employeePayRate
 				 */
-				public void option2AddEmployeeAndWorkingTimes(String employeeFName,String employeeLName,double employeePayRate)
+				public void option2AddEmployeeAndWorkingTimes(String employeeFName,String employeeLName,double employeePayRate,ToggleButton btnSunMorning,ToggleButton btnSunAfternoon,ToggleButton btnSunEvening,ToggleButton btnMonMorning,ToggleButton btnMonAfternoon,ToggleButton btnMonEvening,ToggleButton btnTueMorning,ToggleButton btnTueAfternoon,ToggleButton btnTueEvening,ToggleButton btnWedMorning,ToggleButton btnWedAfternoon,ToggleButton btnWedEvening,ToggleButton btnThurMorning,ToggleButton btnThurAfternoon,ToggleButton btnThurEvening,ToggleButton btnFriMorning,ToggleButton btnFriAfternoon,ToggleButton btnFriEvening,ToggleButton btnSatMorning,ToggleButton btnSatAfternoon,ToggleButton btnSatEvening)
 				{
 					DatabaseConnection connect = new DatabaseConnection();
 					option1AddEmployee(employeeFName,employeeLName,employeePayRate);
@@ -230,23 +234,266 @@ public class BusinessMenu
 					ArrayList<Employee> employees = connect.getEmployees(employeeName);//adding working times to employee just made
 					ListIterator<Employee> employees2 = employees.listIterator();
 					//This is for if more than one employee has the same name as searched
+					int id = -1;
 					while(employees2.hasNext())
 					{
 						//Adds working times to the LAST employee (should be the recent one just added)
 						if(!employees2.hasNext())
 						{
-							//allowWorkingTimes();
-							//changeWorkingTimeRoster(((Employee) employees2).getId()); 
+							id =((Employee)employees2).getId();
 						} 
 					}
+					if(id == -1)
+					{
+						controller.messageBox("WARN", "Finding last employee Error", "Couldn't get ID of last employee in array ","Please consult Luke Mason as he programmed this piece of shit");	
+					}
+					else
+					{
+						connect.clearWorkTimes(id);
+						addWorkingTimes(id,btnSunMorning,btnSunAfternoon,btnSunEvening,btnMonMorning,btnMonAfternoon,btnMonEvening,btnTueMorning,btnTueAfternoon, btnTueEvening,btnWedMorning,btnWedAfternoon, btnWedEvening, btnThurMorning, btnThurAfternoon, btnThurEvening, btnFriMorning, btnFriAfternoon, btnFriEvening, btnSatMorning, btnSatAfternoon, btnSatEvening);
+					}
+					
+				}
+				public boolean addWorkingTimes(int id,ToggleButton btnSunMorning,ToggleButton btnSunAfternoon,ToggleButton btnSunEvening,ToggleButton btnMonMorning,ToggleButton btnMonAfternoon,ToggleButton btnMonEvening,ToggleButton btnTueMorning,ToggleButton btnTueAfternoon,ToggleButton btnTueEvening,ToggleButton btnWedMorning,ToggleButton btnWedAfternoon,ToggleButton btnWedEvening,ToggleButton btnThurMorning,ToggleButton btnThurAfternoon,ToggleButton btnThurEvening,ToggleButton btnFriMorning,ToggleButton btnFriAfternoon,ToggleButton btnFriEvening,ToggleButton btnSatMorning,ToggleButton btnSatAfternoon,ToggleButton btnSatEvening)
+				{
+					SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+					String[] dateArray = new String[7];
+					Calendar c = Calendar.getInstance();
+					for(int i = 1;i<=7; i++)
+					{
+						dateArray[i-1] = sdf.format(c.getTime());//puts each date from every loop into array
+						c.add(Calendar.DAY_OF_MONTH, 1);
+					}
+					for(int i =0; i<dateArray.length;i++)
+					{
+						Calendar d = Calendar.getInstance();
+						Date date = controller.convertStringToTime(dateArray[i]);
+						d.setTime(date);
+						int dayOfWeek = d.get(Calendar.DAY_OF_WEEK);
+						switch(dayOfWeek)
+						{
+							case 1: 
+								addSundayWorkingTime(id,dateArray[i],btnSunMorning, btnSunAfternoon, btnSunEvening);
+								break;
+							case 2: 
+								addMondayWorkingTime(id,dateArray[i],btnMonMorning, btnMonAfternoon, btnMonEvening);
+								break;
+							case 3: 
+								addTuesdayWorkingTime(id,dateArray[i],btnTueMorning, btnTueAfternoon, btnTueEvening);
+								break;
+							case 4: 
+								addWednesdayWorkingTime(id,dateArray[i],btnWedMorning, btnWedAfternoon, btnWedEvening);
+								break;
+							case 5: 
+								addThursdayWorkingTime(id,dateArray[i],btnThurMorning, btnThurAfternoon, btnThurEvening);
+								break;
+							case 6: 
+								addFridayWorkingTime(id,dateArray[i],btnFriMorning, btnFriAfternoon, btnFriEvening);
+								break;
+							case 7: 
+								addSaturdayWorkingTime(id,dateArray[i],btnSatMorning, btnSatAfternoon, btnSatEvening);
+								break;
+							default:
+								controller.messageBox("WARN", "Error: Something happened with dayOfWeek", "dayOfWeek did not register to a day","Please consult Luke Mason for the crap coding");
+								return false;
+						}
+						
+					}
+					return true;
+				}
+				public int checkWorkTimes(ToggleButton morning, ToggleButton afternoon, ToggleButton evening)
+				{
+					if(morning.isSelected() && evening.isSelected())
+					{
+						return -1;
+					}
+					else if(morning.isSelected() && afternoon.isSelected() && evening.isSelected())
+					{
+						return 1;
+					}
+					else if(morning.isSelected() && afternoon.isSelected())
+					{
+						return 2;
+					}
+					else if(afternoon.isSelected() && evening.isSelected())
+					{
+						return 3;
+					}
+					else if(morning.isSelected())
+					{
+						return 4;
+					}
+					else if(afternoon.isSelected())
+					{
+						return 5;
+					}
+					else if(evening.isSelected())
+					{
+						return 6;
+					}
+					else
+					{
+						return 0;
+					}
+				}
+				public String[] getStartEndTimes(int checkTimes)
+				{
+					String[] array = new String[2];
+					array[0] = "";//Start Time
+					array[1] = "";//End Time
+					switch(checkTimes)
+					{
+						case 0:
+							break;
+						case 1: array[0] = "8:00";
+								array[1] = "20:00";
+								break;
+						case 2: 
+							array[0] = "8:00";
+							array[1] = "16:00";
+								break;
+						case 3: 
+							array[0] = "12:00";
+							array[1] = "20:00";
+								break;
+						case 4: 
+							array[0] = "8:00";
+							array[1] = "12:00";
+								break;
+						case 5: 
+							array[0] = "12:00";
+							array[1] = "16:00";
+								break;
+						case 6: 
+							array[0] = "16:00";
+							array[1] = "20:00";
+								break;
+						default:
+							controller.messageBox("WARN", "Error: Something happened with dayOfWeek", "dayOfWeek did not register to a day","Please consult Luke Mason for the crap coding");
+							break;
+					}
+					return array;
 				}
 				
-				public void option3Exit()
-	{
-		//Are you sure you want to exit and NOT save? Yes, No
-		//This GUI could be used for the BACK button or any other exit button
-	}
-
+				public boolean addSundayWorkingTime(int employeeID,String date,ToggleButton morning, ToggleButton afternoon, ToggleButton evening)
+				{
+					String[] array = new String[2];
+					int check = checkWorkTimes(morning, afternoon, evening);
+					array = getStartEndTimes(check);
+					if(check == -1)
+					{
+						controller.messageBox("WARN", "Work Time Error", "Work time selected on Sunday is invalid","Work time selected on Sunday is invalid <Sunday Work times not added>, Morning and Evening are not valid, please select a joined ONE block of time and try again");
+						return false;
+					}
+					if(array[0].equals(""))
+					{
+						return false;//No working times assigned to this day
+					}
+					connect.set7DayRosterTime(date,array[0], array[1]);
+					return true;
+				}
+				public boolean addMondayWorkingTime(int employeeID,String date,ToggleButton morning, ToggleButton afternoon, ToggleButton evening)
+				{
+					String[] array = new String[2];
+					int check = checkWorkTimes(morning, afternoon, evening);
+					array = getStartEndTimes(check);
+					if(check == -1)
+					{
+						controller.messageBox("WARN", "Work Time Error", "Work time selected on Monday is invalid","Work time selected on Monday is invalid <Monday Work times not added>, Morning and Evening are not valid, please select a joined ONE block of time and try again");
+						return false;
+					}
+					if(array[0].equals(""))
+					{
+						return false;//No working times assigned to this day
+					}
+					connect.set7DayRosterTime(date,array[0], array[1]);
+					return true;
+				}
+				public boolean addTuesdayWorkingTime(int employeeID,String date,ToggleButton morning, ToggleButton afternoon, ToggleButton evening)
+				{
+					String[] array = new String[2];
+					int check = checkWorkTimes(morning, afternoon, evening);
+					array = getStartEndTimes(check);
+					if(check == -1)
+					{
+						controller.messageBox("WARN", "Work Time Error", "Work time selected on Tuesday is invalid","Work time selected on Tuesday is invalid <Tuesday Work times not added>, Morning and Evening are not valid, please select a joined ONE block of time and try again");
+						return false;
+					}
+					if(array[0].equals(""))
+					{
+						return false;//No working times assigned to this day
+					}
+					connect.set7DayRosterTime(date,array[0], array[1]);
+					return true;
+				}
+				public boolean addWednesdayWorkingTime(int employeeID,String date,ToggleButton morning, ToggleButton afternoon, ToggleButton evening)
+				{
+					String[] array = new String[2];
+					int check = checkWorkTimes(morning, afternoon, evening);
+					array = getStartEndTimes(check);
+					if(check == -1)
+					{
+						controller.messageBox("WARN", "Work Time Error", "Work time selected on Wednesday is invalid","Work time selected on Wednesday is invalid <Wednesday Work times not added>, Morning and Evening are not valid, please select a joined ONE block of time and try again");
+						return false;
+					}
+					if(array[0].equals(""))
+					{
+						return false;//No working times assigned to this day
+					}
+					connect.set7DayRosterTime(date,array[0], array[1]);
+					return true;
+				}
+				public boolean addThursdayWorkingTime(int employeeID,String date,ToggleButton morning, ToggleButton afternoon, ToggleButton evening)
+				{
+					String[] array = new String[2];
+					int check = checkWorkTimes(morning, afternoon, evening);
+					array = getStartEndTimes(check);
+					if(check == -1)
+					{
+						controller.messageBox("WARN", "Work Time Error", "Work time selected on Thursday is invalid","Work time selected on Thurday is invalid <Thursday Work times not added>, Morning and Evening are not valid, please select a joined ONE block of time and try again");
+						return false;
+					}
+					if(array[0].equals(""))
+					{
+						return false;//No working times assigned to this day
+					}
+					connect.set7DayRosterTime(date,array[0], array[1]);
+					return true;
+				}
+				public boolean addFridayWorkingTime(int employeeID,String date,ToggleButton morning, ToggleButton afternoon, ToggleButton evening)
+				{
+					String[] array = new String[2];
+					int check = checkWorkTimes(morning, afternoon, evening);
+					array = getStartEndTimes(check);
+					if(check == -1)
+					{
+						controller.messageBox("WARN", "Work Time Error", "Work time selected on Friday is invalid","Work time selected on Friday is invalid <Friday Work times not added>, Morning and Evening are not valid, please select a joined ONE block of time and try again");
+						return false;
+					}
+					if(array[0].equals(""))
+					{
+						return false;//No working times assigned to this day
+					}
+					connect.set7DayRosterTime(date,array[0], array[1]);
+					return true;
+				}
+				public boolean addSaturdayWorkingTime(int employeeID,String date,ToggleButton morning, ToggleButton afternoon, ToggleButton evening)
+				{
+					String[] array = new String[2];
+					int check = checkWorkTimes(morning, afternoon, evening);
+					array = getStartEndTimes(check);
+					if(check == -1)
+					{
+						controller.messageBox("WARN", "Work Time Error", "Work time selected on Saturday is invalid","Work time selected on Saturday is invalid <Saturday Work times not added>, Morning and Evening are not valid, please select a joined ONE block of time and try again");
+						return false;
+					}
+					if(array[0].equals(""))
+					{
+						return false;//No working times assigned to this day
+					}
+					connect.set7DayRosterTime(date,array[0], array[1]);
+					return true;
+				}
 	
 	
 	

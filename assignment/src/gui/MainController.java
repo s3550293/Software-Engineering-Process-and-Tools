@@ -71,14 +71,14 @@ public class MainController implements Initializable{
 		refreshBookingView();
 		boolean var = login();
 		if(var == true){
-			if(program.getUser().getAccountType() == 1){
-				stkBusiness.setVisible(true);
-				stkCustomer.setVisible(false);
-			}
-			else{
-				stkBusiness.setVisible(false);
-				stkCustomer.setVisible(true);
-			}
+				if(program.getUser().getAccountType() == 1){
+					stkBusiness.setVisible(true);
+					stkCustomer.setVisible(false);
+				}
+				else{
+					stkBusiness.setVisible(false);
+					stkCustomer.setVisible(true);
+				}
 		}
 		else{
 			Platform.exit();
@@ -108,7 +108,9 @@ public class MainController implements Initializable{
             secondaryStage.setScene(new Scene(root));
             secondaryStage.initModality(Modality.APPLICATION_MODAL);
             secondaryStage.showAndWait();
-            return false;
+            if(program.getUser() != null){
+            	return true;
+            }
         }
 		catch(IOException ioe) {
             log.warn(ioe.getMessage());
@@ -225,7 +227,7 @@ public class MainController implements Initializable{
 	@FXML
 	public void viewEmpDetails()
 	{
-		
+		//TODO
 	}
 	
 	/**
@@ -235,6 +237,6 @@ public class MainController implements Initializable{
 	@FXML
 	public void deleteEmplyee()
 	{
-		
+		//TODO
 	}
 }

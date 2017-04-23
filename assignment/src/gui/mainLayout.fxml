@@ -176,7 +176,7 @@
                                                 </GridPane>
                                              </top>
                                              <center>
-                                                <ListView prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+                                                <ListView fx:id="listviewEmployees" prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
                                                    <BorderPane.margin>
                                                       <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
                                                    </BorderPane.margin>
@@ -475,7 +475,7 @@
                                                       </FlowPane>
                                                       <FlowPane alignment="CENTER_RIGHT" prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1">
                                                          <children>
-                                                            <Button mnemonicParsing="false" text="Confirm">
+                                                            <Button fx:id="btnConfirm" mnemonicParsing="false" onAction="#createEmp" text="Confirm">
                                                                <FlowPane.margin>
                                                                   <Insets left="20.0" right="20.0" />
                                                                </FlowPane.margin>

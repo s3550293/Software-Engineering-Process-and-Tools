@@ -34,6 +34,7 @@ import program.Booking;
 import program.Employee;
 import program.Controller;
 import program.DatabaseConnection;
+import program.BusinessMenu;
 
 import org.apache.log4j.Logger;
 
@@ -245,7 +246,7 @@ public class MainController implements Initializable{
 	/**
 	 * Shows add employee
 	 * note tabs should be disabled
-	 * @author [Programmer]
+	 * @author [Joseph Garner]
 	 */
 	
 	/**************
@@ -273,7 +274,7 @@ public class MainController implements Initializable{
 	
 	/**
 	 * Enables and disables working times
-	 * @author [Programmer]
+	 * @author [Joseph Garner]
 	 */
 	@FXML
 	public void allowWorkingTimes()
@@ -291,12 +292,37 @@ public class MainController implements Initializable{
 	
 	/**
 	 * Creates an Employee
-	 * @author [Programmer]
+	 * @author [Luke Mason]
 	 */
 	@FXML 
 	public void createEmp()
 	{
-		//TODO
+		BusinessMenu bMenu = new BusinessMenu();
+		boolean firstName = bMenu.checkEmployeeFirstOrLastName(txtaddEmpFirstName.getText());
+		boolean lastName = bMenu.checkEmployeeFirstOrLastName(txtAddEmpLastName.getText());
+		double payRate = bMenu.strPayRateToDouble(txtAddEmpPayRate.getText());
+		boolean PayRate = bMenu.checkEmployeePayRate(payRate);
+		if(PayRate && firstName && lastName)
+		{
+			if(chkbxAddWorkingTimes.isSelected())
+			{
+				bMenu.option2AddEmployeeAndWorkingTimes(txtaddEmpFirstName.getText()
+						,txtAddEmpLastName.getText(), payRate, btnSunMorning.isSelected(), btnSunAfternoon.isSelected()
+						, btnSunEvening.isSelected(), btnMonMorning.isSelected(), btnMonAfternoon.isSelected(), btnMonEvening.isSelected()
+						, btnTueMorning.isSelected(), btnTueAfternoon.isSelected(), btnTueEvening.isSelected(), btnWedMorning.isSelected()
+						, btnWedAfternoon.isSelected(), btnWedEvening.isSelected(), btnThurMorning.isSelected(), btnThurAfternoon.isSelected()
+						, btnThurEvening.isSelected(), btnFriMorning.isSelected(), btnFriAfternoon.isSelected(), btnFriEvening.isSelected()
+						, btnSatMorning.isSelected(), btnSatAfternoon.isSelected(), btnSatEvening.isSelected());
+			}
+			else
+			{
+				bMenu.option1AddEmployee(txtaddEmpFirstName.getText(),txtAddEmpLastName.getText(), payRate);
+			}
+		}
+		else
+		{
+			//Error box message, saying employee details have not been put in correctly
+		}
 	}
 	
 	/**

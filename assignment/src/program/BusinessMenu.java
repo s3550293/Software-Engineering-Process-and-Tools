@@ -254,7 +254,13 @@ public class BusinessMenu
 					}
 					
 				}
-				public boolean addWorkingTimes(int id,ToggleButton btnSunMorning,ToggleButton btnSunAfternoon,ToggleButton btnSunEvening,ToggleButton btnMonMorning,ToggleButton btnMonAfternoon,ToggleButton btnMonEvening,ToggleButton btnTueMorning,ToggleButton btnTueAfternoon,ToggleButton btnTueEvening,ToggleButton btnWedMorning,ToggleButton btnWedAfternoon,ToggleButton btnWedEvening,ToggleButton btnThurMorning,ToggleButton btnThurAfternoon,ToggleButton btnThurEvening,ToggleButton btnFriMorning,ToggleButton btnFriAfternoon,ToggleButton btnFriEvening,ToggleButton btnSatMorning,ToggleButton btnSatAfternoon,ToggleButton btnSatEvening)
+				public boolean addWorkingTimes(int id,ToggleButton btnSunMorning,ToggleButton btnSunAfternoon
+						,ToggleButton btnSunEvening,ToggleButton btnMonMorning,ToggleButton btnMonAfternoon
+						,ToggleButton btnMonEvening,ToggleButton btnTueMorning,ToggleButton btnTueAfternoon
+						,ToggleButton btnTueEvening,ToggleButton btnWedMorning,ToggleButton btnWedAfternoon
+						,ToggleButton btnWedEvening,ToggleButton btnThurMorning,ToggleButton btnThurAfternoon
+						,ToggleButton btnThurEvening,ToggleButton btnFriMorning,ToggleButton btnFriAfternoon
+						,ToggleButton btnFriEvening,ToggleButton btnSatMorning,ToggleButton btnSatAfternoon,ToggleButton btnSatEvening)
 				{
 					SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
 					String[] dateArray = new String[7];

@@ -245,7 +245,7 @@ public class DatabaseConnection
 		try(Connection connect = this.connect(); Statement inject = connect.createStatement())
 		{
 			inject.executeUpdate(query);
-			System.out.println("Employee " + empID+ "'s working time Added");
+			//System.out.println("Employee " + empID+ "'s working time Added");
 		}
 		catch(SQLException sqle)
 		{
@@ -566,17 +566,23 @@ public class DatabaseConnection
 	 * @param EmployeeID
 	 * @return
 	 */
-	public boolean clearWorkTimes(int EmployeeID)
+	public boolean clearWorkTimes(int employeeID)
 	{
+		log.info("IN deleteUser\n");
+		String query = "DELETE FROM  EMPLOYEES_WORKING_TIMES WHERE employeeID = '" + employeeID + "'";
+		try(Connection connect = this.connect(); Statement inject = connect.createStatement())
+		{
+			inject.executeUpdate(query);
+			System.out.println("WorkTimes for ID " + employeeID + " deleted!!");
+		}
+		catch(SQLException sqle)
+		{
+			//System.out.println(sqle.getMessage());
+			log.warn(sqle.getMessage());
+		}
+		log.info("OUT deleteUser\n");
 		return false;
 	}
-	/**
-	 * @author Luke Mason
-	 * @param date
-	 * @return
-	 */
-	public boolean set7DayRosterTime(String date, String startTime, String endTime)
-	{
-		return false;
-	}
+	
+
 }

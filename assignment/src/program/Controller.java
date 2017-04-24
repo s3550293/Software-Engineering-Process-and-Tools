@@ -32,11 +32,7 @@ public class Controller
 	 */
 	public boolean checkInputToContainInvalidChar(String string)
 	{
-		if (string.length() == 0 || string.length() > 40)
-		{
-			return true;
-		}
-		if( (int) string.charAt(0) == 32 || (int) string.charAt(1) == 32)
+		if (string.length() < 1 || string.length() > 40)
 		{
 			return true;
 		}
@@ -46,11 +42,7 @@ public class Controller
 			{
 				if ((int) string.charAt(i) < 65 || (int) string.charAt(i) > 90)// checks if the letter is not an upper case letter
 				{
-					if ((int) string.charAt(i) != 32)// checks if the char is
-					{
-					// not a 'space'
-						return true;
-					}
+						return true;		
 				}
 			}
 		}	

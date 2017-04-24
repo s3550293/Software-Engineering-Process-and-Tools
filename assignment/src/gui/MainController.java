@@ -292,13 +292,12 @@ public class MainController implements Initializable{
 	
 	/**
 	 * Creates an Employee
-	 * @author [Programmer]
+	 * @author [Luke Mason]
 	 */
 	@FXML 
 	public void createEmp()
 	{
 		BusinessMenu bMenu = new BusinessMenu();
-		Stage confirmStage = (Stage) btnConfirm.getScene().getWindow();
 		boolean firstName = bMenu.checkEmployeeFirstOrLastName(txtaddEmpFirstName.getText());
 		boolean lastName = bMenu.checkEmployeeFirstOrLastName(txtAddEmpLastName.getText());
 		double payRate = bMenu.strPayRateToDouble(txtAddEmpPayRate.getText());
@@ -307,14 +306,23 @@ public class MainController implements Initializable{
 		{
 			if(chkbxAddWorkingTimes.isSelected())
 			{
-				bMenu.option2AddEmployeeAndWorkingTimes(txtaddEmpFirstName.getText(),txtAddEmpLastName.getText(), payRate, btnSunMorning, btnSunAfternoon, btnSunEvening, btnMonMorning, btnMonAfternoon, btnMonEvening, btnTueMorning, btnTueAfternoon, btnTueEvening, btnWedMorning, btnWedAfternoon, btnWedEvening, btnThurMorning, btnThurAfternoon, btnThurEvening, btnFriMorning, btnFriAfternoon, btnFriEvening, btnSatMorning, btnSatAfternoon, btnSatEvening);
+				bMenu.option2AddEmployeeAndWorkingTimes(txtaddEmpFirstName.getText()
+						,txtAddEmpLastName.getText(), payRate, btnSunMorning.isSelected(), btnSunAfternoon.isSelected()
+						, btnSunEvening.isSelected(), btnMonMorning.isSelected(), btnMonAfternoon.isSelected(), btnMonEvening.isSelected()
+						, btnTueMorning.isSelected(), btnTueAfternoon.isSelected(), btnTueEvening.isSelected(), btnWedMorning.isSelected()
+						, btnWedAfternoon.isSelected(), btnWedEvening.isSelected(), btnThurMorning.isSelected(), btnThurAfternoon.isSelected()
+						, btnThurEvening.isSelected(), btnFriMorning.isSelected(), btnFriAfternoon.isSelected(), btnFriEvening.isSelected()
+						, btnSatMorning.isSelected(), btnSatAfternoon.isSelected(), btnSatEvening.isSelected());
 			}
 			else
 			{
 				bMenu.option1AddEmployee(txtaddEmpFirstName.getText(),txtAddEmpLastName.getText(), payRate);
 			}
 		}
-		confirmStage.close();
+		else
+		{
+			//Error box message, saying employee details have not been put in correctly
+		}
 	}
 	
 	/**

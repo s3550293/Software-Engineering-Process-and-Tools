@@ -232,6 +232,8 @@ public class BusinessMenu
 				,boolean btnThurEvening,boolean btnFriMorning,boolean btnFriAfternoon,boolean btnFriEvening
 				,boolean btnSatMorning,boolean btnSatAfternoon,boolean btnSatEvening)
 				{
+					log.debug("Assigning Work times to employee");
+					System.out.println("Here 6");
 					DatabaseConnection connect = new DatabaseConnection();
 					option1AddEmployee(employeeFName,employeeLName,employeePayRate);
 					String employeeName = employeeFName + " " + employeeLName;//concatenating first and last name into name
@@ -239,20 +241,28 @@ public class BusinessMenu
 					ListIterator<Employee> employees2 = employees.listIterator();
 					//This is for if more than one employee has the same name as searched
 					int id = -1;
-					while(employees2.hasNext())
-					{
+					System.out.println(employees);
+					Employee lastEmp = new Employee();
+					for(Employee emp: employees)
+					{System.out.println("Here 7");
+						lastEmp = emp;
+					}
+					System.out.println("Here 8");
+					id =lastEmp.getId();
+					/*while(employees.hasNext())
+					{System.out.println("Here 7");
 						//Adds working times to the LAST employee (should be the recent one just added)
 						if(!employees2.hasNext())
-						{
+						{System.out.println("Here 8");
 							id =((Employee)employees2).getId();
 						} 
-					}
+					}*/
 					if(id == -1)
-					{
+					{System.out.println("Here 8.5");
 						controller.messageBox("WARN", "Finding last employee Error", "Couldn't get ID of last employee in array ","Please consult Luke Mason as he programmed this piece of shit");	
 					}
 					else
-					{
+					{System.out.println("Here 9");
 						connect.clearWorkTimes(id);
 						addWorkingTimes(id,btnSunMorning,btnSunAfternoon,btnSunEvening,btnMonMorning,btnMonAfternoon,btnMonEvening,btnTueMorning,btnTueAfternoon, btnTueEvening,btnWedMorning,btnWedAfternoon, btnWedEvening, btnThurMorning, btnThurAfternoon, btnThurEvening, btnFriMorning, btnFriAfternoon, btnFriEvening, btnSatMorning, btnSatAfternoon, btnSatEvening);
 					}

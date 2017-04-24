@@ -299,13 +299,16 @@ public class MainController implements Initializable{
 	{
 		BusinessMenu bMenu = new BusinessMenu();
 		boolean firstName = bMenu.checkEmployeeFirstOrLastName(txtaddEmpFirstName.getText());
+		System.out.println("Here 1");
 		boolean lastName = bMenu.checkEmployeeFirstOrLastName(txtAddEmpLastName.getText());
+		System.out.println("Here 2");
 		double payRate = bMenu.strPayRateToDouble(txtAddEmpPayRate.getText());
 		boolean PayRate = bMenu.checkEmployeePayRate(payRate);
+		System.out.println("Here 3");
 		if(PayRate && firstName && lastName)
-		{
+		{System.out.println("Here 4");
 			if(chkbxAddWorkingTimes.isSelected())
-			{
+			{System.out.println("Here 5.1");
 				bMenu.option2AddEmployeeAndWorkingTimes(txtaddEmpFirstName.getText()
 						,txtAddEmpLastName.getText(), payRate, btnSunMorning.isSelected(), btnSunAfternoon.isSelected()
 						, btnSunEvening.isSelected(), btnMonMorning.isSelected(), btnMonAfternoon.isSelected(), btnMonEvening.isSelected()
@@ -315,7 +318,7 @@ public class MainController implements Initializable{
 						, btnSatMorning.isSelected(), btnSatAfternoon.isSelected(), btnSatEvening.isSelected());
 			}
 			else
-			{
+			{System.out.println("Here 5.2");
 				bMenu.option1AddEmployee(txtaddEmpFirstName.getText(),txtAddEmpLastName.getText(), payRate);
 			}
 		}

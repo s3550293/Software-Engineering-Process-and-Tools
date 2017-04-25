@@ -16,7 +16,10 @@ import javafx.collections.ObservableList;
 import javafx.util.Callback;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
@@ -414,7 +417,28 @@ public class MainController implements Initializable {
 	public void cancelBooking() {
 		// TODO
 		log.debug("LOGGER: Entered cancelBooking function");
+		Alert alert = new Alert(AlertType.CONFIRMATION);
+		alert.setTitle("Cancel Booking");
+		alert.setHeaderText("Cancel Selected Booking");
+		alert.setContentText("Are you sure?");
+
+		Optional<ButtonType> result = alert.showAndWait();
+		if (result.get() == ButtonType.OK) {
+			Booking book = null;
+			book = listviewBookings.getSelectionModel().getSelectedItem();
+			connection.cancelBooking(book.getBookingID());
+			Alert feedback = new Alert(AlertType.INFORMATION);
+			feedback.setTitle("Cancel Booking");
+			feedback.setHeaderText("Booking has been cancelled");
+			feedback.showAndWait();
+
+		} else {
+			return;
+		}
+		listviewBookings.getSelectionModel().clearSelection();
+		loadListViewBook();
 	}
+	
 	
 	/**
 	 * Allows the user view past bookings

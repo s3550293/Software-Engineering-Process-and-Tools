@@ -4,7 +4,6 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.ListIterator;
 import java.util.Scanner;
 
 import org.apache.log4j.Level;
@@ -93,7 +92,7 @@ public class BusinessMenu
 					if (employees.size() == 0)//if array list is empty then the user is prompted to try again
 					{
 						//ERROR MESSAGE
-						controller.messageBox("WARN", "Match Error", "Employee name entered has no matches","Sorry but there are no matches for the name '" + employeeName + ", Please Try again");
+						//controller.messageBox("WARN", "Match Error", "Employee name entered has no matches","Sorry but there are no matches for the name '" + employeeName + ", Please Try again");
 						return false;
 					}
 					return true;
@@ -162,7 +161,7 @@ public class BusinessMenu
 	/**
 	 * @author Luke Mason
 	 * Used to check information to add a new employee to database
-	 * @return false if the program breaks out of loop. True if /exit is called or user exits
+	 * 
 	 */
 	/**
 				 * Error checks the first OR last name
@@ -232,41 +231,40 @@ public class BusinessMenu
 				,boolean btnThurEvening,boolean btnFriMorning,boolean btnFriAfternoon,boolean btnFriEvening
 				,boolean btnSatMorning,boolean btnSatAfternoon,boolean btnSatEvening)
 				{
-					log.debug("Assigning Work times to employee");
-					System.out.println("Here 6");
+					/*log.debug("Assigning Work times to employee");
 					DatabaseConnection connect = new DatabaseConnection();
 					option1AddEmployee(employeeFName,employeeLName,employeePayRate);
-					String employeeName = employeeFName + " " + employeeLName;//concatenating first and last name into name
-					ArrayList<Employee> employees = connect.getEmployees(employeeName);//adding working times to employee just made
-					ListIterator<Employee> employees2 = employees.listIterator();
+					String employeeName = employeeFName + " " + employeeLName;//concatenating first and last name into name*/
+					ArrayList<Employee> employees = connect.getEmployees("");//adding working times to employee just made
 					//This is for if more than one employee has the same name as searched
 					int id = -1;
 					System.out.println(employees);
 					Employee lastEmp = new Employee();
 					for(Employee emp: employees)
-					{System.out.println("Here 7");
+					{
 						lastEmp = emp;
 					}
-					System.out.println("Here 8");
-					id =lastEmp.getId();
-					/*while(employees.hasNext())
-					{System.out.println("Here 7");
-						//Adds working times to the LAST employee (should be the recent one just added)
-						if(!employees2.hasNext())
-						{System.out.println("Here 8");
-							id =((Employee)employees2).getId();
-						} 
-					}*/
+					
+					id =lastEmp.getId()+1;
+					System.out.println(id);
 					if(id == -1)
-					{System.out.println("Here 8.5");
+					{
 						controller.messageBox("WARN", "Finding last employee Error", "Couldn't get ID of last employee in array ","Please consult Luke Mason as he programmed this piece of shit");	
 					}
 					else
-					{System.out.println("Here 9");
-						connect.clearWorkTimes(id);
-						addWorkingTimes(id,btnSunMorning,btnSunAfternoon,btnSunEvening,btnMonMorning,btnMonAfternoon,btnMonEvening,btnTueMorning,btnTueAfternoon, btnTueEvening,btnWedMorning,btnWedAfternoon, btnWedEvening, btnThurMorning, btnThurAfternoon, btnThurEvening, btnFriMorning, btnFriAfternoon, btnFriEvening, btnSatMorning, btnSatAfternoon, btnSatEvening);
+					{
+						boolean check = addWorkingTimes(id,btnSunMorning,btnSunAfternoon,btnSunEvening
+								,btnMonMorning,btnMonAfternoon,btnMonEvening
+								,btnTueMorning,btnTueAfternoon, btnTueEvening
+								,btnWedMorning,btnWedAfternoon, btnWedEvening
+								, btnThurMorning, btnThurAfternoon, btnThurEvening
+								, btnFriMorning, btnFriAfternoon, btnFriEvening
+								, btnSatMorning, btnSatAfternoon, btnSatEvening);
+						if(check)
+						{
+							option1AddEmployee(employeeFName,employeeLName,employeePayRate);
+						}
 					}
-					
 				}
 				/**
 				 * Passes all the button values in its parameters and then assigns work times according to those times to the specified id.
@@ -293,11 +291,56 @@ public class BusinessMenu
 				 * @param btnSatAfternoon
 				 * @param btnSatEvening
 				 */
-				public void addWorkingTimes(int id,boolean btnSunMorning,boolean btnSunAfternoon,boolean btnSunEvening,boolean btnMonMorning,boolean btnMonAfternoon,boolean btnMonEvening,boolean btnTueMorning,boolean btnTueAfternoon,boolean btnTueEvening,boolean btnWedMorning,boolean btnWedAfternoon,boolean btnWedEvening,boolean btnThurMorning,boolean btnThurAfternoon,boolean btnThurEvening,boolean btnFriMorning,boolean btnFriAfternoon,boolean btnFriEvening,boolean btnSatMorning,boolean btnSatAfternoon,boolean btnSatEvening)
+				public boolean addWorkingTimes(int id,boolean btnSunMorning,boolean btnSunAfternoon,boolean btnSunEvening,boolean btnMonMorning,boolean btnMonAfternoon,boolean btnMonEvening,boolean btnTueMorning,boolean btnTueAfternoon,boolean btnTueEvening,boolean btnWedMorning,boolean btnWedAfternoon,boolean btnWedEvening,boolean btnThurMorning,boolean btnThurAfternoon,boolean btnThurEvening,boolean btnFriMorning,boolean btnFriAfternoon,boolean btnFriEvening,boolean btnSatMorning,boolean btnSatAfternoon,boolean btnSatEvening)
 				{
 					SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
 					String[] dateArray = new String[7];
 					Calendar c = Calendar.getInstance();
+					//Checks if only morning and evening have been selected for one of the days, If so, then error
+					//Can't test on JUnit because of message box
+					if(btnSunMorning && !btnSunAfternoon && btnSunEvening)
+					{
+						String day = "Sunday";
+						controller.messageBox("ERROR", "Work Time Error", "Work time selected on "+day+" is invalid","Work time selected on "+day+" is invalid\n <Work times not added>\n Reason: Morning and Evening alone are two seperated blocks of time\n please select a one block of time and try again");
+						return false;
+					}
+					else if(btnMonMorning && !btnMonAfternoon && btnMonEvening)
+					{
+						String day = "Monday";
+						controller.messageBox("ERROR", "Work Time Error", "Work time selected on "+day+" is invalid","Work time selected on "+day+" is invalid\n <Work times not added>\n Reason: Morning and Evening alone are two seperated blocks of time\n please select a one block of time and try again");
+						return false;
+					}
+					else if(btnTueMorning && !btnTueAfternoon && btnTueEvening)
+					{
+						String day = "Tuesday";
+						controller.messageBox("ERROR", "Work Time Error", "Work time selected on "+day+" is invalid","Work time selected on "+day+" is invalid\n <Work times not added>\n Reason: Morning and Evening alone are two seperated blocks of time\n please select a one block of time and try again");
+						return false;
+					}
+					else if(btnWedMorning && !btnWedAfternoon && btnWedEvening)
+					{
+						String day = "Wednesday";
+						controller.messageBox("ERROR", "Work Time Error", "Work time selected on "+day+" is invalid","Work time selected on "+day+" is invalid\n <Work times not added>\n Reason: Morning and Evening alone are two seperated blocks of time\n please select a one block of time and try again");
+						return false;
+					}
+					else if(btnThurMorning && !btnThurAfternoon && btnThurEvening)
+					{
+						String day = "Thursday";
+						controller.messageBox("ERROR", "Work Time Error", "Work time selected on "+day+" is invalid","Work time selected on "+day+" is invalid\n <Work times not added>\n Reason: Morning and Evening alone are two seperated blocks of time\n please select a one block of time and try again");
+						return false;
+					}
+					else if(btnFriMorning && !btnFriAfternoon && btnFriEvening)
+					{
+						String day = "Friday";
+						controller.messageBox("ERROR", "Work Time Error", "Work time selected on "+day+" is invalid","Work time selected on "+day+" is invalid\n <Work times not added>\n Reason: Morning and Evening alone are two seperated blocks of time\n please select a one block of time and try again");
+						return false;
+					}
+					else if(btnSatMorning && !btnSatAfternoon && btnSatEvening)
+					{
+						String day = "Saturday";
+						controller.messageBox("ERROR", "Work Time Error", "Work time selected on "+day+" is invalid","Work time selected on "+day+" is invalid\n <Work times not added>\n Reason: Morning and Evening alone are two seperated blocks of time\n please select a one block of time and try again");
+						return false;
+					}
+					connect.clearWorkTimes(id);
 					for(int i = 1;i<=7; i++)
 					{
 						dateArray[i-1] = sdf.format(c.getTime());//puts each date from every loop into array
@@ -334,8 +377,9 @@ public class BusinessMenu
 								break;
 							default:
 								controller.messageBox("WARN", "Error: Something happened with dayOfWeek", "dayOfWeek did not register to a day","Please consult Luke Mason for the crap coding");
-						}			
+						}
 					}
+					return true;
 				}
 				/**
 				 * assigns time blocks to a single time block 
@@ -459,12 +503,12 @@ public class BusinessMenu
 				 */
 				public boolean addDayWorkingTime(String day,int employeeID,String date,boolean morning, boolean afternoon, boolean evening)
 				{
+					// -Day- is not used but is there if needed
 					String[] array = new String[2];
 					int check = checkWorkTimes(morning, afternoon, evening);
 					array = getStartEndTimes(check);
 					if(check == -1)
 					{
-						controller.messageBox("WARN", "Work Time Error", "Work time selected on "+day+" is invalid","Work time selected on "+day+" is invalid <"+day+" Work times not added>, Morning and Evening are not valid, please select a joined ONE block of time and try again");
 						return false;
 					}
 					if(array[0].equals(""))
@@ -474,7 +518,12 @@ public class BusinessMenu
 					set7DayRosterTime(employeeID,date,array[0], array[1]);
 					return true;
 				}
-			
+	public ArrayList<EmployeeWorkingTime> getEmployeeWorkTimes(int employeeID)
+	{
+		ArrayList<EmployeeWorkingTime> workTimes = new ArrayList<EmployeeWorkingTime>();
+		connect.getEmployeeWorkingTimesAfter(employeeID);
+		return workTimes;
+	}
 	
 	
 	/**

@@ -20,10 +20,10 @@ public class BookingJunit {
 		
 		//Add in details
 		book1 = new Booking(1, 12, con.convertStringToDate("01/01/2018"), con.convertStringToTime("13:00"),
-				con.convertStringToTime("14:00"), "active");
+				con.convertStringToTime("14:00"), 0,"active");
 		
 		book2 = new Booking(2, 23, con.convertStringToDate("10/10/2017"), con.convertStringToTime("08:00"),
-				con.convertStringToTime("10:00"), "active");
+				con.convertStringToTime("10:00"), 0,"active");
 		
 	}
 	

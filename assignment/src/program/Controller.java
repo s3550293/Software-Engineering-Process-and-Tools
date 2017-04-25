@@ -822,4 +822,23 @@ public class Controller
 		}
 		return true;
 	}
+	
+	/**
+	 * Compares parts of a string to searching
+	 * @author Joseph Garner
+	 */
+	public boolean searchMatch(String data, String input)
+	{
+		boolean val = false;
+		for (int i = 0; i < input.length(); i++)
+		{
+			if (data.charAt(i) == input.charAt(i)){
+				val = true;
+			}
+			else{
+				val = false;
+			}
+		}
+		return val;
+	}
 }

@@ -52,6 +52,7 @@ public class User
 	{
 		return _password;
 	}
+	public String getFullName(){return _fname+" "+_lname;}
 	public String getFName(){return _fname;}
 	public String getLName(){return _lname;}
 	public String getPhone(){return _phone;}

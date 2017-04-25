@@ -54,8 +54,9 @@ public class PreLoader extends Preloader{
     	Database db = new Database("company.db");
 		db.createTable("company.db");
 		DatabaseConnection connect = new DatabaseConnection();
-		connect.addUser("William", "Apples22", 0);
 		connect.addUser("admin","Monday10!",1);
+		connect.addUser("William12", "Apples22", 0);
+		connect.addUser("Hannah23", "Apples22", 0);
 		
 		connect.addEmployee("Luke Charles",25);
 		connect.addEmployee("David Smith",43);
@@ -67,9 +68,13 @@ public class PreLoader extends Preloader{
 
 		connect.addEmployeeWorkingTime(2,"06/04/2017","10:30","12:30");
 		connect.addEmployeeWorkingTime(2,"07/03/2017","11:30","15:30");
-		connect.addBooking(1, "11/04/2017", "10:00", "11:00",0, "active");
-		connect.addBooking(2, "15/04/2017", "11:00", "12:00",0, "active");
-		connect.cancelBooking(4);
+		
+		connect.addUserDetails(2, "William", "Porter", "will@mail.com", "0452368593", "01/01/2002", "Male");
+		connect.addUserDetails(3, "Hannah", "Hawlking", "hannah@mail.com", "0452136859", "20/04/1995", "Famale");
+		
+		connect.addBooking(2, "25/04/2017", "10:00", "11:00", 0, "active");
+		connect.addBooking(3, "23/04/2017", "11:00", "12:00", 0,"active");
+		connect.cancelBooking(2);
     }
 
 }

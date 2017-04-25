@@ -340,32 +340,6 @@ public class MainController implements Initializable {
 	@FXML
 	public void searchBookings() {
 		// TODO
-		listviewBookings.getItems().clear();
-		int bookID=Integer.parseInt(txtSearchBookings.getText());
-		Booking book=connection.getOneBooking(bookID);
-		ObservableList<Booking> bookList = FXCollections.observableArrayList(book);
-		if (bookList != null) {
-			listviewBookings.setItems(bookList);
-			listviewBookings.setCellFactory(new Callback<ListView<Booking>, ListCell<Booking>>() {
-				@Override
-				public ListCell<Booking> call(ListView<Booking> p) {
-
-					ListCell<Booking> cell = new ListCell<Booking>() {
-						@Override
-						protected void updateItem(Booking t, boolean bln) {
-							super.updateItem(t, bln);
-							if (t != null) {
-								setText(t.getBookingID() + " " + connection.getCustomer(t.getCustomerId()).getFullName()
-										+ " " + program.convertTimeToString(t.getStartTime()));
-							}
-						}
-					};
-					return cell;
-				}
-			});
-		} else {
-			log.warn("Unable to load Employees");
-		}
 		
 		
 	}
@@ -408,8 +382,7 @@ public class MainController implements Initializable {
 	@FXML
 	public void refreshBookingView() {
 		// TODO
-		//listviewBookings.getSelectionModel().clearSelection();
-		//loadListViewBook();
+		
 	}
 
 	/**

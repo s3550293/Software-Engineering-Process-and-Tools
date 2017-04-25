@@ -17,7 +17,7 @@ import javafx.scene.control.Alert;
 public class Controller
 {
 	private static Logger log = Logger.getLogger(Controller.class);
-	public Controller(){log.setLevel(Level.WARN);}
+	public Controller(){}
 	private static User _user = null;
 	public User getUser(){return _user;}
 	public void setUser(User user){_user = user;}
@@ -834,11 +834,13 @@ public class Controller
 		{
 			if (data.charAt(i) == input.charAt(i)){
 				val = true;
+				log.debug("LOGGER: char - "+data.charAt(i));
 			}
 			else{
 				val = false;
 			}
 		}
+		log.debug("LOGGER: val - "+val);
 		return val;
 	}
 }

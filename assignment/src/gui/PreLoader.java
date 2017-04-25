@@ -72,8 +72,9 @@ public class PreLoader extends Preloader{
 		connect.addUserDetails(2, "William", "Porter", "will@mail.com", "0452368593", "01/01/2002", "Male");
 		connect.addUserDetails(3, "Hannah", "Hawlking", "hannah@mail.com", "0452136859", "20/04/1995", "Famale");
 		
-		connect.addBooking(2, "25/04/2017", "10:00", "11:00", 0, "active");
+		connect.addBooking(2, "28/04/2017", "10:00", "11:00", 0, "active");
 		connect.addBooking(3, "23/04/2017", "11:00", "12:00", 0,"active");
+		connect.addBooking(3, "28/04/2017", "11:00", "12:00", 0,"active");
 		connect.cancelBooking(2);
     }
 

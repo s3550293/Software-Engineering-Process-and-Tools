@@ -6,6 +6,8 @@ import java.text.SimpleDateFormat;
 import java.util.*;
 
 import javafx.application.Platform;
+import javafx.beans.Observable;
+import javafx.beans.property.ReadOnlyObjectProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXML;
@@ -13,10 +15,14 @@ import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
 import javafx.util.Callback;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
@@ -252,19 +258,17 @@ public class MainController implements Initializable {
 		listviewBookings.getItems().clear();
 		Calendar cal = Calendar.getInstance();
 		Date now = null;
-		SimpleDateFormat  dateView = new SimpleDateFormat("dd/MM/yyyy");
+		SimpleDateFormat dateView = new SimpleDateFormat("dd/MM/yyyy");
 		ArrayList<Booking> bookArray = new ArrayList<>(connection.getAllBooking());
 		ArrayList<Booking> bookArrayView = new ArrayList<>();
-		for(Booking b : bookArray)
-		{
+		for (Booking b : bookArray) {
 			cal.setTime(b.getDate());
 			now = cal.getTime();
-			log.debug("LOGGER: selected day - "+cmbBookingDay.getSelectionModel().getSelectedItem());
+			log.debug("LOGGER: selected day - " + cmbBookingDay.getSelectionModel().getSelectedItem());
 			log.debug("LOGGER: booking date - " + dateView.format(now));
-			if(dateView.format(now).equals(dateView.format(cmbBookingDay.getSelectionModel().getSelectedItem())))
-			{
+			if (dateView.format(now).equals(dateView.format(cmbBookingDay.getSelectionModel().getSelectedItem()))) {
 				bookArrayView.add(b);
-				log.debug("LOGGER: Booking added - "+b.toString());
+				log.debug("LOGGER: Booking added - " + b.toString());
 			}
 		}
 		ObservableList<Booking> bookList = FXCollections.observableList(bookArrayView);
@@ -331,21 +335,69 @@ public class MainController implements Initializable {
 	/**
 	 * Program Allows the user to search and displays bookings
 	 * 
-	 * @author [Programmer]
+	 * @author Bryan
 	 */
 	@FXML
 	public void searchBookings() {
 		// TODO
+		listviewBookings.getItems().clear();
+		int bookID=Integer.parseInt(txtSearchBookings.getText());
+		Booking book=connection.getOneBooking(bookID);
+		ObservableList<Booking> bookList = FXCollections.observableArrayList(book);
+		if (bookList != null) {
+			listviewBookings.setItems(bookList);
+			listviewBookings.setCellFactory(new Callback<ListView<Booking>, ListCell<Booking>>() {
+				@Override
+				public ListCell<Booking> call(ListView<Booking> p) {
+
+					ListCell<Booking> cell = new ListCell<Booking>() {
+						@Override
+						protected void updateItem(Booking t, boolean bln) {
+							super.updateItem(t, bln);
+							if (t != null) {
+								setText(t.getBookingID() + " " + connection.getCustomer(t.getCustomerId()).getFullName()
+										+ " " + program.convertTimeToString(t.getStartTime()));
+							}
+						}
+					};
+					return cell;
+				}
+			});
+		} else {
+			log.warn("Unable to load Employees");
+		}
+		
+		
 	}
 
 	/**
 	 * Cancels booking (does not remove the booking from view)
 	 * 
-	 * @author [Programmer]
+	 * @author Bryan
 	 */
 	@FXML
 	public void cancelBooking() {
 		// TODO
+		Alert alert = new Alert(AlertType.CONFIRMATION);
+		alert.setTitle("Cancel Booking");
+		alert.setHeaderText("Cancel Selected Booking");
+		alert.setContentText("Are you sure?");
+
+		Optional<ButtonType> result = alert.showAndWait();
+		if (result.get() == ButtonType.OK) {
+			Booking book = null;
+			book = listviewBookings.getSelectionModel().getSelectedItem();
+			connection.cancelBooking(book.getBookingID());
+			Alert feedback = new Alert(AlertType.INFORMATION);
+			feedback.setTitle("Cancel Booking");
+			feedback.setHeaderText("Booking has been cancelled");
+			feedback.showAndWait();
+
+		} else {
+			return;
+		}
+		listviewBookings.getSelectionModel().clearSelection();
+		loadListViewBook();
 	}
 
 	/**
@@ -356,6 +408,8 @@ public class MainController implements Initializable {
 	@FXML
 	public void refreshBookingView() {
 		// TODO
+		//listviewBookings.getSelectionModel().clearSelection();
+		//loadListViewBook();
 	}
 
 	/**

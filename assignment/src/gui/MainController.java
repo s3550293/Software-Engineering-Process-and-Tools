@@ -50,7 +50,7 @@ public class MainController implements Initializable {
 	private DatabaseConnection connection = new DatabaseConnection();
 	private Employee employee = null;
 	private Booking booking = null;
-
+	int globalEmployeeOption = 0;
 	public MainController() {
 	}
 
@@ -493,28 +493,10 @@ public class MainController implements Initializable {
 		txtAddEmpLastName.setText(""); 
 		txtAddEmpPayRate.setText(""); 
 		chkbxAddWorkingTimes.setSelected(false);
-		btnSunMorning.setSelected(false);
-		btnSunAfternoon.setSelected(false);
-		btnSunEvening.setSelected(false);
-		btnMonMorning.setSelected(false);
-		btnMonAfternoon.setSelected(false);
-		btnMonEvening.setSelected(false);
-		btnTueMorning.setSelected(false);
-		btnTueAfternoon.setSelected(false);
-		btnTueEvening.setSelected(false);
-		btnWedMorning.setSelected(false);
-		btnWedAfternoon.setSelected(false);
-		btnWedEvening.setSelected(false);
-		btnThurMorning.setSelected(false);
-		btnThurAfternoon.setSelected(false);
-		btnThurEvening.setSelected(false);
-		btnFriMorning.setSelected(false);
-		btnFriAfternoon.setSelected(false);
-		btnFriEvening.setSelected(false);
-		btnSatMorning.setSelected(false);
-		btnSatAfternoon.setSelected(false);
-		btnSatEvening.setSelected(false);
-		// TODO
+		setAllTogglesToFalse();
+		globalEmployeeOption = 0;
+		lblEmployeeTitle.setText("Add New Employee");
+		gridpWorkingTimes.setDisable(true);
 	}
 
 	/**
@@ -564,25 +546,105 @@ public class MainController implements Initializable {
 		{
 			if(chkbxAddWorkingTimes.isSelected())
 			{
-				bMenu.option2AddEmployeeAndWorkingTimes(txtaddEmpFirstName.getText()
+				if(globalEmployeeOption == 0)
+				{
+				boolean check = bMenu.option2AddEmployeeAndWorkingTimes(txtaddEmpFirstName.getText()
 						,txtAddEmpLastName.getText(), payRate, btnSunMorning.isSelected(), btnSunAfternoon.isSelected()
 						, btnSunEvening.isSelected(), btnMonMorning.isSelected(), btnMonAfternoon.isSelected(), btnMonEvening.isSelected()
 						, btnTueMorning.isSelected(), btnTueAfternoon.isSelected(), btnTueEvening.isSelected(), btnWedMorning.isSelected()
 						, btnWedAfternoon.isSelected(), btnWedEvening.isSelected(), btnThurMorning.isSelected(), btnThurAfternoon.isSelected()
 						, btnThurEvening.isSelected(), btnFriMorning.isSelected(), btnFriAfternoon.isSelected(), btnFriEvening.isSelected()
 						, btnSatMorning.isSelected(), btnSatAfternoon.isSelected(), btnSatEvening.isSelected());
-				program.messageBox("SUCCESS", "New Employee Added", "New Employee Added",txtaddEmpFirstName.getText()+" "+txtAddEmpLastName.getText()+" with $"+payRate+"/h was Added!"); 
+					if(check)
+					{
+							program.messageBox("SUCCESS", "New Employee Added", "New Employee Added",txtaddEmpFirstName.getText()+" "+txtAddEmpLastName.getText()+" with $"+payRate+"/h was Added!"); 
+					}
+					else
+					{
+						return;
+					}
+				}
+				else
+				{
+					Employee employee = listviewEmployees.getSelectionModel().getSelectedItem();
+					int employeeID = employee.getId();
+					changeEmployeesDetails(employeeID,txtaddEmpFirstName.getText(), txtAddEmpLastName.getText(), payRate);
+					boolean check = bMenu.addWorkingTimes(employeeID,btnSunMorning.isSelected(), btnSunAfternoon.isSelected()
+							, btnSunEvening.isSelected(), btnMonMorning.isSelected(), btnMonAfternoon.isSelected(), btnMonEvening.isSelected()
+							, btnTueMorning.isSelected(), btnTueAfternoon.isSelected(), btnTueEvening.isSelected(), btnWedMorning.isSelected()
+							, btnWedAfternoon.isSelected(), btnWedEvening.isSelected(), btnThurMorning.isSelected(), btnThurAfternoon.isSelected()
+							, btnThurEvening.isSelected(), btnFriMorning.isSelected(), btnFriAfternoon.isSelected(), btnFriEvening.isSelected()
+							, btnSatMorning.isSelected(), btnSatAfternoon.isSelected(), btnSatEvening.isSelected());
+					if(check)
+					{
+						program.messageBox("SUCCESS", "Employee Details Updated", "Employee Details Updated",txtaddEmpFirstName.getText()+" "+txtAddEmpLastName.getText()+" with $"+payRate+"/h was updated!"); 
+					}
+					else
+					{
+						return;
+					}
+					lblEmployeeTitle.setText("Add New Employee");
+					globalEmployeeOption = 0;
+				}
 			}
 			else
 			{
-				bMenu.option1AddEmployee(txtaddEmpFirstName.getText(),txtAddEmpLastName.getText(), payRate);	
-				program.messageBox("SUCCESS", "SUCCESS", "New Employee Added",txtaddEmpFirstName.getText()+" "+txtAddEmpLastName.getText()+" with $"+payRate+"/h was Added!");
+				if(globalEmployeeOption == 0)
+				{
+					bMenu.option1AddEmployee(txtaddEmpFirstName.getText(),txtAddEmpLastName.getText(), payRate);	
+					program.messageBox("SUCCESS", "SUCCESS", "New Employee Added",txtaddEmpFirstName.getText()+" "+txtAddEmpLastName.getText()+" with $"+payRate+"/h was Added!");
+				}
+				else
+				{
+					Employee employee = listviewEmployees.getSelectionModel().getSelectedItem();
+					int employeeID = employee.getId();
+					setAllTogglesToFalse();
+					changeEmployeesDetails(employeeID,txtaddEmpFirstName.getText(), txtAddEmpLastName.getText(), payRate);
+					bMenu.addWorkingTimes(employeeID,btnSunMorning.isSelected(), btnSunAfternoon.isSelected()
+							, btnSunEvening.isSelected(), btnMonMorning.isSelected(), btnMonAfternoon.isSelected(), btnMonEvening.isSelected()
+							, btnTueMorning.isSelected(), btnTueAfternoon.isSelected(), btnTueEvening.isSelected(), btnWedMorning.isSelected()
+							, btnWedAfternoon.isSelected(), btnWedEvening.isSelected(), btnThurMorning.isSelected(), btnThurAfternoon.isSelected()
+							, btnThurEvening.isSelected(), btnFriMorning.isSelected(), btnFriAfternoon.isSelected(), btnFriEvening.isSelected()
+							, btnSatMorning.isSelected(), btnSatAfternoon.isSelected(), btnSatEvening.isSelected());
+					program.messageBox("SUCCESS", "Employee Details Updated", "Employee Details Updated",txtaddEmpFirstName.getText()+" "+txtAddEmpLastName.getText()+" with $"+payRate+"/h was updated!"); 
+					lblEmployeeTitle.setText("Add New Employee");
+					globalEmployeeOption = 0;
+				}
 			}
 		}
 		refreshEmployeeView();
 		cancelAddNewEmp();
 	}
-
+	public void changeEmployeesDetails(int empID,String fName, String lName, double pRate)
+	{	
+		String name = fName+" "+lName;
+		connection.updateEmployeeName(empID, name);
+		connection.updateEmployeePayRate(empID,pRate);
+	}
+	public void setAllTogglesToFalse()
+	{
+		btnSunMorning.setSelected(false);
+		btnSunAfternoon.setSelected(false);
+		btnSunEvening.setSelected(false);
+		btnMonMorning.setSelected(false);
+		btnMonAfternoon.setSelected(false);
+		btnMonEvening.setSelected(false);
+		btnTueMorning.setSelected(false);
+		btnTueAfternoon.setSelected(false);
+		btnTueEvening.setSelected(false);
+		btnWedMorning.setSelected(false);
+		btnWedAfternoon.setSelected(false);
+		btnWedEvening.setSelected(false);
+		btnThurMorning.setSelected(false);
+		btnThurAfternoon.setSelected(false);
+		btnThurEvening.setSelected(false);
+		btnFriMorning.setSelected(false);
+		btnFriAfternoon.setSelected(false);
+		btnFriEvening.setSelected(false);
+		btnSatMorning.setSelected(false);
+		btnSatAfternoon.setSelected(false);
+		btnSatEvening.setSelected(false);
+	}
 	/**
 	 * Resets the filtered employee list view
 	 * @author [Luke Mason]
@@ -615,81 +677,86 @@ public class MainController implements Initializable {
 
 	public void viewEmpDetails()
 	{
-		BusinessMenu bMenu = new BusinessMenu();
-		DatabaseConnection connect = new DatabaseConnection();
-		showAddNewEmp();
+		BusinessMenu bMenu = new BusinessMenu();		
 		//Initializing variables
 		int employeeID = -1;
-		String eFirstName = "";
-		String eLastName = "";
+
 		String ePayRate = "";
 		lblEmployeeTitle.setText("Change Employee Details");
+		//Checking if an item has been selected
+		if(listviewEmployees.getSelectionModel().getSelectedIndex() < 0)
+		{
+			program.messageBox("WARN", "oops", "No Employee has been Selected","Please Select an employee and try again");
+			return;
+		}
 		Employee employee = listviewEmployees.getSelectionModel().getSelectedItem();
-		System.out.println("EMPLOYEE - "+employee);
 		employeeID = employee.getId();
-		System.out.println(employeeID);
+
 		//Getting first and last name from full name string
 		String empFullName = employee.getName();
+
 		int index = empFullName.indexOf(' ');
-		eFirstName = empFullName.substring(0,index);
-		eLastName = empFullName.substring(index+1);
+		if(index < 0)
+		{
+			program.messageBox("ERROR", "No space in employee Name", "Please manually change that employee","Please UPDATE the employee name direct from database");
+			return;
+		}
+		String eFirstName = empFullName.substring(0,index);
+
+		String eLastName = empFullName.substring(index+1);
+
 		//converting double to string
 		double EPayRate = employee.getPayRate();
+
 		ePayRate = ""+EPayRate;
-		System.out.println(eFirstName);
-		System.out.println(eLastName);
 		//Assigning textFields with known Strings
 		txtaddEmpFirstName.setText(eFirstName);
 		txtAddEmpLastName.setText(eLastName); 
 		txtAddEmpPayRate.setText(ePayRate); 
 		ArrayList<EmployeeWorkingTime> workTimes = new ArrayList<EmployeeWorkingTime>();
-		//work time contains, WorkTimeID|EmployeeID|Date|StartTime|EndTime
-		workTimes = connect.getEmployeeWorkingTimes(employeeID);
-		
-		SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
-		String[] dateArray = new String[7];
-		
-		//Getting dates for first 7days
-		Calendar c = Calendar.getInstance();
-		System.out.println(workTimes.get(0).getDate());
-		c.setTime(workTimes.get(0).getDate());
-		System.out.println("assigning first week dates from first work time found");
-		for(int i = 1;i<=7; i++)
-		{
-			dateArray[i-1] = sdf.format(c.getTime());//puts each date from every loop into array
-			System.out.println(dateArray[i-1]);
-			c.add(Calendar.DAY_OF_MONTH, 1);
-		}		
+		//work time contains, WorkTimeID|EmployeeID|Date|StartTime|EndTime	
+		workTimes = connection.getEmployeeWorkingTimes(employeeID);
 		int checkBox = 0;
-		for(int j = 0; j<7; j++)
-		{System.out.println("comparing day "+j);
-			for(EmployeeWorkingTime wTime: workTimes)
+		if(workTimes.size() > 0)
+		{
+			SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+			String[] dateArray = new String[7];
+			
+			//Getting dates for first 7days
+			Calendar c = Calendar.getInstance();
+			c.setTime(workTimes.get(0).getDate());
+			for(int i = 1;i<=7; i++)
 			{
-				System.out.println(wTime.getDate()+" = "+dateArray[j]+" ??");
-				String date = program.convertDateToString(wTime.getDate());
-				if(date.equals(dateArray[j]))
+				dateArray[i-1] = sdf.format(c.getTime());//puts each date from every loop into array
+				c.add(Calendar.DAY_OF_MONTH, 1);
+			}		
+			for(int j = 0; j<7; j++)
+			{
+				for(EmployeeWorkingTime wTime: workTimes)
 				{
-					System.out.println("MATCH! ON DAY "+j);
-					String startTime = program.convertTimeToString(wTime.getStartTime());
-					System.out.println("Start Time = "+startTime);
-					String endTime = program.convertTimeToString(wTime.getEndTime());
-					System.out.println("End Time = "+endTime);
-					int timeBlock = bMenu.getTimeBlock(startTime,endTime);
-					System.out.println("time block = "+timeBlock);
-					if(timeBlock == -1)
+					String date = program.convertDateToString(wTime.getDate());
+					if(date.equals(dateArray[j]))
 					{
-						System.out.println("INVALID TIME BLOCK DETECTED");
+						String startTime = program.convertTimeToString(wTime.getStartTime());
+						String endTime = program.convertTimeToString(wTime.getEndTime());
+						int timeBlock = bMenu.getTimeBlock(startTime,endTime);
+						if(timeBlock == -1)
+						{
+							System.out.println("INVALID TIME BLOCK DETECTED");
+						}
+						else
+						{
+							Calendar d = Calendar.getInstance();
+							Date date2 = program.convertStringToDate(dateArray[j]);
+							d.setTime(date2);
+							int dayOfWeek = d.get(Calendar.DAY_OF_WEEK);
+							changeButtonsOfDay(dayOfWeek, timeBlock);
+							checkBox++;
+						}
 					}
-					Calendar d = Calendar.getInstance();
-					Date date2 = program.convertStringToDate(dateArray[j]);
-					d.setTime(date2);
-					int dayOfWeek = d.get(Calendar.DAY_OF_WEEK);
-					changeButtonsOfDay(dayOfWeek, timeBlock);
-					checkBox++;
 				}
 			}
 		}
-		
 		if(checkBox == 0)
 		{
 			chkbxAddWorkingTimes.setSelected(false);
@@ -700,22 +767,10 @@ public class MainController implements Initializable {
 			chkbxAddWorkingTimes.setSelected(true);
 			gridpWorkingTimes.setDisable(false);
 		}
+		globalEmployeeOption = 1;
+		showAddNewEmp();
 	}
-	public void changeEmployeesDetails()
-	{
 
-		BusinessMenu bMenu = new BusinessMenu();
-		DatabaseConnection connect = new DatabaseConnection();
-		Employee employee = listviewEmployees.getSelectionModel().getSelectedItem();
-		int employeeID = employee.getId();
-		bMenu.addWorkingTimes(employeeID,btnSunMorning.isSelected(), btnSunAfternoon.isSelected()
-				, btnSunEvening.isSelected(), btnMonMorning.isSelected(), btnMonAfternoon.isSelected(), btnMonEvening.isSelected()
-				, btnTueMorning.isSelected(), btnTueAfternoon.isSelected(), btnTueEvening.isSelected(), btnWedMorning.isSelected()
-				, btnWedAfternoon.isSelected(), btnWedEvening.isSelected(), btnThurMorning.isSelected(), btnThurAfternoon.isSelected()
-				, btnThurEvening.isSelected(), btnFriMorning.isSelected(), btnFriAfternoon.isSelected(), btnFriEvening.isSelected()
-				, btnSatMorning.isSelected(), btnSatAfternoon.isSelected(), btnSatEvening.isSelected());
-		lblEmployeeTitle.setText("Add New Employee");
-	}
 	public void changeButtonsOfDay(int dayOfWeek, int timeBlock)
 	{
 		switch(dayOfWeek)
@@ -995,7 +1050,17 @@ public class MainController implements Initializable {
 	 * @author [Luke Mason]
 	 */
 	@FXML
-	public void deleteEmplyee() {
-		// TODO
+	public void deleteEmplyee() 
+	{
+		//Needs Are you sure? window
+		if(listviewEmployees.getSelectionModel().getSelectedIndex() < 0)
+		{
+			program.messageBox("WARN", "oops", "No Employee has been Selected","Please Select an employee and try again");
+			return;
+		}
+		Employee employee = listviewEmployees.getSelectionModel().getSelectedItem();
+		int employeeID = employee.getId();
+		connection.clearWorkTimes(employeeID);
+		connection.deleteEmployee(employeeID);
 	}
 }

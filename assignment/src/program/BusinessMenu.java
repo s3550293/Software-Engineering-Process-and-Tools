@@ -223,7 +223,7 @@ public class BusinessMenu
 				 * @param employeeLName
 				 * @param employeePayRate
 				 */
-				public void option2AddEmployeeAndWorkingTimes(String employeeFName
+				public boolean option2AddEmployeeAndWorkingTimes(String employeeFName
 				,String employeeLName,double employeePayRate,boolean btnSunMorning,boolean btnSunAfternoon
 				,boolean btnSunEvening,boolean btnMonMorning,boolean btnMonAfternoon,boolean btnMonEvening
 				,boolean btnTueMorning,boolean btnTueAfternoon,boolean btnTueEvening,boolean btnWedMorning
@@ -264,7 +264,12 @@ public class BusinessMenu
 						{
 							option1AddEmployee(employeeFName,employeeLName,employeePayRate);
 						}
+						else
+						{
+							return false;
+						}
 					}
+					return true;
 				}
 				/**
 				 * Passes all the button values in its parameters and then assigns work times according to those times to the specified id.

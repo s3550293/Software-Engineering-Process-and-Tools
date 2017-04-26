@@ -622,7 +622,7 @@ public class DatabaseConnection
 		try(Connection connect = this.connect(); Statement inject = connect.createStatement())
 		{
 			inject.executeUpdate(query);
-			System.out.println("WorkTimes for ID " + employeeID + " deleted!!");
+			log.info("WorkTimes for ID " + employeeID + " deleted!!\n");
 		}
 		catch(SQLException sqle)
 		{
@@ -632,6 +632,50 @@ public class DatabaseConnection
 		log.info("OUT deleteUser\n");
 		return false;
 	}
-	
+	public void updateEmployeeName(int empID,String name)
+	{
+		String query = "UPDATE employees SET name = '"+name+"' WHERE employeeID = "+empID+";";
+		try(Connection connect = this.connect(); Statement inject = connect.createStatement())
+		{
+			inject.executeUpdate(query);
+			System.out.println("name for ID " + empID + " updated");
+		}
+		catch(SQLException sqle)
+		{
+			//System.out.println(sqle.getMessage());
+			log.warn(sqle.getMessage());
+		}
+	}
+	public void updateEmployeePayRate(int empID, double pRate)
+	{
+		String query = "UPDATE employees SET payRate = '"+pRate+"' WHERE employeeID = "+empID+";";
+		try(Connection connect = this.connect(); Statement inject = connect.createStatement())
+		{
+			inject.executeUpdate(query);
+			System.out.println("name for ID " + empID + " updated");
+		}
+		catch(SQLException sqle)
+		{
+			//System.out.println(sqle.getMessage());
+			log.warn(sqle.getMessage());
+		}
+	}
+	public boolean deleteEmployee(int employeeID)
+	{
+		log.info("IN deleteEmployee\n");
+		String query = "DELETE FROM EMPLOYEES WHERE employeeID = '" + employeeID + "';";
+		try(Connection connect = this.connect(); Statement inject = connect.createStatement())
+		{
+			inject.executeUpdate(query);
+			System.out.println("Employee " + employeeID + " deleted!!");
+		}
+		catch(SQLException sqle)
+		{
+			//System.out.println(sqle.getMessage());
+			log.warn(sqle.getMessage());
+		}
+		log.info("OUT deleteEmployee\n");
+		return false;
+	}
 
 }

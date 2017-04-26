@@ -1,7 +1,11 @@
 package gui;
 
 import java.net.URL;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 import java.util.ResourceBundle;
 
@@ -65,29 +69,39 @@ public class RegisterController implements Initializable {
 		ObservableList<String> obListMonth = FXCollections.observableList(listMonth);
 		cmbMonth.setItems(obListMonth);
 		List<String> list = new ArrayList<String>();
-		for(int i =2017; i>1900;i--){list.add(Integer.toString(i));}
+		//for(int i =2017; i>1900;i--){list.add(Integer.toString(i));}
+		DateFormat dayFormat = new SimpleDateFormat("yyyy");
+		Calendar cal = Calendar.getInstance();
+		Date date = null;
+		log.debug("LOGGER: Calculating Years");
+	    for (int i = 0; i < 100; i++) {
+	    	date = cal.getTime();
+	    	list.add(dayFormat.format(date));
+	        cal.add(Calendar.YEAR, -1);
+	    }
 		ObservableList<String> obList = FXCollections.observableList(list);
 		cmbYear.setItems(obList);
 		
 		cmbMonth.valueProperty().addListener(new ChangeListener<String>() {
 	        @Override public void changed(ObservableValue ov, String t, String t1) {
-	        	if(t1 == "4" || t1 == "6" || t1 == "10" || t1 == "11"){
+	        	log.debug("LOGGER: t1 value - "+t1);
+	        	if(t1.equals("4") || t1.equals("6") || t1.equals("10") || t1.equals("11")){
 	        		cmbDay.getItems().clear();
 	        		List<String> listDay = new ArrayList<String>();
 	        		for(int i =1; i<31;i++){listDay.add(Integer.toString(i));}
 	        		ObservableList<String> obListDay = FXCollections.observableList(listDay);
 	        		cmbDay.setItems(obListDay);
 	        	}
-	        	else if(t1 == "2"){
+	        	else if(t1.equals("2")){
 	        		cmbDay.getItems().clear();
 	        		List<String> listDay = new ArrayList<String>();
-	        		for(int i =1; i<28;i++){listDay.add(Integer.toString(i));}
+	        		for(int i =1; i<29;i++){listDay.add(Integer.toString(i));}
 	        		ObservableList<String> obListDay = FXCollections.observableList(listDay);
 	        		cmbDay.setItems(obListDay);
 	        	}
 	        	else{
 	        		List<String> listDay = new ArrayList<String>();
-	        		for(int i =1; i<31;i++){listDay.add(Integer.toString(i));}
+	        		for(int i =1; i<32;i++){listDay.add(Integer.toString(i));}
 	        		ObservableList<String> obListDay = FXCollections.observableList(listDay);
 	        		cmbDay.setItems(obListDay);
 	        	}
@@ -169,6 +183,12 @@ public class RegisterController implements Initializable {
             return;
         }
         date = cmbDay.getSelectionModel().getSelectedItem() + "/" + cmbMonth.getSelectionModel().getSelectedItem() + "/" + cmbYear.getSelectionModel().getSelectedItem();
+        if(program.checkForBackToFuture(date))
+        {
+        	log.debug("LOGGER: doc...ah...are you telling me you built a TIME MACHINE...out of a delorean?!");
+        	program.messageBox("ERROR", "Incorrect DOB", "Invalid DOB", "DOB is in the future");
+        	return;
+        }
         regProgram.registerUser(txtFirstName.getText(), txtLastName.getText(), txtRegUsername.getText(), txtRegEmail.getText(), txtMobileNumber.getText(), date, cmbRegGender.getSelectionModel().getSelectedItem(), pfRegPassword.getText());
         program.messageBox("INFO", "User Added", "User Added", "You have successfully created an account");
         cancel();

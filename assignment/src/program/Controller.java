@@ -21,6 +21,8 @@ public class Controller
 	private static User _user = null;
 	public User getUser(){return _user;}
 	public void setUser(User user){_user = user;}
+	private static Booking _booking = null;
+	public Booking getBooking(){return _booking;}
 
 	Scanner kb = new Scanner(System.in);
 
@@ -813,11 +815,14 @@ public class Controller
 	 */
 	public boolean checkEmail(String email)
 	{
-		for (int i = 0; i < email.length(); i++)
+		if(email.length() >= 7)
 		{
-			if (email.charAt(i) == '@')
+			for (int i = 0; i < email.length(); i++)
 			{
-				return false;
+				if (email.charAt(i) == '@')
+				{
+					return false;
+				}
 			}
 		}
 		return true;
@@ -835,6 +840,22 @@ public class Controller
 				log.debug("LOGGER: char - "+data.charAt(i));
 				return false;
 			}
+		}
+		return true;
+	}
+	
+	/**
+	 * Checks if date entered is in the future
+	 * @author Joseph Garner
+	 */
+	public boolean checkForBackToFuture(String date)
+	{
+		Date _date = convertStringToDate(date);
+		Calendar cal = Calendar.getInstance();
+		Date today = cal.getTime();
+		if(today.after(_date))
+		{
+			return true;
 		}
 		return true;
 	}

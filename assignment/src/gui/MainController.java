@@ -2,6 +2,8 @@ package gui;
 
 import java.io.IOException;
 import java.net.URL;
+import java.util.ResourceBundle;
+
 import java.text.SimpleDateFormat;
 import java.util.*;
 
@@ -36,6 +38,7 @@ import javafx.stage.Stage;
 
 import program.Booking;
 import program.Employee;
+import program.EmployeeWorkingTime;
 import program.Controller;
 import program.DatabaseConnection;
 import program.BusinessMenu;
@@ -464,9 +467,15 @@ public class MainController implements Initializable {
 	}
 
 	/**
+<<<<<<< HEAD
+	 * Shows add employee
+	 * note tabs should be disabled
+	 * @author [Luke Mason]
+=======
 	 * Shows add employee note tabs should be disabled
 	 * 
 	 * @author Joseph Garner
+>>>>>>> branch 'master' of https://github.com/s3550293/Software-Engineering-Process-and-Tools.git
 	 */
 
 	/**************
@@ -481,13 +490,38 @@ public class MainController implements Initializable {
 
 	/**
 	 * Returns User to manage employees
-	 * 
-	 * @author [Programmer]
+	 * @author [Luke Mason]
 	 */
 	@FXML
 	public void cancelAddNewEmp() {
 		boardPaneEmpAdd.setVisible(false);
 		boardPaneEmpOverview.setVisible(true);
+		//Resetting the add Employee board to default values
+		txtaddEmpFirstName.setText("");
+		txtAddEmpLastName.setText(""); 
+		txtAddEmpPayRate.setText(""); 
+		chkbxAddWorkingTimes.setSelected(false);
+		btnSunMorning.setSelected(false);
+		btnSunAfternoon.setSelected(false);
+		btnSunEvening.setSelected(false);
+		btnMonMorning.setSelected(false);
+		btnMonAfternoon.setSelected(false);
+		btnMonEvening.setSelected(false);
+		btnTueMorning.setSelected(false);
+		btnTueAfternoon.setSelected(false);
+		btnTueEvening.setSelected(false);
+		btnWedMorning.setSelected(false);
+		btnWedAfternoon.setSelected(false);
+		btnWedEvening.setSelected(false);
+		btnThurMorning.setSelected(false);
+		btnThurAfternoon.setSelected(false);
+		btnThurEvening.setSelected(false);
+		btnFriMorning.setSelected(false);
+		btnFriAfternoon.setSelected(false);
+		btnFriEvening.setSelected(false);
+		btnSatMorning.setSelected(false);
+		btnSatAfternoon.setSelected(false);
+		btnSatEvening.setSelected(false);
 		// TODO
 	}
 
@@ -512,71 +546,150 @@ public class MainController implements Initializable {
 	 * @author [Luke Mason]
 	 */
 	@FXML
-	public void createEmp() {
+	public void createEmp() 
+	{
 		BusinessMenu bMenu = new BusinessMenu();
 		boolean firstName = bMenu.checkEmployeeFirstOrLastName(txtaddEmpFirstName.getText());
-		System.out.println("Here 1");
+		if(!firstName)
+		{
+			program.messageBox("ERROR", "First Name Invalid", "First Name Invalid","First Name entered is not a valid first name\nReason: First name contains invalid characters");
+			return;
+		}
 		boolean lastName = bMenu.checkEmployeeFirstOrLastName(txtAddEmpLastName.getText());
-		System.out.println("Here 2");
+		if(!lastName)
+		{
+			program.messageBox("ERROR", "Last Name Invalid", "Last Name Invalid","Last Name entered is not a valid last name\nReason: Last name contains invalid characters");
+			return;
+		}
 		double payRate = bMenu.strPayRateToDouble(txtAddEmpPayRate.getText());
 		boolean PayRate = bMenu.checkEmployeePayRate(payRate);
-		System.out.println("Here 3");
-		if (PayRate && firstName && lastName) {
-			System.out.println("Here 4");
-			if (chkbxAddWorkingTimes.isSelected()) {
-				System.out.println("Here 5.1");
-				bMenu.option2AddEmployeeAndWorkingTimes(txtaddEmpFirstName.getText(), txtAddEmpLastName.getText(),
-						payRate, btnSunMorning.isSelected(), btnSunAfternoon.isSelected(), btnSunEvening.isSelected(),
-						btnMonMorning.isSelected(), btnMonAfternoon.isSelected(), btnMonEvening.isSelected(),
-						btnTueMorning.isSelected(), btnTueAfternoon.isSelected(), btnTueEvening.isSelected(),
-						btnWedMorning.isSelected(), btnWedAfternoon.isSelected(), btnWedEvening.isSelected(),
-						btnThurMorning.isSelected(), btnThurAfternoon.isSelected(), btnThurEvening.isSelected(),
-						btnFriMorning.isSelected(), btnFriAfternoon.isSelected(), btnFriEvening.isSelected(),
-						btnSatMorning.isSelected(), btnSatAfternoon.isSelected(), btnSatEvening.isSelected());
-			} else {
-				System.out.println("Here 5.2");
-				bMenu.option1AddEmployee(txtaddEmpFirstName.getText(), txtAddEmpLastName.getText(), payRate);
-			}
-		} else {
-			// Error box message, saying employee details have not been put in
-			// correctly
+		if(!PayRate)
+		{
+			program.messageBox("ERROR", "Pay Rate Invalid", "Pay Rate Invalid","Pay rate entered is not a valid pay rate\nReason: Pay Rate is not 0 - 1000");
+			return;
 		}
+		if(PayRate && firstName && lastName)
+		{
+			if(chkbxAddWorkingTimes.isSelected())
+			{
+				bMenu.option2AddEmployeeAndWorkingTimes(txtaddEmpFirstName.getText()
+						,txtAddEmpLastName.getText(), payRate, btnSunMorning.isSelected(), btnSunAfternoon.isSelected()
+						, btnSunEvening.isSelected(), btnMonMorning.isSelected(), btnMonAfternoon.isSelected(), btnMonEvening.isSelected()
+						, btnTueMorning.isSelected(), btnTueAfternoon.isSelected(), btnTueEvening.isSelected(), btnWedMorning.isSelected()
+						, btnWedAfternoon.isSelected(), btnWedEvening.isSelected(), btnThurMorning.isSelected(), btnThurAfternoon.isSelected()
+						, btnThurEvening.isSelected(), btnFriMorning.isSelected(), btnFriAfternoon.isSelected(), btnFriEvening.isSelected()
+						, btnSatMorning.isSelected(), btnSatAfternoon.isSelected(), btnSatEvening.isSelected());
+				program.messageBox("SUCCESS", "New Employee Added", "New Employee Added",txtaddEmpFirstName.getText()+" "+txtAddEmpLastName.getText()+" with $"+payRate+"/h was Added!"); 
+			}
+		}
+		else
+		{
+			bMenu.option1AddEmployee(txtaddEmpFirstName.getText(),txtAddEmpLastName.getText(), payRate);	
+			program.messageBox("SUCCESS", "SUCCESS", "New Employee Added",txtaddEmpFirstName.getText()+" "+txtAddEmpLastName.getText()+" with $"+payRate+"/h was Added!");
+		}
+			cancelAddNewEmp();
 	}
 
 	/**
 	 * Resets the filtered employee list view
-	 * 
-	 * @author [Programmer]
+	 * @author [Luke Mason]
 	 */
 	@FXML
-	public void refreshEmployeeView() {
-		// TODO
+
+	public void refreshEmployeeView()
+	{
+		txtSearchEmployee.setText("");
+		loadListViewEmp("");
 	}
 
 	/**
 	 * Filters the list of employees
-	 * 
-	 * @author [Programmer]
+	 * @author [Luke Mason]
 	 */
 	@FXML
-	public void searchEmployee() {
-		// TODO
+
+	public void searchEmployee()
+	{
+		String name = txtSearchEmployee.getText();
+		loadListViewEmp(name);
 	}
 
 	/**
 	 * Views Employees Details
-	 * 
-	 * @author [Programmer]
+	 * @author [Luke Mason]
 	 */
 	@FXML
-	public void viewEmpDetails() {
-		// TODO
+
+	public void viewEmpDetails()
+	{
+		BusinessMenu bMenu = new BusinessMenu();
+		program.messageBox("SUCCESS", "Not Implemented","","");
+
+		int employeeID = -1;
+		String eFirstName = "";
+		String eLastName = "";
+		String ePayRate = "";
+		boolean v1 = false;
+		boolean v2 = false;
+		boolean v3 = false;
+		boolean v4 = false;
+		boolean v5 = false;
+		boolean v6 = false;
+		boolean v7 = false;
+		boolean v8 = false;
+		boolean v9 = false;
+		boolean v10 = false;
+		boolean v11 = false;
+		boolean v12 = false;
+		boolean v13 = false;
+		boolean v14 = false;	
+		boolean v15 = false;
+		boolean v16 = false;
+		boolean v17 = false;
+		boolean v18 = false;
+		boolean v19 = false;
+		boolean v20 = false;
+		boolean v21 = false;
+		boolean v22 = false;
+		
+		txtaddEmpFirstName.setText(eFirstName);
+		txtAddEmpLastName.setText(eLastName); 
+		txtAddEmpPayRate.setText(ePayRate); 
+		
+		chkbxAddWorkingTimes.setSelected(v1);
+		
+		btnSunMorning.setSelected(v2);
+		btnSunAfternoon.setSelected(v3);
+		btnSunEvening.setSelected(v4);
+		btnMonMorning.setSelected(v5);
+		btnMonAfternoon.setSelected(v6);
+		btnMonEvening.setSelected(v7);
+		btnTueMorning.setSelected(v8);
+		btnTueAfternoon.setSelected(v9);
+		btnTueEvening.setSelected(v10);
+		btnWedMorning.setSelected(v11);
+		btnWedAfternoon.setSelected(v12);
+		btnWedEvening.setSelected(v13);
+		btnThurMorning.setSelected(v14);
+		btnThurAfternoon.setSelected(v15);
+		btnThurEvening.setSelected(v16);
+		btnFriMorning.setSelected(v17);
+		btnFriAfternoon.setSelected(v18);
+		btnFriEvening.setSelected(v19);
+		btnSatMorning.setSelected(v20);
+		btnSatAfternoon.setSelected(v21);
+		btnSatEvening.setSelected(v22);
+		
+		//lblEmployeeTitle.setText("Change Employee Details");
+		//Get chosen employee ID
+		ArrayList<EmployeeWorkingTime> workTimes = new ArrayList<EmployeeWorkingTime>();
+		workTimes = bMenu.getEmployeeWorkTimes(employeeID);
+		
 	}
 
 	/**
 	 * Deletes Employee
-	 * 
-	 * @author [Programmer]
+	 * @author [Luke Mason]
 	 */
 	@FXML
 	public void deleteEmplyee() {

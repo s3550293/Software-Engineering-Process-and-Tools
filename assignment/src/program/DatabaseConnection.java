@@ -7,6 +7,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 
 import org.apache.log4j.Level;
@@ -342,7 +343,7 @@ public class DatabaseConnection
 		int id = 0;
 		int empID = 0;
 		Date date, startTime, endTime;
-		String query = "SELECT * FROM EMPLOYEES_WORKING_TIMES WHERE employeeID = ? "; 
+		String query = "SELECT * FROM EMPLOYEES_WORKING_TIMES WHERE employeeID = ?;"; 
 
 		try (Connection connect = this.connect(); PreparedStatement  inject  = connect.prepareStatement(query))
 		{
@@ -631,6 +632,41 @@ public class DatabaseConnection
 		log.info("OUT deleteUser\n");
 		return false;
 	}
-	
+	public ArrayList<EmployeeWorkingTime> getEmployeeWorkingTimesAfter(int employeeId)
+	{
+		log.info("IN getEmployeeWorkingTimes\n");
+		ArrayList<EmployeeWorkingTime> databaseWorkingTime = new ArrayList<EmployeeWorkingTime>();
+		int id = 0;
+		int empID = 0;
+		Date date, startTime, endTime;
+		Calendar c = Calendar.getInstance();
+		String currentDateStr = controller.convertDateToString(c.getTime());
+		String query = "SELECT * FROM EMPLOYEES_WORKING_TIMES WHERE employeeID = ? AND date > "+currentDateStr+";"; 
+
+		try (Connection connect = this.connect(); PreparedStatement  inject  = connect.prepareStatement(query))
+		{
+			//Sets '?' to user name in the query
+			//crates a user from the found information
+			inject.setInt(1,employeeId);
+			ResultSet output = inject.executeQuery();
+			while (output.next())
+			{
+				id = output.getInt(1);
+				empID = output.getInt(2);
+				date = controller.convertStringToDate(output.getString(3));
+				startTime = controller.convertStringToTime(output.getString(4));
+				endTime = controller.convertStringToTime(output.getString(5));
+				databaseWorkingTime.add(new EmployeeWorkingTime(id,empID,date,startTime,endTime));				
+			}
+			output.close();
+		}
+		catch(SQLException sqle)
+		{
+			//System.out.println("Getting Working Time: "+sqle.getMessage());
+			log.warn(sqle.getMessage());
+		}
+		log.info("OUT getEmployeeWorkingTimes\n");
+		return databaseWorkingTime;
+	}
 
 }

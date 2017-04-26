@@ -26,8 +26,11 @@ import javafx.scene.control.CheckBox;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
+import javafx.scene.control.RadioButton;
 import javafx.scene.control.TextField;
+import javafx.scene.control.Toggle;
 import javafx.scene.control.ToggleButton;
+import javafx.scene.control.ToggleGroup;
 import javafx.scene.control.ListCell;
 import javafx.scene.image.Image;
 import javafx.scene.layout.BorderPane;
@@ -42,6 +45,7 @@ import program.EmployeeWorkingTime;
 import program.Controller;
 import program.DatabaseConnection;
 import program.BusinessMenu;
+import program.Service;
 
 import org.apache.log4j.Logger;
 
@@ -53,9 +57,18 @@ public class MainController implements Initializable {
 	private Employee employee = null;
 	private Booking booking = null;
 
-	public MainController() {
-	}
-
+	public MainController() {}
+	
+	/**************
+	 * B Owner
+	 **************/
+	
+	@FXML
+	ToggleGroup bookingViewGroup = new ToggleGroup();
+	
+	@FXML
+	RadioButton rbCurrentBook, rbPastBook;
+	
 	@FXML
 	StackPane stkBusiness, stkCustomer;
 
@@ -85,7 +98,7 @@ public class MainController implements Initializable {
 	TextField txtSearchBookings, txtaddEmpFirstName, txtAddEmpLastName, txtAddEmpPayRate, txtSearchEmployee;
 
 	@FXML
-	CheckBox chkbxAddWorkingTimes, chkbPastBooking;
+	CheckBox chkbxAddWorkingTimes, chbkViewAllBook;
 
 	@FXML
 	GridPane gridpWorkingTimes;
@@ -98,6 +111,38 @@ public class MainController implements Initializable {
 			btnFriMorning, btnFriAfternoon, btnFriEvening;
 	@FXML
 	ToggleButton btnSatMorning, btnSatAfternoon, btnSatEvening;
+	
+	/**************
+	 * Customer
+	 **************/
+	
+	@FXML
+	Button btnBookAppointment, btnConfirmBooking, btnNext, btnLogoutCustomer, btnBack;
+	
+	@FXML
+	Label lblCustomerName, lblDayDate, lblServiceName, lblServiceDur, lblServicePrice, lblCustBookingDate, lblBookingService, lblBookingPrice, lblBookingDur, lblBookingTime, lblBookingEmp;
+	
+	@FXML
+	ComboBox<Date> cmbDayBooking;
+	
+	@FXML
+	ComboBox<Employee> cmbPreferEmp;
+	
+	@FXML
+	ListView<Service> listviewBookingServices;
+	
+	@FXML
+	StackPane stkpnUserMenu, stkpnBookingMenu, stkpnDateService, stkpnTime, stkpnBookingConfirm;
+	
+	@FXML
+	ToggleButton togbtnMorn, togbtnAft, togbtnEven, togbtnTimeSlot1, togbtnTimeSlot2, togbtnTimeSlot3, togbtnTimeSlot4, togbtnTimeSlot5, togbtnTimeSlot6, togbtnTimeSlot7, togbtnTimeSlot8;
+	ToggleButton[] bookingTimes = new ToggleButton[]{togbtnTimeSlot1, togbtnTimeSlot2, togbtnTimeSlot3, togbtnTimeSlot4, togbtnTimeSlot5, togbtnTimeSlot6, togbtnTimeSlot7, togbtnTimeSlot8};
+	
+	
+	@FXML
+	Label lblAvail1, lblAvail2, lblAvail3, lblAvail4, lblAvail5, lblAvail6, lblAvail7, lblAvail8;
+	Label[] timeAvail = new Label[]{lblAvail1, lblAvail2, lblAvail3, lblAvail4, lblAvail5, lblAvail6, lblAvail7, lblAvail8};
+	
 
 	/**
 	 * initializes the stage
@@ -121,6 +166,7 @@ public class MainController implements Initializable {
 			Platform.exit();
 			System.exit(0);
 		}
+		rbCurrentBook.setSelected(true);
 		loadListViewEmp("");
 		listviewEmployees.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<Employee>() {
 			@Override
@@ -156,13 +202,26 @@ public class MainController implements Initializable {
 				loadListViewBook();
 			}
 		});
-
+		
+		bookingViewGroup.selectedToggleProperty().addListener(new ChangeListener<Toggle>(){
+		    public void changed(ObservableValue<? extends Toggle> ov, Toggle old_toggle, Toggle new_toggle) {
+		    	loadDaySelect();
+		    	loadListViewBook();
+		     } 
+		});
+		
+		cmbDayBooking.valueProperty().addListener(new ChangeListener<Date>() {
+			@Override
+			public void changed(ObservableValue ov, Date t, Date t1) {
+				//TODO
+			}
+		});
 	}
 
 	/**
 	 * Returns User to login
 	 * 
-	 * @author [Programmer]
+	 * @author Joseph Garner
 	 */
 	private void loadListViewEmp(String name) {
 		ArrayList<Employee> empArray = new ArrayList<>(connection.getEmployees(name));
@@ -195,7 +254,7 @@ public class MainController implements Initializable {
 	}
 
 	/**
-	 * Returns User to login
+	 * Loads the current and past 7 days into a combo box
 	 * 
 	 * @author Joseph Garmer
 	 */
@@ -204,7 +263,8 @@ public class MainController implements Initializable {
 		SimpleDateFormat dayFormat = new SimpleDateFormat("EEEE");
 		Calendar date = Calendar.getInstance();
 		ArrayList<Date> dateArray = new ArrayList<>();
-		if (chkbPastBooking.isSelected()) {
+		log.debug("LOGGER: rbPastBook - "+rbPastBook.isSelected());
+		if (rbPastBook.isSelected()) {
 			date.add(Calendar.DAY_OF_MONTH, -1);
 			for (int i = 0; i < 7; i++) {
 				log.debug("LOGGER: Date - " + date);
@@ -262,9 +322,9 @@ public class MainController implements Initializable {
 	}
 
 	/**
-	 * Returns User to login
+	 * loads bookings into list view
 	 * 
-	 * @author [Programmer]
+	 * @author Joseph Garner
 	 */
 	private void loadListViewBook() {
 		if(cmbBookingDay.getSelectionModel().getSelectedItem() != null)
@@ -314,11 +374,62 @@ public class MainController implements Initializable {
 			}
 		}
 	}
+	
+	/**
+	 * loads all bookings into list view
+	 * 
+	 * @author Joseph Garner
+	 */
+	public void loadAllBookings(){
+		if(cmbBookingDay.getSelectionModel().getSelectedItem() != null)
+		{
+			listviewBookings.getItems().clear();
+			ArrayList<Booking> bookArray = new ArrayList<>(connection.getAllBooking());
+			ObservableList<Booking> bookList = FXCollections.observableList(bookArray);
+			log.debug("LOGGER: List length:" + bookArray.size());
+			if (bookList != null) {
+				listviewBookings.setItems(bookList);
+				listviewBookings.setCellFactory(new Callback<ListView<Booking>, ListCell<Booking>>() {
+					@Override
+					public ListCell<Booking> call(ListView<Booking> p) {
+	
+						ListCell<Booking> cell = new ListCell<Booking>() {
+							@Override
+							protected void updateItem(Booking t, boolean bln) {
+								super.updateItem(t, bln);
+								if (t != null) {
+									setText(t.getBookingID() + " " + connection.getCustomer(t.getCustomerId()).getFullName()
+											+ " " + program.convertTimeToString(t.getStartTime()));
+								}
+								else{
+									listviewEmployees.setPlaceholder(new Label("No Bookings"));
+								}
+							}
+						};
+						return cell;
+					}
+				});
+			} else {
+				log.warn("Unable to load Employees");
+			}
+		}
+	}
 
 	/**************
 	 * LOGIN
 	 **************/
-
+	
+	/**
+	 * Logs the user out
+	 * 
+	 * @author [Programmer]
+	 */
+	@FXML
+	public void logout()
+	{
+		
+	}
+	
 	/**
 	 * Returns User to login
 	 * 
@@ -351,9 +462,35 @@ public class MainController implements Initializable {
 	 **************/
 
 	/**
+	 * Displays all bookings to user
+	 * 
+	 * @author Joseph Garner
+	 */
+	@FXML
+	public void viewAllBookings()
+	{
+		if(chbkViewAllBook.isSelected())
+    	{
+    		cmbBookingDay.setDisable(true);
+    		rbPastBook.setDisable(true);
+    		rbPastBook.setSelected(false);
+    		rbCurrentBook.setDisable(true);
+    		rbCurrentBook.setSelected(false);
+    		loadAllBookings();
+    	}
+    	else{
+    		cmbBookingDay.setDisable(false);
+    		rbPastBook.setDisable(false);
+    		rbCurrentBook.setDisable(false);
+    		rbCurrentBook.setSelected(true);
+    		loadListViewBook();
+    	}
+	}
+	
+	/**
 	 * Program Allows the user to search and displays bookings
 	 * 
-	 * @author [Programmer]
+	 * @author Joseph Garner
 	 */
 	@FXML
 	public void searchBookings() {
@@ -379,10 +516,14 @@ public class MainController implements Initializable {
 			boolean checkFL = program.searchMatch(fullName.toUpperCase( ), txtSearchBookings.getText().toUpperCase( ));
 			log.debug("LOGGER: Users Name - "+fullName);
 			if (checkF || checkL || checkFL) {
-				if (dateView.format(now).equals(dateView.format(cmbBookingDay.getSelectionModel().getSelectedItem()))){
+				if(chbkViewAllBook.isSelected()){
+					bookArrayView.add(b);
+				}
+				else if (!chbkViewAllBook.isSelected() && dateView.format(now).equals(dateView.format(cmbBookingDay.getSelectionModel().getSelectedItem()))){
 					bookArrayView.add(b);
 					log.debug("LOGGER: Booking added - " + b.toString());
 				}
+				else{}
 			}
 		}
 		ObservableList<Booking> bookList = FXCollections.observableList(bookArrayView);
@@ -469,7 +610,7 @@ public class MainController implements Initializable {
 	/**
 	 * Shows add employee
 	 * note tabs should be disabled
-	 * @author [Luke Mason]
+	 * @author Luke Mason
 	 */
 
 	/**************
@@ -484,7 +625,7 @@ public class MainController implements Initializable {
 
 	/**
 	 * Returns User to manage employees
-	 * @author [Luke Mason]
+	 * @author Luke Mason
 	 */
 	@FXML
 	public void cancelAddNewEmp() {
@@ -537,7 +678,7 @@ public class MainController implements Initializable {
 	/**
 	 * Creates an Employee
 	 * 
-	 * @author [Luke Mason]
+	 * @author Luke Mason
 	 */
 	@FXML
 	public void createEmp() 
@@ -587,7 +728,7 @@ public class MainController implements Initializable {
 
 	/**
 	 * Resets the filtered employee list view
-	 * @author [Luke Mason]
+	 * @author Luke Mason
 	 */
 	@FXML
 
@@ -599,7 +740,7 @@ public class MainController implements Initializable {
 
 	/**
 	 * Filters the list of employees
-	 * @author [Luke Mason]
+	 * @author Luke Mason
 	 */
 	@FXML
 
@@ -611,7 +752,7 @@ public class MainController implements Initializable {
 
 	/**
 	 * Views Employees Details
-	 * @author [Luke Mason]
+	 * @author Luke Mason
 	 */
 	@FXML
 
@@ -684,10 +825,93 @@ public class MainController implements Initializable {
 
 	/**
 	 * Deletes Employee
-	 * @author [Luke Mason]
+	 * @author Luke Mason
 	 */
 	@FXML
 	public void deleteEmplyee() {
 		// TODO
+	}
+	
+	
+	
+	/**************
+	 * Customer
+	 **************/
+	
+	/**
+	 * Enters to booking phase
+	 * @author [Programmer]
+	 */
+	@FXML
+	public void startBooking(){
+		//TODO
+		if(stkpnUserMenu.isVisible())
+		{
+			stkpnUserMenu.setVisible(false);
+			stkpnBookingMenu.setVisible(true);
+			return;
+		}
+		
+	}
+	
+	/**
+	 * Moves the customer forward
+	 * @author [Programmer]
+	 */
+	@FXML
+	public void nextView(){
+		if(stkpnDateService.isVisible() && stkpnBookingMenu.isVisible())
+		{
+			stkpnDateService.setVisible(false);
+			stkpnTime.setVisible(true);
+			//TODO
+			return;
+		}
+		if(stkpnTime.isVisible() && stkpnBookingMenu.isVisible())
+		{
+			stkpnTime.setVisible(false);
+			stkpnBookingMenu.setVisible(false);
+			stkpnBookingConfirm.setVisible(true);
+			//TODO
+			return;
+		}
+		
+	}
+	
+	/**
+	 * Moves the customer backward
+	 * @author Joseph Garner
+	 */
+	@FXML
+	public void backView(){
+		if(stkpnDateService.isVisible() && stkpnBookingMenu.isVisible())
+		{
+			stkpnBookingMenu.setVisible(false);
+			stkpnUserMenu.setVisible(true);
+			return;
+		}
+		if(stkpnTime.isVisible() && stkpnBookingMenu.isVisible())
+		{
+			stkpnTime.setVisible(false);
+			stkpnDateService.setVisible(true);
+			return;
+		}
+		if(stkpnBookingConfirm.isVisible())
+		{
+			stkpnBookingConfirm.setVisible(false);
+			stkpnTime.setVisible(true);
+			stkpnBookingMenu.setVisible(true);
+			return;
+		}
+		
+	}
+	
+	/**
+	 * Deletes Employee
+	 * @author [Programmer]
+	 */
+	@FXML
+	public void confirmBooking(){
+		//TODO
 	}
 }

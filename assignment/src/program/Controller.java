@@ -829,18 +829,13 @@ public class Controller
 	 */
 	public boolean searchMatch(String data, String input)
 	{
-		boolean val = false;
 		for (int i = 0; i < input.length(); i++)
 		{
-			if (data.charAt(i) == input.charAt(i)){
-				val = true;
+			if (data.charAt(i) != input.charAt(i)){
 				log.debug("LOGGER: char - "+data.charAt(i));
-			}
-			else{
-				val = false;
+				return false;
 			}
 		}
-		log.debug("LOGGER: val - "+val);
-		return val;
+		return true;
 	}
 }

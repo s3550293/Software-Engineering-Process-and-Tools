@@ -4,18 +4,28 @@ import java.util.Date;
 
 
 public class Booking {
-	private int bookingID, cusID, employeeID;
+	private int bookingID, cusID, employeeID, serviceID;
 	private Date date, startTime, endTime;
 	private String status;
 	
 	public Booking(){}
-	public Booking(int bookingID, int cusID, Date date, Date startTime, Date endTime, String status)
+	public Booking(int bookingID, int cusID, Date date, Date startTime, Date endTime, int serviceID, String status)
 	{
 		this.bookingID = bookingID;
 		this.cusID = cusID;
 		this.date = date;
 		this.startTime = startTime;
 		this.endTime = endTime;
+		this.serviceID = serviceID;
+		this.status = status;
+	}
+	public Booking(int cusID, Date date, Date startTime, Date endTime, int serviceID, String status)
+	{
+		this.cusID = cusID;
+		this.date = date;
+		this.startTime = startTime;
+		this.endTime = endTime;
+		this.serviceID = serviceID;
 		this.status = status;
 	}
 

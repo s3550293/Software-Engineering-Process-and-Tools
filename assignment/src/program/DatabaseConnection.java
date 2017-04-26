@@ -138,6 +138,49 @@ public class DatabaseConnection
 	}
 	
 	/**
+	 * Gets where the user name keyword matches another users name
+	 * @param id
+	 * @return User Object
+	 */
+	public User getCustomer(int id)
+	{
+		int _id = 0;
+		String _FName = "null";
+		String _LName = "null";
+		String _Email = "null";
+		String _Phone = "null";
+		String _DOB = "null";
+		String _Gender = "null";
+		String query = "SELECT * FROM CLIENTDETAILS WHERE id = ?";
+		//Creates a null user to return, this can be used to validate user at login
+		Customer databaseCustomer = null;
+		try (Connection connect = this.connect(); PreparedStatement  inject  = connect.prepareStatement(query))
+		{
+			//Sets '?' to user name in the query
+			//crates a user from the found information
+			inject.setInt(1,id);
+			ResultSet output = inject.executeQuery();
+			while (output.next()){
+				_id = output.getInt(1);
+				_FName = output.getString(2);
+				_LName = output.getString(3);
+				_Email = output.getString(4);
+				_Phone = output.getString(5);
+				_DOB = output.getString(6);
+				_Gender = output.getString(6);
+			}
+			databaseCustomer = new Customer(_id ,_FName, _LName, _Email, _Phone, _DOB, _Gender);
+			output.close();
+		}
+		catch(SQLException sqle)
+		{
+			//System.out.println("Getting User: "+sqle.getMessage());
+			log.warn(sqle.getMessage());
+		}
+		return databaseCustomer;
+	}
+	
+	/**
 	 * This function finds a selection of employees that matches the string name
 	 * @param name
 	 * @return ArrayList<Employee> Objects
@@ -424,6 +467,7 @@ public class DatabaseConnection
 		int cusID = 0;
 		Date date, startTime, endTime;
 		String desc;
+		int service;
 		String query = "SELECT * FROM BOOKINGS WHERE userID = ? "; 
 
 		try (Connection connect = this.connect(); PreparedStatement  inject  = connect.prepareStatement(query))
@@ -439,8 +483,9 @@ public class DatabaseConnection
 				date = controller.convertStringToDate(output.getString(3));
 				startTime = controller.convertStringToTime(output.getString(4));
 				endTime = controller.convertStringToTime(output.getString(5));
-				desc=output.getString(6);
-				databaseBookingTime.add(new Booking(bookingID,cusID,date,startTime,endTime,desc));				
+				service = output.getInt(6);
+				desc=output.getString(7);
+				databaseBookingTime.add(new Booking(bookingID,cusID,date,startTime,endTime,service,desc));				
 			}
 			output.close();
 		}
@@ -463,6 +508,7 @@ public class DatabaseConnection
 		int cusID = 0;
 		Date date, startTime, endTime;
 		String desc;
+		int service;
 		String query = "SELECT * FROM BOOKINGS"; 
 
 		try (Connection connect = this.connect(); PreparedStatement  inject  = connect.prepareStatement(query))
@@ -478,8 +524,9 @@ public class DatabaseConnection
 				date = controller.convertStringToDate(output.getString(3));
 				startTime = controller.convertStringToTime(output.getString(4));
 				endTime = controller.convertStringToTime(output.getString(5));
-				desc=output.getString(6);
-				databaseBookingTime.add(new Booking(bookingID,cusID,date,startTime,endTime,desc));				
+				service = output.getInt(6);
+				desc=output.getString(7);
+				databaseBookingTime.add(new Booking(bookingID,cusID,date,startTime,endTime,service,desc));				
 			}
 			output.close();
 		}
@@ -501,6 +548,7 @@ public class DatabaseConnection
 		int bookingID = 0;
 		int cusID = 0;
 		Date date, startTime, endTime;
+		int service;
 		String desc;
 		String query = "SELECT * FROM BOOKINGS WHERE id = ?"; 
 
@@ -517,8 +565,9 @@ public class DatabaseConnection
 				date = controller.convertStringToDate(output.getString(3));
 				startTime = controller.convertStringToTime(output.getString(4));
 				endTime = controller.convertStringToTime(output.getString(5));
-				desc=output.getString(6);
-				getBooking = new Booking(bookingID,cusID,date,startTime,endTime,desc);				
+				service = output.getInt(6);
+				desc=output.getString(7);
+				getBooking = new Booking(bookingID,cusID,date,startTime,endTime,service,desc);				
 			}
 			output.close();
 		}
@@ -535,8 +584,7 @@ public class DatabaseConnection
 	 * @return true or false
 	 */
 	public boolean cancelBooking(int bookID){
-		ArrayList<Booking> bookList = new ArrayList<Booking>();
-		bookList = getAllBooking();
+		ArrayList<Booking> bookList = getAllBooking();
 		Boolean exists = false;
 		for(Booking b : bookList){
 			if(b.getBookingID() == bookID){

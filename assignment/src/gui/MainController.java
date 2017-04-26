@@ -2,8 +2,6 @@ package gui;
 
 import java.io.IOException;
 import java.net.URL;
-import java.util.ResourceBundle;
-
 import java.text.SimpleDateFormat;
 import java.util.*;
 
@@ -618,70 +616,380 @@ public class MainController implements Initializable {
 	public void viewEmpDetails()
 	{
 		BusinessMenu bMenu = new BusinessMenu();
-		program.messageBox("SUCCESS", "Not Implemented","","");
-
+		DatabaseConnection connect = new DatabaseConnection();
+		showAddNewEmp();
+		//Initializing variables
 		int employeeID = -1;
 		String eFirstName = "";
 		String eLastName = "";
 		String ePayRate = "";
-		boolean v1 = false;
-		boolean v2 = false;
-		boolean v3 = false;
-		boolean v4 = false;
-		boolean v5 = false;
-		boolean v6 = false;
-		boolean v7 = false;
-		boolean v8 = false;
-		boolean v9 = false;
-		boolean v10 = false;
-		boolean v11 = false;
-		boolean v12 = false;
-		boolean v13 = false;
-		boolean v14 = false;	
-		boolean v15 = false;
-		boolean v16 = false;
-		boolean v17 = false;
-		boolean v18 = false;
-		boolean v19 = false;
-		boolean v20 = false;
-		boolean v21 = false;
-		boolean v22 = false;
-		
+		lblEmployeeTitle.setText("Change Employee Details");
+		Employee employee = listviewEmployees.getSelectionModel().getSelectedItem();
+		System.out.println("EMPLOYEE - "+employee);
+		employeeID = employee.getId();
+		System.out.println(employeeID);
+		//Getting first and last name from full name string
+		String empFullName = employee.getName();
+		int index = empFullName.indexOf(' ');
+		eFirstName = empFullName.substring(0,index);
+		eLastName = empFullName.substring(index+1);
+		//converting double to string
+		double EPayRate = employee.getPayRate();
+		ePayRate = ""+EPayRate;
+		System.out.println(eFirstName);
+		System.out.println(eLastName);
+		//Assigning textFields with known Strings
 		txtaddEmpFirstName.setText(eFirstName);
 		txtAddEmpLastName.setText(eLastName); 
 		txtAddEmpPayRate.setText(ePayRate); 
-		
-		chkbxAddWorkingTimes.setSelected(v1);
-		
-		btnSunMorning.setSelected(v2);
-		btnSunAfternoon.setSelected(v3);
-		btnSunEvening.setSelected(v4);
-		btnMonMorning.setSelected(v5);
-		btnMonAfternoon.setSelected(v6);
-		btnMonEvening.setSelected(v7);
-		btnTueMorning.setSelected(v8);
-		btnTueAfternoon.setSelected(v9);
-		btnTueEvening.setSelected(v10);
-		btnWedMorning.setSelected(v11);
-		btnWedAfternoon.setSelected(v12);
-		btnWedEvening.setSelected(v13);
-		btnThurMorning.setSelected(v14);
-		btnThurAfternoon.setSelected(v15);
-		btnThurEvening.setSelected(v16);
-		btnFriMorning.setSelected(v17);
-		btnFriAfternoon.setSelected(v18);
-		btnFriEvening.setSelected(v19);
-		btnSatMorning.setSelected(v20);
-		btnSatAfternoon.setSelected(v21);
-		btnSatEvening.setSelected(v22);
-		
-		//lblEmployeeTitle.setText("Change Employee Details");
-		//Get chosen employee ID
 		ArrayList<EmployeeWorkingTime> workTimes = new ArrayList<EmployeeWorkingTime>();
-		workTimes = bMenu.getEmployeeWorkTimes(employeeID);
+		//work time contains, WorkTimeID|EmployeeID|Date|StartTime|EndTime
+		workTimes = connect.getEmployeeWorkingTimes(employeeID);
 		
+		SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+		String[] dateArray = new String[7];
+		
+		//Getting dates for first 7days
+		Calendar c = Calendar.getInstance();
+		System.out.println(workTimes.get(0).getDate());
+		c.setTime(workTimes.get(0).getDate());
+		System.out.println("assigning first week dates from first work time found");
+		for(int i = 1;i<=7; i++)
+		{
+			dateArray[i-1] = sdf.format(c.getTime());//puts each date from every loop into array
+			System.out.println(dateArray[i-1]);
+			c.add(Calendar.DAY_OF_MONTH, 1);
+		}		
+		int checkBox = 0;
+		for(int j = 0; j<7; j++)
+		{System.out.println("comparing day "+j);
+			for(EmployeeWorkingTime wTime: workTimes)
+			{
+				System.out.println(wTime.getDate()+" = "+dateArray[j]+" ??");
+				String date = program.convertDateToString(wTime.getDate());
+				if(date.equals(dateArray[j]))
+				{
+					System.out.println("MATCH! ON DAY "+j);
+					String startTime = program.convertTimeToString(wTime.getStartTime());
+					System.out.println("Start Time = "+startTime);
+					String endTime = program.convertTimeToString(wTime.getEndTime());
+					System.out.println("End Time = "+endTime);
+					int timeBlock = bMenu.getTimeBlock(startTime,endTime);
+					System.out.println("time block = "+timeBlock);
+					if(timeBlock == -1)
+					{
+						System.out.println("INVALID TIME BLOCK DETECTED");
+					}
+					Calendar d = Calendar.getInstance();
+					Date date2 = program.convertStringToDate(dateArray[j]);
+					d.setTime(date2);
+					int dayOfWeek = d.get(Calendar.DAY_OF_WEEK);
+					changeButtonsOfDay(dayOfWeek, timeBlock);
+					checkBox++;
+				}
+			}
+		}
+		
+		if(checkBox == 0)
+		{
+			chkbxAddWorkingTimes.setSelected(false);
+			gridpWorkingTimes.setDisable(true);
+		}
+		else
+		{
+			chkbxAddWorkingTimes.setSelected(true);
+			gridpWorkingTimes.setDisable(false);
+		}
 	}
+	public void changeEmployeesDetails()
+	{
 
+		BusinessMenu bMenu = new BusinessMenu();
+		DatabaseConnection connect = new DatabaseConnection();
+		Employee employee = listviewEmployees.getSelectionModel().getSelectedItem();
+		int employeeID = employee.getId();
+		bMenu.addWorkingTimes(employeeID,btnSunMorning.isSelected(), btnSunAfternoon.isSelected()
+				, btnSunEvening.isSelected(), btnMonMorning.isSelected(), btnMonAfternoon.isSelected(), btnMonEvening.isSelected()
+				, btnTueMorning.isSelected(), btnTueAfternoon.isSelected(), btnTueEvening.isSelected(), btnWedMorning.isSelected()
+				, btnWedAfternoon.isSelected(), btnWedEvening.isSelected(), btnThurMorning.isSelected(), btnThurAfternoon.isSelected()
+				, btnThurEvening.isSelected(), btnFriMorning.isSelected(), btnFriAfternoon.isSelected(), btnFriEvening.isSelected()
+				, btnSatMorning.isSelected(), btnSatAfternoon.isSelected(), btnSatEvening.isSelected());
+		lblEmployeeTitle.setText("Add New Employee");
+	}
+	public void changeButtonsOfDay(int dayOfWeek, int timeBlock)
+	{
+		switch(dayOfWeek)
+		{
+			case 1: 
+				if(timeBlock == 1)
+				{
+					btnSunMorning.setSelected(true);
+					btnSunAfternoon.setSelected(true);
+					btnSunEvening.setSelected(true);
+				}
+				else if(timeBlock == 2)
+				{
+					btnSunMorning.setSelected(true);
+					btnSunAfternoon.setSelected(true);
+					btnSunEvening.setSelected(false);
+				}
+				else if(timeBlock == 3)
+				{
+					btnSunMorning.setSelected(false);
+					btnSunAfternoon.setSelected(true);
+					btnSunEvening.setSelected(true);
+				}
+				else if(timeBlock == 4)
+				{
+					btnSunMorning.setSelected(true);
+					btnSunAfternoon.setSelected(false);
+					btnSunEvening.setSelected(false);
+				}
+				else if(timeBlock == 5)
+				{
+					btnSunMorning.setSelected(false);
+					btnSunAfternoon.setSelected(true);
+					btnSunEvening.setSelected(false);
+				}
+				else if(timeBlock == 6)
+				{
+					btnSunMorning.setSelected(false);
+					btnSunAfternoon.setSelected(false);
+					btnSunEvening.setSelected(true);
+				}
+				break;
+			case 2: 
+				if(timeBlock == 1)
+				{
+					btnMonMorning.setSelected(true);
+					btnMonAfternoon.setSelected(true);
+					btnMonEvening.setSelected(true);
+				}
+				else if(timeBlock == 2)
+				{
+					btnMonMorning.setSelected(true);
+					btnMonAfternoon.setSelected(true);
+					btnMonEvening.setSelected(false);
+				}
+				else if(timeBlock == 3)
+				{
+					btnMonMorning.setSelected(false);
+					btnMonAfternoon.setSelected(true);
+					btnMonEvening.setSelected(true);
+				}
+				else if(timeBlock == 4)
+				{
+					btnMonMorning.setSelected(true);
+					btnMonAfternoon.setSelected(false);
+					btnMonEvening.setSelected(false);
+				}
+				else if(timeBlock == 5)
+				{
+					btnMonMorning.setSelected(false);
+					btnMonAfternoon.setSelected(true);
+					btnMonEvening.setSelected(false);
+				}
+				else if(timeBlock == 6)
+				{
+					btnMonMorning.setSelected(false);
+					btnMonAfternoon.setSelected(false);
+					btnMonEvening.setSelected(true);
+				}
+				break;
+			case 3: 
+				if(timeBlock == 1)
+				{
+					btnTueMorning.setSelected(true);
+					btnTueAfternoon.setSelected(true);
+					btnTueEvening.setSelected(true);
+				}
+				else if(timeBlock == 2)
+				{
+					btnTueMorning.setSelected(true);
+					btnTueAfternoon.setSelected(true);
+					btnTueEvening.setSelected(false);
+				}
+				else if(timeBlock == 3)
+				{
+					btnTueMorning.setSelected(false);
+					btnTueAfternoon.setSelected(true);
+					btnTueEvening.setSelected(true);
+				}
+				else if(timeBlock == 4)
+				{
+					btnTueMorning.setSelected(true);
+					btnTueAfternoon.setSelected(false);
+					btnTueEvening.setSelected(false);
+				}
+				else if(timeBlock == 5)
+				{
+					btnTueMorning.setSelected(false);
+					btnTueAfternoon.setSelected(true);
+					btnTueEvening.setSelected(false);
+				}
+				else if(timeBlock == 6)
+				{
+					btnTueMorning.setSelected(false);
+					btnTueAfternoon.setSelected(false);
+					btnTueEvening.setSelected(true);
+				}
+				break;
+			case 4: 
+				if(timeBlock == 1)
+				{
+					btnWedMorning.setSelected(true);
+					btnWedAfternoon.setSelected(true);
+					btnWedEvening.setSelected(true);
+				}
+				else if(timeBlock == 2)
+				{
+					btnWedMorning.setSelected(true);
+					btnWedAfternoon.setSelected(true);
+					btnWedEvening.setSelected(false);
+				}
+				else if(timeBlock == 3)
+				{
+					btnWedMorning.setSelected(false);
+					btnWedAfternoon.setSelected(true);
+					btnWedEvening.setSelected(true);
+				}
+				else if(timeBlock == 4)
+				{
+					btnWedMorning.setSelected(true);
+					btnWedAfternoon.setSelected(false);
+					btnWedEvening.setSelected(false);
+				}
+				else if(timeBlock == 5)
+				{
+					btnWedMorning.setSelected(false);
+					btnWedAfternoon.setSelected(true);
+					btnWedEvening.setSelected(false);
+				}
+				else if(timeBlock == 6)
+				{
+					btnWedMorning.setSelected(false);
+					btnWedAfternoon.setSelected(false);
+					btnWedEvening.setSelected(true);
+				}
+				break;
+			case 5: 
+				if(timeBlock == 1)
+				{
+					btnThurMorning.setSelected(true);
+					btnThurAfternoon.setSelected(true);
+					btnThurEvening.setSelected(true);
+				}
+				else if(timeBlock == 2)
+				{
+					btnThurMorning.setSelected(true);
+					btnThurAfternoon.setSelected(true);
+					btnThurEvening.setSelected(false);
+				}
+				else if(timeBlock == 3)
+				{
+					btnThurMorning.setSelected(false);
+					btnThurAfternoon.setSelected(true);
+					btnThurEvening.setSelected(true);
+				}
+				else if(timeBlock == 4)
+				{
+					btnThurMorning.setSelected(true);
+					btnThurAfternoon.setSelected(false);
+					btnThurEvening.setSelected(false);
+				}
+				else if(timeBlock == 5)
+				{
+					btnThurMorning.setSelected(false);
+					btnThurAfternoon.setSelected(true);
+					btnThurEvening.setSelected(false);
+				}
+				else if(timeBlock == 6)
+				{
+					btnThurMorning.setSelected(false);
+					btnThurAfternoon.setSelected(false);
+					btnThurEvening.setSelected(true);
+				}
+				break;
+			case 6: 
+				if(timeBlock == 1)
+				{
+					btnFriMorning.setSelected(true);
+					btnFriAfternoon.setSelected(true);
+					btnFriEvening.setSelected(true);
+				}
+				else if(timeBlock == 2)
+				{
+					btnFriMorning.setSelected(true);
+					btnFriAfternoon.setSelected(true);
+					btnFriEvening.setSelected(false);
+				}
+				else if(timeBlock == 3)
+				{
+					btnFriMorning.setSelected(false);
+					btnFriAfternoon.setSelected(true);
+					btnFriEvening.setSelected(true);
+				}
+				else if(timeBlock == 4)
+				{
+					btnFriMorning.setSelected(true);
+					btnFriAfternoon.setSelected(false);
+					btnFriEvening.setSelected(false);
+				}
+				else if(timeBlock == 5)
+				{
+					btnFriMorning.setSelected(false);
+					btnFriAfternoon.setSelected(true);
+					btnFriEvening.setSelected(false);
+				}
+				else if(timeBlock == 6)
+				{
+					btnFriMorning.setSelected(false);
+					btnFriAfternoon.setSelected(false);
+					btnFriEvening.setSelected(true);
+				}
+				break;
+			case 7: 
+				if(timeBlock == 1)
+				{
+					btnSatMorning.setSelected(true);
+					btnSatAfternoon.setSelected(true);
+					btnSatEvening.setSelected(true);
+				}
+				else if(timeBlock == 2)
+				{
+					btnSatMorning.setSelected(true);
+					btnSatAfternoon.setSelected(true);
+					btnSatEvening.setSelected(false);
+				}
+				else if(timeBlock == 3)
+				{
+					btnSatMorning.setSelected(false);
+					btnSatAfternoon.setSelected(true);
+					btnSatEvening.setSelected(true);
+				}
+				else if(timeBlock == 4)
+				{
+					btnSatMorning.setSelected(true);
+					btnSatAfternoon.setSelected(false);
+					btnSatEvening.setSelected(false);
+				}
+				else if(timeBlock == 5)
+				{
+					btnSatMorning.setSelected(false);
+					btnSatAfternoon.setSelected(true);
+					btnSatEvening.setSelected(false);
+				}
+				else if(timeBlock == 6)
+				{
+					btnSatMorning.setSelected(false);
+					btnSatAfternoon.setSelected(false);
+					btnSatEvening.setSelected(true);
+				}
+				break;
+			default:
+				program.messageBox("WARN", "Error: Something happened with dayOfWeek", "dayOfWeek did not register to a day","Please consult Luke Mason for the crap coding");
+		}
+	}
 	/**
 	 * Deletes Employee
 	 * @author [Luke Mason]

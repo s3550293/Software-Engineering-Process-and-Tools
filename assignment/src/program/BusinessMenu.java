@@ -293,9 +293,7 @@ public class BusinessMenu
 				 */
 				public boolean addWorkingTimes(int id,boolean btnSunMorning,boolean btnSunAfternoon,boolean btnSunEvening,boolean btnMonMorning,boolean btnMonAfternoon,boolean btnMonEvening,boolean btnTueMorning,boolean btnTueAfternoon,boolean btnTueEvening,boolean btnWedMorning,boolean btnWedAfternoon,boolean btnWedEvening,boolean btnThurMorning,boolean btnThurAfternoon,boolean btnThurEvening,boolean btnFriMorning,boolean btnFriAfternoon,boolean btnFriEvening,boolean btnSatMorning,boolean btnSatAfternoon,boolean btnSatEvening)
 				{
-					SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
-					String[] dateArray = new String[7];
-					Calendar c = Calendar.getInstance();
+					
 					//Checks if only morning and evening have been selected for one of the days, If so, then error
 					//Can't test on JUnit because of message box
 					if(btnSunMorning && !btnSunAfternoon && btnSunEvening)
@@ -341,6 +339,10 @@ public class BusinessMenu
 						return false;
 					}
 					connect.clearWorkTimes(id);
+					
+					SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+					String[] dateArray = new String[7];
+					Calendar c = Calendar.getInstance();
 					for(int i = 1;i<=7; i++)
 					{
 						dateArray[i-1] = sdf.format(c.getTime());//puts each date from every loop into array
@@ -518,13 +520,43 @@ public class BusinessMenu
 					set7DayRosterTime(employeeID,date,array[0], array[1]);
 					return true;
 				}
-	public ArrayList<EmployeeWorkingTime> getEmployeeWorkTimes(int employeeID)
-	{
-		ArrayList<EmployeeWorkingTime> workTimes = new ArrayList<EmployeeWorkingTime>();
-		connect.getEmployeeWorkingTimesAfter(employeeID);
-		return workTimes;
-	}
-	
+				/**
+				 * Give a number representing a time block corresponding to the start time and end time
+				 * @param startTime
+				 * @param endTime
+				 * @return
+				 */
+				public int getTimeBlock(String startTime, String endTime)
+				{
+						if(startTime.equals("08:00") && endTime.equals("20:00"))
+						{
+							return 1;
+						}
+						else if(startTime.equals("08:00") && endTime.equals("16:00"))
+						{
+							return 2;
+						}
+						else if(startTime.equals("12:00") && endTime.equals("20:00"))
+						{
+							return 3;
+						}
+						else if(startTime.equals("08:00") && endTime.equals("12:00"))
+						{
+							return 4;
+						}
+						else if(startTime.equals("12:00") && endTime.equals("16:00"))
+						{
+							return 5;
+						}
+						else if(startTime.equals("16:00") && endTime.equals("20:00"))
+						{
+							return 6;
+						}
+						else
+						{			
+							return -1;
+						}
+				}
 	
 	/**
 	 * @author Luke Mason, David (Panhaseth Heang)

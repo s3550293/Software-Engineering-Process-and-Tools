@@ -860,11 +860,11 @@ public class MainController implements Initializable {
 	 */
 	@FXML
 	public void nextView(){
-		//TODO
 		if(stkpnDateService.isVisible() && stkpnBookingMenu.isVisible())
 		{
 			stkpnDateService.setVisible(false);
 			stkpnTime.setVisible(true);
+			//TODO
 			return;
 		}
 		if(stkpnTime.isVisible() && stkpnBookingMenu.isVisible())
@@ -872,6 +872,7 @@ public class MainController implements Initializable {
 			stkpnTime.setVisible(false);
 			stkpnBookingMenu.setVisible(false);
 			stkpnBookingConfirm.setVisible(true);
+			//TODO
 			return;
 		}
 		
@@ -879,11 +880,10 @@ public class MainController implements Initializable {
 	
 	/**
 	 * Moves the customer backward
-	 * @author [Programmer]
+	 * @author Joseph Garner
 	 */
 	@FXML
 	public void backView(){
-		//TODO
 		if(stkpnDateService.isVisible() && stkpnBookingMenu.isVisible())
 		{
 			stkpnBookingMenu.setVisible(false);

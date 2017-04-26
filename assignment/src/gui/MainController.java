@@ -559,6 +559,11 @@ public class MainController implements Initializable {
 	public void cancelBooking() {
 		// TODO
 		log.debug("LOGGER: Entered cancelBooking function");
+		if(listviewBookings.getSelectionModel().getSelectedIndex() < 0)
+		{
+			program.messageBox("WARN", "oops", "A Booking has not been Selected","Please Select a booking and try again");
+			return;
+		}
 		Alert alert = new Alert(AlertType.CONFIRMATION);
 		alert.setTitle("Cancel Booking");
 		alert.setHeaderText("Cancel Selected Booking");
@@ -827,7 +832,7 @@ public class MainController implements Initializable {
 		//Checking if an item has been selected
 		if(listviewEmployees.getSelectionModel().getSelectedIndex() < 0)
 		{
-			program.messageBox("WARN", "oops", "No Employee has been Selected","Please Select an employee and try again");
+			program.messageBox("WARN", "oops", "An Employee has not been Selected","Please Select an employee and try again");
 			return;
 		}
 		Employee employee = listviewEmployees.getSelectionModel().getSelectedItem();
@@ -1193,16 +1198,33 @@ public class MainController implements Initializable {
 	@FXML
 	public void deleteEmplyee() 
 	{
-		//Needs Are you sure? window
+		log.debug("LOGGER: Entered deleteEmployee function");
 		if(listviewEmployees.getSelectionModel().getSelectedIndex() < 0)
 		{
-			program.messageBox("WARN", "oops", "No Employee has been Selected","Please Select an employee and try again");
+			program.messageBox("WARN", "oops", "An Employee has not been Selected","Please Select an employee and try again");
 			return;
 		}
-		Employee employee = listviewEmployees.getSelectionModel().getSelectedItem();
-		int employeeID = employee.getId();
-		connection.clearWorkTimes(employeeID);
-		connection.deleteEmployee(employeeID);
+		Alert alert = new Alert(AlertType.CONFIRMATION);
+		alert.setTitle("Delete Employee");
+		alert.setHeaderText("Delete Selected Employee");
+		alert.setContentText("Are you sure?");
+
+		Optional<ButtonType> result = alert.showAndWait();
+		if (result.get() == ButtonType.OK) {
+			Employee employee = listviewEmployees.getSelectionModel().getSelectedItem();
+			int employeeID = employee.getId();
+			connection.clearWorkTimes(employeeID);
+			connection.deleteEmployee(employeeID);
+			Alert feedback = new Alert(AlertType.INFORMATION);
+			feedback.setTitle("Delete Employee");
+			feedback.setHeaderText("Employee has been deleted");
+			feedback.showAndWait();
+			refreshEmployeeView();
+		} 
+		else 
+		{
+			return;
+		}
 	}
 	
 	

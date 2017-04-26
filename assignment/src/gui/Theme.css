@@ -22,12 +22,16 @@
 }
 .tab-pane .tab:selected
 {
-    -fx-background-color: derive(#446CB3,30%);
+  -fx-background-color:
+        -fx-shadow-highlight-color,
+        linear-gradient(to bottom, derive(#446CB3,-90%) 0%, derive(#446CB3,-60%) 100%),
+        linear-gradient(to bottom, derive(#446CB3,-60%) 0%, derive(#446CB3,-35%) 50%, derive(#446CB3,-30%) 98%, derive(#446CB3,-50%) 100%),
+        linear-gradient(to right, rgba(0,0,0,0.2) 0%, rgba(0,0,0,0) 40%, rgba(0,0,0,0) 190%, rgba(0,0,0,0.3) 200%);
     -fx-text-fill: white;
 }
 .tab .tab-label {
     -fx-alignment: CENTER;
-    -fx-text-fill: #1d1d1d;
+    -fx-text-fill: white;
     -fx-font-size: 14px;
 }
 
@@ -79,6 +83,13 @@
     -fx-text-fill: #ff0000;
     -fx-opacity: 1;
 }
+.lable-avail{
+	-fx-font-size: 11pt;
+    -fx-font-family: "Segoe UI Semibold";
+    -fx-text-fill: #008b00;
+    -fx-opacity: 1;
+}
+
 
 /*LIST VIEW*/
 .list-view .list-cell{
@@ -86,8 +97,12 @@
     -fx-text-fill: black;
 }
 .list-view .list-cell:filled:selected:focused, .list-cell:filled:selected {
-    -fx-background-color: linear-gradient(#446CB3 0%, #446CB3 25%, #446CB3 75%, #446CB3 100%);
-    -fx-text-fill: #1d1d1d;
+  -fx-background-color:
+        -fx-shadow-highlight-color,
+        linear-gradient(to bottom, derive(#446CB3,-90%) 0%, derive(#446CB3,-60%) 100%),
+        linear-gradient(to bottom, derive(#446CB3,-60%) 0%, derive(#446CB3,-35%) 50%, derive(#446CB3,-30%) 98%, derive(#446CB3,-50%) 100%),
+        linear-gradient(to right, rgba(0,0,0,0.2) 0%, rgba(0,0,0,0) 40%, rgba(0,0,0,0) 190%, rgba(0,0,0,0.3) 200%);
+    -fx-text-fill: White;
 }
 
 .list-view .list-cell:even { /* <=== changed to even */
@@ -149,7 +164,11 @@
 }
 
 .button:pressed, .button:default:hover:pressed {
-    -fx-background-color: #1d1d1d;
+  -fx-background-color:
+        -fx-shadow-highlight-color,
+        linear-gradient(to bottom, derive(#446CB3,-90%) 0%, derive(#446CB3,-60%) 100%),
+        linear-gradient(to bottom, derive(#446CB3,-60%) 0%, derive(#446CB3,-35%) 50%, derive(#446CB3,-30%) 98%, derive(#446CB3,-50%) 100%),
+        linear-gradient(to right, rgba(0,0,0,0.2) 0%, rgba(0,0,0,0) 40%, rgba(0,0,0,0) 190%, rgba(0,0,0,0.3) 200%);
     -fx-text-fill: #EDEDED;
 }
 
@@ -180,7 +199,6 @@
     -fx-background-insets: 0 0 0 0, 0, 0, 0;
   -fx-font-family: "Segoe UI", Helvetica, Arial, sans-serif;
   -fx-font-size: 11pt;
-  -fx-font-weight: bold;
   -fx-text-fill: #4EEE94;
   -fx-background-radius: 0px, 0px, 0px, 0px;
 }
@@ -193,6 +211,30 @@
   -fx-background-insets: 0 0 0 0, 0, 1, 2;
 }
 
+.toggle-button-cust:selected{
+  -fx-background-radius: 0;
+  -fx-background-color:
+        -fx-shadow-highlight-color,
+        linear-gradient(to bottom, derive(#446CB3,-90%) 0%, derive(#446CB3,-60%) 100%),
+        linear-gradient(to bottom, derive(#446CB3,-60%) 0%, derive(#446CB3,-35%) 50%, derive(#446CB3,-30%) 98%, derive(#446CB3,-50%) 100%),
+        linear-gradient(to right, rgba(0,0,0,0.2) 0%, rgba(0,0,0,0) 40%, rgba(0,0,0,0) 190%, rgba(0,0,0,0.3) 200%);
+    -fx-background-insets: 0 0 0 0, 0, 0, 0;
+  -fx-font-family: "Segoe UI", Helvetica, Arial, sans-serif;
+  -fx-font-size: 11pt;
+  -fx-text-fill: White;
+  -fx-background-radius: 0px, 0px, 0px, 0px;
+}
+.toggle-button-cust{
+  -fx-background-radius: 1;
+  -fx-background-color: #446CB3;
+  -fx-font-family: "Segoe UI", Helvetica, Arial, sans-serif;
+  -fx-font-size: 11pt;
+  -fx-text-fill: White;
+  -fx-background-insets: 0 0 0 0, 0, 1, 2;
+}
+
+
+
 
 /*COMBOBOX*/
 .combo-box {
@@ -200,6 +242,10 @@
     -fx-background-insets: 0 0 -1 0, 0, 1, 2;
     -fx-background-radius: 3px, 3px, 2px, 1px;
 }
+.combo-box:selected {
+    -fx-text-fill: black;
+}
+
 .combo-box .list-view .list-cell:hover{
     -fx-text-fill: White;
     -fx-background-color: #446CB3;
@@ -208,6 +254,7 @@
   -fx-background-color: -fx-shadow-highlight-color, -fx-outer-border, -fx-inner-border, white;
   -fx-background-insets: 0 0 -1 0, 0, 1, 2;
   -fx-background-radius: 3px, 3px, 2px, 1px;
+  -fx-text-fill: black;
 }
 .combo-box .cell:even {
     -fx-background-color: #EDEDED;
@@ -219,4 +266,5 @@
   -fx-background-color: -fx-shadow-highlight-color, -fx-outer-border, -fx-inner-border, white;
   -fx-background-insets: 0 0 -1 0, 0, 1, 2;
   -fx-background-radius: 3px, 3px, 2px, 1px;
+  -fx-text-fill: black;
 }

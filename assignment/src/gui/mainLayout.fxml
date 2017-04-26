@@ -9,10 +9,12 @@
 <?import javafx.scene.control.Menu?>
 <?import javafx.scene.control.MenuBar?>
 <?import javafx.scene.control.MenuItem?>
+<?import javafx.scene.control.RadioButton?>
 <?import javafx.scene.control.Tab?>
 <?import javafx.scene.control.TabPane?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.control.ToggleButton?>
+<?import javafx.scene.control.ToggleGroup?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
@@ -25,7 +27,7 @@
 
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="650.0" prefWidth="800.0" stylesheets="@Theme.css" xmlns="http://javafx.com/javafx/8.0.121" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.MainController">
    <children>
-      <StackPane fx:id="stkBusiness" layoutX="27.0" prefHeight="150.0" prefWidth="773.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="34.0">
+      <StackPane fx:id="stkBusiness" layoutX="27.0" prefHeight="150.0" prefWidth="773.0" visible="false" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
             <BorderPane prefHeight="200.0" prefWidth="200.0">
                <top>
@@ -63,7 +65,7 @@
                                                 <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
                                              </BorderPane.margin>
                                              <center>
-                                                <ListView fx:id="listviewBookings" prefHeight="348.0" prefWidth="556.0" stylesheets="@Theme.css" />
+                                                <ListView fx:id="listviewBookings" onEditStart="#viewAllBookings" prefHeight="348.0" prefWidth="556.0" stylesheets="@Theme.css" />
                                              </center>
                                              <right>
                                                 <GridPane prefHeight="348.0" prefWidth="246.0" BorderPane.alignment="CENTER">
@@ -178,9 +180,22 @@
                                                             <Insets />
                                                          </FlowPane.margin>
                                                       </ComboBox>
-                                                      <CheckBox fx:id="chkbPastBooking" mnemonicParsing="false" onAction="#loadDaySelect" styleClass="label-bright" text="Past bookings">
+                                                      <RadioButton fx:id="rbPastBook" mnemonicParsing="false" styleClass="label-bright" text="Past Bookings">
                                                          <FlowPane.margin>
-                                                            <Insets left="20.0" />
+                                                            <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                                                         </FlowPane.margin>
+                                                         <toggleGroup>
+                                                            <ToggleGroup fx:id="bookingViewGroup" />
+                                                         </toggleGroup>
+                                                      </RadioButton>
+                                                      <RadioButton fx:id="rbCurrentBook" mnemonicParsing="false" styleClass="label-bright" text="Current Bookings" toggleGroup="$bookingViewGroup">
+                                                         <FlowPane.margin>
+                                                            <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                                                         </FlowPane.margin>
+                                                      </RadioButton>
+                                                      <CheckBox fx:id="chbkViewAllBook" mnemonicParsing="false" onAction="#viewAllBookings" styleClass="label-bright" text="View All Bookings">
+                                                         <FlowPane.margin>
+                                                            <Insets bottom="10.0" left="20.0" right="10.0" top="10.0" />
                                                          </FlowPane.margin>
                                                       </CheckBox>
                                                    </children>
@@ -720,6 +735,736 @@
                </center>
             </BorderPane>
          </children></StackPane>
-      <StackPane fx:id="stkCustomer" prefHeight="150.0" prefWidth="200.0" visible="false" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+      <StackPane fx:id="stkCustomer" prefHeight="150.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+         <children>
+            <BorderPane prefHeight="200.0" prefWidth="200.0">
+               <center>
+                  <BorderPane prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+                     <top>
+                        <GridPane prefHeight="50.0" prefWidth="800.0" BorderPane.alignment="CENTER">
+                           <columnConstraints>
+                              <ColumnConstraints hgrow="SOMETIMES" maxWidth="294.0" minWidth="10.0" prefWidth="294.0" />
+                              <ColumnConstraints hgrow="SOMETIMES" maxWidth="744.0" minWidth="10.0" prefWidth="506.0" />
+                           </columnConstraints>
+                           <rowConstraints>
+                              <RowConstraints minHeight="10.0" vgrow="SOMETIMES" />
+                           </rowConstraints>
+                           <children>
+                              <FlowPane alignment="CENTER_RIGHT" prefHeight="60.0" prefWidth="800.0" GridPane.columnIndex="1">
+                                 <children>
+                                    <Button fx:id="btnLogoutCustomer" mnemonicParsing="false" onAction="#logout">
+                                       <graphic>
+                                          <FlowPane alignment="CENTER" prefHeight="20.0" prefWidth="100.0">
+                                             <children>
+                                                <Label styleClass="label-button" text="Logout">
+                                                   <FlowPane.margin>
+                                                      <Insets right="5.0" />
+                                                   </FlowPane.margin>
+                                                </Label>
+                                                <ImageView fitHeight="20.0" fitWidth="40.0" pickOnBounds="true" preserveRatio="true">
+                                                   <image>
+                                                      <Image url="@../images/ic_person_outline_white_48dp_2x.png" />
+                                                   </image>
+                                                   <FlowPane.margin>
+                                                      <Insets left="5.0" />
+                                                   </FlowPane.margin>
+                                                </ImageView>
+                                             </children>
+                                          </FlowPane>
+                                       </graphic>
+                                       <FlowPane.margin>
+                                          <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                                       </FlowPane.margin>
+                                    </Button>
+                                 </children>
+                              </FlowPane>
+                              <FlowPane alignment="CENTER_LEFT" prefHeight="200.0" prefWidth="200.0">
+                                 <children>
+                                    <Label text="Customer:">
+                                       <FlowPane.margin>
+                                          <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                                       </FlowPane.margin>
+                                    </Label>
+                                    <Label fx:id="lblCustomerName" text="Label" />
+                                 </children>
+                              </FlowPane>
+                           </children>
+                        </GridPane>
+                     </top>
+                     <center>
+                        <AnchorPane BorderPane.alignment="CENTER">
+                           <children>
+                              <StackPane fx:id="stkpnUserMenu" prefHeight="150.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                 <children>
+                                    <BorderPane prefHeight="200.0" prefWidth="200.0">
+                                       <center>
+                                          <FlowPane alignment="CENTER" prefHeight="401.0" prefWidth="800.0" BorderPane.alignment="CENTER">
+                                             <children>
+                                                <Button fx:id="btnBookAppointment" mnemonicParsing="false" onAction="#startBooking" text="Book an appointment">
+                                                   <FlowPane.margin>
+                                                      <Insets bottom="100.0" />
+                                                   </FlowPane.margin></Button>
+                                             </children>
+                                          </FlowPane>
+                                       </center>
+                                       <top>
+                                          <FlowPane alignment="CENTER" prefHeight="174.0" prefWidth="800.0" BorderPane.alignment="CENTER">
+                                             <children>
+                                                <Label disable="true" text="Choose A Business:">
+                                                   <FlowPane.margin>
+                                                      <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                                                   </FlowPane.margin>
+                                                </Label>
+                                                <ComboBox disable="true" prefHeight="25.0" prefWidth="167.0">
+                                                   <FlowPane.margin>
+                                                      <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                                                   </FlowPane.margin>
+                                                </ComboBox>
+                                             </children>
+                                          </FlowPane>
+                                       </top>
+                                    </BorderPane>
+                                 </children>
+                              </StackPane>
+                              <StackPane fx:id="stkpnBookingMenu" visible="false" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                 <children>
+                                    <BorderPane>
+                                       <center>
+                                          <AnchorPane prefHeight="200.0" prefWidth="200.0">
+                                             <children>
+                                                <StackPane fx:id="stkpnDateService" layoutX="148.0" layoutY="94.0" prefHeight="150.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                                   <children>
+                                                      <BorderPane prefHeight="507.0" prefWidth="497.0">
+                                                         <top>
+                                                            <FlowPane alignment="CENTER" prefHeight="73.0" prefWidth="495.0" BorderPane.alignment="CENTER">
+                                                               <children>
+                                                                  <Label text="Day:">
+                                                                     <FlowPane.margin>
+                                                                        <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                                                                     </FlowPane.margin>
+                                                                  </Label>
+                                                                  <ComboBox fx:id="cmbDayBooking" prefHeight="25.0" prefWidth="193.0">
+                                                                     <FlowPane.margin>
+                                                                        <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                                                                     </FlowPane.margin>
+                                                                  </ComboBox>
+                                                                  <Label text="Date:">
+                                                                     <FlowPane.margin>
+                                                                        <Insets bottom="10.0" left="40.0" right="10.0" top="10.0" />
+                                                                     </FlowPane.margin>
+                                                                  </Label>
+                                                                  <Label fx:id="lblDayDate" text="Label">
+                                                                     <FlowPane.margin>
+                                                                        <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                                                                     </FlowPane.margin>
+                                                                  </Label>
+                                                               </children>
+                                                            </FlowPane>
+                                                         </top>
+                                                         <center>
+                                                            <ListView fx:id="listviewBookingServices" prefHeight="473.0" prefWidth="246.0" BorderPane.alignment="CENTER">
+                                                               <BorderPane.margin>
+                                                                  <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                                                               </BorderPane.margin>
+                                                            </ListView>
+                                                         </center>
+                                                         <right>
+                                                            <GridPane BorderPane.alignment="CENTER">
+                                                              <columnConstraints>
+                                                                <ColumnConstraints hgrow="SOMETIMES" maxWidth="93.0" minWidth="10.0" prefWidth="68.0" />
+                                                                <ColumnConstraints hgrow="SOMETIMES" maxWidth="159.0" minWidth="10.0" prefWidth="132.0" />
+                                                              </columnConstraints>
+                                                              <rowConstraints>
+                                                                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                                                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                                                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                                              </rowConstraints>
+                                                               <BorderPane.margin>
+                                                                  <Insets bottom="200.0" top="10.0" />
+                                                               </BorderPane.margin>
+                                                               <children>
+                                                                  <FlowPane alignment="CENTER_RIGHT">
+                                                                     <children>
+                                                                        <Label text="Service:" />
+                                                                     </children>
+                                                                  </FlowPane>
+                                                                  <FlowPane alignment="CENTER_RIGHT" GridPane.rowIndex="1">
+                                                                     <children>
+                                                                        <Label text="Duration:" />
+                                                                     </children>
+                                                                  </FlowPane>
+                                                                  <FlowPane alignment="CENTER_RIGHT" GridPane.rowIndex="2">
+                                                                     <children>
+                                                                        <Label text="Price:" />
+                                                                     </children>
+                                                                  </FlowPane>
+                                                                  <FlowPane alignment="CENTER_LEFT" prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1">
+                                                                     <children>
+                                                                        <Label fx:id="lblServiceName" text="Label">
+                                                                           <FlowPane.margin>
+                                                                              <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                                                                           </FlowPane.margin>
+                                                                        </Label>
+                                                                     </children>
+                                                                  </FlowPane>
+                                                                  <FlowPane alignment="CENTER_LEFT" prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="1">
+                                                                     <children>
+                                                                        <Label fx:id="lblServiceDur" text="Label">
+                                                                           <FlowPane.margin>
+                                                                              <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                                                                           </FlowPane.margin>
+                                                                        </Label>
+                                                                     </children>
+                                                                  </FlowPane>
+                                                                  <FlowPane alignment="CENTER_LEFT" prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="2">
+                                                                     <children>
+                                                                        <Label fx:id="lblServicePrice" text="Label">
+                                                                           <FlowPane.margin>
+                                                                              <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                                                                           </FlowPane.margin>
+                                                                        </Label>
+                                                                     </children>
+                                                                  </FlowPane>
+                                                               </children>
+                                                            </GridPane>
+                                                         </right>
+                                                         <bottom>
+                                                            <FlowPane alignment="CENTER" prefHeight="94.0" prefWidth="495.0" BorderPane.alignment="CENTER">
+                                                               <children>
+                                                                  <Label text="Prefered Employee:">
+                                                                     <FlowPane.margin>
+                                                                        <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                                                                     </FlowPane.margin></Label>
+                                                                  <ComboBox fx:id="cmbPreferEmp" prefHeight="25.0" prefWidth="193.0">
+                                                                     <FlowPane.margin>
+                                                                        <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                                                                     </FlowPane.margin></ComboBox>
+                                                               </children>
+                                                            </FlowPane>
+                                                         </bottom>
+                                                      </BorderPane>
+                                                   </children>
+                                                </StackPane>
+                                                <StackPane fx:id="stkpnTime" layoutX="83.0" layoutY="299.0" prefHeight="150.0" prefWidth="200.0" visible="false" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                                   <children>
+                                                      <BorderPane prefHeight="200.0" prefWidth="200.0">
+                                                         <top>
+                                                            <GridPane prefHeight="94.0" prefWidth="495.0" BorderPane.alignment="CENTER">
+                                                              <columnConstraints>
+                                                                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                                                              </columnConstraints>
+                                                              <rowConstraints>
+                                                                <RowConstraints maxHeight="42.0" minHeight="10.0" prefHeight="42.0" vgrow="SOMETIMES" />
+                                                                <RowConstraints maxHeight="52.0" minHeight="10.0" prefHeight="52.0" vgrow="SOMETIMES" />
+                                                              </rowConstraints>
+                                                               <children>
+                                                                  <FlowPane alignment="CENTER" prefHeight="200.0" prefWidth="200.0">
+                                                                     <children>
+                                                                        <Label text="Time of Day" />
+                                                                     </children>
+                                                                  </FlowPane>
+                                                                  <FlowPane alignment="CENTER" prefHeight="200.0" prefWidth="200.0" GridPane.rowIndex="1">
+                                                                     <children>
+                                                                        <ToggleButton fx:id="togbtnMorn" mnemonicParsing="false" styleClass="toggle-button-cust" text="Morning">
+                                                                           <FlowPane.margin>
+                                                                              <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                                                                           </FlowPane.margin>
+                                                                        </ToggleButton>
+                                                                        <ToggleButton fx:id="togbtnAft" mnemonicParsing="false" styleClass="toggle-button-cust" text="Afternoon">
+                                                                           <FlowPane.margin>
+                                                                              <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                                                                           </FlowPane.margin>
+                                                                        </ToggleButton>
+                                                                        <ToggleButton fx:id="togbtnEven" mnemonicParsing="false" styleClass="toggle-button-cust" text="Evening">
+                                                                           <FlowPane.margin>
+                                                                              <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                                                                           </FlowPane.margin>
+                                                                        </ToggleButton>
+                                                                     </children>
+                                                                  </FlowPane>
+                                                               </children>
+                                                            </GridPane>
+                                                         </top>
+                                                         <center>
+                                                            <GridPane BorderPane.alignment="CENTER">
+                                                              <columnConstraints>
+                                                                  <ColumnConstraints hgrow="SOMETIMES" maxWidth="241.0" minWidth="10.0" prefWidth="182.0" />
+                                                                <ColumnConstraints hgrow="SOMETIMES" maxWidth="317.0" minWidth="10.0" prefWidth="313.0" />
+                                                              </columnConstraints>
+                                                              <rowConstraints>
+                                                                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                                                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                                                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                                                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                                                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                                                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                                                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                                                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                                              </rowConstraints>
+                                                               <children>
+                                                                  <FlowPane alignment="CENTER_LEFT" prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1">
+                                                                     <children>
+                                                                        <ToggleButton fx:id="togbtnTimeSlot1" mnemonicParsing="false" prefWidth="125.0" styleClass="toggle-button-cust" text="Time">
+                                                                           <FlowPane.margin>
+                                                                              <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                                                                           </FlowPane.margin>
+                                                                        </ToggleButton>
+                                                                     </children>
+                                                                  </FlowPane>
+                                                                  <FlowPane alignment="CENTER_LEFT" prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="1">
+                                                                     <children>
+                                                                        <ToggleButton fx:id="togbtnTimeSlot2" mnemonicParsing="false" prefWidth="125.0" styleClass="toggle-button-cust" text="Time">
+                                                                           <FlowPane.margin>
+                                                                              <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                                                                           </FlowPane.margin>
+                                                                        </ToggleButton>
+                                                                     </children>
+                                                                  </FlowPane>
+                                                                  <FlowPane alignment="CENTER_LEFT" prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="2">
+                                                                     <children>
+                                                                        <ToggleButton fx:id="togbtnTimeSlot3" mnemonicParsing="false" prefWidth="125.0" styleClass="toggle-button-cust" text="Time">
+                                                                           <FlowPane.margin>
+                                                                              <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                                                                           </FlowPane.margin>
+                                                                        </ToggleButton>
+                                                                     </children>
+                                                                  </FlowPane>
+                                                                  <FlowPane alignment="CENTER_LEFT" prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="3">
+                                                                     <children>
+                                                                        <ToggleButton fx:id="togbtnTimeSlot4" mnemonicParsing="false" prefWidth="125.0" styleClass="toggle-button-cust" text="Time">
+                                                                           <FlowPane.margin>
+                                                                              <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                                                                           </FlowPane.margin>
+                                                                        </ToggleButton>
+                                                                     </children>
+                                                                  </FlowPane>
+                                                                  <FlowPane alignment="CENTER_LEFT" prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="4">
+                                                                     <children>
+                                                                        <ToggleButton fx:id="togbtnTimeSlot5" mnemonicParsing="false" prefWidth="125.0" styleClass="toggle-button-cust" text="Time">
+                                                                           <FlowPane.margin>
+                                                                              <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                                                                           </FlowPane.margin>
+                                                                        </ToggleButton>
+                                                                     </children>
+                                                                  </FlowPane>
+                                                                  <FlowPane alignment="CENTER_LEFT" prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="5">
+                                                                     <children>
+                                                                        <ToggleButton fx:id="togbtnTimeSlot6" mnemonicParsing="false" prefWidth="125.0" styleClass="toggle-button-cust" text="Time">
+                                                                           <FlowPane.margin>
+                                                                              <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                                                                           </FlowPane.margin>
+                                                                        </ToggleButton>
+                                                                     </children>
+                                                                  </FlowPane>
+                                                                  <FlowPane alignment="CENTER_LEFT" prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="6">
+                                                                     <children>
+                                                                        <ToggleButton fx:id="togbtnTimeSlot7" mnemonicParsing="false" prefWidth="125.0" styleClass="toggle-button-cust" text="Time">
+                                                                           <FlowPane.margin>
+                                                                              <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                                                                           </FlowPane.margin>
+                                                                        </ToggleButton>
+                                                                     </children>
+                                                                  </FlowPane>
+                                                                  <FlowPane alignment="CENTER_LEFT" prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="7">
+                                                                     <children>
+                                                                        <ToggleButton fx:id="togbtnTimeSlot8" mnemonicParsing="false" prefWidth="125.0" styleClass="toggle-button-cust" text="Time">
+                                                                           <FlowPane.margin>
+                                                                              <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                                                                           </FlowPane.margin>
+                                                                        </ToggleButton>
+                                                                     </children>
+                                                                  </FlowPane>
+                                                                  <FlowPane alignment="CENTER_RIGHT" prefHeight="200.0" prefWidth="200.0">
+                                                                     <children>
+                                                                        <Label fx:id="lblAvail1" styleClass="lable-avail" text="Available">
+                                                                           <FlowPane.margin>
+                                                                              <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                                                                           </FlowPane.margin>
+                                                                        </Label>
+                                                                     </children>
+                                                                  </FlowPane>
+                                                                  <FlowPane alignment="CENTER_RIGHT" prefHeight="200.0" prefWidth="200.0" GridPane.rowIndex="1">
+                                                                     <children>
+                                                                        <Label fx:id="lblAvail2" styleClass="lable-avail" text="Available">
+                                                                           <FlowPane.margin>
+                                                                              <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                                                                           </FlowPane.margin>
+                                                                        </Label>
+                                                                     </children>
+                                                                  </FlowPane>
+                                                                  <FlowPane alignment="CENTER_RIGHT" prefHeight="200.0" prefWidth="200.0" GridPane.rowIndex="2">
+                                                                     <children>
+                                                                        <Label fx:id="lblAvail3" styleClass="lable-avail" text="Available">
+                                                                           <FlowPane.margin>
+                                                                              <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                                                                           </FlowPane.margin>
+                                                                        </Label>
+                                                                     </children>
+                                                                  </FlowPane>
+                                                                  <FlowPane alignment="CENTER_RIGHT" prefHeight="200.0" prefWidth="200.0" GridPane.rowIndex="3">
+                                                                     <children>
+                                                                        <Label fx:id="lblAvail4" styleClass="lable-avail" text="Available">
+                                                                           <FlowPane.margin>
+                                                                              <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                                                                           </FlowPane.margin>
+                                                                        </Label>
+                                                                     </children>
+                                                                  </FlowPane>
+                                                                  <FlowPane alignment="CENTER_RIGHT" prefHeight="200.0" prefWidth="200.0" GridPane.rowIndex="4">
+                                                                     <children>
+                                                                        <Label fx:id="lblAvail5" styleClass="lable-avail" text="Available">
+                                                                           <FlowPane.margin>
+                                                                              <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                                                                           </FlowPane.margin>
+                                                                        </Label>
+                                                                     </children>
+                                                                  </FlowPane>
+                                                                  <FlowPane alignment="CENTER_RIGHT" prefHeight="200.0" prefWidth="200.0" GridPane.rowIndex="5">
+                                                                     <children>
+                                                                        <Label fx:id="lblAvail6" styleClass="lable-avail" text="Available">
+                                                                           <FlowPane.margin>
+                                                                              <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                                                                           </FlowPane.margin>
+                                                                        </Label>
+                                                                     </children>
+                                                                  </FlowPane>
+                                                                  <FlowPane alignment="CENTER_RIGHT" prefHeight="200.0" prefWidth="200.0" GridPane.rowIndex="6">
+                                                                     <children>
+                                                                        <Label fx:id="lblAvail7" styleClass="lable-avail" text="Available">
+                                                                           <FlowPane.margin>
+                                                                              <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                                                                           </FlowPane.margin>
+                                                                        </Label>
+                                                                     </children>
+                                                                  </FlowPane>
+                                                                  <FlowPane alignment="CENTER_RIGHT" prefHeight="200.0" prefWidth="200.0" GridPane.rowIndex="7">
+                                                                     <children>
+                                                                        <Label fx:id="lblAvail8" styleClass="lable-avail" text="Available">
+                                                                           <FlowPane.margin>
+                                                                              <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                                                                           </FlowPane.margin>
+                                                                        </Label>
+                                                                     </children>
+                                                                  </FlowPane>
+                                                               </children>
+                                                            </GridPane>
+                                                         </center>
+                                                      </BorderPane>
+                                                   </children>
+                                                </StackPane>
+                                             </children>
+                                          </AnchorPane>
+                                       </center>
+                                       <right>
+                                          <GridPane prefHeight="536.0" prefWidth="285.0" BorderPane.alignment="CENTER">
+                                            <columnConstraints>
+                                              <ColumnConstraints hgrow="SOMETIMES" maxWidth="138.0" minWidth="10.0" prefWidth="109.0" />
+                                              <ColumnConstraints hgrow="SOMETIMES" maxWidth="176.0" minWidth="10.0" prefWidth="176.0" />
+                                            </columnConstraints>
+                                            <rowConstraints>
+                                              <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                              <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                              <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                            </rowConstraints>
+                                             <BorderPane.margin>
+                                                <Insets bottom="100.0" left="10.0" right="10.0" top="10.0" />
+                                             </BorderPane.margin>
+                                             <children>
+                                                <FlowPane alignment="CENTER_RIGHT" prefHeight="200.0" prefWidth="200.0">
+                                                   <children>
+                                                      <Label text="Date:" />
+                                                   </children>
+                                                </FlowPane>
+                                                <FlowPane alignment="CENTER_RIGHT" prefHeight="200.0" prefWidth="200.0" GridPane.rowIndex="1">
+                                                   <children>
+                                                      <Label text="Service:" />
+                                                   </children>
+                                                </FlowPane>
+                                                <FlowPane alignment="CENTER_RIGHT" prefHeight="200.0" prefWidth="200.0" GridPane.rowIndex="3">
+                                                   <children>
+                                                      <Label text="Duration:" />
+                                                   </children>
+                                                </FlowPane>
+                                                <FlowPane alignment="CENTER_RIGHT" prefHeight="200.0" prefWidth="200.0" GridPane.rowIndex="4">
+                                                   <children>
+                                                      <Label text="Start Time:" />
+                                                   </children>
+                                                </FlowPane>
+                                                <FlowPane alignment="CENTER_RIGHT" prefHeight="200.0" prefWidth="200.0" GridPane.rowIndex="5">
+                                                   <children>
+                                                      <Label text="Staff Member:" />
+                                                   </children>
+                                                </FlowPane>
+                                                <FlowPane alignment="CENTER_LEFT" prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1">
+                                                   <children>
+                                                      <Label fx:id="lblCustBookingDate" text="Label">
+                                                         <FlowPane.margin>
+                                                            <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                                                         </FlowPane.margin>
+                                                      </Label>
+                                                   </children>
+                                                </FlowPane>
+                                                <FlowPane alignment="CENTER_LEFT" prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="1">
+                                                   <children>
+                                                      <Label fx:id="lblBookingService" text="Label">
+                                                         <FlowPane.margin>
+                                                            <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                                                         </FlowPane.margin>
+                                                      </Label>
+                                                   </children>
+                                                </FlowPane>
+                                                <FlowPane alignment="CENTER_LEFT" prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="3">
+                                                   <children>
+                                                      <Label fx:id="lblBookingDur" text="Label">
+                                                         <FlowPane.margin>
+                                                            <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                                                         </FlowPane.margin>
+                                                      </Label>
+                                                   </children>
+                                                </FlowPane>
+                                                <FlowPane alignment="CENTER_LEFT" prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="4">
+                                                   <children>
+                                                      <Label fx:id="lblBookingTime" text="Label">
+                                                         <FlowPane.margin>
+                                                            <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                                                         </FlowPane.margin>
+                                                      </Label>
+                                                   </children>
+                                                </FlowPane>
+                                                <FlowPane alignment="CENTER_LEFT" prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="5">
+                                                   <children>
+                                                      <Label fx:id="lblBookingEmp" text="Label">
+                                                         <FlowPane.margin>
+                                                            <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                                                         </FlowPane.margin>
+                                                      </Label>
+                                                   </children>
+                                                </FlowPane>
+                                                <FlowPane alignment="CENTER_RIGHT" prefHeight="200.0" prefWidth="200.0" GridPane.rowIndex="2">
+                                                   <children>
+                                                      <Label text="Price:" />
+                                                   </children>
+                                                </FlowPane>
+                                                <FlowPane alignment="CENTER_LEFT" prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="2">
+                                                   <children>
+                                                      <Label fx:id="lblBookingPrice" text="Label">
+                                                         <FlowPane.margin>
+                                                            <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                                                         </FlowPane.margin>
+                                                      </Label>
+                                                   </children>
+                                                </FlowPane>
+                                             </children>
+                                          </GridPane>
+                                       </right>
+                                       <bottom>
+                                          <GridPane prefHeight="42.0" prefWidth="800.0" BorderPane.alignment="CENTER">
+                                             <columnConstraints>
+                                                <ColumnConstraints hgrow="SOMETIMES" maxWidth="495.0" minWidth="10.0" prefWidth="491.0" />
+                                                <ColumnConstraints hgrow="SOMETIMES" maxWidth="744.0" minWidth="10.0" prefWidth="309.0" />
+                                             </columnConstraints>
+                                             <rowConstraints>
+                                                <RowConstraints minHeight="10.0" vgrow="SOMETIMES" />
+                                             </rowConstraints>
+                                             <children>
+                                                <FlowPane alignment="CENTER_RIGHT" prefHeight="58.0" prefWidth="800.0" GridPane.columnIndex="1">
+                                                   <children>
+                                                      <Button fx:id="btnNext" mnemonicParsing="false" onAction="#nextView" text="Next">
+                                                         <FlowPane.margin>
+                                                            <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                                                         </FlowPane.margin>
+                                                      </Button>
+                                                   </children>
+                                                </FlowPane>
+                                                <FlowPane alignment="CENTER_LEFT" prefHeight="42.0" prefWidth="137.0">
+                                                   <children>
+                                                      <Button fx:id="btnBack" mnemonicParsing="false" onAction="#backView" text="Back">
+                                                         <FlowPane.margin>
+                                                            <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                                                         </FlowPane.margin>
+                                                      </Button>
+                                                   </children></FlowPane>
+                                             </children>
+                                          </GridPane>
+                                       </bottom>
+                                    </BorderPane>
+                                 </children>
+                              </StackPane>
+                              <StackPane fx:id="stkpnBookingConfirm" prefHeight="150.0" prefWidth="200.0" visible="false" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                 <children>
+                                    <GridPane>
+                                      <columnConstraints>
+                                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                                      </columnConstraints>
+                                      <rowConstraints>
+                                        <RowConstraints maxHeight="357.0" minHeight="10.0" prefHeight="357.0" vgrow="SOMETIMES" />
+                                        <RowConstraints maxHeight="277.0" minHeight="10.0" prefHeight="208.0" vgrow="SOMETIMES" />
+                                      </rowConstraints>
+                                       <children>
+                                          <GridPane>
+                                            <columnConstraints>
+                                              <ColumnConstraints hgrow="SOMETIMES" maxWidth="170.0" minWidth="10.0" prefWidth="150.0" />
+                                                <ColumnConstraints hgrow="SOMETIMES" maxWidth="339.0" minWidth="10.0" prefWidth="250.0" />
+                                                <ColumnConstraints hgrow="SOMETIMES" maxWidth="298.0" minWidth="10.0" prefWidth="150.0" />
+                                              <ColumnConstraints hgrow="SOMETIMES" maxWidth="255.0" minWidth="10.0" prefWidth="250.0" />
+                                            </columnConstraints>
+                                            <rowConstraints>
+                                              <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                              <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                              <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                            </rowConstraints>
+                                             <children>
+                                                <FlowPane alignment="CENTER_RIGHT" prefHeight="200.0" prefWidth="200.0">
+                                                   <children>
+                                                      <Label text="Date:">
+                                                         <FlowPane.margin>
+                                                            <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                                                         </FlowPane.margin>
+                                                      </Label>
+                                                   </children>
+                                                </FlowPane>
+                                                <FlowPane alignment="CENTER_RIGHT" prefHeight="200.0" prefWidth="200.0" GridPane.rowIndex="1">
+                                                   <children>
+                                                      <Label text="Price:">
+                                                         <FlowPane.margin>
+                                                            <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                                                         </FlowPane.margin>
+                                                      </Label>
+                                                   </children>
+                                                </FlowPane>
+                                                <FlowPane alignment="CENTER_RIGHT" prefHeight="200.0" prefWidth="200.0" GridPane.rowIndex="2">
+                                                   <children>
+                                                      <Label text="Start Time:">
+                                                         <FlowPane.margin>
+                                                            <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                                                         </FlowPane.margin>
+                                                      </Label>
+                                                   </children>
+                                                </FlowPane>
+                                                <FlowPane alignment="CENTER_LEFT" prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1">
+                                                   <children>
+                                                      <Label text="Label">
+                                                         <FlowPane.margin>
+                                                            <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                                                         </FlowPane.margin>
+                                                      </Label>
+                                                   </children>
+                                                </FlowPane>
+                                                <FlowPane alignment="CENTER_LEFT" prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="1">
+                                                   <children>
+                                                      <Label text="Label">
+                                                         <FlowPane.margin>
+                                                            <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                                                         </FlowPane.margin>
+                                                      </Label>
+                                                   </children>
+                                                </FlowPane>
+                                                <FlowPane alignment="CENTER_RIGHT" prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="2">
+                                                   <children>
+                                                      <Label text="Service:">
+                                                         <FlowPane.margin>
+                                                            <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                                                         </FlowPane.margin>
+                                                      </Label>
+                                                   </children>
+                                                </FlowPane>
+                                                <FlowPane alignment="CENTER_LEFT" prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="2">
+                                                   <children>
+                                                      <Label text="Label">
+                                                         <FlowPane.margin>
+                                                            <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                                                         </FlowPane.margin>
+                                                      </Label>
+                                                   </children>
+                                                </FlowPane>
+                                                <FlowPane alignment="CENTER_RIGHT" prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="2" GridPane.rowIndex="1">
+                                                   <children>
+                                                      <Label text="Duration:">
+                                                         <FlowPane.margin>
+                                                            <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                                                         </FlowPane.margin>
+                                                      </Label>
+                                                   </children>
+                                                </FlowPane>
+                                                <FlowPane alignment="CENTER_RIGHT" prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="2" GridPane.rowIndex="2">
+                                                   <children>
+                                                      <Label text="Staff Member:">
+                                                         <FlowPane.margin>
+                                                            <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                                                         </FlowPane.margin>
+                                                      </Label>
+                                                   </children>
+                                                </FlowPane>
+                                                <FlowPane alignment="CENTER_LEFT" prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="3">
+                                                   <children>
+                                                      <Label text="Label">
+                                                         <FlowPane.margin>
+                                                            <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                                                         </FlowPane.margin>
+                                                      </Label>
+                                                   </children>
+                                                </FlowPane>
+                                                <FlowPane alignment="CENTER_LEFT" prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="3" GridPane.rowIndex="1">
+                                                   <children>
+                                                      <Label text="Label">
+                                                         <FlowPane.margin>
+                                                            <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                                                         </FlowPane.margin>
+                                                      </Label>
+                                                   </children>
+                                                </FlowPane>
+                                                <FlowPane alignment="CENTER_LEFT" prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="3" GridPane.rowIndex="2">
+                                                   <children>
+                                                      <Label text="Label">
+                                                         <FlowPane.margin>
+                                                            <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                                                         </FlowPane.margin>
+                                                      </Label>
+                                                   </children>
+                                                </FlowPane>
+                                             </children>
+                                             <GridPane.margin>
+                                                <Insets bottom="50.0" left="50.0" right="50.0" top="50.0" />
+                                             </GridPane.margin>
+                                          </GridPane>
+                                          <FlowPane alignment="CENTER" prefHeight="200.0" prefWidth="200.0" GridPane.rowIndex="1">
+                                             <children>
+                                                <Button mnemonicParsing="false" onAction="#backView" text="Back">
+                                                   <FlowPane.margin>
+                                                      <Insets bottom="100.0" right="100.0" />
+                                                   </FlowPane.margin>
+                                                </Button>
+                                                <Button fx:id="btnConfirmBooking" mnemonicParsing="false" onAction="#confirmBooking" text="Confirm Booking">
+                                                   <FlowPane.margin>
+                                                      <Insets bottom="100.0" />
+                                                   </FlowPane.margin>
+                                                </Button>
+                                             </children>
+                                          </FlowPane>
+                                       </children>
+                                    </GridPane>
+                                 </children>
+                              </StackPane>
+                           </children>
+                        </AnchorPane>
+                     </center>
+                  </BorderPane>
+               </center>
+               <top>
+                  <MenuBar BorderPane.alignment="CENTER">
+                    <menus>
+                      <Menu mnemonicParsing="false" text="File">
+                        <items>
+                          <MenuItem mnemonicParsing="false" onAction="#logout" text="Logout" />
+                        </items>
+                      </Menu>
+                    </menus>
+                  </MenuBar>
+               </top>
+            </BorderPane>
+         </children></StackPane>
    </children>
 </AnchorPane>

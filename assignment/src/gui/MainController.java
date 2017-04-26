@@ -467,15 +467,9 @@ public class MainController implements Initializable {
 	}
 
 	/**
-<<<<<<< HEAD
 	 * Shows add employee
 	 * note tabs should be disabled
 	 * @author [Luke Mason]
-=======
-	 * Shows add employee note tabs should be disabled
-	 * 
-	 * @author Joseph Garner
->>>>>>> branch 'master' of https://github.com/s3550293/Software-Engineering-Process-and-Tools.git
 	 */
 
 	/**************
@@ -581,13 +575,14 @@ public class MainController implements Initializable {
 						, btnSatMorning.isSelected(), btnSatAfternoon.isSelected(), btnSatEvening.isSelected());
 				program.messageBox("SUCCESS", "New Employee Added", "New Employee Added",txtaddEmpFirstName.getText()+" "+txtAddEmpLastName.getText()+" with $"+payRate+"/h was Added!"); 
 			}
+			else
+			{
+				bMenu.option1AddEmployee(txtaddEmpFirstName.getText(),txtAddEmpLastName.getText(), payRate);	
+				program.messageBox("SUCCESS", "SUCCESS", "New Employee Added",txtaddEmpFirstName.getText()+" "+txtAddEmpLastName.getText()+" with $"+payRate+"/h was Added!");
+			}
 		}
-		else
-		{
-			bMenu.option1AddEmployee(txtaddEmpFirstName.getText(),txtAddEmpLastName.getText(), payRate);	
-			program.messageBox("SUCCESS", "SUCCESS", "New Employee Added",txtaddEmpFirstName.getText()+" "+txtAddEmpLastName.getText()+" with $"+payRate+"/h was Added!");
-		}
-			cancelAddNewEmp();
+		refreshEmployeeView();
+		cancelAddNewEmp();
 	}
 
 	/**

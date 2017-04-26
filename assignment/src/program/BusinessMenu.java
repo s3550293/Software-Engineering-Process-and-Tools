@@ -252,7 +252,8 @@ public class BusinessMenu
 						controller.messageBox("WARN", "Finding last employee Error", "Couldn't get ID of last employee in array ","Please consult Luke Mason as he programmed this piece of shit");	
 					}
 					else
-					{
+					{			System.out.println("HERE");
+
 						boolean check = addWorkingTimes(id,btnSunMorning,btnSunAfternoon,btnSunEvening
 								,btnMonMorning,btnMonAfternoon,btnMonEvening
 								,btnTueMorning,btnTueAfternoon, btnTueEvening
@@ -260,6 +261,7 @@ public class BusinessMenu
 								, btnThurMorning, btnThurAfternoon, btnThurEvening
 								, btnFriMorning, btnFriAfternoon, btnFriEvening
 								, btnSatMorning, btnSatAfternoon, btnSatEvening);
+						System.out.println("CHECK SHOULD BE TRUE = "+check);
 						if(check)
 						{
 							option1AddEmployee(employeeFName,employeeLName,employeePayRate);
@@ -344,7 +346,7 @@ public class BusinessMenu
 						return false;
 					}
 					connect.clearWorkTimes(id);
-					
+					System.out.println("HERE2");
 					SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
 					String[] dateArray = new String[7];
 					Calendar c = Calendar.getInstance();
@@ -353,6 +355,7 @@ public class BusinessMenu
 						dateArray[i-1] = sdf.format(c.getTime());//puts each date from every loop into array
 						c.add(Calendar.DAY_OF_MONTH, 1);
 					}
+					System.out.println("workTime length = "+dateArray.length);
 					for(int i =0; i<dateArray.length;i++)
 					{
 						Calendar d = Calendar.getInstance();
@@ -361,16 +364,16 @@ public class BusinessMenu
 						int dayOfWeek = d.get(Calendar.DAY_OF_WEEK);
 						switch(dayOfWeek)
 						{
-							case 1: 
+							case 1: System.out.println("here sunday");
 								addDayWorkingTime("Sunday",id,dateArray[i],btnSunMorning, btnSunAfternoon, btnSunEvening);
 								break;
-							case 2: 
+							case 2: System.out.println("here monday");
 								addDayWorkingTime("Monday",id,dateArray[i],btnMonMorning, btnMonAfternoon, btnMonEvening);
 								break;
-							case 3: 
+							case 3: System.out.println("here tuesday");
 								addDayWorkingTime("Tuesday",id,dateArray[i],btnTueMorning, btnTueAfternoon, btnTueEvening);
 								break;
-							case 4: 
+							case 4: System.out.println("here wednesday");
 								addDayWorkingTime("Wednesday",id,dateArray[i],btnWedMorning, btnWedAfternoon, btnWedEvening);
 								break;
 							case 5: 

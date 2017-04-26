@@ -238,7 +238,7 @@ public class MainController implements Initializable {
 						protected void updateItem(Employee t, boolean bln) {
 							super.updateItem(t, bln);
 							if (t != null) {
-								setText(t.getId() + " " + t.getName() + " " + t.getPayRate());
+								setText( t.getName());
 							}
 							else{
 								listviewEmployees.setPlaceholder(new Label("No Employees"));

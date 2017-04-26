@@ -27,7 +27,7 @@
 
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="650.0" prefWidth="800.0" stylesheets="@Theme.css" xmlns="http://javafx.com/javafx/8.0.121" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.MainController">
    <children>
-      <StackPane fx:id="stkBusiness" layoutX="27.0" prefHeight="150.0" prefWidth="773.0" visible="false" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+      <StackPane fx:id="stkBusiness" layoutX="27.0" prefHeight="150.0" prefWidth="773.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
             <BorderPane prefHeight="200.0" prefWidth="200.0">
                <top>
@@ -143,7 +143,7 @@
                                                       </FlowPane>
                                                       <FlowPane alignment="CENTER_RIGHT" prefHeight="200.0" prefWidth="200.0" GridPane.rowIndex="4">
                                                          <children>
-                                                            <Label text="End Time">
+                                                            <Label text="End Time:">
                                                                <FlowPane.margin>
                                                                   <Insets right="10.0" />
                                                                </FlowPane.margin>
@@ -157,7 +157,7 @@
                                                       </FlowPane>
                                                       <FlowPane alignment="CENTER_RIGHT" prefHeight="200.0" prefWidth="200.0" GridPane.rowIndex="5">
                                                          <children>
-                                                            <Label text="Status">
+                                                            <Label text="Status:">
                                                                <FlowPane.margin>
                                                                   <Insets right="10.0" />
                                                                </FlowPane.margin>
@@ -444,17 +444,17 @@
                                                                   </FlowPane>
                                                                   <FlowPane alignment="CENTER" prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="1">
                                                                      <children>
-                                                                        <ToggleButton fx:id="btnSunMorning" mnemonicParsing="false" prefHeight="30.0" prefWidth="150.0" text="Unselected" />
+                                                                        <ToggleButton fx:id="btnSunMorning" mnemonicParsing="false" prefHeight="30.0" prefWidth="150.0" />
                                                                      </children>
                                                                   </FlowPane>
                                                                   <FlowPane alignment="CENTER" prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="2" GridPane.rowIndex="1">
                                                                      <children>
-                                                                        <ToggleButton fx:id="btnSunAfternoon" mnemonicParsing="false" prefHeight="30.0" prefWidth="150.0" text="Unselected" />
+                                                                        <ToggleButton fx:id="btnSunAfternoon" mnemonicParsing="false" prefHeight="30.0" prefWidth="150.0" />
                                                                      </children>
                                                                   </FlowPane>
                                                                   <FlowPane alignment="CENTER" prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="3" GridPane.rowIndex="1">
                                                                      <children>
-                                                                        <ToggleButton fx:id="btnSunEvening" mnemonicParsing="false" prefHeight="30.0" prefWidth="150.0" text="Unselected" />
+                                                                        <ToggleButton fx:id="btnSunEvening" mnemonicParsing="false" prefHeight="30.0" prefWidth="150.0" />
                                                                      </children>
                                                                   </FlowPane>
                                                                   <FlowPane alignment="CENTER" prefHeight="200.0" prefWidth="200.0" GridPane.rowIndex="2">
@@ -469,32 +469,32 @@
                                                                   </FlowPane>
                                                                   <FlowPane alignment="CENTER" prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="2">
                                                                      <children>
-                                                                        <ToggleButton fx:id="btnMonMorning" mnemonicParsing="false" prefHeight="30.0" prefWidth="150.0" text="Unselected" />
+                                                                        <ToggleButton fx:id="btnMonMorning" mnemonicParsing="false" prefHeight="30.0" prefWidth="150.0" />
                                                                      </children>
                                                                   </FlowPane>
                                                                   <FlowPane alignment="CENTER" prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="2" GridPane.rowIndex="2">
                                                                      <children>
-                                                                        <ToggleButton fx:id="btnMonAfternoon" mnemonicParsing="false" prefHeight="30.0" prefWidth="150.0" text="Unselected" />
+                                                                        <ToggleButton fx:id="btnMonAfternoon" mnemonicParsing="false" prefHeight="30.0" prefWidth="150.0" />
                                                                      </children>
                                                                   </FlowPane>
                                                                   <FlowPane alignment="CENTER" prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="3" GridPane.rowIndex="2">
                                                                      <children>
-                                                                        <ToggleButton fx:id="btnMonEvening" mnemonicParsing="false" prefHeight="30.0" prefWidth="150.0" text="Unselected" />
+                                                                        <ToggleButton fx:id="btnMonEvening" mnemonicParsing="false" prefHeight="30.0" prefWidth="150.0" />
                                                                      </children>
                                                                   </FlowPane>
                                                                   <FlowPane alignment="CENTER" prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="3">
                                                                      <children>
-                                                                        <ToggleButton fx:id="btnTueMorning" mnemonicParsing="false" prefHeight="30.0" prefWidth="150.0" text="Unselected" />
+                                                                        <ToggleButton fx:id="btnTueMorning" mnemonicParsing="false" prefHeight="30.0" prefWidth="150.0" />
                                                                      </children>
                                                                   </FlowPane>
                                                                   <FlowPane alignment="CENTER" prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="2" GridPane.rowIndex="3">
                                                                      <children>
-                                                                        <ToggleButton fx:id="btnTueAfternoon" mnemonicParsing="false" prefHeight="30.0" prefWidth="150.0" text="Unselected" />
+                                                                        <ToggleButton fx:id="btnTueAfternoon" mnemonicParsing="false" prefHeight="30.0" prefWidth="150.0" />
                                                                      </children>
                                                                   </FlowPane>
                                                                   <FlowPane alignment="CENTER" prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="3" GridPane.rowIndex="3">
                                                                      <children>
-                                                                        <ToggleButton fx:id="btnTueEvening" mnemonicParsing="false" prefHeight="30.0" prefWidth="150.0" text="Unselected" />
+                                                                        <ToggleButton fx:id="btnTueEvening" mnemonicParsing="false" prefHeight="30.0" prefWidth="150.0" />
                                                                      </children>
                                                                   </FlowPane>
                                                                   <FlowPane alignment="CENTER" prefHeight="200.0" prefWidth="200.0" GridPane.rowIndex="4">
@@ -504,17 +504,17 @@
                                                                   </FlowPane>
                                                                   <FlowPane alignment="CENTER" prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="4">
                                                                      <children>
-                                                                        <ToggleButton fx:id="btnWedMorning" mnemonicParsing="false" prefHeight="30.0" prefWidth="150.0" text="Unselected" />
+                                                                        <ToggleButton fx:id="btnWedMorning" mnemonicParsing="false" prefHeight="30.0" prefWidth="150.0" />
                                                                      </children>
                                                                   </FlowPane>
                                                                   <FlowPane alignment="CENTER" prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="2" GridPane.rowIndex="4">
                                                                      <children>
-                                                                        <ToggleButton fx:id="btnWedAfternoon" mnemonicParsing="false" prefHeight="30.0" prefWidth="150.0" text="Unselected" />
+                                                                        <ToggleButton fx:id="btnWedAfternoon" mnemonicParsing="false" prefHeight="30.0" prefWidth="150.0" />
                                                                      </children>
                                                                   </FlowPane>
                                                                   <FlowPane alignment="CENTER" prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="3" GridPane.rowIndex="4">
                                                                      <children>
-                                                                        <ToggleButton fx:id="btnWedEvening" mnemonicParsing="false" prefHeight="30.0" prefWidth="150.0" text="Unselected" />
+                                                                        <ToggleButton fx:id="btnWedEvening" mnemonicParsing="false" prefHeight="30.0" prefWidth="150.0" />
                                                                      </children>
                                                                   </FlowPane>
                                                                   <FlowPane alignment="CENTER" prefHeight="200.0" prefWidth="200.0" GridPane.rowIndex="6">
@@ -524,17 +524,17 @@
                                                                   </FlowPane>
                                                                   <FlowPane alignment="CENTER" prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="6">
                                                                      <children>
-                                                                        <ToggleButton fx:id="btnFriMorning" mnemonicParsing="false" prefHeight="30.0" prefWidth="150.0" text="Unselected" />
+                                                                        <ToggleButton fx:id="btnFriMorning" mnemonicParsing="false" prefHeight="30.0" prefWidth="150.0" />
                                                                      </children>
                                                                   </FlowPane>
                                                                   <FlowPane alignment="CENTER" prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="2" GridPane.rowIndex="6">
                                                                      <children>
-                                                                        <ToggleButton fx:id="btnFriAfternoon" mnemonicParsing="false" prefHeight="30.0" prefWidth="150.0" text="Unselected" />
+                                                                        <ToggleButton fx:id="btnFriAfternoon" mnemonicParsing="false" prefHeight="30.0" prefWidth="150.0" />
                                                                      </children>
                                                                   </FlowPane>
                                                                   <FlowPane alignment="CENTER" prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="3" GridPane.rowIndex="6">
                                                                      <children>
-                                                                        <ToggleButton fx:id="btnFriEvening" mnemonicParsing="false" prefHeight="30.0" prefWidth="150.0" text="Unselected" />
+                                                                        <ToggleButton fx:id="btnFriEvening" mnemonicParsing="false" prefHeight="30.0" prefWidth="150.0" />
                                                                      </children>
                                                                   </FlowPane>
                                                                   <FlowPane alignment="CENTER" prefHeight="200.0" prefWidth="200.0" GridPane.rowIndex="7">
@@ -544,17 +544,17 @@
                                                                   </FlowPane>
                                                                   <FlowPane alignment="CENTER" prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="7">
                                                                      <children>
-                                                                        <ToggleButton fx:id="btnSatMorning" mnemonicParsing="false" prefHeight="30.0" prefWidth="150.0" text="Unselected" />
+                                                                        <ToggleButton fx:id="btnSatMorning" mnemonicParsing="false" prefHeight="30.0" prefWidth="150.0" />
                                                                      </children>
                                                                   </FlowPane>
                                                                   <FlowPane alignment="CENTER" prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="2" GridPane.rowIndex="7">
                                                                      <children>
-                                                                        <ToggleButton fx:id="btnSatAfternoon" mnemonicParsing="false" prefHeight="30.0" prefWidth="150.0" text="Unselected" />
+                                                                        <ToggleButton fx:id="btnSatAfternoon" mnemonicParsing="false" prefHeight="30.0" prefWidth="150.0" />
                                                                      </children>
                                                                   </FlowPane>
                                                                   <FlowPane alignment="CENTER" prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="3" GridPane.rowIndex="7">
                                                                      <children>
-                                                                        <ToggleButton fx:id="btnSatEvening" mnemonicParsing="false" prefHeight="30.0" prefWidth="150.0" text="Unselected" />
+                                                                        <ToggleButton fx:id="btnSatEvening" mnemonicParsing="false" prefHeight="30.0" prefWidth="150.0" />
                                                                      </children>
                                                                   </FlowPane>
                                                                   <FlowPane alignment="CENTER" prefHeight="200.0" prefWidth="200.0" GridPane.rowIndex="5">
@@ -564,17 +564,17 @@
                                                                   </FlowPane>
                                                                   <FlowPane alignment="CENTER" prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="5">
                                                                      <children>
-                                                                        <ToggleButton fx:id="btnThurMorning" mnemonicParsing="false" prefHeight="30.0" prefWidth="150.0" text="Unselected" />
+                                                                        <ToggleButton fx:id="btnThurMorning" mnemonicParsing="false" prefHeight="30.0" prefWidth="150.0" />
                                                                      </children>
                                                                   </FlowPane>
                                                                   <FlowPane alignment="CENTER" prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="2" GridPane.rowIndex="5">
                                                                      <children>
-                                                                        <ToggleButton fx:id="btnThurAfternoon" mnemonicParsing="false" prefHeight="30.0" prefWidth="150.0" text="Unselected" />
+                                                                        <ToggleButton fx:id="btnThurAfternoon" mnemonicParsing="false" prefHeight="30.0" prefWidth="150.0" />
                                                                      </children>
                                                                   </FlowPane>
                                                                   <FlowPane alignment="CENTER" prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="3" GridPane.rowIndex="5">
                                                                      <children>
-                                                                        <ToggleButton fx:id="btnThurEvening" mnemonicParsing="false" prefHeight="30.0" prefWidth="150.0" text="Unselected" />
+                                                                        <ToggleButton fx:id="btnThurEvening" mnemonicParsing="false" prefHeight="30.0" prefWidth="150.0" />
                                                                      </children>
                                                                   </FlowPane>
                                                                </children>
@@ -735,7 +735,7 @@
                </center>
             </BorderPane>
          </children></StackPane>
-      <StackPane fx:id="stkCustomer" prefHeight="150.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+      <StackPane fx:id="stkCustomer" prefHeight="150.0" prefWidth="200.0" visible="false" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
             <BorderPane prefHeight="200.0" prefWidth="200.0">
                <center>

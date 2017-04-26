@@ -88,14 +88,17 @@ public class LoginController implements Initializable {
             Stage secondaryStage = new Stage();
             secondaryStage.getIcons().add(new Image("images/ic_collections_bookmark_black_48dp_2x.png"));
             Parent root = FXMLLoader.load(getClass().getResource("registerLayout.fxml"));
+            log.debug("LOGGER: FXML Loaded");
             secondaryStage.setTitle("Register");
             secondaryStage.setResizable(false);
             secondaryStage.setScene(new Scene(root));
             secondaryStage.initModality(Modality.APPLICATION_MODAL);
+            log.debug("LOGGER: Ready to show");
             secondaryStage.showAndWait();
         }
 		catch(IOException ioe) {
             log.warn(ioe.getMessage());
+            log.debug("LOGGER: Creation Fail");
         }
 	}
 	

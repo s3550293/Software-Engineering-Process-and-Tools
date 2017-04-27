@@ -333,16 +333,16 @@ public class BusinessMenu
 						int dayOfWeek = d.get(Calendar.DAY_OF_WEEK);
 						switch(dayOfWeek)
 						{
-							case 1: 
+							case 1: System.out.println("here sunday");
 								addDayWorkingTime("Sunday",id,dateArray[i],btnSunMorning, btnSunAfternoon, btnSunEvening);
 								break;
-							case 2: 
+							case 2: System.out.println("here monday");
 								addDayWorkingTime("Monday",id,dateArray[i],btnMonMorning, btnMonAfternoon, btnMonEvening);
 								break;
-							case 3: 
+							case 3: System.out.println("here tuesday");
 								addDayWorkingTime("Tuesday",id,dateArray[i],btnTueMorning, btnTueAfternoon, btnTueEvening);
 								break;
-							case 4: 
+							case 4: System.out.println("here wednesday");
 								addDayWorkingTime("Wednesday",id,dateArray[i],btnWedMorning, btnWedAfternoon, btnWedEvening);
 								break;
 							case 5: 

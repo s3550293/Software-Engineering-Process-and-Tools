@@ -14,26 +14,7 @@ public class BusinessMenuJUnit {
 	{
 		
 	}
-	@Test
-	public void testCheckEmployeeFirstOrLastName1()
-	{
-		assertFalse(bMenu.checkEmployeeFirstOrLastName(""));
-	}
-	@Test
-	public void testCheckEmployeeFirstOrLastName2()
-	{
-		assertFalse(true == bMenu.checkEmployeeFirstOrLastName("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"));
-	}
-	@Test
-	public void testCheckEmployeeFirstOrLastName3()
-	{
-		assertTrue(bMenu.checkEmployeeFirstOrLastName("a"));
-	}
-	@Test
-	public void testCheckEmployeeFirstOrLastName4()
-	{
-		assertTrue(bMenu.checkEmployeeFirstOrLastName("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"));
-	}
+
 	@Test
 	public void testCheckEmployeePayRate1()
 	{

@@ -236,7 +236,7 @@ public class MainController implements Initializable {
 						protected void updateItem(Employee t, boolean bln) {
 							super.updateItem(t, bln);
 							if (t != null) {
-								setText( t.getName());
+								setText(t.getId() + " " + t.getName() + " " + t.getPayRate());
 							}
 							else{
 								listviewEmployees.setPlaceholder(new Label("No Employees"));
@@ -692,43 +692,39 @@ public class MainController implements Initializable {
 		{
 			if(chkbxAddWorkingTimes.isSelected())
 			{
-				if(globalEmployeeOption == 0)
-				{
-				boolean check = bMenu.option2AddEmployeeAndWorkingTimes(txtaddEmpFirstName.getText()
-						,txtAddEmpLastName.getText(), payRate, btnSunMorning.isSelected(), btnSunAfternoon.isSelected()
-						, btnSunEvening.isSelected(), btnMonMorning.isSelected(), btnMonAfternoon.isSelected(), btnMonEvening.isSelected()
+				if(!bMenu.checkWorkTimes(btnSunMorning.isSelected(), btnSunAfternoon.isSelected(), btnSunEvening.isSelected(), btnMonMorning.isSelected(), btnMonAfternoon.isSelected(), btnMonEvening.isSelected()
 						, btnTueMorning.isSelected(), btnTueAfternoon.isSelected(), btnTueEvening.isSelected(), btnWedMorning.isSelected()
 						, btnWedAfternoon.isSelected(), btnWedEvening.isSelected(), btnThurMorning.isSelected(), btnThurAfternoon.isSelected()
 						, btnThurEvening.isSelected(), btnFriMorning.isSelected(), btnFriAfternoon.isSelected(), btnFriEvening.isSelected()
-						, btnSatMorning.isSelected(), btnSatAfternoon.isSelected(), btnSatEvening.isSelected());
-					if(check)
-					{
-							program.messageBox("SUCCESS", "New Employee Added", "New Employee Added",txtaddEmpFirstName.getText()+" "+txtAddEmpLastName.getText()+" with $"+payRate+"/h was Added!"); 
-					}
-					else
-					{
-						return;
-					}
-				}
-				else
+						, btnSatMorning.isSelected(), btnSatAfternoon.isSelected(), btnSatEvening.isSelected()))
 				{
-					Employee employee = listviewEmployees.getSelectionModel().getSelectedItem();
-					int employeeID = employee.getId();
-					changeEmployeesDetails(employeeID,txtaddEmpFirstName.getText(), txtAddEmpLastName.getText(), payRate);
-					boolean check = bMenu.addWorkingTimes(employeeID,btnSunMorning.isSelected(), btnSunAfternoon.isSelected()
+					return;
+				}
+				if(globalEmployeeOption == 0)
+				{
+					bMenu.option1AddEmployee(txtaddEmpFirstName.getText(),txtAddEmpLastName.getText(), payRate);
+					int id = bMenu.getLastEmployeeId();
+					System.out.println("last employee id = "+id);
+					bMenu.addWorkingTimes(id,btnSunMorning.isSelected(), btnSunAfternoon.isSelected()
 							, btnSunEvening.isSelected(), btnMonMorning.isSelected(), btnMonAfternoon.isSelected(), btnMonEvening.isSelected()
 							, btnTueMorning.isSelected(), btnTueAfternoon.isSelected(), btnTueEvening.isSelected(), btnWedMorning.isSelected()
 							, btnWedAfternoon.isSelected(), btnWedEvening.isSelected(), btnThurMorning.isSelected(), btnThurAfternoon.isSelected()
 							, btnThurEvening.isSelected(), btnFriMorning.isSelected(), btnFriAfternoon.isSelected(), btnFriEvening.isSelected()
 							, btnSatMorning.isSelected(), btnSatAfternoon.isSelected(), btnSatEvening.isSelected());
-					if(check)
-					{
+					program.messageBox("SUCCESS", "New Employee Added", "New Employee Added",txtaddEmpFirstName.getText()+" "+txtAddEmpLastName.getText()+" with $"+payRate+"/h was Added!"); 
+				}
+				else
+				{				
+					Employee employee = listviewEmployees.getSelectionModel().getSelectedItem();
+					int employeeID = employee.getId();
+					changeEmployeesDetails(employeeID,txtaddEmpFirstName.getText(), txtAddEmpLastName.getText(), payRate);
+					bMenu.addWorkingTimes(employeeID,btnSunMorning.isSelected(), btnSunAfternoon.isSelected()
+							, btnSunEvening.isSelected(), btnMonMorning.isSelected(), btnMonAfternoon.isSelected(), btnMonEvening.isSelected()
+							, btnTueMorning.isSelected(), btnTueAfternoon.isSelected(), btnTueEvening.isSelected(), btnWedMorning.isSelected()
+							, btnWedAfternoon.isSelected(), btnWedEvening.isSelected(), btnThurMorning.isSelected(), btnThurAfternoon.isSelected()
+							, btnThurEvening.isSelected(), btnFriMorning.isSelected(), btnFriAfternoon.isSelected(), btnFriEvening.isSelected()
+							, btnSatMorning.isSelected(), btnSatAfternoon.isSelected(), btnSatEvening.isSelected());					
 						program.messageBox("SUCCESS", "Employee Details Updated", "Employee Details Updated",txtaddEmpFirstName.getText()+" "+txtAddEmpLastName.getText()+" with $"+payRate+"/h was updated!"); 
-					}
-					else
-					{
-						return;
-					}
 					lblEmployeeTitle.setText("Add New Employee");
 					globalEmployeeOption = 0;
 				}
@@ -744,7 +740,7 @@ public class MainController implements Initializable {
 				{
 					Employee employee = listviewEmployees.getSelectionModel().getSelectedItem();
 					int employeeID = employee.getId();
-					setAllTogglesToFalse();
+					setAllTogglesToFalse();//wiping the work times
 					changeEmployeesDetails(employeeID,txtaddEmpFirstName.getText(), txtAddEmpLastName.getText(), payRate);
 					bMenu.addWorkingTimes(employeeID,btnSunMorning.isSelected(), btnSunAfternoon.isSelected()
 							, btnSunEvening.isSelected(), btnMonMorning.isSelected(), btnMonAfternoon.isSelected(), btnMonEvening.isSelected()
@@ -801,6 +797,10 @@ public class MainController implements Initializable {
 	{
 		txtSearchEmployee.setText("");
 		loadListViewEmp("");
+		lblEmployeeID.setText("");
+		lblEmployeeName.setText("");
+		lblEmployeePayrate.setText("");
+		lblEmployeeTitle.setText("");
 	}
 
 	/**
@@ -1220,6 +1220,7 @@ public class MainController implements Initializable {
 			feedback.setHeaderText("Employee has been deleted");
 			feedback.showAndWait();
 			refreshEmployeeView();
+			
 		} 
 		else 
 		{

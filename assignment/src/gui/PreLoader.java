@@ -63,11 +63,11 @@ public class PreLoader extends Preloader{
 		connect.addEmployee("Will Turner",15);
 		connect.addEmployee("Null Pointer",42);
 		
-		connect.addEmployeeWorkingTime(1,"05/04/2017","9:00","17:00");
-		connect.addEmployeeWorkingTime(1,"10/04/2017","8:00","14:00");
+		connect.addEmployeeWorkingTime(1,"05/04/2017","08:00","16:00");
+		connect.addEmployeeWorkingTime(1,"10/04/2017","08:00","20:00");
 
-		connect.addEmployeeWorkingTime(2,"06/04/2017","10:30","12:30");
-		connect.addEmployeeWorkingTime(2,"07/03/2017","11:30","15:30");
+		connect.addEmployeeWorkingTime(2,"06/04/2017","12:00","16:00");
+		connect.addEmployeeWorkingTime(2,"07/04/2017","12:00","20:00");
 		
 		connect.addUserDetails(2, "William", "Porter", "will@mail.com", "0452368593", "01/01/2002", "Male");
 		connect.addUserDetails(3, "Hannah", "Hawlking", "hannah@mail.com", "0452136859", "20/04/1995", "Famale");

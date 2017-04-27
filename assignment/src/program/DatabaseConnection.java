@@ -289,7 +289,7 @@ public class DatabaseConnection
 		try(Connection connect = this.connect(); Statement inject = connect.createStatement())
 		{
 			inject.executeUpdate(query);
-			//System.out.println("Employee " + empID+ "'s working time Added");
+			System.out.println("Employee " + empID+ "'s working time Added");
 		}
 		catch(SQLException sqle)
 		{

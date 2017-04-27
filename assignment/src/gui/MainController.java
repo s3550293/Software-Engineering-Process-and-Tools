@@ -45,6 +45,7 @@ import program.DatabaseConnection;
 import program.BusinessMenu;
 import program.Service;
 
+import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 
 public class MainController implements Initializable {
@@ -55,7 +56,7 @@ public class MainController implements Initializable {
 	private Employee employee = null;
 	private Booking booking = null;
 	int globalEmployeeOption = 0;
-	public MainController() {}
+	public MainController() {log.setLevel(Level.WARN);}
 	
 	/**************
 	 * B Owner
@@ -669,20 +670,24 @@ public class MainController implements Initializable {
 	public void createEmp() 
 	{
 		BusinessMenu bMenu = new BusinessMenu();
-		boolean firstName = bMenu.checkEmployeeFirstOrLastName(txtaddEmpFirstName.getText());
+		boolean firstName = !program.checkInputToContainInvalidChar(txtaddEmpFirstName.getText());
+		log.debug("First Name = "+firstName+"\n");
 		if(!firstName)
 		{
 			program.messageBox("ERROR", "First Name Invalid", "First Name Invalid","First Name entered is not a valid first name\nReason: First name contains invalid characters");
 			return;
 		}
-		boolean lastName = bMenu.checkEmployeeFirstOrLastName(txtAddEmpLastName.getText());
+		boolean lastName = !program.checkInputToContainInvalidChar(txtAddEmpLastName.getText());
+		log.debug("last Name = "+lastName+"\n");
 		if(!lastName)
 		{
 			program.messageBox("ERROR", "Last Name Invalid", "Last Name Invalid","Last Name entered is not a valid last name\nReason: Last name contains invalid characters");
 			return;
 		}
 		double payRate = bMenu.strPayRateToDouble(txtAddEmpPayRate.getText());
+		log.debug("pay rate = "+payRate+"\n");
 		boolean PayRate = bMenu.checkEmployeePayRate(payRate);
+		log.debug("is pay rate okay? "+PayRate+"\n");
 		if(!PayRate)
 		{
 			program.messageBox("ERROR", "Pay Rate Invalid", "Pay Rate Invalid","Pay rate entered is not a valid pay rate\nReason: Pay Rate is not 0 - 1000");
@@ -690,8 +695,9 @@ public class MainController implements Initializable {
 		}
 
 		if(PayRate && firstName && lastName)
-		{			System.out.println("before "+globalEmployeeOption);
-
+		{	
+			log.debug("globalEmployeeOption = "+globalEmployeeOption+"\n");
+			log.debug("chkboxWorkingTimes = "+chkbxAddWorkingTimes.isSelected()+"\n");
 			if(chkbxAddWorkingTimes.isSelected())
 			{
 				if(!bMenu.checkWorkTimes(btnSunMorning.isSelected(), btnSunAfternoon.isSelected(), btnSunEvening.isSelected(), btnMonMorning.isSelected(), btnMonAfternoon.isSelected(), btnMonEvening.isSelected()
@@ -704,9 +710,8 @@ public class MainController implements Initializable {
 				}
 				if(globalEmployeeOption == 0)
 				{
-					bMenu.option1AddEmployee(txtaddEmpFirstName.getText(),txtAddEmpLastName.getText(), payRate);
+					bMenu.addEmployee(txtaddEmpFirstName.getText(),txtAddEmpLastName.getText(), payRate);
 					int id = bMenu.getLastEmployeeId();
-					System.out.println("last employee id = "+id);
 					bMenu.addWorkingTimes(id,btnSunMorning.isSelected(), btnSunAfternoon.isSelected()
 							, btnSunEvening.isSelected(), btnMonMorning.isSelected(), btnMonAfternoon.isSelected(), btnMonEvening.isSelected()
 							, btnTueMorning.isSelected(), btnTueAfternoon.isSelected(), btnTueEvening.isSelected(), btnWedMorning.isSelected()
@@ -735,7 +740,7 @@ public class MainController implements Initializable {
 			{
 				if(globalEmployeeOption == 0)
 				{
-					bMenu.option1AddEmployee(txtaddEmpFirstName.getText(),txtAddEmpLastName.getText(), payRate);	
+					bMenu.addEmployee(txtaddEmpFirstName.getText(),txtAddEmpLastName.getText(), payRate);	
 					program.messageBox("SUCCESS", "SUCCESS", "New Employee Added",txtaddEmpFirstName.getText()+" "+txtAddEmpLastName.getText()+" with $"+payRate+"/h was Added!");
 				}
 				else
@@ -759,12 +764,24 @@ public class MainController implements Initializable {
 		refreshEmployeeView();
 		cancelAddNewEmp();
 	}
+	
+	/**
+	 * updates the employees names and payrates in database
+	 * @param empID
+	 * @param fName
+	 * @param lName
+	 * @param pRate
+	 */
 	public void changeEmployeesDetails(int empID,String fName, String lName, double pRate)
 	{	
 		String name = fName+" "+lName;
 		connection.updateEmployeeName(empID, name);
 		connection.updateEmployeePayRate(empID,pRate);
 	}
+	
+	/**
+	 * Sets all the workTime toggles to false
+	 */
 	public void setAllTogglesToFalse()
 	{
 		btnSunMorning.setSelected(false);
@@ -789,6 +806,7 @@ public class MainController implements Initializable {
 		btnSatAfternoon.setSelected(false);
 		btnSatEvening.setSelected(false);
 	}
+	
 	/**
 	 * Resets the filtered employee list view
 	 * @author Luke Mason
@@ -920,6 +938,11 @@ public class MainController implements Initializable {
 		showAddNewEmp();
 	}
 
+	/**
+	 * sets a certain day's toggles according to a combination of morning, afternoon and evening
+	 * @param dayOfWeek
+	 * @param timeBlock
+	 */
 	public void changeButtonsOfDay(int dayOfWeek, int timeBlock)
 	{
 		switch(dayOfWeek)
@@ -1194,6 +1217,7 @@ public class MainController implements Initializable {
 				program.messageBox("WARN", "Error: Something happened with dayOfWeek", "dayOfWeek did not register to a day","Please consult Luke Mason for the crap coding");
 		}
 	}
+	
 	/**
 	 * Deletes Employee
 	 * @author Luke Mason
@@ -1307,7 +1331,7 @@ public class MainController implements Initializable {
 	}
 	
 	/**
-	 * Deletes Employee
+	 * 
 	 * @author [Programmer]
 	 */
 	@FXML

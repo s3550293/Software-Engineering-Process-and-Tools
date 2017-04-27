@@ -8,7 +8,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.Scanner;
 
-import org.apache.log4j.Level;
+//import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 
 import javafx.scene.control.Alert;
@@ -23,7 +23,6 @@ public class Controller
 	public void setUser(User user){_user = user;}
 	private static Booking _booking = null;
 	public Booking getBooking(){return _booking;}
-
 	Scanner kb = new Scanner(System.in);
 
 	/**
@@ -44,7 +43,10 @@ public class Controller
 			{
 				if ((int) string.charAt(i) < 65 || (int) string.charAt(i) > 90)// checks if the letter is not an upper case letter
 				{
-						return true;		
+					if(!((int) string.charAt(i) == 45))//Checks if the letter is not a hyphen '-'
+					{
+						return true;					
+					}
 				}
 			}
 		}	
@@ -858,5 +860,106 @@ public class Controller
 			return true;
 		}
 		return true;
+	}
+	
+	/**
+	 * combines date and time to create new date
+	 * @param date
+	 * @param time
+	 * @return milliseconds from 1970
+	 * @author Luke Mason
+	 */
+	public long getTimeFrom1970(Date date, Date time)
+	{
+		log.info("IN getTimeFrom1970");
+		String dateStr = convertDateToString(date);
+		int first = dateStr.indexOf("/");
+		int second = dateStr.indexOf("/",first+1);
+		String dayOfMonthStr = dateStr.substring(0,first);
+		String monthStr = dateStr.substring(first+1,second);
+		String yearStr = dateStr.substring(second+1);	
+		String timeStr = convertTimeToString(time);
+		int semicolon = timeStr.indexOf(":");
+		System.out.println("index = "+semicolon);
+		String hourStr = timeStr.substring(0,semicolon);
+		System.out.println("hourStr = "+hourStr);
+		int year = Integer.parseInt(yearStr);
+		int month = Integer.parseInt(monthStr);
+		int dayOfMonth = Integer.parseInt(dayOfMonthStr);
+		int hour = Integer.parseInt(hourStr);
+		int minute = 0;
+		Calendar c = Calendar.getInstance();
+		System.out.println("("+year+"+1900 , "+month+" , "+dayOfMonth+" , "+hour+" , "+minute+")");
+		c.set(year+1900,month,dayOfMonth,hour,minute);//Setting new date
+		c.set(Calendar.SECOND, 0);
+		c.set(Calendar.MILLISECOND, 0);
+		log.info("OUT getTimeFrom1970");
+		return c.getTimeInMillis();
+	}
+	
+	/**
+	 * Gets Employees that are available to provide service on given date
+	 * @param date
+	 * @param startTime
+	 * @param endTime
+	 * @return
+	 */
+	public ArrayList<Employee> getAvailableEmployeesForSpecifiedTime(String date, String startTime, String endTime)
+	{
+		DatabaseConnection connect = new DatabaseConnection();
+		log.info("IN getAvailableEmployeesForBooking");
+		ArrayList<Employee> employeesWorkingInTimeBlock = new ArrayList<Employee>();
+		ArrayList<EmployeeWorkingTime> workTimesOnDate = new ArrayList<EmployeeWorkingTime>();
+		ArrayList<Booking> bookingsOnDate = new ArrayList<Booking>();
+		ArrayList<Employee> employeesNotAvailable = new ArrayList<Employee>();
+		workTimesOnDate = connect.getWorkTimesOnDate(date);
+		bookingsOnDate = connect.getActiveBookingsOnDate(date);
+		Date date2 = convertStringToDate(date);
+		Date startTime2 = convertStringToTime(startTime);
+		Date endTime2 = convertStringToTime(endTime);
+		long bookingStartTime = getTimeFrom1970(date2, startTime2);
+		long bookingEndTime = getTimeFrom1970(date2, endTime2);
+		//Check if employees are already booked for that time
+		if(bookingsOnDate.size() > 0)
+		{
+			for(Booking bk: bookingsOnDate)
+			{
+				//compare booking end time to booking start time
+				long booking2EndTime = getTimeFrom1970(bk.getDate(), bk.getEndTime());
+				if(!(booking2EndTime <= bookingStartTime))//If index booking end time is NOT less than booking start time(or equal to)
+				{
+					employeesNotAvailable.add(connect.getEmployee(bk.getEmployeeID()));
+				}
+			}
+		}
+		if(workTimesOnDate.size() > 0)
+		{
+			for(EmployeeWorkingTime ewt: workTimesOnDate)
+			{
+				//Getting work time start and end time
+				long employeeStartTime = getTimeFrom1970(ewt.getDate(),ewt.getStartTime());
+				long employeeEndTime = getTimeFrom1970(ewt.getDate(),ewt.getEndTime());
+				if(bookingEndTime <= employeeEndTime)//If booking end time is less than employee work end time(or equal to)
+				{
+					if(bookingStartTime >= employeeStartTime)//If booking start time is later than employee work start time(or equal to)
+					{
+						boolean available = true;
+						for(Employee emp: employeesNotAvailable)
+						{
+							if(emp.getId() == ewt.getEmpID())//If employee is already taken
+							{
+								available = false;
+							}
+						}
+						if(available)
+						{
+							employeesWorkingInTimeBlock.add(connect.getEmployee(ewt.getEmpID()));
+						}
+					}
+				}
+			}		
+		}
+		log.info("OUT getAvailableEmployeesForBooking");	
+		return employeesWorkingInTimeBlock;
 	}
 }

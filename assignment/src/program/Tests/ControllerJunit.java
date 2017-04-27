@@ -2,11 +2,11 @@ package program.Tests;
 
 import static org.junit.Assert.*;
 
-/*import java.util.Calendar;
-import java.util.Date;
-import java.util.GregorianCalendar;
+import java.text.ParseException;
 
-import org.junit.After;*/
+import java.util.Calendar;
+import java.util.Date;
+
 import org.junit.Before;
 import org.junit.Test;
 import program.Controller;
@@ -53,6 +53,21 @@ public class ControllerJunit {
 	public void testCheckInputToContainNonAlphabetChar7() 
 	{
 		assertTrue(controller.checkInputToContainInvalidChar("luke%@#$"));
+	}
+	@Test
+	public void testCheckInputToContainNonAlphabetChar8()
+	{
+		assertTrue(controller.checkInputToContainInvalidChar("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"));
+	}
+	@Test
+	public void testCheckInputToContainNonAlphabetChar9()
+	{
+		assertFalse(controller.checkInputToContainInvalidChar("a"));
+	}
+	@Test
+	public void testCheckInputToContainNonAlphabetChar13()
+	{
+		assertFalse(controller.checkInputToContainInvalidChar("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"));
 	}
 	@Test
 	public void testChangeInputIntoValidDouble() 
@@ -542,6 +557,7 @@ public class ControllerJunit {
 		assertEquals(start, "8:00");
 		assertEquals(end, "20:00");
 	}
+	@Test
 	public void testAllocateWorkTimes9()
 	{
 		String[] times = new String[2];
@@ -551,6 +567,7 @@ public class ControllerJunit {
 		assertEquals(start, "8:00");
 		assertEquals(end, "20:00");
 	}
+	@Test
 	public void testAllocateWorkTimes10()
 	{
 		String[] times = new String[2];
@@ -560,6 +577,7 @@ public class ControllerJunit {
 		assertEquals(start, "8:00");
 		assertEquals(end, "20:00");
 	}
+	@Test
 	public void testAllocateWorkTimes11()
 	{
 		String[] times = new String[2];
@@ -569,6 +587,7 @@ public class ControllerJunit {
 		assertEquals(start, "8:00");
 		assertEquals(end, "20:00");
 	}
+	@Test
 	public void testAllocateWorkTimes12()
 	{
 		String[] times = new String[2];
@@ -578,6 +597,7 @@ public class ControllerJunit {
 		assertEquals(start, "8:00");
 		assertEquals(end, "20:00");
 	}
+	@Test
 	public void testAllocateWorkTimes13()
 	{
 		String[] times = new String[2];
@@ -587,13 +607,50 @@ public class ControllerJunit {
 		assertEquals(start, "8:00");
 		assertEquals(end, "20:00");
 	}
-	/*
 	@Test
-	public void testEmpID() throws SQLException{
-		
-		assertFalse(employeeIDCheck(123));
-		assertTrue(employeeIDCheck(223));
+	public void test1GetTimeFrom1970() throws ParseException
+	{		
+		Calendar date2 = Calendar.getInstance();
+		date2.set(1998+1900, 4, 2, 8, 0);
+		date2.set(Calendar.SECOND, 0);
+		date2.set(Calendar.MILLISECOND, 0);
+		long amount = date2.getTimeInMillis();
+		Date date = controller.convertStringToDate("02/04/1998");
+		Date time = controller.convertStringToTime("08:00");
+		System.out.println(controller.getTimeFrom1970(date, time));
+		System.out.println(amount);
+		System.out.println(date2.getTimeInMillis());
+		assertEquals(amount,controller.getTimeFrom1970(date, time));
 	}
-	*/
+	@Test
+	public void test2GetTimeFrom1970() throws ParseException
+	{		
+		Calendar date2 = Calendar.getInstance();
+		date2.set(2005+1900, 6, 22, 16, 0);
+		date2.set(Calendar.SECOND, 0);
+		date2.set(Calendar.MILLISECOND, 0);
+		long amount = date2.getTimeInMillis();
+		Date date = controller.convertStringToDate("22/06/2005");
+		Date time = controller.convertStringToTime("16:00");
+		System.out.println(controller.getTimeFrom1970(date, time));
+		System.out.println(amount);
+		System.out.println(date2.getTimeInMillis());
+		assertEquals(amount,controller.getTimeFrom1970(date, time));
+	}
+	@Test
+	public void test3GetTimeFrom1970() throws ParseException
+	{		
+		Calendar date2 = Calendar.getInstance();
+		date2.set(2017+1900, 1, 15, 20, 0);
+		date2.set(Calendar.SECOND, 0);
+		date2.set(Calendar.MILLISECOND, 0);
+		long amount = date2.getTimeInMillis();
+		Date date = controller.convertStringToDate("15/01/2017");
+		Date time = controller.convertStringToTime("20:00");
+		System.out.println(controller.getTimeFrom1970(date, time));
+		System.out.println(amount);
+		System.out.println(date2.getTimeInMillis());
+		assertEquals(amount,controller.getTimeFrom1970(date, time));
+	}
 
 }

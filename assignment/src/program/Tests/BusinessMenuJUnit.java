@@ -62,42 +62,42 @@ public class BusinessMenuJUnit {
 	@Test
 	public void testCheckWorkTimes1()
 	{
-		assertEquals(1,bMenu.checkWorkTimes(true,true,true));
+		assertEquals(1,bMenu.getWorkTimes(true,true,true));
 	}
 	@Test
 	public void testCheckWorkTimes2()
 	{
-		assertEquals(2,bMenu.checkWorkTimes(true,true,false));
+		assertEquals(2,bMenu.getWorkTimes(true,true,false));
 	}
 	@Test
 	public void testCheckWorkTimes3()
 	{
-		assertEquals(3,bMenu.checkWorkTimes(false,true,true));
+		assertEquals(3,bMenu.getWorkTimes(false,true,true));
 	}
 	@Test
 	public void testCheckWorkTimes4()
 	{
-		assertEquals(4,bMenu.checkWorkTimes(true,false,false));
+		assertEquals(4,bMenu.getWorkTimes(true,false,false));
 	}
 	@Test
 	public void testCheckWorkTimes5()
 	{
-		assertEquals(5,bMenu.checkWorkTimes(false,true,false));
+		assertEquals(5,bMenu.getWorkTimes(false,true,false));
 	}
 	@Test
 	public void testCheckWorkTimes6()
 	{
-		assertEquals(6,bMenu.checkWorkTimes(false,false,true));
+		assertEquals(6,bMenu.getWorkTimes(false,false,true));
 	}
 	@Test
 	public void testCheckWorkTimes7()
 	{
-		assertEquals(-1,bMenu.checkWorkTimes(true,false,true));
+		assertEquals(-1,bMenu.getWorkTimes(true,false,true));
 	}
 	@Test
 	public void testCheckWorkTimes8()
 	{
-		assertEquals(0,bMenu.checkWorkTimes(false,false,false));
+		assertEquals(0,bMenu.getWorkTimes(false,false,false));
 	}
 	@Test
 	public void testGetStartEndTimes0()

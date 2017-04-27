@@ -223,84 +223,23 @@ public class BusinessMenu
 				 * @param employeeLName
 				 * @param employeePayRate
 				 */
-				public boolean option2AddEmployeeAndWorkingTimes(String employeeFName
-				,String employeeLName,double employeePayRate,boolean btnSunMorning,boolean btnSunAfternoon
-				,boolean btnSunEvening,boolean btnMonMorning,boolean btnMonAfternoon,boolean btnMonEvening
-				,boolean btnTueMorning,boolean btnTueAfternoon,boolean btnTueEvening,boolean btnWedMorning
-				,boolean btnWedAfternoon,boolean btnWedEvening,boolean btnThurMorning,boolean btnThurAfternoon
-				,boolean btnThurEvening,boolean btnFriMorning,boolean btnFriAfternoon,boolean btnFriEvening
-				,boolean btnSatMorning,boolean btnSatAfternoon,boolean btnSatEvening)
+				public int getLastEmployeeId()
 				{
-					/*log.debug("Assigning Work times to employee");
-					DatabaseConnection connect = new DatabaseConnection();
-					option1AddEmployee(employeeFName,employeeLName,employeePayRate);
-					String employeeName = employeeFName + " " + employeeLName;//concatenating first and last name into name*/
+					log.debug("getting id from last employee");
 					ArrayList<Employee> employees = connect.getEmployees("");//adding working times to employee just made
 					//This is for if more than one employee has the same name as searched
 					int id = -1;
-					System.out.println(employees);
 					Employee lastEmp = new Employee();
 					for(Employee emp: employees)
 					{
 						lastEmp = emp;
-					}
-					
-					id =lastEmp.getId()+1;
-					System.out.println(id);
-					if(id == -1)
-					{
-						controller.messageBox("WARN", "Finding last employee Error", "Couldn't get ID of last employee in array ","Please consult Luke Mason as he programmed this piece of shit");	
-					}
-					else
-					{
-						boolean check = addWorkingTimes(id,btnSunMorning,btnSunAfternoon,btnSunEvening
-								,btnMonMorning,btnMonAfternoon,btnMonEvening
-								,btnTueMorning,btnTueAfternoon, btnTueEvening
-								,btnWedMorning,btnWedAfternoon, btnWedEvening
-								, btnThurMorning, btnThurAfternoon, btnThurEvening
-								, btnFriMorning, btnFriAfternoon, btnFriEvening
-								, btnSatMorning, btnSatAfternoon, btnSatEvening);
-						if(check)
-						{
-							option1AddEmployee(employeeFName,employeeLName,employeePayRate);
-						}
-						else
-						{
-							return false;
-						}
-					}
-					return true;
+					}		
+					id =lastEmp.getId();
+					return id;
 				}
-				/**
-				 * Passes all the button values in its parameters and then assigns work times according to those times to the specified id.
-				 * @param id
-				 * @param btnSunMorning
-				 * @param btnSunAfternoon
-				 * @param btnSunEvening
-				 * @param btnMonMorning
-				 * @param btnMonAfternoon
-				 * @param btnMonEvening
-				 * @param btnTueMorning
-				 * @param btnTueAfternoon
-				 * @param btnTueEvening
-				 * @param btnWedMorning
-				 * @param btnWedAfternoon
-				 * @param btnWedEvening
-				 * @param btnThurMorning
-				 * @param btnThurAfternoon
-				 * @param btnThurEvening
-				 * @param btnFriMorning
-				 * @param btnFriAfternoon
-				 * @param btnFriEvening
-				 * @param btnSatMorning
-				 * @param btnSatAfternoon
-				 * @param btnSatEvening
-				 */
-				public boolean addWorkingTimes(int id,boolean btnSunMorning,boolean btnSunAfternoon,boolean btnSunEvening,boolean btnMonMorning,boolean btnMonAfternoon,boolean btnMonEvening,boolean btnTueMorning,boolean btnTueAfternoon,boolean btnTueEvening,boolean btnWedMorning,boolean btnWedAfternoon,boolean btnWedEvening,boolean btnThurMorning,boolean btnThurAfternoon,boolean btnThurEvening,boolean btnFriMorning,boolean btnFriAfternoon,boolean btnFriEvening,boolean btnSatMorning,boolean btnSatAfternoon,boolean btnSatEvening)
+				
+				public boolean checkWorkTimes(boolean btnSunMorning,boolean btnSunAfternoon,boolean btnSunEvening,boolean btnMonMorning,boolean btnMonAfternoon,boolean btnMonEvening,boolean btnTueMorning,boolean btnTueAfternoon,boolean btnTueEvening,boolean btnWedMorning,boolean btnWedAfternoon,boolean btnWedEvening,boolean btnThurMorning,boolean btnThurAfternoon,boolean btnThurEvening,boolean btnFriMorning,boolean btnFriAfternoon,boolean btnFriEvening,boolean btnSatMorning,boolean btnSatAfternoon,boolean btnSatEvening)
 				{
-					
-					//Checks if only morning and evening have been selected for one of the days, If so, then error
-					//Can't test on JUnit because of message box
 					if(btnSunMorning && !btnSunAfternoon && btnSunEvening)
 					{
 						String day = "Sunday";
@@ -343,8 +282,40 @@ public class BusinessMenu
 						controller.messageBox("ERROR", "Work Time Error", "Work time selected on "+day+" is invalid","Work time selected on "+day+" is invalid\n <Work times not added>\n Reason: Morning and Evening alone are two seperated blocks of time\n please select a one block of time and try again");
 						return false;
 					}
-					connect.clearWorkTimes(id);
+					return true;
+				}
+				
+				/**
+				 * Passes all the button values in its parameters and then assigns work times according to those times to the specified id.
+				 * @param id
+				 * @param btnSunMorning
+				 * @param btnSunAfternoon
+				 * @param btnSunEvening
+				 * @param btnMonMorning
+				 * @param btnMonAfternoon
+				 * @param btnMonEvening
+				 * @param btnTueMorning
+				 * @param btnTueAfternoon
+				 * @param btnTueEvening
+				 * @param btnWedMorning
+				 * @param btnWedAfternoon
+				 * @param btnWedEvening
+				 * @param btnThurMorning
+				 * @param btnThurAfternoon
+				 * @param btnThurEvening
+				 * @param btnFriMorning
+				 * @param btnFriAfternoon
+				 * @param btnFriEvening
+				 * @param btnSatMorning
+				 * @param btnSatAfternoon
+				 * @param btnSatEvening
+				 */
+				public boolean addWorkingTimes(int id,boolean btnSunMorning,boolean btnSunAfternoon,boolean btnSunEvening,boolean btnMonMorning,boolean btnMonAfternoon,boolean btnMonEvening,boolean btnTueMorning,boolean btnTueAfternoon,boolean btnTueEvening,boolean btnWedMorning,boolean btnWedAfternoon,boolean btnWedEvening,boolean btnThurMorning,boolean btnThurAfternoon,boolean btnThurEvening,boolean btnFriMorning,boolean btnFriAfternoon,boolean btnFriEvening,boolean btnSatMorning,boolean btnSatAfternoon,boolean btnSatEvening)
+				{
 					
+					//Checks if only morning and evening have been selected for one of the days, If so, then error
+					//Can't test on JUnit because of message box
+					connect.clearWorkTimes(id);	
 					SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
 					String[] dateArray = new String[7];
 					Calendar c = Calendar.getInstance();
@@ -353,6 +324,7 @@ public class BusinessMenu
 						dateArray[i-1] = sdf.format(c.getTime());//puts each date from every loop into array
 						c.add(Calendar.DAY_OF_MONTH, 1);
 					}
+					System.out.println("should be 7 = "+dateArray.length);
 					for(int i =0; i<dateArray.length;i++)
 					{
 						Calendar d = Calendar.getInstance();
@@ -361,16 +333,16 @@ public class BusinessMenu
 						int dayOfWeek = d.get(Calendar.DAY_OF_WEEK);
 						switch(dayOfWeek)
 						{
-							case 1: 
+							case 1: System.out.println("here sunday");
 								addDayWorkingTime("Sunday",id,dateArray[i],btnSunMorning, btnSunAfternoon, btnSunEvening);
 								break;
-							case 2: 
+							case 2: System.out.println("here monday");
 								addDayWorkingTime("Monday",id,dateArray[i],btnMonMorning, btnMonAfternoon, btnMonEvening);
 								break;
-							case 3: 
+							case 3: System.out.println("here tuesday");
 								addDayWorkingTime("Tuesday",id,dateArray[i],btnTueMorning, btnTueAfternoon, btnTueEvening);
 								break;
-							case 4: 
+							case 4: System.out.println("here wednesday");
 								addDayWorkingTime("Wednesday",id,dateArray[i],btnWedMorning, btnWedAfternoon, btnWedEvening);
 								break;
 							case 5: 
@@ -395,7 +367,7 @@ public class BusinessMenu
 				 * @param evening
 				 * @return number referring to a time block, -1 if time block is invalid
 				 */
-				public int checkWorkTimes(boolean morning, boolean afternoon, boolean evening)
+				public int getWorkTimes(boolean morning, boolean afternoon, boolean evening)
 				{
 					if(morning && afternoon && evening)
 					{
@@ -481,13 +453,15 @@ public class BusinessMenu
 				 */
 				public boolean set7DayRosterTime(int employeeID,String date, String startTime, String endTime)
 				{
-					Date Date;
+					Date Date = null;
 					for(int i = 0; i<54;i++)//54 = 54 weeks in a year (setting work time every week for 54 weeks in advance)
 					{
-						connect.addEmployeeWorkingTime(employeeID, date, startTime, endTime);
+						System.out.println("Calling addTime");
+						connect.addEmployeeWorkingTime(employeeID, date, startTime, endTime);	
 						Date = controller.convertStringToDate(date);
 						if(Date == null)
 						{
+							System.out.println("Could not convert string to date");
 							return false;
 						}
 						Calendar calendar = Calendar.getInstance();
@@ -512,7 +486,7 @@ public class BusinessMenu
 				{
 					// -Day- is not used but is there if needed
 					String[] array = new String[2];
-					int check = checkWorkTimes(morning, afternoon, evening);
+					int check = getWorkTimes(morning, afternoon, evening);
 					array = getStartEndTimes(check);
 					if(check == -1)
 					{

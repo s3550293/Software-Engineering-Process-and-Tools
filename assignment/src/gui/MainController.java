@@ -57,7 +57,7 @@ public class MainController implements Initializable {
 	private Employee employee = null;
 	private Booking booking = null;
 	int globalEmployeeOption = 0;
-	public MainController() {log.setLevel(Level.WARN);}
+	public MainController() {}
 	
 	/**************
 	 * B Owner
@@ -179,6 +179,8 @@ public class MainController implements Initializable {
 		stkBusiness.setVisible(true);
 		stkCustomer.setVisible(false);
 		boolean var = login();
+		loadDaySelect();
+		loadallServices("");
 		if (var == true) {
 			if (program.getUser().getAccountType() == 1) {
 				stkBusiness.setVisible(true);
@@ -197,9 +199,8 @@ public class MainController implements Initializable {
 						}
 					}
 				});
-				loadDaySelect();
 				loadListViewBook();
-				loadallServices();
+				loadallCustomers();
 				listviewBookings.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<Booking>() {
 					@Override
 					public void changed(ObservableValue<? extends Booking> observable, Booking oldValue, Booking newValue) {
@@ -214,7 +215,31 @@ public class MainController implements Initializable {
 						}
 					}
 				});
-		
+				
+				listviewManServices.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<Service>() {
+					@Override
+					public void changed(ObservableValue<? extends Service> observable, Service oldValue, Service newValue) {
+						if (newValue != null) {
+							lblServiceID.setText(Integer.toString(newValue.getID()));
+							lblManServiceName.setText(newValue.getName());
+							lblManServicePrice.setText("$"+Double.toString(newValue.getPrice()));
+							lblServiceDura.setText(Integer.toString(newValue.getLengthMin()));
+						}
+					}
+				});
+				listviewCustomers.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<Customer>() {
+					@Override
+					public void changed(ObservableValue<? extends Customer> observable, Customer oldValue, Customer newValue) {
+						if (newValue != null) {
+							lblCustFirstName.setText(newValue.getFName());
+							lblCustLastName.setText(newValue.getLName());
+							lblCustEmail.setText(newValue.getEmail());
+							lblCustMobile.setText(newValue.getPhone());
+							lblCustDOB.setText(newValue.getDOB());
+							lblCustGender.setText(newValue.getGender());
+						}
+					}
+				});
 				cmbBookingDay.valueProperty().addListener(new ChangeListener<Date>() {
 					@Override
 					public void changed(ObservableValue ov, Date t, Date t1) {
@@ -238,6 +263,16 @@ public class MainController implements Initializable {
 			} else {
 				stkBusiness.setVisible(false);
 				stkCustomer.setVisible(true);
+				listviewBookingServices .getSelectionModel().selectedItemProperty().addListener(new ChangeListener<Service>() {
+					@Override
+					public void changed(ObservableValue<? extends Service> observable, Service oldValue, Service newValue) {
+						if (newValue != null) {
+							lblServiceName.setText(newValue.getName());
+							lblServiceDur.setText("$"+Double.toString(newValue.getPrice()));
+							lblServicePrice.setText(Integer.toString(newValue.getLengthMin()));
+						}
+					}
+				});
 			}
 		} else {
 			Platform.exit();
@@ -334,6 +369,43 @@ public class MainController implements Initializable {
 				}
 			});
 			cmbBookingDay.setButtonCell(new ListCell<Date>() {
+				@Override
+				protected void updateItem(Date t, boolean bln) {
+					super.updateItem(t, bln);
+					if (t != null) {
+						setText(dayFormat.format(t.getTime()));
+					} else {
+						setText(null);
+					}
+
+				}
+			});
+			cmbDayBooking.setItems(dateList);
+			cmbDayBooking.getSelectionModel().select(0);
+			cmbDayBooking.setCellFactory(new Callback<ListView<Date>, ListCell<Date>>() {
+
+				@Override
+				public ListCell<Date> call(ListView<Date> p) {
+
+					final ListCell<Date> cell = new ListCell<Date>() {
+
+						@Override
+						protected void updateItem(Date t, boolean bln) {
+							super.updateItem(t, bln);
+
+							if (t != null) {
+								setText(dayFormat.format(t.getTime()));
+							} else {
+								setText(null);
+							}
+						}
+
+					};
+
+					return cell;
+				}
+			});
+			cmbDayBooking.setButtonCell(new ListCell<Date>() {
 				@Override
 				protected void updateItem(Date t, boolean bln) {
 					super.updateItem(t, bln);
@@ -442,13 +514,20 @@ public class MainController implements Initializable {
 		}
 	}
 	
-	private void loadallServices(){
+	/**
+	 * loads all Services into list view
+	 * 
+	 * @author Joseph Garner
+	 */
+	@FXML
+	public void loadallServices(String input){
 		listviewManServices.getItems().clear();
-		ArrayList<Service> serviceArray = new ArrayList<>(connection.getAllServices());
+		ArrayList<Service> serviceArray = new ArrayList<>(connection.getAllServices(input));
 		ObservableList<Service> serviceList = FXCollections.observableList(serviceArray);
 		log.debug("LOGGER: List length:" + serviceArray.size());
 		if (serviceList != null) {
 			listviewManServices.setItems(serviceList);
+			listviewBookingServices.setItems(serviceList);
 			listviewManServices.setCellFactory(new Callback<ListView<Service>, ListCell<Service>>() {
 				@Override
 				public ListCell<Service> call(ListView<Service> p) {
@@ -458,7 +537,58 @@ public class MainController implements Initializable {
 						protected void updateItem(Service t, boolean bln) {
 							super.updateItem(t, bln);
 							if (t != null) {
+								log.debug("LOGGER: added:" + t.getName());
 								setText(t.getName());
+							}
+						}
+					};
+					return cell;
+				}
+			});
+			listviewBookingServices.setCellFactory(new Callback<ListView<Service>, ListCell<Service>>() {
+				@Override
+				public ListCell<Service> call(ListView<Service> p) {
+
+					ListCell<Service> cell = new ListCell<Service>() {
+						@Override
+						protected void updateItem(Service t, boolean bln) {
+							super.updateItem(t, bln);
+							if (t != null) {
+								log.debug("LOGGER: added:" + t.getName());
+								setText(t.getName());
+							}
+						}
+					};
+					return cell;
+				}
+			});
+		}
+	}
+	
+	/**
+	 * loads all customers into list view
+	 * 
+	 * @author Joseph Garner
+	 */
+	@FXML
+	public void loadallCustomers(){
+		listviewCustomers.getItems().clear();
+		ArrayList<Customer> serviceArray = new ArrayList<>(connection.getAllCustomer());
+		ObservableList<Customer> serviceList = FXCollections.observableList(serviceArray);
+		log.debug("LOGGER: List length:" + serviceArray.size());
+		if (serviceList != null) {
+			listviewCustomers.setItems(serviceList);
+			listviewCustomers.setCellFactory(new Callback<ListView<Customer>, ListCell<Customer>>() {
+				@Override
+				public ListCell<Customer> call(ListView<Customer> p) {
+
+					ListCell<Customer> cell = new ListCell<Customer>() {
+						@Override
+						protected void updateItem(Customer t, boolean bln) {
+							super.updateItem(t, bln);
+							if (t != null) {
+								log.debug("LOGGER: added:" + t.getFName());
+								setText(t.getFName()+" "+t.getLName());
 							}
 							else{
 								listviewEmployees.setPlaceholder(new Label("No Bookings"));
@@ -550,7 +680,6 @@ public class MainController implements Initializable {
 	 */
 	@FXML
 	public void searchBookings() {
-		// TODO
 		log.debug("LOGGER: Entered searchBookings function");
 		listviewBookings.getItems().clear();
 		Calendar cal = Calendar.getInstance();
@@ -644,17 +773,6 @@ public class MainController implements Initializable {
 		loadListViewBook();
 	}
 	
-	
-	/**
-	 * Allows the user view past bookings
-	 * 
-	 * @author Joseph Garner
-	 */
-	@FXML
-	public void lookToThePast()
-	{
-		
-	}
 
 	/**
 	 * Displays and refreshes booking view to all
@@ -1313,11 +1431,174 @@ public class MainController implements Initializable {
 		}
 	}
 	
+	/**************
+	 * SERVICES
+	 **************/
+	
+	/**
+	 * Searches Services List
+	 * @author [Programmer]
+	 */
+	@FXML
+	public void searchServices()
+	{
+		loadListViewEmp(txtSearchService.getText());
+	}
+	
+	/**
+	 * Creates a new service
+	 * @author [Programmer]
+	 */
+	@FXML
+	public void addService()
+	{
+		//TODO
+	}
+	
+	/**
+	 * Deletes a Service
+	 * @author [Programmer]
+	 */
+	@FXML
+	public void deleteService()
+	{
+		//TODO
+		loadListViewEmp("");
+	}
+	
+	/**
+	 * Refresh all Services
+	 * @author [Programmer]
+	 */
+	@FXML
+	public void refreshService()
+	{
+		loadListViewEmp("");
+	}
+	
+	/**************
+	 * BMENU CUSTOMERS
+	 **************/
+	
+	
+	/**
+	 * Searches Customers
+	 * @author [Programmer]
+	 */
+	@FXML
+	public void searchCustomers()
+	{
+		listviewCustomers.getItems().clear();
+		ArrayList<Customer> customerArray = new ArrayList<>(connection.getAllCustomer());
+		ArrayList<Customer> customerArrayView = new ArrayList<>();
+		String fname = null;
+		String lname = null;
+		String fullName = null;
+		for (Customer c : customerArray) {
+			fname = connection.getCustomer(c.getID()).getFName();
+			lname = connection.getCustomer(c.getID()).getLName();
+			fullName = fname + " " + lname;
+			boolean checkF = program.searchMatch(fname.toUpperCase( ), txtSearchCustomer.getText().toUpperCase());
+			boolean checkL = program.searchMatch(lname.toUpperCase( ), txtSearchCustomer.getText().toUpperCase());
+			boolean checkFL = program.searchMatch(fullName.toUpperCase( ), txtSearchCustomer.getText().toUpperCase());
+			log.debug("LOGGER: Users Name - "+fullName);
+			if (checkF || checkL || checkFL) {
+					customerArrayView.add(c);
+			}
+		}
+		ObservableList<Customer> customerList = FXCollections.observableList(customerArrayView);
+		log.debug("LOGGER: List length:" + customerArrayView.size());
+		if (customerList != null) {
+			listviewCustomers.setItems(customerList);
+			listviewCustomers.setCellFactory(new Callback<ListView<Customer>, ListCell<Customer>>() {
+				@Override
+				public ListCell<Customer> call(ListView<Customer> p) {
+
+					ListCell<Customer> cell = new ListCell<Customer>() {
+						@Override
+						protected void updateItem(Customer t, boolean bln) {
+							super.updateItem(t, bln);
+							if (t != null) {
+								log.debug("LOGGER: added:" + t.getFName());
+								setText(t.getFName()+" "+t.getLName());
+							}
+							else{
+								listviewEmployees.setPlaceholder(new Label("No Bookings"));
+							}
+						}
+					};
+					return cell;
+				}
+			});
+		}
+		else {
+			program.messageBox("WARN", "Search Result", "No Search Results Found", "");
+		}
+	}
+	
+	/**
+	 * Creates a booking for selected customer
+	 * @author [Programmer]
+	 */
+	@FXML
+	public void createBooking()
+	{
+		//TODO
+	}
+	
 	
 	
 	/**************
 	 * Customer
 	 **************/
+	/**
+	 * Enters to booking phase
+	 * @author Luke
+	 */
+	private void loadpreferedEmp()
+	{
+		//TODO
+		ArrayList<Employee> dateArray = new ArrayList<>();
+		ObservableList<Employee> dateList = FXCollections.observableList(dateArray);
+		if (dateList != null) {
+			cmbPreferEmp.setItems(dateList);
+			cmbPreferEmp.setCellFactory(new Callback<ListView<Employee>, ListCell<Employee>>() {
+
+				@Override
+				public ListCell<Employee> call(ListView<Employee> p) {
+
+					final ListCell<Employee> cell = new ListCell<Employee>() {
+
+						@Override
+						protected void updateItem(Employee t, boolean bln) {
+							super.updateItem(t, bln);
+
+							if (t != null) {
+								setText(t.getName());
+							} else {
+								setText(null);
+							}
+						}
+
+					};
+
+					return cell;
+				}
+			});
+			cmbBookingDay.setButtonCell(new ListCell<Date>() {
+				@Override
+				protected void updateItem(Date t, boolean bln) {
+					super.updateItem(t, bln);
+					if (t != null) {
+						setText("");
+					} else {
+						setText(null);
+					}
+
+				}
+			});
+		}
+	}
 	
 	/**
 	 * Enters to booking phase

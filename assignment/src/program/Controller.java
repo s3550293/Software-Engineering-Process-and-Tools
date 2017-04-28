@@ -8,6 +8,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.Scanner;
 
+import org.apache.log4j.Level;
 //import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 
@@ -17,7 +18,7 @@ import javafx.scene.control.Alert;
 public class Controller
 {
 	private static Logger log = Logger.getLogger(Controller.class);
-	public Controller(){}
+	public Controller(){ log.setLevel(Level.DEBUG);}
 	private static User _user = null;
 	public User getUser(){return _user;}
 	public void setUser(User user){_user = user;}
@@ -838,6 +839,7 @@ public class Controller
 	{
 		for (int i = 0; i < input.length(); i++)
 		{
+			log.debug("LOGGER: char - "+data.charAt(i));
 			if (data.charAt(i) != input.charAt(i)){
 				log.debug("LOGGER: char - "+data.charAt(i));
 				return false;
@@ -859,7 +861,7 @@ public class Controller
 		{
 			return true;
 		}
-		return true;
+		return false;
 	}
 	
 	/**

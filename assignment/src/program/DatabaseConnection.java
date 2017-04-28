@@ -173,9 +173,9 @@ public class DatabaseConnection
 				_Email = output.getString(4);
 				_Phone = output.getString(5);
 				_DOB = output.getString(6);
-				_Gender = output.getString(6);
+				_Gender = output.getString(7);
 			}
-			databaseCustomer = new Customer(_id ,_FName, _LName, _Email, _Phone, _DOB, _Gender);
+			databaseCustomer = new Customer(_id ,_FName, _LName, _Phone, _DOB, _Gender, _Email);
 			output.close();
 		}
 		catch(SQLException sqle)
@@ -185,6 +185,49 @@ public class DatabaseConnection
 		}
 		log.info("OUT getCustomer\n");
 		return databaseCustomer;
+	}
+	/**
+	 * Gets where the user name keyword matches another users name
+	 * @param id
+	 * @return User Object
+	 */
+	public ArrayList<Customer> getAllCustomer()
+	{
+		log.info("IN getCustomer\n");
+		ArrayList<Customer> customers = new ArrayList<Customer>();
+		int _id = 0;
+		String _FName = "null";
+		String _LName = "null";
+		String _Email = "null";
+		String _Phone = "null";
+		String _DOB = "null";
+		String _Gender = "null";
+		String query = "SELECT * FROM CLIENTDETAILS";
+		//Creates a null user to return, this can be used to validate user at login
+		try (Connection connect = this.connect(); PreparedStatement  inject  = connect.prepareStatement(query))
+		{
+			//Sets '?' to user name in the query
+			//crates a user from the found information
+			ResultSet output = inject.executeQuery();
+			while (output.next()){
+				_id = output.getInt(1);
+				_FName = output.getString(2);
+				_LName = output.getString(3);
+				_Email = output.getString(4);
+				_Phone = output.getString(5);
+				_DOB = output.getString(6);
+				_Gender = output.getString(7);
+				customers.add(new Customer(_id ,_FName, _LName, _Phone, _DOB, _Gender, _Email));
+			}
+			output.close();
+		}
+		catch(SQLException sqle)
+		{
+			//System.out.println("Getting User: "+sqle.getMessage());
+			log.warn(sqle.getMessage());
+		}
+		log.info("OUT getCustomer\n");
+		return customers;
 	}
 	
 	/**
@@ -822,16 +865,17 @@ public class DatabaseConnection
 	 * @return array of services
 	 * @author Joseph Garner
 	 */
-	public ArrayList<Service> getAllServices()
+	public ArrayList<Service> getAllServices(String input)
 	{
 		int id = 0;
 		String _service = "null";
 		int length = 0;
 		double cost = 0;
 		ArrayList<Service> services = new ArrayList<Service>();
-		String query = "SELECT * FROM Services;"; 
+		String query = "SELECT * FROM Services WHERE service like ?;"; 
 		try (Connection connect = this.connect(); PreparedStatement  inject  = connect.prepareStatement(query))
 		{
+			inject.setString(1, "%"+input+"%");
 			ResultSet output = inject.executeQuery();
 			while (output.next())
 			{

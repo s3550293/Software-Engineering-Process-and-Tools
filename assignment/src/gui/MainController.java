@@ -2,6 +2,7 @@ package gui;
 
 import java.io.IOException;
 import java.net.URL;
+import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
@@ -290,7 +291,6 @@ public class MainController implements Initializable {
 								}
 							}
 						});
-
 				cmbDayBooking.valueProperty().addListener(new ChangeListener<Date>() {
 					@Override
 					public void changed(ObservableValue ov, Date t, Date t1) {
@@ -300,7 +300,7 @@ public class MainController implements Initializable {
 						newBook.setDate(cmbDayBooking.getSelectionModel().getSelectedItem());
 					}
 				});
-				newBook.setCus(connection.getCustomer(program.getUser().getID()).getID());
+				newBook.setCus(program.getUser().getID());
 			}
 		} else {
 			Platform.exit();
@@ -1652,6 +1652,7 @@ public class MainController implements Initializable {
 			stkpnDateService.setVisible(false);
 			stkpnTime.setVisible(true);
 			//TODO
+			
 			return;
 		}
 		if(stkpnTime.isVisible() && stkpnBookingMenu.isVisible())
@@ -1660,6 +1661,7 @@ public class MainController implements Initializable {
 			stkpnBookingMenu.setVisible(false);
 			stkpnBookingConfirm.setVisible(true);
 			//TODO
+			
 			return;
 		}
 		
@@ -1707,7 +1709,7 @@ public class MainController implements Initializable {
 
 		Optional<ButtonType> result = alert.showAndWait();
 		if (result.get() == ButtonType.OK) {
-			newBook.setStatus("Active");
+			newBook.setStatus("active");
 			connection.createBooking(newBook);
 			Alert feedback = new Alert(AlertType.INFORMATION);
 			feedback.setTitle("Book Appointment");

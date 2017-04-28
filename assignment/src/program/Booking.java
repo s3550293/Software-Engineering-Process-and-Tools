@@ -69,7 +69,7 @@ public class Booking {
 	}
 	public void setCus(int cus)
 	{
-		serviceID = cus;
+		cusID = cus;
 	}
 	public void setService(int service)
 	{

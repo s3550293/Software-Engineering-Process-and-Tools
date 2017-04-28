@@ -2,22 +2,66 @@ package program.Tests;
 
 import static org.junit.Assert.*;
 
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.text.ParseException;
-
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 
+import org.apache.log4j.Logger;
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import program.Controller;
+import program.Database;
+import program.DatabaseConnection;
+import program.Employee;
 public class ControllerJunit {
 	
+	private static Logger log = Logger.getLogger(Controller.class);
 	Controller controller = new Controller();
-	
+	DatabaseConnection connect2 = new DatabaseConnection();
+	DatabaseConnectionJUnit connection2 = new DatabaseConnectionJUnit();
 	@Before
 	public void setUp()
 	{
+		log.info("\n\nSet Up\n--------------\n");
+		//Wiping EMPLOYEES table at start of test in case of any changes manually made via SQLite
+		try(Connection connect = connection2.connect(); Statement inject = connect.createStatement())
+		{
+			inject.executeUpdate("DROP TABLE IF EXISTS EMPLOYEES");
+			log.info("Dropped Employees Table\n");
+			inject.executeUpdate("DROP TABLE IF EXISTS EMPLOYEES_WORKING_TIMES");
+			log.info("Dropped 'Working Times' Table\n");
+			inject.executeUpdate("DROP TABLE IF EXISTS BOOKINGS");
+			log.info("Dropped 'Bookings' Table\n");
+		}
+		catch(SQLException sqle)
+		{
+			log.info(sqle.getMessage()+"\n");
+		}
+		//Creates ALL TABLES
+		Database db = new Database("company.db");
+		db.createTable("company.db");
+		connect2.addEmployee("Test one",25);
+		connect2.addEmployee("Test two",43);
 		
+		connect2.addEmployeeWorkingTime(1,"05/06/2017","08:00","16:00");
+		connect2.addEmployeeWorkingTime(1,"06/06/2017","08:00","20:00");
+		connect2.addEmployeeWorkingTime(1,"07/06/2017","08:00","16:00");
+		connect2.addEmployeeWorkingTime(1,"08/06/2017","12:00","20:00");
+		connect2.addEmployeeWorkingTime(1,"09/06/2017","08:00","16:00");
+		connect2.addEmployeeWorkingTime(1,"10/06/2017","08:00","20:00");
+
+		connect2.addEmployeeWorkingTime(2,"05/06/2017","08:00","16:00");
+		connect2.addEmployeeWorkingTime(2,"06/06/2017","08:00","20:00");
+		connect2.addEmployeeWorkingTime(2,"07/06/2017","08:00","16:00");
+		connect2.addEmployeeWorkingTime(2,"08/06/2017","12:00","20:00");
+		connect2.addEmployeeWorkingTime(2,"09/06/2017","08:00","16:00");
+		connect2.addEmployeeWorkingTime(2,"10/06/2017","08:00","20:00");
 	}
 	@Test
 	public void testCheckInputToContainNonAlphabetChar1() 
@@ -617,9 +661,6 @@ public class ControllerJunit {
 		long amount = date2.getTimeInMillis();
 		Date date = controller.convertStringToDate("02/04/1998");
 		Date time = controller.convertStringToTime("08:00");
-		System.out.println(controller.getTimeFrom1970(date, time));
-		System.out.println(amount);
-		System.out.println(date2.getTimeInMillis());
 		assertEquals(amount,controller.getTimeFrom1970(date, time));
 	}
 	@Test
@@ -632,25 +673,122 @@ public class ControllerJunit {
 		long amount = date2.getTimeInMillis();
 		Date date = controller.convertStringToDate("22/06/2005");
 		Date time = controller.convertStringToTime("16:00");
-		System.out.println(controller.getTimeFrom1970(date, time));
-		System.out.println(amount);
-		System.out.println(date2.getTimeInMillis());
 		assertEquals(amount,controller.getTimeFrom1970(date, time));
 	}
 	@Test
 	public void test3GetTimeFrom1970() throws ParseException
 	{		
 		Calendar date2 = Calendar.getInstance();
-		date2.set(2017+1900, 1, 15, 20, 0);
+		date2.set(2056+1900, 12, 30, 12, 0);
 		date2.set(Calendar.SECOND, 0);
 		date2.set(Calendar.MILLISECOND, 0);
 		long amount = date2.getTimeInMillis();
-		Date date = controller.convertStringToDate("15/01/2017");
-		Date time = controller.convertStringToTime("20:00");
-		System.out.println(controller.getTimeFrom1970(date, time));
-		System.out.println(amount);
-		System.out.println(date2.getTimeInMillis());
+		Date date = controller.convertStringToDate("30/12/2056");
+		Date time = controller.convertStringToTime("12:00");
 		assertEquals(amount,controller.getTimeFrom1970(date, time));
+	}
+	@Test
+	public void test4GetTimeFrom1970() throws ParseException
+	{		
+		Calendar date2 = Calendar.getInstance();
+		date2.set(2018+1900, 6, 15, 16, 0);
+		date2.set(Calendar.SECOND, 0);
+		date2.set(Calendar.MILLISECOND, 0);
+		long amount = date2.getTimeInMillis();
+		Date date = controller.convertStringToDate("15/06/2018");
+		Date time = controller.convertStringToTime("16:00");
+		assertEquals(amount,controller.getTimeFrom1970(date, time));
+	}
+	@Test
+	public void test5GetTimeFrom1970() throws ParseException
+	{		
+		Calendar date2 = Calendar.getInstance();
+		date2.set(2018+1900, 1, 15, 20, 0);
+		date2.set(Calendar.SECOND, 0);
+		date2.set(Calendar.MILLISECOND, 0);
+		long amount = date2.getTimeInMillis();
+		Date date = controller.convertStringToDate("15/01/2018");
+		Date time = controller.convertStringToTime("20:00");
+		assertEquals(amount,controller.getTimeFrom1970(date, time));
+	}
+	@Test
+	public void testGetAvailableEmployeesForSpecifiedTime1()
+	{
+		ArrayList<Employee> employees = new ArrayList<Employee>();
+		employees = controller.getAvailableEmployeesForSpecifiedTime("06/06/2017", "15:15", "20:00");
+		assertEquals(1,employees.get(0).getId());
+		assertEquals(2,employees.get(1).getId());
+	}
+	@Test
+	public void testGetAvailableEmployeesForSpecifiedTime2()
+	{
+		ArrayList<Employee> employees = new ArrayList<Employee>();
+		employees = controller.getAvailableEmployeesForSpecifiedTime("06/06/2017", "15:15", "20:01");
+		assertEquals(0,employees.size());
+	}
+	@Test
+	public void testGetAvailableEmployeesForSpecifiedTime3()
+	{
+		ArrayList<Employee> employees = new ArrayList<Employee>();
+		employees = controller.getAvailableEmployeesForSpecifiedTime("06/06/2017", "08:00", "15:00");
+		assertEquals(1,employees.get(0).getId());
+		assertEquals(2,employees.get(1).getId());
+	}
+	@Test
+	public void testGetAvailableEmployeesForSpecifiedTime4()
+	{
+		ArrayList<Employee> employees = new ArrayList<Employee>();
+		employees = controller.getAvailableEmployeesForSpecifiedTime("06/06/2017", "07:59", "15:00");
+		log.debug(employees.size()+"\n");
+		assertEquals(0,employees.size());
+	}
+	@Test
+	public void testGetAvailableEmployeesForSpecifiedTime5()
+	{
+		ArrayList<Employee> employees = new ArrayList<Employee>();
+		connect2.addBooking(1,1, "06/06/2017", "08:00", "9:59", 0, "active");
+		employees = controller.getAvailableEmployeesForSpecifiedTime("06/06/2017", "10:00", "15:00");
+		assertEquals(1,employees.get(0).getId());
+		assertEquals(2,employees.get(1).getId());
+	}
+	@Test
+	public void testGetAvailableEmployeesForSpecifiedTime6()
+	{
+		ArrayList<Employee> employees = new ArrayList<Employee>();
+		connect2.addBooking(2,1, "06/06/2017", "08:00", "10:01", 0, "active");
+		employees = controller.getAvailableEmployeesForSpecifiedTime("06/06/2017", "10:00", "15:00");
+		assertEquals(2,employees.get(0).getId());
+		log.debug(employees.size()+"\n");
+		assertEquals(1,employees.size());
+	}
+	@Test
+	public void testGetAvailableEmployeesForSpecifiedTime7()
+	{
+		ArrayList<Employee> employees = new ArrayList<Employee>();
+		connect2.addBooking(2,1, "06/06/2017", "14:59", "16:00", 0, "active");
+		employees = controller.getAvailableEmployeesForSpecifiedTime("06/06/2017", "10:00", "15:00");
+		assertEquals(2,employees.get(0).getId());
+		log.debug(employees.size()+"\n");
+		assertEquals(1,employees.size());
+	}
+	@After
+	public void tearDown()
+	{
+		log.info("\n\nTear Down\n--------------\n");
+		//Deleting table EMPLOYEES after the Test has been executed correctly
+		try(Connection connect = this.connection2.connect(); Statement inject = connect.createStatement())
+		{
+			inject.executeUpdate("DROP TABLE EMPLOYEES");
+			log.info("Dropped Employees Table\n");
+			inject.executeUpdate("DROP TABLE EMPLOYEES_WORKING_TIMES");
+			log.info("Dropped 'Working Times' Table\n");
+			inject.executeUpdate("DROP TABLE IF EXISTS BOOKINGS");
+			log.info("Dropped 'Bookings' Table\n");
+		}
+		catch(SQLException sqle)
+		{
+			log.info(sqle.getMessage()+"\n");
+		}
 	}
 
 }

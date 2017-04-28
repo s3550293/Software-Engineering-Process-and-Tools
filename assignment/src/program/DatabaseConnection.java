@@ -18,11 +18,13 @@ import org.apache.log4j.Logger;
  * this is where I will leave my sanity
  */
 
+
 /**
  * Consists of functions that add and extract information to and from the database
  * @author Luke Mason, Joseph Garner
  *
  */
+
 public class DatabaseConnection
 {
 	private static Logger log = Logger.getLogger(DatabaseConnection.class);
@@ -452,11 +454,11 @@ public class DatabaseConnection
 	 * @param endTime
 	 * @param description
 	 */
-	public void addBooking (int userId, String date, String startTime, String endTime, int service, String status)
+	public void addBooking (int userId,int empID, String date, String startTime, String endTime, int service, String status)
 	{
 		log.info("IN addBookingToDatabase\n");
 		//bookingID is made in the database
-		String query = "INSERT INTO BOOKINGS (userID,date,startTime,endTime, serviceID,status)" + "VALUES(" + userId + ",'" + date + "','" + startTime + "','" + endTime + "',"+service+",'" + status + "');";
+		String query = "INSERT INTO BOOKINGS (userID,employeeID,date,startTime,endTime, serviceID,status)" + "VALUES(" + userId + ","+empID+",'" + date + "','" + startTime + "','" + endTime + "',"+service+",'" + status + "');";
 		try(Connection connect = this.connect(); Statement inject = connect.createStatement())
 		{
 			inject.executeUpdate(query);
@@ -480,6 +482,7 @@ public class DatabaseConnection
 		ArrayList<Booking> databaseBookingTime = new ArrayList<Booking>();
 		int bookingID = 0;
 		int cusID = 0;
+		int empID = 0;
 		Date date, startTime, endTime;
 		String desc;
 		int service;
@@ -495,12 +498,13 @@ public class DatabaseConnection
 			{
 				bookingID = output.getInt(1);
 				cusID = output.getInt(2);
-				date = controller.convertStringToDate(output.getString(3));
-				startTime = controller.convertStringToTime(output.getString(4));
-				endTime = controller.convertStringToTime(output.getString(5));
-				service = output.getInt(6);
-				desc=output.getString(7);
-				databaseBookingTime.add(new Booking(bookingID,cusID,date,startTime,endTime,service,desc));				
+				empID = output.getInt(3);
+				date = controller.convertStringToDate(output.getString(4));
+				startTime = controller.convertStringToTime(output.getString(5));
+				endTime = controller.convertStringToTime(output.getString(6));
+				service = output.getInt(7);
+				desc=output.getString(8);
+				databaseBookingTime.add(new Booking(bookingID,cusID,empID,date,startTime,endTime,service,desc));				
 			}
 			output.close();
 		}
@@ -523,6 +527,7 @@ public class DatabaseConnection
 		ArrayList<Booking> databaseBookingTime = new ArrayList<Booking>();
 		int bookingID = 0;
 		int cusID = 0;
+		int empID = 0;
 		Date date, startTime, endTime;
 		String desc;
 		int service;
@@ -538,12 +543,13 @@ public class DatabaseConnection
 			{
 				bookingID = output.getInt(1);
 				cusID = output.getInt(2);
-				date = controller.convertStringToDate(output.getString(3));
-				startTime = controller.convertStringToTime(output.getString(4));
-				endTime = controller.convertStringToTime(output.getString(5));
-				service = output.getInt(6);
-				desc=output.getString(7);
-				databaseBookingTime.add(new Booking(bookingID,cusID,date,startTime,endTime,service,desc));				
+				empID = output.getInt(3);
+				date = controller.convertStringToDate(output.getString(4));
+				startTime = controller.convertStringToTime(output.getString(5));
+				endTime = controller.convertStringToTime(output.getString(6));
+				service = output.getInt(7);
+				desc=output.getString(8);
+				databaseBookingTime.add(new Booking(bookingID,cusID,empID,date,startTime,endTime,service,desc));				
 			}
 			output.close();
 		}
@@ -566,6 +572,7 @@ public class DatabaseConnection
 		Booking getBooking = null;
 		int bookingID = 0;
 		int cusID = 0;
+		int empID = 0;
 		Date date, startTime, endTime;
 		int service;
 		String desc;
@@ -581,12 +588,13 @@ public class DatabaseConnection
 			{
 				bookingID = output.getInt(1);
 				cusID = output.getInt(2);
-				date = controller.convertStringToDate(output.getString(3));
-				startTime = controller.convertStringToTime(output.getString(4));
-				endTime = controller.convertStringToTime(output.getString(5));
-				service = output.getInt(6);
-				desc=output.getString(7);
-				getBooking = new Booking(bookingID,cusID,date,startTime,endTime,service,desc);				
+				empID = output.getInt(3);
+				date = controller.convertStringToDate(output.getString(4));
+				startTime = controller.convertStringToTime(output.getString(5));
+				endTime = controller.convertStringToTime(output.getString(6));
+				service = output.getInt(7);
+				desc=output.getString(8);
+				getBooking = new Booking(bookingID,cusID,empID,date,startTime,endTime,service,desc);				
 			}
 			output.close();
 		}

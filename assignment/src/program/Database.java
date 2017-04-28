@@ -43,12 +43,12 @@ public class Database
 			if (connect != null)
 			{
 				DatabaseMetaData meta = connect.getMetaData();
-				System.out.println("The driver is " + meta.getDriverName());
-				System.out.println("New database has been created.");
+				log.info("The driver is " + meta.getDriverName()+"\n");
+				log.info("New database has been created.\n");
 			}
 		} catch (SQLException sqle)
 		{
-			System.out.println(sqle.getMessage());
+			log.info(sqle.getMessage()+"\n");
 		}
 	}
 
@@ -91,7 +91,9 @@ public class Database
 				+ "FOREIGN KEY(employeeID) REFERENCES EMPLOYEES(employeeID));";
 		String queryBookings = "CREATE TABLE IF NOT EXISTS BOOKINGS (" 
 				+ "id integer PRIMARY KEY AUTOINCREMENT,"
-				+ "userID integer NOT NULL," + "date VARCHAR(20) NOT NULL," 
+				+ "userID integer NOT NULL,"
+				+ "employeeID integer NOT NULL," 
+				+ "date VARCHAR(20) NOT NULL," 
 				+ "startTime VARCHAR(20) NOT NULL,"
 				+ "endTime VARCHAR(20) NOT NULL," 
 				+ "serviceID integer NOT NULL," 

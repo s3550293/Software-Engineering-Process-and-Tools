@@ -863,7 +863,7 @@ public class Controller
 	}
 	
 	/**
-	 * combines date and time to create new date
+	 * combines date and time to create new date then gets milliseconds from it
 	 * @param date
 	 * @param time
 	 * @return milliseconds from 1970
@@ -880,16 +880,17 @@ public class Controller
 		String yearStr = dateStr.substring(second+1);	
 		String timeStr = convertTimeToString(time);
 		int semicolon = timeStr.indexOf(":");
-		System.out.println("index = "+semicolon);
+		log.info("index = "+semicolon+"\n");
 		String hourStr = timeStr.substring(0,semicolon);
-		System.out.println("hourStr = "+hourStr);
+		String minuteStr = timeStr.substring(semicolon+1);
+		log.info("hourStr = "+hourStr+"\n");
 		int year = Integer.parseInt(yearStr);
 		int month = Integer.parseInt(monthStr);
 		int dayOfMonth = Integer.parseInt(dayOfMonthStr);
 		int hour = Integer.parseInt(hourStr);
-		int minute = 0;
+		int minute = Integer.parseInt(minuteStr);
 		Calendar c = Calendar.getInstance();
-		System.out.println("("+year+"+1900 , "+month+" , "+dayOfMonth+" , "+hour+" , "+minute+")");
+		log.info("("+year+"+1900 , "+month+" , "+dayOfMonth+" , "+hour+" , "+minute+")");
 		c.set(year+1900,month,dayOfMonth,hour,minute);//Setting new date
 		c.set(Calendar.SECOND, 0);
 		c.set(Calendar.MILLISECOND, 0);
@@ -916,7 +917,9 @@ public class Controller
 		bookingsOnDate = connect.getActiveBookingsOnDate(date);
 		Date date2 = convertStringToDate(date);
 		Date startTime2 = convertStringToTime(startTime);
+		System.out.println("Booking Start Time = "+startTime2);
 		Date endTime2 = convertStringToTime(endTime);
+		System.out.println("Booking End Time = "+endTime2);
 		long bookingStartTime = getTimeFrom1970(date2, startTime2);
 		long bookingEndTime = getTimeFrom1970(date2, endTime2);
 		//Check if employees are already booked for that time
@@ -941,8 +944,13 @@ public class Controller
 				long employeeEndTime = getTimeFrom1970(ewt.getDate(),ewt.getEndTime());
 				if(bookingEndTime <= employeeEndTime)//If booking end time is less than employee work end time(or equal to)
 				{
+					System.out.println("Booking Date End Time = "+bookingEndTime);
+					System.out.println("<=Employee Work End Time = "+employeeEndTime);
 					if(bookingStartTime >= employeeStartTime)//If booking start time is later than employee work start time(or equal to)
 					{
+						System.out.println("Booking Date Start Time = "+bookingStartTime);
+						System.out.println(">=Employee Work Start Time = "+employeeStartTime);
+
 						boolean available = true;
 						for(Employee emp: employeesNotAvailable)
 						{

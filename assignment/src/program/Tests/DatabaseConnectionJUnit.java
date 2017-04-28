@@ -23,7 +23,7 @@ import program.EmployeeWorkingTime;
 public class DatabaseConnectionJUnit {
 	
 	Controller controller = new Controller();
-	private Connection connect()
+	public Connection connect()
 	{
 		/*
 		 * creates a connection to the database to be used multiple times in the class
@@ -91,11 +91,11 @@ public class DatabaseConnectionJUnit {
 		connect.addEmployee("Luke Boi", 24.57);
 		connect.addEmployee("Mason Smith", 24.57);
 		connect.addEmployee("Jane Smith", 24.57);
-		connect.addEmployeeWorkingTime(1,"03/12/2017","9:50","17:25");//Assigning employee Luke with 2 working times
-		connect.addEmployeeWorkingTime(1,"02/03/2017","8:30","14:30");
-		connect.addBooking(1, "04/04/2017", "10:30", "12:00",0, "active");
-		connect.addBooking(2, "04/05/2017", "11:30", "12:30",0, "active");
-		connect.addBooking(3, "05/04/2017", "10:30", "12:00",0, "active");
+		connect.addEmployeeWorkingTime(1,"03/12/2017","08:00","20:00");//Assigning employee Luke with 2 working times
+		connect.addEmployeeWorkingTime(1,"02/03/2017","08:00","20:00");
+		connect.addBooking(1,1, "03/12/2017", "10:30", "11:59",0, "active");
+		connect.addBooking(2,1, "02/03/2017", "11:30", "12:30",0, "active");
+		connect.addBooking(3,1, "03/12/2017", "12:00", "14:00",0, "active");
 	}
 	@Test
 	public void testTestEmployeeAttributesLuke1()
@@ -255,7 +255,7 @@ public class DatabaseConnectionJUnit {
 			if(empWork.getId() == 1)
 				emplWorking = empWork;
 		}
-		assertEquals("09:50", controller.convertTimeToString(emplWorking.getStartTime()));
+		assertEquals("08:00", controller.convertTimeToString(emplWorking.getStartTime()));
 	}
 	@Test
 	public void testGetEmployeeWorkingTimes5()
@@ -267,7 +267,7 @@ public class DatabaseConnectionJUnit {
 			if(empWork.getId() == 1)
 				emplWorking = empWork;
 		}
-		assertEquals("17:25", controller.convertTimeToString(emplWorking.getEndTime()));
+		assertEquals("20:00", controller.convertTimeToString(emplWorking.getEndTime()));
 	}
 	@Test
 	public void testAddBookingToDatabase_CustomerID()
@@ -286,9 +286,9 @@ public class DatabaseConnectionJUnit {
 		ArrayList<Booking> bookingLists = new ArrayList<Booking>();
 		bookingLists = connect.getAllBooking();
 		
-		assertEquals(controller.convertDateToString(bookingLists.get(0).getDate()),"04/04/2017");
-		assertEquals(controller.convertDateToString(bookingLists.get(1).getDate()),"04/05/2017");
-		assertEquals(controller.convertDateToString(bookingLists.get(2).getDate()),"05/04/2017");
+		assertEquals(controller.convertDateToString(bookingLists.get(0).getDate()),"03/12/2017");
+		assertEquals(controller.convertDateToString(bookingLists.get(1).getDate()),"02/03/2017");
+		assertEquals(controller.convertDateToString(bookingLists.get(2).getDate()),"03/12/2017");
 	}
 	
 	@Test
@@ -296,13 +296,13 @@ public class DatabaseConnectionJUnit {
 	{
 		ArrayList<Booking> bookingLists = new ArrayList<Booking>();
 		bookingLists = connect.getAllBooking();
-		
+
 		assertEquals(controller.convertTimeToString(bookingLists.get(0).getStartTime()),"10:30");
-		assertEquals(controller.convertTimeToString(bookingLists.get(0).getEndTime()),"12:00");
+		assertEquals(controller.convertTimeToString(bookingLists.get(0).getEndTime()),"11:59");
 		assertEquals(controller.convertTimeToString(bookingLists.get(1).getStartTime()),"11:30");
 		assertEquals(controller.convertTimeToString(bookingLists.get(1).getEndTime()),"12:30");
-		assertEquals(controller.convertTimeToString(bookingLists.get(2).getStartTime()),"10:30");
-		assertEquals(controller.convertTimeToString(bookingLists.get(2).getEndTime()),"12:00");
+		assertEquals(controller.convertTimeToString(bookingLists.get(2).getStartTime()),"12:00");
+		assertEquals(controller.convertTimeToString(bookingLists.get(2).getEndTime()),"14:00");
 	}
 	
 	@Test
@@ -310,7 +310,9 @@ public class DatabaseConnectionJUnit {
 	{
 		ArrayList<Booking> bookingLists = new ArrayList<Booking>();
 		bookingLists = connect.getAllBooking();
-		
+		System.out.println(bookingLists.get(0).getStatus());
+		System.out.println(bookingLists.get(1).getStatus());
+		System.out.println(bookingLists.get(2).getStatus());
 		assertEquals(bookingLists.get(0).getStatus(), "active");
 		assertEquals(bookingLists.get(1).getStatus(), "active");
 		assertEquals(bookingLists.get(2).getStatus(), "active");

@@ -27,7 +27,7 @@
 
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="650.0" prefWidth="800.0" stylesheets="@Theme.css" xmlns="http://javafx.com/javafx/8.0.121" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.MainController">
    <children>
-      <StackPane fx:id="stkBusiness" layoutX="27.0" prefHeight="150.0" prefWidth="773.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+      <StackPane fx:id="stkBusiness" layoutX="27.0" prefHeight="150.0" prefWidth="773.0" visible="false" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
             <BorderPane prefHeight="200.0" prefWidth="200.0">
                <top>
@@ -697,7 +697,7 @@
                                 <content>
                                   <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                                        <children>
-                                          <BorderPane fx:id="boardPaneEmpOverview1" prefHeight="200.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                          <BorderPane prefHeight="200.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                                              <bottom>
                                                 <GridPane BorderPane.alignment="CENTER">
                                                    <columnConstraints>
@@ -710,7 +710,7 @@
                                                    <children>
                                                       <FlowPane alignment="CENTER_RIGHT" prefHeight="49.0" prefWidth="800.0" GridPane.columnIndex="1">
                                                          <children>
-                                                            <Button fx:id="btnAddService" mnemonicParsing="false" onAction="#deleteEmplyee" text="Add Service">
+                                                            <Button fx:id="btnAddService" mnemonicParsing="false" onAction="#addService" text="Add Service">
                                                                <FlowPane.margin>
                                                                   <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
                                                                </FlowPane.margin>
@@ -719,7 +719,7 @@
                                                       </FlowPane>
                                                       <FlowPane prefHeight="49.0" prefWidth="200.0">
                                                          <children>
-                                                            <Button fx:id="btnDeleteService" mnemonicParsing="false" onAction="#showAddNewEmp" text="Delete Service">
+                                                            <Button fx:id="btnDeleteService" mnemonicParsing="false" onAction="#deleteService" text="Delete Service">
                                                                <FlowPane.margin>
                                                                   <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
                                                                </FlowPane.margin>
@@ -741,7 +741,7 @@
                                                    <children>
                                                       <FlowPane prefHeight="49.0">
                                                          <children>
-                                                            <Button fx:id="btnRefershServices" mnemonicParsing="false" onAction="#refreshEmployeeView" text="Refresh">
+                                                            <Button fx:id="btnRefershServices" mnemonicParsing="false" onAction="#refreshService" text="Refresh">
                                                                <FlowPane.margin>
                                                                   <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
                                                                </FlowPane.margin>
@@ -755,7 +755,7 @@
                                                                   <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
                                                                </FlowPane.margin>
                                                             </TextField>
-                                                            <Button fx:id="btnSearchServices" mnemonicParsing="false" onAction="#searchEmployee" text="Search">
+                                                            <Button fx:id="btnSearchServices" mnemonicParsing="false" onAction="#searchServices" text="Search">
                                                                <FlowPane.margin>
                                                                   <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
                                                                </FlowPane.margin>
@@ -888,7 +888,7 @@
                                                    <children>
                                                       <FlowPane alignment="CENTER_RIGHT" prefHeight="49.0" prefWidth="800.0" GridPane.columnIndex="1">
                                                          <children>
-                                                            <Button fx:id="btnCreateBooking" mnemonicParsing="false" onAction="#deleteEmplyee" text="Create Booking">
+                                                            <Button fx:id="btnCreateBooking" mnemonicParsing="false" onAction="#createBooking" text="Create Booking">
                                                                <FlowPane.margin>
                                                                   <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
                                                                </FlowPane.margin>
@@ -911,7 +911,7 @@
                                                    <children>
                                                       <FlowPane prefHeight="49.0">
                                                          <children>
-                                                            <Button fx:id="btnRefershCustomers" mnemonicParsing="false" onAction="#refreshEmployeeView" text="Refresh">
+                                                            <Button fx:id="btnRefershCustomers" mnemonicParsing="false" onAction="#loadallCustomers" text="Refresh">
                                                                <FlowPane.margin>
                                                                   <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
                                                                </FlowPane.margin>
@@ -925,7 +925,7 @@
                                                                   <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
                                                                </FlowPane.margin>
                                                             </TextField>
-                                                            <Button fx:id="btnSearchCustomer" mnemonicParsing="false" onAction="#searchEmployee" text="Search">
+                                                            <Button fx:id="btnSearchCustomer" mnemonicParsing="false" onAction="#searchCustomers" text="Search">
                                                                <FlowPane.margin>
                                                                   <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
                                                                </FlowPane.margin>
@@ -961,18 +961,8 @@
                                                             <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                                                             <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                                                             <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                                                            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                                                          </rowConstraints>
                                                          <children>
-                                                            <FlowPane alignment="CENTER_RIGHT" prefHeight="200.0" prefWidth="200.0" GridPane.rowIndex="2">
-                                                               <children>
-                                                                  <Label text="Username:">
-                                                                     <FlowPane.margin>
-                                                                        <Insets right="15.0" />
-                                                                     </FlowPane.margin>
-                                                                  </Label>
-                                                               </children>
-                                                            </FlowPane>
                                                             <FlowPane alignment="CENTER_LEFT" prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1">
                                                                <children>
                                                                   <Label fx:id="lblCustFirstName" />
@@ -985,25 +975,20 @@
                                                             </FlowPane>
                                                             <FlowPane alignment="CENTER_LEFT" prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="2">
                                                                <children>
-                                                                  <Label fx:id="lblCustUsername" />
+                                                                  <Label fx:id="lblCustEmail" />
                                                                </children>
                                                             </FlowPane>
                                                             <FlowPane alignment="CENTER_LEFT" prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="3">
                                                                <children>
-                                                                  <Label fx:id="lblCustEmail" />
+                                                                  <Label fx:id="lblCustMobile" />
                                                                </children>
                                                             </FlowPane>
                                                             <FlowPane alignment="CENTER_LEFT" prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="4">
                                                                <children>
-                                                                  <Label fx:id="lblCustMobile" />
-                                                               </children>
-                                                            </FlowPane>
-                                                            <FlowPane alignment="CENTER_LEFT" prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="5">
-                                                               <children>
                                                                   <Label fx:id="lblCustDOB" />
                                                                </children>
                                                             </FlowPane>
-                                                            <FlowPane alignment="CENTER_RIGHT" prefHeight="200.0" prefWidth="200.0" GridPane.rowIndex="3">
+                                                            <FlowPane alignment="CENTER_RIGHT" prefHeight="200.0" prefWidth="200.0" GridPane.rowIndex="2">
                                                                <children>
                                                                   <Label text="Email:">
                                                                      <FlowPane.margin>
@@ -1012,7 +997,7 @@
                                                                   </Label>
                                                                </children>
                                                             </FlowPane>
-                                                            <FlowPane alignment="CENTER_RIGHT" prefHeight="200.0" prefWidth="200.0" GridPane.rowIndex="5">
+                                                            <FlowPane alignment="CENTER_RIGHT" prefHeight="200.0" prefWidth="200.0" GridPane.rowIndex="4">
                                                                <children>
                                                                   <Label text="DOB:">
                                                                      <FlowPane.margin>
@@ -1021,7 +1006,7 @@
                                                                   </Label>
                                                                </children>
                                                             </FlowPane>
-                                                            <FlowPane alignment="CENTER_RIGHT" prefHeight="200.0" prefWidth="200.0" GridPane.rowIndex="6">
+                                                            <FlowPane alignment="CENTER_RIGHT" prefHeight="200.0" prefWidth="200.0" GridPane.rowIndex="5">
                                                                <children>
                                                                   <Label text="Gender:">
                                                                      <FlowPane.margin>
@@ -1030,7 +1015,7 @@
                                                                   </Label>
                                                                </children>
                                                             </FlowPane>
-                                                            <FlowPane alignment="CENTER_LEFT" prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="6">
+                                                            <FlowPane alignment="CENTER_LEFT" prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="5">
                                                                <children>
                                                                   <Label fx:id="lblCustGender" />
                                                                </children>
@@ -1053,7 +1038,7 @@
                                                                   </Label>
                                                                </children>
                                                             </FlowPane>
-                                                            <FlowPane alignment="CENTER_RIGHT" prefHeight="200.0" prefWidth="200.0" GridPane.rowIndex="4">
+                                                            <FlowPane alignment="CENTER_RIGHT" prefHeight="200.0" prefWidth="200.0" GridPane.rowIndex="3">
                                                                <children>
                                                                   <Label text="Mobile Number:">
                                                                      <FlowPane.margin>
@@ -1109,7 +1094,7 @@
                </center>
             </BorderPane>
          </children></StackPane>
-      <StackPane fx:id="stkCustomer" prefHeight="150.0" prefWidth="200.0" visible="false" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+      <StackPane fx:id="stkCustomer" prefHeight="150.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
             <BorderPane prefHeight="200.0" prefWidth="200.0">
                <center>
@@ -1168,7 +1153,7 @@
                      <center>
                         <AnchorPane BorderPane.alignment="CENTER">
                            <children>
-                              <StackPane fx:id="stkpnUserMenu" prefHeight="150.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                              <StackPane fx:id="stkpnUserMenu" prefHeight="150.0" prefWidth="200.0" visible="false" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                                  <children>
                                     <BorderPane prefHeight="200.0" prefWidth="200.0">
                                        <center>
@@ -1205,7 +1190,7 @@
                                     </BorderPane>
                                  </children>
                               </StackPane>
-                              <StackPane fx:id="stkpnBookingMenu" visible="false" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                              <StackPane fx:id="stkpnBookingMenu" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                                  <children>
                                     <BorderPane>
                                        <center>
@@ -1222,7 +1207,7 @@
                                                                         <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
                                                                      </FlowPane.margin>
                                                                   </Label>
-                                                                  <ComboBox fx:id="cmbDayBooking" prefHeight="25.0" prefWidth="193.0">
+                                                                  <ComboBox fx:id="cmbDayBooking" prefHeight="25.0" prefWidth="193.0" promptText="Day">
                                                                      <FlowPane.margin>
                                                                         <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
                                                                      </FlowPane.margin>
@@ -1241,17 +1226,17 @@
                                                             </FlowPane>
                                                          </top>
                                                          <center>
-                                                            <ListView fx:id="listviewBookingServices" prefHeight="473.0" prefWidth="246.0" BorderPane.alignment="CENTER">
+                                                            <ListView fx:id="listviewBookingServices" prefHeight="430.0" prefWidth="193.0" BorderPane.alignment="CENTER">
                                                                <BorderPane.margin>
                                                                   <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
                                                                </BorderPane.margin>
                                                             </ListView>
                                                          </center>
                                                          <right>
-                                                            <GridPane BorderPane.alignment="CENTER">
+                                                            <GridPane prefHeight="241.0" prefWidth="240.0" BorderPane.alignment="CENTER">
                                                               <columnConstraints>
-                                                                <ColumnConstraints hgrow="SOMETIMES" maxWidth="93.0" minWidth="10.0" prefWidth="68.0" />
-                                                                <ColumnConstraints hgrow="SOMETIMES" maxWidth="159.0" minWidth="10.0" prefWidth="132.0" />
+                                                                <ColumnConstraints hgrow="SOMETIMES" maxWidth="93.0" minWidth="10.0" prefWidth="72.0" />
+                                                                <ColumnConstraints hgrow="SOMETIMES" maxWidth="170.0" minWidth="10.0" prefWidth="168.0" />
                                                               </columnConstraints>
                                                               <rowConstraints>
                                                                 <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
@@ -1307,20 +1292,6 @@
                                                                </children>
                                                             </GridPane>
                                                          </right>
-                                                         <bottom>
-                                                            <FlowPane alignment="CENTER" prefHeight="94.0" prefWidth="495.0" BorderPane.alignment="CENTER">
-                                                               <children>
-                                                                  <Label text="Prefered Employee:">
-                                                                     <FlowPane.margin>
-                                                                        <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
-                                                                     </FlowPane.margin></Label>
-                                                                  <ComboBox fx:id="cmbPreferEmp" prefHeight="25.0" prefWidth="193.0">
-                                                                     <FlowPane.margin>
-                                                                        <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
-                                                                     </FlowPane.margin></ComboBox>
-                                                               </children>
-                                                            </FlowPane>
-                                                         </bottom>
                                                       </BorderPane>
                                                    </children>
                                                 </StackPane>
@@ -1528,6 +1499,20 @@
                                                                </children>
                                                             </GridPane>
                                                          </center>
+                                                         <bottom>
+                                                            <FlowPane alignment="CENTER" prefHeight="58.0" prefWidth="495.0" BorderPane.alignment="CENTER">
+                                                               <children>
+                                                                  <Label text="Prefered Employee:">
+                                                                     <FlowPane.margin>
+                                                                        <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                                                                     </FlowPane.margin></Label>
+                                                                  <ComboBox fx:id="cmbPreferEmp" prefHeight="25.0" prefWidth="193.0">
+                                                                     <FlowPane.margin>
+                                                                        <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                                                                     </FlowPane.margin></ComboBox>
+                                                               </children>
+                                                            </FlowPane>
+                                                         </bottom>
                                                       </BorderPane>
                                                    </children>
                                                 </StackPane>

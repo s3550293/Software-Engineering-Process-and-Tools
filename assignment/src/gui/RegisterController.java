@@ -148,6 +148,10 @@ public class RegisterController implements Initializable {
             program.messageBox("ERROR", "Error", "Invalid Username", "");
             return;
         }
+        if (program.checkInputToContainInvalidChar(txtRegUsername.getText().toString())) {
+            program.messageBox("ERROR", "Error", "Invalid Username", "");
+            return;
+        }
         if (program.checkEmail(txtRegEmail.getText().toString())) {
             program.messageBox("ERROR", "Error", "Invalid Email", "");
             return;

@@ -9,9 +9,10 @@ public class Booking {
 	private String status;
 	
 	public Booking(){}
-	public Booking(int bookingID, int cusID, Date date, Date startTime, Date endTime, int serviceID, String status)
+	public Booking(int bookingID, int cusID, int empID, Date date, Date startTime, Date endTime, int serviceID, String status)
 	{
 		this.bookingID = bookingID;
+		employeeID = empID;
 		this.cusID = cusID;
 		this.date = date;
 		this.startTime = startTime;
@@ -19,9 +20,10 @@ public class Booking {
 		this.serviceID = serviceID;
 		this.status = status;
 	}
-	public Booking(int cusID, Date date, Date startTime, Date endTime, int serviceID, String status)
+	public Booking(int cusID,int empID, Date date, Date startTime, Date endTime, int serviceID, String status)
 	{
 		this.cusID = cusID;
+		employeeID = empID;
 		this.date = date;
 		this.startTime = startTime;
 		this.endTime = endTime;

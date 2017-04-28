@@ -7,6 +7,7 @@ import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
 import program.Database;
 import program.DatabaseConnection;
+import program.Service;
 
 import java.io.File;
 
@@ -71,6 +72,10 @@ public class PreLoader extends Preloader{
 		
 		connect.addUserDetails(2, "William", "Porter", "will@mail.com", "0452368593", "01/01/2002", "Male");
 		connect.addUserDetails(3, "Hannah", "Hawlking", "hannah@mail.com", "0452136859", "20/04/1995", "Famale");
+		
+		connect.addSerice(new Service("Trim",30,25));
+		connect.addSerice(new Service("Wash",45,30));
+		connect.addSerice(new Service("Cut and Style",90,60));
 		
 		connect.addBooking(2, "28/04/2017", "10:00", "11:00", 0, "active");
 		connect.addBooking(3, "23/04/2017", "11:00", "12:00", 0,"active");

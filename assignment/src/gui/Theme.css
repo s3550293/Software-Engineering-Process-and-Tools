@@ -20,6 +20,16 @@
     -fx-background-color: derive(#EDEDED,-20%);
 
 }
+.tab .tab-label {
+    -fx-alignment: CENTER;
+    -fx-text-fill: black;
+    -fx-font-size: 14px;
+}
+.tab-pane .tab:selected .tab-label {
+    -fx-alignment: CENTER;
+    -fx-text-fill: white;
+    -fx-font-size: 14px;
+}
 .tab-pane .tab:selected
 {
   -fx-background-color:
@@ -29,11 +39,7 @@
         linear-gradient(to right, rgba(0,0,0,0.2) 0%, rgba(0,0,0,0) 40%, rgba(0,0,0,0) 190%, rgba(0,0,0,0.3) 200%);
     -fx-text-fill: white;
 }
-.tab .tab-label {
-    -fx-alignment: CENTER;
-    -fx-text-fill: white;
-    -fx-font-size: 14px;
-}
+
 
 
 /*LABELS*/

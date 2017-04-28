@@ -41,6 +41,7 @@ import program.Booking;
 import program.Employee;
 import program.EmployeeWorkingTime;
 import program.Controller;
+import program.Customer;
 import program.DatabaseConnection;
 import program.BusinessMenu;
 import program.Service;
@@ -111,12 +112,37 @@ public class MainController implements Initializable {
 	@FXML
 	ToggleButton btnSatMorning, btnSatAfternoon, btnSatEvening;
 	
+	@FXML
+	Label lblServiceID, lblManServiceName, lblManServicePrice, lblServiceDura;
+	
+	@FXML
+	ListView<Service> listviewManServices;
+	
+	@FXML
+	Button btnRefershServices, btnDeleteService, btnAddService, btnSearchServices;
+	
+	@FXML
+	TextField txtSearchService;
+	
+	@FXML
+	Label lblCustFirstName, lblCustLastName, lblCustUsername, lblCustEmail, lblCustMobile, lblCustDOB, lblCustGender;
+	
+	@FXML
+	ListView<Customer> listviewCustomers;
+	
+	@FXML
+	Button btnSearchCustomer, btnDeleteCustomer, btnCreateBooking, btnRefershCustomers;
+	
+	@FXML
+	TextField txtSearchCustomer;
+	
+	
 	/**************
 	 * Customer
 	 **************/
 	
 	@FXML
-	Button btnBookAppointment, btnConfirmBooking, btnNext, btnLogoutCustomer, btnBack;
+	Button btnBookAppointment, btnConfirmBooking, btnNext, btnLogoutCustomer, btnBack, btnCancelAppoitment;
 	
 	@FXML
 	Label lblCustomerName, lblDayDate, lblServiceName, lblServiceDur, lblServicePrice, lblCustBookingDate, lblBookingService, lblBookingPrice, lblBookingDur, lblBookingTime, lblBookingEmp;
@@ -157,6 +183,58 @@ public class MainController implements Initializable {
 			if (program.getUser().getAccountType() == 1) {
 				stkBusiness.setVisible(true);
 				stkCustomer.setVisible(false);
+		
+				rbCurrentBook.setSelected(true);
+				loadListViewEmp("");
+				listviewEmployees.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<Employee>() {
+					@Override
+					public void changed(ObservableValue<? extends Employee> observable, Employee oldValue, Employee newValue) {
+						if (newValue != null) {
+							employee = newValue;
+							lblEmployeeID.setText(Integer.toString(employee.getId()));
+							lblEmployeeName.setText(employee.getName());
+							lblEmployeePayrate.setText(Double.toString(employee.getPayRate()));
+						}
+					}
+				});
+				loadDaySelect();
+				loadListViewBook();
+				loadallServices();
+				listviewBookings.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<Booking>() {
+					@Override
+					public void changed(ObservableValue<? extends Booking> observable, Booking oldValue, Booking newValue) {
+						if (newValue != null) {
+							booking = newValue;
+							lblBookingID.setText(Integer.toString(booking.getBookingID()));
+							lblBookingCustomerID.setText(connection.getCustomer(booking.getCustomerId()).getFullName());
+							lblBookingDate.setText(program.convertDateToString(booking.getDate()));
+							lblBookingStartTime.setText(program.convertTimeToString(booking.getStartTime()));
+							lblBookingEndTime.setText(program.convertTimeToString(booking.getEndTime()));
+							lblBookingStatus.setText(booking.getStatus());
+						}
+					}
+				});
+		
+				cmbBookingDay.valueProperty().addListener(new ChangeListener<Date>() {
+					@Override
+					public void changed(ObservableValue ov, Date t, Date t1) {
+						loadListViewBook();
+					}
+				});
+				
+				bookingViewGroup.selectedToggleProperty().addListener(new ChangeListener<Toggle>(){
+				    public void changed(ObservableValue<? extends Toggle> ov, Toggle old_toggle, Toggle new_toggle) {
+				    	loadDaySelect();
+				    	loadListViewBook();
+				     } 
+				});
+				
+				cmbDayBooking.valueProperty().addListener(new ChangeListener<Date>() {
+					@Override
+					public void changed(ObservableValue ov, Date t, Date t1) {
+						//TODO
+					}
+				});
 			} else {
 				stkBusiness.setVisible(false);
 				stkCustomer.setVisible(true);
@@ -165,56 +243,6 @@ public class MainController implements Initializable {
 			Platform.exit();
 			System.exit(0);
 		}
-		rbCurrentBook.setSelected(true);
-		loadListViewEmp("");
-		listviewEmployees.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<Employee>() {
-			@Override
-			public void changed(ObservableValue<? extends Employee> observable, Employee oldValue, Employee newValue) {
-				if (newValue != null) {
-					employee = newValue;
-					lblEmployeeID.setText(Integer.toString(employee.getId()));
-					lblEmployeeName.setText(employee.getName());
-					lblEmployeePayrate.setText(Double.toString(employee.getPayRate()));
-				}
-			}
-		});
-		loadDaySelect();
-		loadListViewBook();
-		listviewBookings.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<Booking>() {
-			@Override
-			public void changed(ObservableValue<? extends Booking> observable, Booking oldValue, Booking newValue) {
-				if (newValue != null) {
-					booking = newValue;
-					lblBookingID.setText(Integer.toString(booking.getBookingID()));
-					lblBookingCustomerID.setText(connection.getCustomer(booking.getCustomerId()).getFullName());
-					lblBookingDate.setText(program.convertDateToString(booking.getDate()));
-					lblBookingStartTime.setText(program.convertTimeToString(booking.getStartTime()));
-					lblBookingEndTime.setText(program.convertTimeToString(booking.getEndTime()));
-					lblBookingStatus.setText(booking.getStatus());
-				}
-			}
-		});
-
-		cmbBookingDay.valueProperty().addListener(new ChangeListener<Date>() {
-			@Override
-			public void changed(ObservableValue ov, Date t, Date t1) {
-				loadListViewBook();
-			}
-		});
-		
-		bookingViewGroup.selectedToggleProperty().addListener(new ChangeListener<Toggle>(){
-		    public void changed(ObservableValue<? extends Toggle> ov, Toggle old_toggle, Toggle new_toggle) {
-		    	loadDaySelect();
-		    	loadListViewBook();
-		     } 
-		});
-		
-		cmbDayBooking.valueProperty().addListener(new ChangeListener<Date>() {
-			@Override
-			public void changed(ObservableValue ov, Date t, Date t1) {
-				//TODO
-			}
-		});
 	}
 
 	/**
@@ -411,6 +439,35 @@ public class MainController implements Initializable {
 			} else {
 				log.warn("Unable to load Employees");
 			}
+		}
+	}
+	
+	private void loadallServices(){
+		listviewManServices.getItems().clear();
+		ArrayList<Service> serviceArray = new ArrayList<>(connection.getAllServices());
+		ObservableList<Service> serviceList = FXCollections.observableList(serviceArray);
+		log.debug("LOGGER: List length:" + serviceArray.size());
+		if (serviceList != null) {
+			listviewManServices.setItems(serviceList);
+			listviewManServices.setCellFactory(new Callback<ListView<Service>, ListCell<Service>>() {
+				@Override
+				public ListCell<Service> call(ListView<Service> p) {
+
+					ListCell<Service> cell = new ListCell<Service>() {
+						@Override
+						protected void updateItem(Service t, boolean bln) {
+							super.updateItem(t, bln);
+							if (t != null) {
+								setText(t.getName());
+							}
+							else{
+								listviewEmployees.setPlaceholder(new Label("No Bookings"));
+							}
+						}
+					};
+					return cell;
+				}
+			});
 		}
 	}
 

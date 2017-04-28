@@ -6,11 +6,16 @@ public class Service
 	private String _name, _description;
 	private double _price;
 	public Service(){}
-	public Service(int id, String name, String description, int lengthMin, double price)
+	public Service(int id, String name, int lengthMin, double price)
 	{
 		_id = id;
 		_name = name;
-		_description = description;
+		_lengthMin = lengthMin;
+		_price = price;
+	}
+	public Service(String name, int lengthMin, double price)
+	{
+		_name = name;
 		_lengthMin = lengthMin;
 		_price = price;
 	}
@@ -20,8 +25,8 @@ public class Service
 	public String getName(){ return _name; }
 	public void setName(String name){ _name = name; }
 	 
-	public String getDescpt(){ return _description; }
-	public void setDescrpt(String description){ _description = description; }
+//	public String getDescpt(){ return _description; }
+//	public void setDescrpt(String description){ _description = description; }
 	
 	public int getLengthMin(){ return _lengthMin; }
 	public void setLengthMin(int lengthMin){ _lengthMin = lengthMin; }

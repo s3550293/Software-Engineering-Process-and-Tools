@@ -805,4 +805,132 @@ public class DatabaseConnection
 		log.info("OUT getActiveBookingsOnDate");
 		return ActiveBookingsOnDate;
 	}
+	
+	/**
+	 * adds a service to the database
+	 * @param Service Object
+	 * @author Joseph Garner
+	 */
+	public void addSerice(Service service)
+	{
+		String query = "INSERT INTO SERVICES(service, length, cost) " + "VALUES('"+service.getName()+"',"+service.getLengthMin()+","+service.getPrice()+")";
+		try(Connection connect = this.connect(); Statement inject = connect.createStatement())
+		{
+			inject.executeUpdate(query);
+			log.info("User Added\n");
+		}
+		catch(SQLException sqle)
+		{
+			log.warn(sqle.getMessage());
+		}
+	}
+	
+	/**
+	 * Gets All services
+	 * @return array of services
+	 * @author Joseph Garner
+	 */
+	public ArrayList<Service> getAllServices()
+	{
+		int id = 0;
+		String _service = "null";
+		int length = 0;
+		double cost = 0;
+		ArrayList<Service> services = new ArrayList<Service>();
+		String query = "SELECT * FROM Services;"; 
+		try (Connection connect = this.connect(); PreparedStatement  inject  = connect.prepareStatement(query))
+		{
+			ResultSet output = inject.executeQuery();
+			while (output.next())
+			{
+				id = output.getInt(1);
+				_service = output.getString(2);
+				length = output.getInt(3);
+				cost = output.getDouble(4);
+				services.add(new Service(id, _service, length, cost));
+			}
+			output.close();
+		}
+		catch(SQLException sqle)
+		{
+			log.warn(sqle.getMessage());
+		}
+		return services;
+	}
+	
+	/**
+	 * Gets a service
+	 * @return service Object
+	 * @param Service ID
+	 * @author Joseph Garner
+	 */
+	public Service getService(int id)
+	{
+		Service service = new Service();
+		int _id = 0;
+		String _service = "null";
+		int length = 0;
+		double cost = 0;
+		String query = "SELECT * FROM SERVICES WHERE id = ?"; 
+
+		try (Connection connect = this.connect(); PreparedStatement  inject  = connect.prepareStatement(query))
+		{
+			//Sets '?' to user name in the query
+			//crates a user from the found information
+			inject.setInt(1, id);
+			ResultSet output = inject.executeQuery();
+			while (output.next())
+			{
+				_id = output.getInt(1);
+				_service = output.getString(2);
+				length = output.getInt(3);
+				cost = output.getDouble(4);
+				service = new Service(_id, _service, length, cost);			
+			}
+			output.close();
+		}
+		catch(SQLException sqle)
+		{
+			log.warn(sqle.getMessage());
+		}
+		return service;
+	}
+	
+	/**
+	 * Gets a service
+	 * @return service Object
+	 * @param Service Name
+	 * @author Joseph Garner
+	 */
+	public Service getService(String name)
+	{
+		Service service = new Service();
+		int id = 0;
+		String _service = "null";
+		int length = 0;
+		double cost = 0;
+		String query = "SELECT * FROM SERVICES WHERE service like ?"; 
+
+		try (Connection connect = this.connect(); PreparedStatement  inject  = connect.prepareStatement(query))
+		{
+			//Sets '?' to user name in the query
+			//crates a user from the found information
+			inject.setString(1,"%"+name+"%");
+			ResultSet output = inject.executeQuery();
+			while (output.next())
+			{
+				id = output.getInt(1);
+				_service = output.getString(2);
+				length = output.getInt(3);
+				cost = output.getDouble(4);
+				service = new Service(id, _service, length, cost);			
+			}
+			output.close();
+		}
+		catch(SQLException sqle)
+		{
+			log.warn(sqle.getMessage());
+		}
+		return service;
+	}
 }

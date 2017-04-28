@@ -57,6 +57,7 @@ public class MainController implements Initializable {
 	private Employee employee = null;
 	private Booking booking = null;
 	int globalEmployeeOption = 0;
+	private static Booking newBook=new Booking(0,0,null,null,null,0,null);
 	public MainController() {}
 	
 	/**************
@@ -263,6 +264,7 @@ public class MainController implements Initializable {
 			} else {
 				stkBusiness.setVisible(false);
 				stkCustomer.setVisible(true);
+				lblCustomerName.setText(connection.getCustomer(program.getUser().getID()).getFullName());
 				listviewBookingServices .getSelectionModel().selectedItemProperty().addListener(new ChangeListener<Service>() {
 					@Override
 					public void changed(ObservableValue<? extends Service> observable, Service oldValue, Service newValue) {
@@ -1611,6 +1613,9 @@ public class MainController implements Initializable {
 		{
 			stkpnUserMenu.setVisible(false);
 			stkpnBookingMenu.setVisible(true);
+			newBook.setCus(connection.getCustomer(program.getUser().getID()).getID());
+			newBook.setDate(cmbDayBooking.getSelectionModel().getSelectedItem());
+			newBook.setService(listviewBookingServices .getSelectionModel().getSelectedItem().getID());
 			return;
 		}
 		
@@ -1675,5 +1680,23 @@ public class MainController implements Initializable {
 	@FXML
 	public void confirmBooking(){
 		//TODO
+		Alert alert = new Alert(AlertType.CONFIRMATION);
+		alert.setTitle("Book Appointment");
+		alert.setHeaderText("Confirm Apointment");
+		alert.setContentText("Are you sure?");
+
+		Optional<ButtonType> result = alert.showAndWait();
+		if (result.get() == ButtonType.OK) {
+			newBook.setStatus("Active");
+			connection.createBooking(newBook);
+			Alert feedback = new Alert(AlertType.INFORMATION);
+			feedback.setTitle("Book Appointment");
+			feedback.setHeaderText("Appointment has been made");
+			feedback.showAndWait();
+
+		} else {
+			return;
+		}
+		
 	}
 }

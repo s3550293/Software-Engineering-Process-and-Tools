@@ -67,6 +67,10 @@ public class Booking {
 	{
 		return staffID;
 	}
+	public void setCus(int cus)
+	{
+		serviceID = cus;
+	}
 	public void setService(int service)
 	{
 		serviceID = service;

@@ -186,25 +186,28 @@ public class MainController implements Initializable {
 			if (program.getUser().getAccountType() == 1) {
 				stkBusiness.setVisible(true);
 				stkCustomer.setVisible(false);
-		
+
 				rbCurrentBook.setSelected(true);
 				loadListViewEmp("");
-				listviewEmployees.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<Employee>() {
-					@Override
-					public void changed(ObservableValue<? extends Employee> observable, Employee oldValue, Employee newValue) {
-						if (newValue != null) {
-							employee = newValue;
-							lblEmployeeID.setText(Integer.toString(employee.getId()));
-							lblEmployeeName.setText(employee.getName());
-							lblEmployeePayrate.setText(Double.toString(employee.getPayRate()));
-						}
-					}
-				});
+				listviewEmployees.getSelectionModel().selectedItemProperty()
+						.addListener(new ChangeListener<Employee>() {
+							@Override
+							public void changed(ObservableValue<? extends Employee> observable, Employee oldValue,
+									Employee newValue) {
+								if (newValue != null) {
+									employee = newValue;
+									lblEmployeeID.setText(Integer.toString(employee.getId()));
+									lblEmployeeName.setText(employee.getName());
+									lblEmployeePayrate.setText(Double.toString(employee.getPayRate()));
+								}
+							}
+						});
 				loadListViewBook();
 				loadallCustomers();
 				listviewBookings.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<Booking>() {
 					@Override
-					public void changed(ObservableValue<? extends Booking> observable, Booking oldValue, Booking newValue) {
+					public void changed(ObservableValue<? extends Booking> observable, Booking oldValue,
+							Booking newValue) {
 						if (newValue != null) {
 							booking = newValue;
 							lblBookingID.setText(Integer.toString(booking.getBookingID()));
@@ -216,65 +219,88 @@ public class MainController implements Initializable {
 						}
 					}
 				});
-				
-				listviewManServices.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<Service>() {
-					@Override
-					public void changed(ObservableValue<? extends Service> observable, Service oldValue, Service newValue) {
-						if (newValue != null) {
-							lblServiceID.setText(Integer.toString(newValue.getID()));
-							lblManServiceName.setText(newValue.getName());
-							lblManServicePrice.setText("$"+Double.toString(newValue.getPrice()));
-							lblServiceDura.setText(Integer.toString(newValue.getLengthMin()));
-						}
-					}
-				});
-				listviewCustomers.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<Customer>() {
-					@Override
-					public void changed(ObservableValue<? extends Customer> observable, Customer oldValue, Customer newValue) {
-						if (newValue != null) {
-							lblCustFirstName.setText(newValue.getFName());
-							lblCustLastName.setText(newValue.getLName());
-							lblCustEmail.setText(newValue.getEmail());
-							lblCustMobile.setText(newValue.getPhone());
-							lblCustDOB.setText(newValue.getDOB());
-							lblCustGender.setText(newValue.getGender());
-						}
-					}
-				});
+
+				listviewManServices.getSelectionModel().selectedItemProperty()
+						.addListener(new ChangeListener<Service>() {
+							@Override
+							public void changed(ObservableValue<? extends Service> observable, Service oldValue,
+									Service newValue) {
+								if (newValue != null) {
+									lblServiceID.setText(Integer.toString(newValue.getID()));
+									lblManServiceName.setText(newValue.getName());
+									lblManServicePrice.setText("$" + Double.toString(newValue.getPrice()));
+									lblServiceDura.setText(Integer.toString(newValue.getLengthMin()));
+								}
+							}
+						});
+				listviewCustomers.getSelectionModel().selectedItemProperty()
+						.addListener(new ChangeListener<Customer>() {
+							@Override
+							public void changed(ObservableValue<? extends Customer> observable, Customer oldValue,
+									Customer newValue) {
+								if (newValue != null) {
+									lblCustFirstName.setText(newValue.getFName());
+									lblCustLastName.setText(newValue.getLName());
+									lblCustEmail.setText(newValue.getEmail());
+									lblCustMobile.setText(newValue.getPhone());
+									lblCustDOB.setText(newValue.getDOB());
+									lblCustGender.setText(newValue.getGender());
+								}
+							}
+						});
 				cmbBookingDay.valueProperty().addListener(new ChangeListener<Date>() {
 					@Override
 					public void changed(ObservableValue ov, Date t, Date t1) {
 						loadListViewBook();
 					}
 				});
-				
-				bookingViewGroup.selectedToggleProperty().addListener(new ChangeListener<Toggle>(){
-				    public void changed(ObservableValue<? extends Toggle> ov, Toggle old_toggle, Toggle new_toggle) {
-				    	loadDaySelect();
-				    	loadListViewBook();
-				     } 
+
+				bookingViewGroup.selectedToggleProperty().addListener(new ChangeListener<Toggle>() {
+					public void changed(ObservableValue<? extends Toggle> ov, Toggle old_toggle, Toggle new_toggle) {
+						loadDaySelect();
+						loadListViewBook();
+					}
 				});
-				
+
 				cmbDayBooking.valueProperty().addListener(new ChangeListener<Date>() {
 					@Override
 					public void changed(ObservableValue ov, Date t, Date t1) {
-						//TODO
+						// TODO
 					}
 				});
 			} else {
 				stkBusiness.setVisible(false);
 				stkCustomer.setVisible(true);
 				lblCustomerName.setText(connection.getCustomer(program.getUser().getID()).getFullName());
-				listviewBookingServices .getSelectionModel().selectedItemProperty().addListener(new ChangeListener<Service>() {
+				listviewBookingServices.getSelectionModel().selectedItemProperty()
+						.addListener(new ChangeListener<Service>() {
+							@Override
+							public void changed(ObservableValue<? extends Service> observable, Service oldValue,
+									Service newValue) {
+								if (newValue != null) {
+									lblServiceName.setText(newValue.getName());
+									lblServiceDur.setText(Integer.toString(newValue.getLengthMin()));
+									lblServicePrice.setText("$" + Double.toString(newValue.getPrice()));
+
+									lblBookingService.setText(newValue.getName());
+									lblBookingDur.setText(Integer.toString(newValue.getLengthMin()));
+									lblBookingPrice.setText("$" + Double.toString(newValue.getPrice()));
+									newBook.setService(
+											listviewBookingServices.getSelectionModel().getSelectedItem().getID());
+								}
+							}
+						});
+
+				cmbDayBooking.valueProperty().addListener(new ChangeListener<Date>() {
 					@Override
-					public void changed(ObservableValue<? extends Service> observable, Service oldValue, Service newValue) {
-						if (newValue != null) {
-							lblServiceName.setText(newValue.getName());
-							lblServiceDur.setText("$"+Double.toString(newValue.getPrice()));
-							lblServicePrice.setText(Integer.toString(newValue.getLengthMin()));
-						}
+					public void changed(ObservableValue ov, Date t, Date t1) {
+						lblCustBookingDate.setText(
+								program.convertDateToString(cmbDayBooking.getSelectionModel().getSelectedItem()));
+						lblDayDate.setText(program.convertDateToString(cmbDayBooking.getSelectionModel().getSelectedItem()));
+						newBook.setDate(cmbDayBooking.getSelectionModel().getSelectedItem());
 					}
 				});
+				newBook.setCus(connection.getCustomer(program.getUser().getID()).getID());
 			}
 		} else {
 			Platform.exit();
@@ -1607,20 +1633,14 @@ public class MainController implements Initializable {
 	 * @author [Programmer]
 	 */
 	@FXML
-	public void startBooking(){
-		//TODO
-		if(stkpnUserMenu.isVisible())
-		{
+	public void startBooking() {
+		// TODO
+		if (stkpnUserMenu.isVisible()) {
 			stkpnUserMenu.setVisible(false);
 			stkpnBookingMenu.setVisible(true);
-			newBook.setCus(connection.getCustomer(program.getUser().getID()).getID());
-			newBook.setDate(cmbDayBooking.getSelectionModel().getSelectedItem());
-			newBook.setService(listviewBookingServices .getSelectionModel().getSelectedItem().getID());
-			return;
 		}
-		
 	}
-	
+
 	/**
 	 * Moves the customer forward
 	 * @author [Programmer]

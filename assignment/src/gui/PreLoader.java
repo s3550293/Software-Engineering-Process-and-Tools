@@ -27,6 +27,10 @@ public class PreLoader extends Preloader{
         this.stage = stage;
         stage.setScene(createPreloaderScene());
         stage.show();
+        File varTmpData = new File("db/company.db");
+        if(varTmpData.exists() == false) {
+        	ini();
+        }
         /*
         File varTmpDir = new File(System.getProperty("user.home")+"/resourcing");
         if(varTmpDir.exists() == false) {
@@ -38,11 +42,6 @@ public class PreLoader extends Preloader{
     @Override
     public void handleProgressNotification(ProgressNotification pn) {
         bar.setProgress(pn.getProgress());
-        File varTmpData = new File("db/company.db");
-        if(varTmpData.exists() == false) {
-        	ini();
-        }
-        
     }
 
     @Override

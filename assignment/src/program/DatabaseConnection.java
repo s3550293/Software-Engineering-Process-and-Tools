@@ -977,4 +977,26 @@ public class DatabaseConnection
 		}
 		return service;
 	}
+	
+	/**
+	 * Create booking in database using booking object
+	 * @param booking
+	 * @return
+	 * @author Bryan
+	 */
+	public void createBooking(Booking book){
+		log.info("IN addBookingToDatabase\n");
+		//bookingID is made in the database
+		String query = "INSERT INTO BOOKINGS (userID,employeeID,date,startTime,endTime, serviceID,status)" + "VALUES(" + book.getCustomerId() + ","+book.getEmployeeID()+",'" + book.getDate() + "','" + book.getStartTime() + "','" + book.getEndTime() + "',"+book.getService()+",'" + book.getStatus() + "');";
+		try(Connection connect = this.connect(); Statement inject = connect.createStatement())
+		{
+			inject.executeUpdate(query);
+			log.info("Booking Added - User ID: "+book.getCustomerId()+" Date: "+book.getDate()+" Start Time: "+book.getStartTime()+" End Time: "+book.getEndTime()+" ServiceNmb: "+book.getService()+" Status: "+book.getStatus()+"\n");
+		}
+		catch(SQLException sqle)
+		{
+			log.warn(sqle.getMessage());
+		}
+		log.info("OUT addBookingToDatabase\n");
+	}
 }

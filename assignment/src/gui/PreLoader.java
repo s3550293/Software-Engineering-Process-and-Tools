@@ -92,6 +92,7 @@ public class PreLoader extends Preloader{
 		connect.addBooking(2,2, "28/04/2017", "11:00", "11:59", 0,"canceled");
 		connect.addBooking(2,1, "29/04/2017", "8:00", "8:40", 0, "canceled");
 
+
 		
 		//connect.cancelBooking(2);
     }

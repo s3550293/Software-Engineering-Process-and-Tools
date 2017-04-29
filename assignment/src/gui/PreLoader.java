@@ -78,9 +78,19 @@ public class PreLoader extends Preloader{
 		connect.addSerice(new Service("Wash",45,30));
 		connect.addSerice(new Service("Cut and Style",90,60));
 		
-		connect.addBooking(2,1, "30/04/2017", "8:00", "8:40", 0, "active");
-		connect.addBooking(3,1, "30/04/2017", "10:00", "10:40", 0,"active");
-		connect.addBooking(3,2, "30/04/2017", "11:00", "11:59", 0,"active");
+		connect.addBooking(2,1, "24/05/2017", "8:00", "8:40", 0, "active");
+		connect.addBooking(3,1, "16/07/2017", "10:00", "10:40", 0,"active");
+		connect.addBooking(3,2, "14/05/2017", "11:00", "11:59", 0,"active");
+		connect.addBooking(3,1, "4/05/2017", "10:00", "10:40", 0,"active");
+		connect.addBooking(3,2, "6/05/2017", "11:00", "11:59", 0,"active");
+		
+		connect.addBooking(2,1, "23/04/2017", "10:00", "10:40", 0,"canceled");
+		connect.addBooking(2,2, "24/04/2017", "11:00", "11:59", 0,"canceled");
+		connect.addBooking(2,1, "25/04/2017", "8:00", "8:40", 0, "canceled");
+		connect.addBooking(2,1, "26/04/2017", "8:00", "8:40", 0, "canceled");
+		connect.addBooking(2,1, "27/04/2017", "10:00", "10:40", 0,"canceled");
+		connect.addBooking(2,2, "28/04/2017", "11:00", "11:59", 0,"canceled");
+		connect.addBooking(2,1, "29/04/2017", "8:00", "8:40", 0, "canceled");
 
 		
 		//connect.cancelBooking(2);

@@ -1358,12 +1358,15 @@
                                                                            <FlowPane.margin>
                                                                               <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
                                                                            </FlowPane.margin>
+                                                                           <toggleGroup>
+                                                                              <ToggleGroup fx:id="timeGroup" />
+                                                                           </toggleGroup>
                                                                         </ToggleButton>
                                                                      </children>
                                                                   </FlowPane>
                                                                   <FlowPane alignment="CENTER_LEFT" prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="1">
                                                                      <children>
-                                                                        <ToggleButton fx:id="togbtnTimeSlot2" mnemonicParsing="false" prefWidth="125.0" styleClass="toggle-button-cust">
+                                                                        <ToggleButton fx:id="togbtnTimeSlot2" mnemonicParsing="false" prefWidth="125.0" styleClass="toggle-button-cust" toggleGroup="$timeGroup">
                                                                            <FlowPane.margin>
                                                                               <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
                                                                            </FlowPane.margin>
@@ -1372,7 +1375,7 @@
                                                                   </FlowPane>
                                                                   <FlowPane alignment="CENTER_LEFT" prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="2">
                                                                      <children>
-                                                                        <ToggleButton fx:id="togbtnTimeSlot3" mnemonicParsing="false" prefWidth="125.0" styleClass="toggle-button-cust">
+                                                                        <ToggleButton fx:id="togbtnTimeSlot3" mnemonicParsing="false" prefWidth="125.0" styleClass="toggle-button-cust" toggleGroup="$timeGroup">
                                                                            <FlowPane.margin>
                                                                               <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
                                                                            </FlowPane.margin>
@@ -1381,7 +1384,7 @@
                                                                   </FlowPane>
                                                                   <FlowPane alignment="CENTER_LEFT" prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="3">
                                                                      <children>
-                                                                        <ToggleButton fx:id="togbtnTimeSlot4" mnemonicParsing="false" prefWidth="125.0" styleClass="toggle-button-cust">
+                                                                        <ToggleButton fx:id="togbtnTimeSlot4" mnemonicParsing="false" prefWidth="125.0" styleClass="toggle-button-cust" toggleGroup="$timeGroup">
                                                                            <FlowPane.margin>
                                                                               <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
                                                                            </FlowPane.margin>
@@ -1390,7 +1393,7 @@
                                                                   </FlowPane>
                                                                   <FlowPane alignment="CENTER_LEFT" prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="4">
                                                                      <children>
-                                                                        <ToggleButton fx:id="togbtnTimeSlot5" mnemonicParsing="false" prefWidth="125.0" styleClass="toggle-button-cust">
+                                                                        <ToggleButton fx:id="togbtnTimeSlot5" mnemonicParsing="false" prefWidth="125.0" styleClass="toggle-button-cust" toggleGroup="$timeGroup">
                                                                            <FlowPane.margin>
                                                                               <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
                                                                            </FlowPane.margin>
@@ -1399,7 +1402,7 @@
                                                                   </FlowPane>
                                                                   <FlowPane alignment="CENTER_LEFT" prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="5">
                                                                      <children>
-                                                                        <ToggleButton fx:id="togbtnTimeSlot6" mnemonicParsing="false" prefWidth="125.0" styleClass="toggle-button-cust">
+                                                                        <ToggleButton fx:id="togbtnTimeSlot6" mnemonicParsing="false" prefWidth="125.0" styleClass="toggle-button-cust" toggleGroup="$timeGroup">
                                                                            <FlowPane.margin>
                                                                               <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
                                                                            </FlowPane.margin>
@@ -1408,7 +1411,7 @@
                                                                   </FlowPane>
                                                                   <FlowPane alignment="CENTER_LEFT" prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="6">
                                                                      <children>
-                                                                        <ToggleButton fx:id="togbtnTimeSlot7" mnemonicParsing="false" prefWidth="125.0" styleClass="toggle-button-cust">
+                                                                        <ToggleButton fx:id="togbtnTimeSlot7" mnemonicParsing="false" prefWidth="125.0" styleClass="toggle-button-cust" toggleGroup="$timeGroup">
                                                                            <FlowPane.margin>
                                                                               <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
                                                                            </FlowPane.margin>
@@ -1417,7 +1420,7 @@
                                                                   </FlowPane>
                                                                   <FlowPane alignment="CENTER_LEFT" prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="7">
                                                                      <children>
-                                                                        <ToggleButton fx:id="togbtnTimeSlot8" mnemonicParsing="false" prefWidth="125.0" styleClass="toggle-button-cust">
+                                                                        <ToggleButton fx:id="togbtnTimeSlot8" mnemonicParsing="false" prefWidth="125.0" styleClass="toggle-button-cust" toggleGroup="$timeGroup">
                                                                            <FlowPane.margin>
                                                                               <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
                                                                            </FlowPane.margin>

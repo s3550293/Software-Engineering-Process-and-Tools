@@ -243,7 +243,7 @@ public class DatabaseConnectionJUnit {
 				emplWorking = empWork;
 		}
 		assertTrue(emplWorking.getId()==1);
-		assertEquals("03/12/2017", controller.convertDateToString(emplWorking.getDate()));
+		assertEquals("03/12/2017", controller.dateToStr(emplWorking.getDate()));
 	}
 	@Test
 	public void testGetEmployeeWorkingTimes4()
@@ -255,7 +255,7 @@ public class DatabaseConnectionJUnit {
 			if(empWork.getId() == 1)
 				emplWorking = empWork;
 		}
-		assertEquals("08:00", controller.convertTimeToString(emplWorking.getStartTime()));
+		assertEquals("08:00", controller.timeToStr(emplWorking.getStartTime()));
 	}
 	@Test
 	public void testGetEmployeeWorkingTimes5()
@@ -267,7 +267,7 @@ public class DatabaseConnectionJUnit {
 			if(empWork.getId() == 1)
 				emplWorking = empWork;
 		}
-		assertEquals("20:00", controller.convertTimeToString(emplWorking.getEndTime()));
+		assertEquals("20:00", controller.timeToStr(emplWorking.getEndTime()));
 	}
 	@Test
 	public void testAddBookingToDatabase_CustomerID()
@@ -286,9 +286,9 @@ public class DatabaseConnectionJUnit {
 		ArrayList<Booking> bookingLists = new ArrayList<Booking>();
 		bookingLists = connect.getAllBooking();
 		
-		assertEquals(controller.convertDateToString(bookingLists.get(0).getDate()),"03/12/2017");
-		assertEquals(controller.convertDateToString(bookingLists.get(1).getDate()),"02/03/2017");
-		assertEquals(controller.convertDateToString(bookingLists.get(2).getDate()),"03/12/2017");
+		assertEquals(controller.dateToStr(bookingLists.get(0).getDate()),"03/12/2017");
+		assertEquals(controller.dateToStr(bookingLists.get(1).getDate()),"02/03/2017");
+		assertEquals(controller.dateToStr(bookingLists.get(2).getDate()),"03/12/2017");
 	}
 	
 	@Test
@@ -297,12 +297,12 @@ public class DatabaseConnectionJUnit {
 		ArrayList<Booking> bookingLists = new ArrayList<Booking>();
 		bookingLists = connect.getAllBooking();
 
-		assertEquals(controller.convertTimeToString(bookingLists.get(0).getStartTime()),"10:30");
-		assertEquals(controller.convertTimeToString(bookingLists.get(0).getEndTime()),"11:59");
-		assertEquals(controller.convertTimeToString(bookingLists.get(1).getStartTime()),"11:30");
-		assertEquals(controller.convertTimeToString(bookingLists.get(1).getEndTime()),"12:30");
-		assertEquals(controller.convertTimeToString(bookingLists.get(2).getStartTime()),"12:00");
-		assertEquals(controller.convertTimeToString(bookingLists.get(2).getEndTime()),"14:00");
+		assertEquals(controller.timeToStr(bookingLists.get(0).getStartTime()),"10:30");
+		assertEquals(controller.timeToStr(bookingLists.get(0).getEndTime()),"11:59");
+		assertEquals(controller.timeToStr(bookingLists.get(1).getStartTime()),"11:30");
+		assertEquals(controller.timeToStr(bookingLists.get(1).getEndTime()),"12:30");
+		assertEquals(controller.timeToStr(bookingLists.get(2).getStartTime()),"12:00");
+		assertEquals(controller.timeToStr(bookingLists.get(2).getEndTime()),"14:00");
 	}
 	
 	@Test

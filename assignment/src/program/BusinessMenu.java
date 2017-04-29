@@ -268,7 +268,7 @@ public class BusinessMenu
 					for(int i =0; i<dateArray.length;i++)
 					{
 						Calendar d = Calendar.getInstance();
-						Date date = controller.convertStringToDate(dateArray[i]);
+						Date date = controller.strToDate(dateArray[i]);
 						d.setTime(date);
 						int dayOfWeek = d.get(Calendar.DAY_OF_WEEK);
 						switch(dayOfWeek)
@@ -421,7 +421,7 @@ public class BusinessMenu
 					for(int i = 0; i<54;i++)//54 = 54 weeks in a year (setting work time every week for 54 weeks in advance)
 					{
 						connect.addEmployeeWorkingTime(employeeID, date, startTime, endTime);	
-						Date = controller.convertStringToDate(date);
+						Date = controller.strToDate(date);
 						if(Date == null)
 						{
 							log.debug("Could not convert string to date\n");
@@ -431,7 +431,7 @@ public class BusinessMenu
 						calendar.setTime(Date);
 						calendar.add(Calendar.DAY_OF_MONTH, 7);
 						Date = calendar.getTime();
-						date = controller.convertDateToString(Date);
+						date = controller.dateToStr(Date);
 					}
 					log.info("OUT set7DayRosterTime\n");
 					return true;

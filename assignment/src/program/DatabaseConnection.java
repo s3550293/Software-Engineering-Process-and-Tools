@@ -708,7 +708,7 @@ public class DatabaseConnection
 			log.info("OUT cancelBooking\n");
 			return false;
 		}
-		String query = "UPDATE BOOKINGS SET status = 'cancel' WHERE id = " + bookID;
+		String query = "UPDATE BOOKINGS SET status = 'canceled' WHERE id = " + bookID;
 		
 		try(Connection connect = this.connect(); Statement inject = connect.createStatement())
 		{

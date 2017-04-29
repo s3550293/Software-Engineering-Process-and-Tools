@@ -27,10 +27,6 @@ public class PreLoader extends Preloader{
         this.stage = stage;
         stage.setScene(createPreloaderScene());
         stage.show();
-        File varTmpData = new File("db/company.db");
-        if(varTmpData.exists() == false) {
-        	ini();
-        }
         /*
         File varTmpDir = new File(System.getProperty("user.home")+"/resourcing");
         if(varTmpDir.exists() == false) {
@@ -42,6 +38,11 @@ public class PreLoader extends Preloader{
     @Override
     public void handleProgressNotification(ProgressNotification pn) {
         bar.setProgress(pn.getProgress());
+        File varTmpData = new File("db/company.db");
+        if(varTmpData.exists() == false) {
+        	ini();
+        }
+        
     }
 
     @Override
@@ -133,21 +134,21 @@ public class PreLoader extends Preloader{
 		connect.addSerice(new Service("Wash",45,30));
 		connect.addSerice(new Service("Cut and Style",90,60));
 		
-		connect.addBooking(2,1, "21/04/2017", "10:00", "10:40", 0,"canceled");
-		connect.addBooking(2,2, "22/04/2017", "11:00", "11:59", 0,"canceled");
-		connect.addBooking(2,1, "23/04/2017", "10:00", "10:40", 0,"canceled");
-		connect.addBooking(2,2, "24/04/2017", "11:00", "11:59", 0,"canceled");
-		connect.addBooking(2,3, "25/04/2017", "8:00", "8:40", 0, "canceled");
-		connect.addBooking(2,2, "26/04/2017", "8:00", "8:40", 0, "canceled");
-		connect.addBooking(2,3, "27/04/2017", "10:00", "10:40", 0,"canceled");
-		connect.addBooking(2,2, "28/04/2017", "11:00", "11:59", 0,"canceled");
-		connect.addBooking(2,3, "29/04/2017", "8:00", "8:40", 0, "canceled");
+		connect.addBooking(2,1, "21/04/2017", "10:00", "10:40", 1,"active");
+		connect.addBooking(2,2, "22/04/2017", "11:00", "11:59", 2,"canceled");
+		connect.addBooking(2,1, "23/04/2017", "10:00", "10:40", 3,"canceled");
+		connect.addBooking(2,2, "24/04/2017", "11:00", "11:59", 2,"canceled");
+		connect.addBooking(2,3, "25/04/2017", "8:00", "8:40", 2, "active");
+		connect.addBooking(2,2, "26/04/2017", "8:00", "8:40", 2, "canceled");
+		connect.addBooking(2,3, "27/04/2017", "10:00", "10:40", 1,"active");
+		connect.addBooking(2,2, "28/04/2017", "11:00", "11:59", 1,"canceled");
+		connect.addBooking(2,3, "29/04/2017", "8:00", "8:40", 1, "canceled");
 		
-		connect.addBooking(2,1, "24/05/2017", "8:00", "8:40", 0, "active");
-		connect.addBooking(3,1, "16/07/2017", "10:00", "10:40", 0,"active");
-		connect.addBooking(3,2, "14/05/2017", "11:00", "11:59", 0,"active");
-		connect.addBooking(3,1, "4/05/2017", "10:00", "10:40", 0,"active");
-		connect.addBooking(3,2, "6/05/2017", "11:00", "11:59", 0,"active");
+		connect.addBooking(2,1, "24/05/2017", "8:00", "8:40", 2, "active");
+		connect.addBooking(3,1, "16/07/2017", "10:00", "10:40", 3,"active");
+		connect.addBooking(3,2, "14/05/2017", "11:00", "11:59", 1,"active");
+		connect.addBooking(3,1, "4/05/2017", "10:00", "10:40", 2,"active");
+		connect.addBooking(3,2, "6/05/2017", "11:00", "11:59", 3,"active");
 		
 
 

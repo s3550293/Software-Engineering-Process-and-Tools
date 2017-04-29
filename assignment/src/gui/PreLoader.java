@@ -5,6 +5,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.ProgressBar;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
+import program.BusinessMenu;
 import program.Database;
 import program.DatabaseConnection;
 import program.Service;
@@ -55,28 +56,92 @@ public class PreLoader extends Preloader{
     	Database db = new Database("company.db");
 		db.createTable("company.db");
 		DatabaseConnection connect = new DatabaseConnection();
+		BusinessMenu bMenu = new BusinessMenu();
 		connect.addUser("admin","Monday10!",1);
-		connect.addUser("William12", "Apples22", 0);
-		connect.addUser("Hannah23", "Apples22", 0);
+		connect.addUser("William", "Apples22", 0);
+		connect.addUser("Hannah", "Apples22", 0);
 		
 		connect.addEmployee("Luke Charles",25);
-		connect.addEmployee("David Smith",43);
+		connect.addEmployee("David Smith",26.6);
 		connect.addEmployee("Will Turner",15);
-		connect.addEmployee("Null Pointer",42);
+		connect.addEmployee("Rob Pointer",14);
+		connect.addEmployee("Adam Mason",12);
+		connect.addEmployee("David Chang",17);
+		connect.addEmployee("Joseph Tun",17);
+		connect.addEmployee("Casey Pointer",17);
+		connect.addEmployee("Danyon Glenk",10);
+		connect.addEmployee("Justin Lui",24);
+		connect.addEmployee("Jan Misso",15.7);
+		connect.addEmployee("Harry Nancarrow",19);
+		connect.addEmployee("Tom Gates",18.54);
+		connect.addEmployee("Emma Snelling",16.3);
+		connect.addEmployee("Laura Rite",15.2);
+		connect.addEmployee("Harry Potter",18);
 		
-		connect.addEmployeeWorkingTime(1,"05/04/2017","08:00","16:00");
-		connect.addEmployeeWorkingTime(1,"10/04/2017","08:00","20:00");
-
-		connect.addEmployeeWorkingTime(2,"06/04/2017","12:00","16:00");
-		connect.addEmployeeWorkingTime(2,"07/04/2017","12:00","20:00");
+		bMenu.set7DayRosterTime(1,"05/04/2017","08:00","16:00");
+		bMenu.set7DayRosterTime(1,"10/04/2017","08:00","20:00");
+		
+		bMenu.set7DayRosterTime(2,"06/04/2017","12:00","16:00");
+		bMenu.set7DayRosterTime(2,"07/04/2017","12:00","16:00");
+		
+		bMenu.set7DayRosterTime(3,"05/04/2017","08:00","16:00");
+		bMenu.set7DayRosterTime(3,"10/04/2017","08:00","20:00");
+		
+		bMenu.set7DayRosterTime(4,"06/04/2017","12:00","16:00");
+		bMenu.set7DayRosterTime(4,"07/04/2017","12:00","20:00");
+		
+		bMenu.set7DayRosterTime(5,"05/04/2017","08:00","16:00");
+		bMenu.set7DayRosterTime(5,"10/04/2017","08:00","20:00");
+		
+		bMenu.set7DayRosterTime(6,"06/04/2017","12:00","16:00");
+		bMenu.set7DayRosterTime(6,"07/04/2017","12:00","20:00");
+		
+		bMenu.set7DayRosterTime(7,"05/04/2017","08:00","16:00");
+		bMenu.set7DayRosterTime(7,"10/04/2017","08:00","20:00");
+		
+		bMenu.set7DayRosterTime(8,"06/04/2017","12:00","16:00");
+		bMenu.set7DayRosterTime(8,"07/04/2017","12:00","20:00");
+		
+		bMenu.set7DayRosterTime(9,"05/04/2017","08:00","16:00");
+		bMenu.set7DayRosterTime(9,"10/04/2017","08:00","20:00");
+		
+		bMenu.set7DayRosterTime(10,"06/04/2017","12:00","16:00");
+		bMenu.set7DayRosterTime(10,"07/04/2017","12:00","20:00");
+		
+		bMenu.set7DayRosterTime(11,"05/04/2017","08:00","16:00");
+		bMenu.set7DayRosterTime(11,"10/04/2017","08:00","20:00");
+		
+		bMenu.set7DayRosterTime(12,"06/04/2017","12:00","16:00");
+		bMenu.set7DayRosterTime(12,"07/04/2017","12:00","20:00");
+		
+		bMenu.set7DayRosterTime(13,"05/04/2017","08:00","16:00");
+		bMenu.set7DayRosterTime(13,"10/04/2017","08:00","20:00");
+		
+		bMenu.set7DayRosterTime(14,"06/04/2017","12:00","16:00");
+		bMenu.set7DayRosterTime(14,"07/04/2017","12:00","20:00");
+		
+		bMenu.set7DayRosterTime(15,"05/04/2017","08:00","16:00");
+		bMenu.set7DayRosterTime(15,"10/04/2017","08:00","20:00");
+		
+		bMenu.set7DayRosterTime(16,"06/04/2017","12:00","16:00");
+		bMenu.set7DayRosterTime(16,"07/04/2017","12:00","20:00");
 		
 		connect.addUserDetails(2, "William", "Porter", "will@mail.com", "0452368593", "01/01/2002", "Male");
 		connect.addUserDetails(3, "Hannah", "Hawlking", "hannah@mail.com", "0452136859", "20/04/1995", "Famale");
-		
 
 		connect.addSerice(new Service("Trim",30,25));
 		connect.addSerice(new Service("Wash",45,30));
 		connect.addSerice(new Service("Cut and Style",90,60));
+		
+		connect.addBooking(2,1, "21/04/2017", "10:00", "10:40", 0,"canceled");
+		connect.addBooking(2,2, "22/04/2017", "11:00", "11:59", 0,"canceled");
+		connect.addBooking(2,1, "23/04/2017", "10:00", "10:40", 0,"canceled");
+		connect.addBooking(2,2, "24/04/2017", "11:00", "11:59", 0,"canceled");
+		connect.addBooking(2,3, "25/04/2017", "8:00", "8:40", 0, "canceled");
+		connect.addBooking(2,2, "26/04/2017", "8:00", "8:40", 0, "canceled");
+		connect.addBooking(2,3, "27/04/2017", "10:00", "10:40", 0,"canceled");
+		connect.addBooking(2,2, "28/04/2017", "11:00", "11:59", 0,"canceled");
+		connect.addBooking(2,3, "29/04/2017", "8:00", "8:40", 0, "canceled");
 		
 		connect.addBooking(2,1, "24/05/2017", "8:00", "8:40", 0, "active");
 		connect.addBooking(3,1, "16/07/2017", "10:00", "10:40", 0,"active");
@@ -84,13 +149,6 @@ public class PreLoader extends Preloader{
 		connect.addBooking(3,1, "4/05/2017", "10:00", "10:40", 0,"active");
 		connect.addBooking(3,2, "6/05/2017", "11:00", "11:59", 0,"active");
 		
-		connect.addBooking(2,1, "23/04/2017", "10:00", "10:40", 0,"canceled");
-		connect.addBooking(2,2, "24/04/2017", "11:00", "11:59", 0,"canceled");
-		connect.addBooking(2,1, "25/04/2017", "8:00", "8:40", 0, "canceled");
-		connect.addBooking(2,1, "26/04/2017", "8:00", "8:40", 0, "canceled");
-		connect.addBooking(2,1, "27/04/2017", "10:00", "10:40", 0,"canceled");
-		connect.addBooking(2,2, "28/04/2017", "11:00", "11:59", 0,"canceled");
-		connect.addBooking(2,1, "29/04/2017", "8:00", "8:40", 0, "canceled");
 
 
 		

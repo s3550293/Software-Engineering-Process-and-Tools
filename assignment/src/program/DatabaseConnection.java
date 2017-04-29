@@ -110,6 +110,45 @@ public class DatabaseConnection
 	 * @param username
 	 * @return User Object
 	 */
+	public User getUser(int id)
+	{
+		log.info("IN getUser\n");
+		int _id = 0;
+		String _username = "null";
+		String _password = "null";
+		int _accountType = 0;
+		String query = "SELECT * FROM users WHERE id = ?";
+		//Creates a null user to return, this can be used to validate user at login
+		User databaseUser = null;
+		try (Connection connect = this.connect(); PreparedStatement  inject  = connect.prepareStatement(query))
+		{
+			//Sets '?' to user name in the query
+			//crates a user from the found information
+			inject.setInt(1,id);
+			ResultSet output = inject.executeQuery();
+			while (output.next()){
+				_id = output.getInt(1);
+				_username = output.getString(2);
+				_password = output.getString(3);
+				_accountType = output.getInt(4);
+			}
+			databaseUser = new User(_id ,_username, _password, _accountType);
+			output.close();
+		}
+		catch(SQLException sqle)
+		{
+			//System.out.println("Getting User: "+sqle.getMessage());
+			log.warn(sqle.getMessage());
+		}
+		log.info("OUT getUser\n");
+		return databaseUser;
+	}
+	
+	/**
+	 * Gets where the user name keyword matches another users name
+	 * @param username
+	 * @return User Object
+	 */
 	public User getUser(String username)
 	{
 		log.info("IN getUser\n");

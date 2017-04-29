@@ -46,6 +46,7 @@ import program.Customer;
 import program.DatabaseConnection;
 import program.BusinessMenu;
 import program.Service;
+import program.User;
 
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
@@ -144,7 +145,7 @@ public class MainController implements Initializable {
 	 **************/
 	
 	@FXML
-	Button btnBookAppointment, btnConfirmBooking, btnNext, btnLogoutCustomer, btnBack, btnCancelAppoitment;
+	Button btnBookAppointment, btnConfirmBooking, btnNext, btnLogoutCustomer, btnBack, btnCancelAppoitment, btnRToOwnMen;
 	
 	@FXML
 	Label lblCustomerName, lblDayDate, lblServiceName, lblServiceDur, lblServicePrice, lblCustBookingDate, lblBookingService, lblBookingPrice, lblBookingDur, lblBookingTime, lblBookingEmp;
@@ -172,6 +173,8 @@ public class MainController implements Initializable {
 	
 	@FXML
 	Label lblAvail1, lblAvail2, lblAvail3, lblAvail4, lblAvail5, lblAvail6, lblAvail7, lblAvail8;
+	
+	private User _user = null;
 
 	/**
 	 * initializes the stage
@@ -189,7 +192,11 @@ public class MainController implements Initializable {
 			if (program.getUser().getAccountType() == 1) {
 				stkBusiness.setVisible(true);
 				stkCustomer.setVisible(false);
-
+			}
+			else {
+				stkBusiness.setVisible(false);
+				stkCustomer.setVisible(true);
+			}
 				rbCurrentBook.setSelected(true);
 				loadListViewEmp("");
 				listviewEmployees.getSelectionModel().selectedItemProperty()
@@ -264,10 +271,6 @@ public class MainController implements Initializable {
 						loadListViewBook();
 					}
 				});
-
-			} else {
-				stkBusiness.setVisible(false);
-				stkCustomer.setVisible(true);
 				lblCustomerName.setText(connection.getCustomer(program.getUser().getID()).getFullName());
 				cmbDayBooking.valueProperty().addListener(new ChangeListener<Date>() {
 					@Override
@@ -315,6 +318,7 @@ public class MainController implements Initializable {
 					        	if(i == 7){togbtnTimeSlot8.setText(date.get(Calendar.HOUR_OF_DAY)+":"+date.get(Calendar.MINUTE));}
 					        	date.add(Calendar.MINUTE, 30);
 					        }
+					        checkBookingTime();
 						}
 						else if(togbtnAft.isSelected()){
 							togbtnMorn.setSelected(false);
@@ -335,6 +339,7 @@ public class MainController implements Initializable {
 					        	if(i == 7){togbtnTimeSlot8.setText(date.get(Calendar.HOUR_OF_DAY)+":"+date.get(Calendar.MINUTE));}
 					        	date.add(Calendar.MINUTE, 30);
 					        }
+					        checkBookingTime();
 						}
 						else{
 							togbtnMorn.setSelected(false);
@@ -361,7 +366,7 @@ public class MainController implements Initializable {
 				});
 				togbtnMorn.setSelected(true);
 			}
-		} else {
+		else {
 			Platform.exit();
 			System.exit(0);
 		}
@@ -397,7 +402,8 @@ public class MainController implements Initializable {
 					return cell;
 				}
 			});
-		} else {
+		}
+		else {
 			log.warn("Unable to load Employees");
 		}
 	}
@@ -1639,12 +1645,19 @@ public class MainController implements Initializable {
 	
 	/**
 	 * Creates a booking for selected customer
-	 * @author [Programmer]
+	 * @author Joseph Garner
 	 */
 	@FXML
 	public void createBooking()
 	{
 		//TODO
+		btnRToOwnMen.setDisable(false);
+		stkBusiness.setVisible(false);
+		stkCustomer.setVisible(true);
+		_user = program.getUser();
+		program.setUser(connection.getUser(listviewCustomers.getSelectionModel().getSelectedItem().getID()));
+		newBook.setCus(program.getUser().getID());
+		lblCustomerName.setText(listviewCustomers.getSelectionModel().getSelectedItem().getFullName());
 	}
 	
 	
@@ -1716,6 +1729,31 @@ public class MainController implements Initializable {
 	
 	private void checkBookingTime()
 	{
+		togbtnTimeSlot1.setDisable(false);
+		togbtnTimeSlot2.setDisable(false);
+		togbtnTimeSlot3.setDisable(false);
+		togbtnTimeSlot4.setDisable(false);
+		togbtnTimeSlot5.setDisable(false);
+		togbtnTimeSlot6.setDisable(false);
+		togbtnTimeSlot7.setDisable(false);
+		togbtnTimeSlot8.setDisable(false);
+		lblAvail1.setText("Available");
+		lblAvail1.setStyle("-fx-text-fill: #008b00;");
+		lblAvail2.setText("Available");
+		lblAvail2.setStyle("-fx-text-fill: #008b00;");
+		lblAvail3.setText("Available");
+		lblAvail3.setStyle("-fx-text-fill: #008b00;");
+		lblAvail4.setText("Available");
+		lblAvail4.setStyle("-fx-text-fill: #008b00;");
+		lblAvail5.setText("Available");
+		lblAvail5.setStyle("-fx-text-fill: #008b00;");
+		lblAvail6.setText("Available");
+		lblAvail6.setStyle("-fx-text-fill: #008b00;");
+		lblAvail7.setText("Available");
+		lblAvail7.setStyle("-fx-text-fill: #008b00;");
+		lblAvail8.setText("Available");
+		lblAvail8.setStyle("-fx-text-fill: #008b00;");
+		
 		if(newBook.getDate() != null){
 			Date stD = null;
 			Date enD = null;
@@ -1771,37 +1809,37 @@ public class MainController implements Initializable {
 							lblAvail8.setStyle("-fx-text-fill: #ff0000;");
 						}
 						
-						if(enD.after(program.strToTime(togbtnTimeSlot2.getText()))){
+						if(enD.after(program.strToTime(togbtnTimeSlot2.getText())) && enD.before(program.strToTime(togbtnTimeSlot3.getText()))){
 							togbtnTimeSlot2.setDisable(true);
 							lblAvail2.setText("Unavailable");
 							lblAvail2.setStyle("-fx-text-fill: #ff0000;");
 						}
-						else if(enD.after(program.strToTime(togbtnTimeSlot3.getText()))){
+						if(enD.after(program.strToTime(togbtnTimeSlot3.getText())) && enD.before(program.strToTime(togbtnTimeSlot4.getText()))){
 							togbtnTimeSlot3.setDisable(true);
 							lblAvail3.setText("Unavailable");
 							lblAvail3.setStyle("-fx-text-fill: #ff0000;");
 						}
-						else if( enD.after(program.strToTime(togbtnTimeSlot4.getText()))){
+						if(enD.after(program.strToTime(togbtnTimeSlot4.getText())) && enD.before(program.strToTime(togbtnTimeSlot5.getText()))){
 							togbtnTimeSlot4.setDisable(true);
 							lblAvail4.setText("Unavailable");
 							lblAvail4.setStyle("-fx-text-fill: #ff0000;");
 						}
-						else if(enD.after(program.strToTime(togbtnTimeSlot5.getText()))){
+						if(enD.after(program.strToTime(togbtnTimeSlot5.getText())) && enD.before(program.strToTime(togbtnTimeSlot6.getText()))){
 							togbtnTimeSlot5.setDisable(true);
 							lblAvail5.setText("Unavailable");
 							lblAvail5.setStyle("-fx-text-fill: #ff0000;");
 						}
-						else if(enD.after(program.strToTime(togbtnTimeSlot6.getText()))){
+						if(enD.after(program.strToTime(togbtnTimeSlot6.getText())) && enD.before(program.strToTime(togbtnTimeSlot7.getText()))){
 							togbtnTimeSlot6.setDisable(true);
 							lblAvail6.setText("Unavailable");
 							lblAvail6.setStyle("-fx-text-fill: #ff0000;");
 						}
-						else if(enD.after(program.strToTime(togbtnTimeSlot7.getText()))){
+						if(enD.after(program.strToTime(togbtnTimeSlot7.getText())) && enD.before(program.strToTime(togbtnTimeSlot8.getText()))){
 							togbtnTimeSlot7.setDisable(true);
 							lblAvail7.setText("Unavailable");
 							lblAvail7.setStyle("-fx-text-fill: #ff0000;");
 						}
-						else if(enD.after(program.strToTime(togbtnTimeSlot8.getText()))){
+						if(enD.after(program.strToTime(togbtnTimeSlot8.getText())) && enD.before(program.strToTime("12:00"))){
 							togbtnTimeSlot8.setDisable(true);
 							lblAvail8.setText("Unavailable");
 							lblAvail8.setStyle("-fx-text-fill: #ff0000;");
@@ -1809,10 +1847,170 @@ public class MainController implements Initializable {
 						log.debug("LOGGER: Button 8 date - "+program.strToTime(togbtnTimeSlot8.getText()));
 					}
 					else if(togbtnAft.isSelected()){
-						
+						if(stD.compareTo(program.strToTime(togbtnTimeSlot1.getText())) == 0){
+							log.debug("LOGGER: Time Matchs 8:00");
+							togbtnTimeSlot1.setDisable(true);
+							lblAvail1.setText("Unavailable");
+							lblAvail1.setStyle("-fx-text-fill: #ff0000;");
+						}
+						else if(stD.equals(program.strToTime(togbtnTimeSlot2.getText()))){
+							togbtnTimeSlot2.setDisable(true);
+							lblAvail2.setText("Unavailable");
+							lblAvail2.setStyle("-fx-text-fill: #ff0000;");
+						}
+						else if(stD.equals(program.strToTime(togbtnTimeSlot3.getText()))){
+							togbtnTimeSlot3.setDisable(true);
+							lblAvail3.setText("Unavailable");
+							lblAvail3.setStyle("-fx-text-fill: #ff0000;");
+						}
+						else if(stD.equals(program.strToTime(togbtnTimeSlot4.getText()))){
+							togbtnTimeSlot4.setDisable(true);
+							lblAvail4.setText("Unavailable");
+							lblAvail4.setStyle("-fx-text-fill: #ff0000;");
+						}
+						else if(stD.equals(program.strToTime(togbtnTimeSlot5.getText()))){
+							togbtnTimeSlot5.setDisable(true);
+							lblAvail5.setText("Unavailable");
+							lblAvail5.setStyle("-fx-text-fill: #ff0000;");
+						}
+						else if(stD.equals(program.strToTime(togbtnTimeSlot6.getText()))){
+							togbtnTimeSlot6.setDisable(true);
+							lblAvail6.setText("Unavailable");
+							lblAvail6.setStyle("-fx-text-fill: #ff0000;");
+						}
+						else if(stD.equals(program.strToTime(togbtnTimeSlot7.getText()))){
+							togbtnTimeSlot7.setDisable(true);
+							lblAvail7.setText("Unavailable");
+							lblAvail7.setStyle("-fx-text-fill: #ff0000;");
+						}
+						else if(stD.equals(program.strToTime(togbtnTimeSlot8.getText()))){
+							togbtnTimeSlot8.setDisable(true);
+							lblAvail8.setText("Unavailable");
+							lblAvail8.setStyle("-fx-text-fill: #ff0000;");
+						}
+						if(enD.after(program.strToTime(togbtnTimeSlot1.getText())) && enD.before(program.strToTime("12:31"))){
+							togbtnTimeSlot1.setDisable(true);
+							lblAvail1.setText("Unavailable");
+							lblAvail1.setStyle("-fx-text-fill: #ff0000;");
+						}
+						else if(enD.after(program.strToTime(togbtnTimeSlot2.getText())) && enD.before(program.strToTime("13:01"))){
+							togbtnTimeSlot2.setDisable(true);
+							lblAvail2.setText("Unavailable");
+							lblAvail2.setStyle("-fx-text-fill: #ff0000;");
+						}
+						if(enD.after(program.strToTime(togbtnTimeSlot3.getText())) && enD.before(program.strToTime("13:31"))){
+							togbtnTimeSlot3.setDisable(true);
+							lblAvail3.setText("Unavailable");
+							lblAvail3.setStyle("-fx-text-fill: #ff0000;");
+						}
+						if(enD.after(program.strToTime(togbtnTimeSlot4.getText())) && enD.before(program.strToTime("14:01"))){
+							togbtnTimeSlot4.setDisable(true);
+							lblAvail4.setText("Unavailable");
+							lblAvail4.setStyle("-fx-text-fill: #ff0000;");
+						}
+						if(enD.after(program.strToTime(togbtnTimeSlot5.getText())) && enD.before(program.strToTime("14:31"))){
+							togbtnTimeSlot5.setDisable(true);
+							lblAvail5.setText("Unavailable");
+							lblAvail5.setStyle("-fx-text-fill: #ff0000;");
+						}
+						if(enD.after(program.strToTime(togbtnTimeSlot6.getText())) && enD.before(program.strToTime("15:01"))){
+							togbtnTimeSlot6.setDisable(true);
+							lblAvail6.setText("Unavailable");
+							lblAvail6.setStyle("-fx-text-fill: #ff0000;");
+						}
+						if(enD.after(program.strToTime(togbtnTimeSlot7.getText())) && enD.before(program.strToTime("15:31"))){
+							togbtnTimeSlot7.setDisable(true);
+							lblAvail7.setText("Unavailable");
+							lblAvail7.setStyle("-fx-text-fill: #ff0000;");
+						}
+						if(enD.after(program.strToTime(togbtnTimeSlot8.getText()))){
+							togbtnTimeSlot8.setDisable(true);
+							lblAvail8.setText("Unavailable");
+							lblAvail8.setStyle("-fx-text-fill: #ff0000;");
+						}
 					}
 					else if(togbtnEven.isSelected()){
-						
+						if(stD.compareTo(program.strToTime(togbtnTimeSlot1.getText())) == 0){
+							log.debug("LOGGER: Time Matchs 8:00");
+							togbtnTimeSlot1.setDisable(true);
+							lblAvail1.setText("Unavailable");
+							lblAvail1.setStyle("-fx-text-fill: #ff0000;");
+						}
+						else if(stD.equals(program.strToTime(togbtnTimeSlot2.getText()))){
+							togbtnTimeSlot2.setDisable(true);
+							lblAvail2.setText("Unavailable");
+							lblAvail2.setStyle("-fx-text-fill: #ff0000;");
+						}
+						else if(stD.equals(program.strToTime(togbtnTimeSlot3.getText()))){
+							togbtnTimeSlot3.setDisable(true);
+							lblAvail3.setText("Unavailable");
+							lblAvail3.setStyle("-fx-text-fill: #ff0000;");
+						}
+						else if(stD.equals(program.strToTime(togbtnTimeSlot4.getText()))){
+							togbtnTimeSlot4.setDisable(true);
+							lblAvail4.setText("Unavailable");
+							lblAvail4.setStyle("-fx-text-fill: #ff0000;");
+						}
+						else if(stD.equals(program.strToTime(togbtnTimeSlot5.getText()))){
+							togbtnTimeSlot5.setDisable(true);
+							lblAvail5.setText("Unavailable");
+							lblAvail5.setStyle("-fx-text-fill: #ff0000;");
+						}
+						else if(stD.equals(program.strToTime(togbtnTimeSlot6.getText()))){
+							togbtnTimeSlot6.setDisable(true);
+							lblAvail6.setText("Unavailable");
+							lblAvail6.setStyle("-fx-text-fill: #ff0000;");
+						}
+						else if(stD.equals(program.strToTime(togbtnTimeSlot7.getText()))){
+							togbtnTimeSlot7.setDisable(true);
+							lblAvail7.setText("Unavailable");
+							lblAvail7.setStyle("-fx-text-fill: #ff0000;");
+						}
+						else if(stD.equals(program.strToTime(togbtnTimeSlot8.getText()))){
+							togbtnTimeSlot8.setDisable(true);
+							lblAvail8.setText("Unavailable");
+							lblAvail8.setStyle("-fx-text-fill: #ff0000;");
+						}
+						if(enD.after(program.strToTime(togbtnTimeSlot1.getText())) && enD.before(program.strToTime("16:31"))){
+							togbtnTimeSlot1.setDisable(true);
+							lblAvail1.setText("Unavailable");
+							lblAvail1.setStyle("-fx-text-fill: #ff0000;");
+						}
+						else if(enD.after(program.strToTime(togbtnTimeSlot2.getText())) && enD.before(program.strToTime("17:01"))){
+							togbtnTimeSlot2.setDisable(true);
+							lblAvail2.setText("Unavailable");
+							lblAvail2.setStyle("-fx-text-fill: #ff0000;");
+						}
+						if(enD.after(program.strToTime(togbtnTimeSlot3.getText())) && enD.before(program.strToTime("17:31"))){
+							togbtnTimeSlot3.setDisable(true);
+							lblAvail3.setText("Unavailable");
+							lblAvail3.setStyle("-fx-text-fill: #ff0000;");
+						}
+						if(enD.after(program.strToTime(togbtnTimeSlot4.getText())) && enD.before(program.strToTime("18:01"))){
+							togbtnTimeSlot4.setDisable(true);
+							lblAvail4.setText("Unavailable");
+							lblAvail4.setStyle("-fx-text-fill: #ff0000;");
+						}
+						if(enD.after(program.strToTime(togbtnTimeSlot5.getText())) && enD.before(program.strToTime("18:31"))){
+							togbtnTimeSlot5.setDisable(true);
+							lblAvail5.setText("Unavailable");
+							lblAvail5.setStyle("-fx-text-fill: #ff0000;");
+						}
+						if(enD.after(program.strToTime(togbtnTimeSlot6.getText())) && enD.before(program.strToTime("19:01"))){
+							togbtnTimeSlot6.setDisable(true);
+							lblAvail6.setText("Unavailable");
+							lblAvail6.setStyle("-fx-text-fill: #ff0000;");
+						}
+						if(enD.after(program.strToTime(togbtnTimeSlot7.getText())) && enD.before(program.strToTime("19:31"))){
+							togbtnTimeSlot7.setDisable(true);
+							lblAvail7.setText("Unavailable");
+							lblAvail7.setStyle("-fx-text-fill: #ff0000;");
+						}
+						if(enD.after(program.strToTime(togbtnTimeSlot8.getText()))){
+							togbtnTimeSlot8.setDisable(true);
+							lblAvail8.setText("Unavailable");
+							lblAvail8.setStyle("-fx-text-fill: #ff0000;");
+						}
 					}
 					else{}
 				}
@@ -2038,5 +2236,17 @@ public class MainController implements Initializable {
 			return;
 		}
 		
+	}
+	
+	/**
+	 * Returns the business owner to their menus
+	 * @author [Programmer]
+	 */
+	@FXML
+	public void returnOwnMen()
+	{
+		btnRToOwnMen.setDisable(true);
+		stkBusiness.setVisible(true);
+		stkCustomer.setVisible(false);
 	}
 }

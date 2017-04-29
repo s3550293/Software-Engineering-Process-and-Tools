@@ -183,7 +183,7 @@ public class MainController implements Initializable {
 	 */
 	@Override
 	public void initialize(URL url, ResourceBundle rb) {
-		stkBusiness.setVisible(true);
+		stkBusiness.setVisible(false);
 		stkCustomer.setVisible(false);
 		boolean var = login();
 		loadDaySelect();
@@ -707,7 +707,21 @@ public class MainController implements Initializable {
 	@FXML
 	public void logout()
 	{
-		//TODO
+		Alert alert = new Alert(AlertType.CONFIRMATION);
+		alert.setTitle("Logout");
+		alert.setHeaderText("Logout of Account?");
+		alert.setContentText("Are you sure?");
+
+		Optional<ButtonType> result = alert.showAndWait();
+		if (result.get() == ButtonType.OK) {
+			initialize(null, null);
+			login();
+			
+		} 
+		else 
+		{
+			return;
+		}
 	}
 	
 	/**
@@ -1503,7 +1517,6 @@ public class MainController implements Initializable {
 		alert.setContentText("Are you sure?");
 
 		Optional<ButtonType> result = alert.showAndWait();
-		System.out.println(globalEmployeeOption);
 		if (result.get() == ButtonType.OK) {
 			Employee employee = listviewEmployees.getSelectionModel().getSelectedItem();
 			int employeeID = employee.getId();
@@ -1580,7 +1593,6 @@ public class MainController implements Initializable {
 		alert.setContentText("Are you sure?");
 
 		Optional<ButtonType> result = alert.showAndWait();
-		System.out.println(globalEmployeeOption);
 		if (result.get() == ButtonType.OK) {
 			Service service = listviewManServices.getSelectionModel().getSelectedItem();
 			int serviceID = service.getID();

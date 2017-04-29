@@ -744,7 +744,6 @@ public class MainController implements Initializable {
 	 */
 	@FXML
 	public void cancelBooking() {
-		// TODO
 		log.debug("LOGGER: Entered cancelBooking function");
 		if(listviewBookings.getSelectionModel().getSelectedIndex() < 0)
 		{
@@ -799,7 +798,6 @@ public class MainController implements Initializable {
 	public void showAddNewEmp() {
 		boardPaneEmpAdd.setVisible(true);
 		boardPaneEmpOverview.setVisible(false);
-		// TODO
 	}
 
 	/**
@@ -833,7 +831,6 @@ public class MainController implements Initializable {
 		} else {
 			gridpWorkingTimes.setDisable(true);
 		}
-		// TODO
 	}
 
 	/**

@@ -13,7 +13,7 @@ public class Login
 	private CustomerMenu cmenu = new CustomerMenu();
 	private Controller controller = new Controller();
 	
-	public Login(){log.setLevel(Level.WARN);}
+	public Login(){log.setLevel(Level.DEBUG);}
 	/*
 	 * loginMenu displays the user login menu to the user
 	 */
@@ -110,9 +110,11 @@ public class Login
 					passCheck=true;
 					if(connect.getUser(userName).getAccountType() == 1){
 						controller.setUser(connect.getUser(userName));
+						log.debug("LOGGER: User - "+connect.getUser(userName).getFullName());
 						return 1;
 					}else{
 						controller.setUser(connect.getUser(userName));
+						log.debug("LOGGER: User - "+connect.getUser(userName).getFullName());
 						return 0;
 					}
 				}

@@ -3,7 +3,7 @@ package program;
 public class Service
 {
 	private int _id, _lengthMin;
-	private String _name, _description;
+	private String _name;
 	private double _price;
 	public Service(){}
 	public Service(int id, String name, int lengthMin, double price)

@@ -163,13 +163,12 @@ public class MainController implements Initializable {
 	
 	@FXML
 	ToggleButton togbtnMorn, togbtnAft, togbtnEven, togbtnTimeSlot1, togbtnTimeSlot2, togbtnTimeSlot3, togbtnTimeSlot4, togbtnTimeSlot5, togbtnTimeSlot6, togbtnTimeSlot7, togbtnTimeSlot8;
-	ToggleButton[] bookingTimes = new ToggleButton[]{togbtnTimeSlot1, togbtnTimeSlot2, togbtnTimeSlot3, togbtnTimeSlot4, togbtnTimeSlot5, togbtnTimeSlot6, togbtnTimeSlot7, togbtnTimeSlot8};
 	
+	@FXML
+	ToggleGroup timeODayGroup = new ToggleGroup();
 	
 	@FXML
 	Label lblAvail1, lblAvail2, lblAvail3, lblAvail4, lblAvail5, lblAvail6, lblAvail7, lblAvail8;
-	Label[] timeAvail = new Label[]{lblAvail1, lblAvail2, lblAvail3, lblAvail4, lblAvail5, lblAvail6, lblAvail7, lblAvail8};
-	
 
 	/**
 	 * initializes the stage
@@ -263,18 +262,17 @@ public class MainController implements Initializable {
 					}
 				});
 
+			} else {
+				stkBusiness.setVisible(false);
+				stkCustomer.setVisible(true);
+				lblCustomerName.setText(connection.getCustomer(program.getUser().getID()).getFullName());
 				cmbDayBooking.valueProperty().addListener(new ChangeListener<Date>() {
 					@Override
 					public void changed(ObservableValue ov, Date t, Date t1) {
 						// TODO
 					}
 				});
-			} else {
-				stkBusiness.setVisible(false);
-				stkCustomer.setVisible(true);
-				lblCustomerName.setText(connection.getCustomer(program.getUser().getID()).getFullName());
-				listviewBookingServices.getSelectionModel().selectedItemProperty()
-						.addListener(new ChangeListener<Service>() {
+				listviewBookingServices.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<Service>() {
 							@Override
 							public void changed(ObservableValue<? extends Service> observable, Service oldValue,
 									Service newValue) {
@@ -282,25 +280,86 @@ public class MainController implements Initializable {
 									lblServiceName.setText(newValue.getName());
 									lblServiceDur.setText(Integer.toString(newValue.getLengthMin()));
 									lblServicePrice.setText("$" + Double.toString(newValue.getPrice()));
-
-									lblBookingService.setText(newValue.getName());
-									lblBookingDur.setText(Integer.toString(newValue.getLengthMin()));
-									lblBookingPrice.setText("$" + Double.toString(newValue.getPrice()));
-									newBook.setService(
-											listviewBookingServices.getSelectionModel().getSelectedItem().getID());
 								}
 							}
 						});
 				cmbDayBooking.valueProperty().addListener(new ChangeListener<Date>() {
 					@Override
 					public void changed(ObservableValue ov, Date t, Date t1) {
-						lblCustBookingDate.setText(
-								program.convertDateToString(cmbDayBooking.getSelectionModel().getSelectedItem()));
 						lblDayDate.setText(program.convertDateToString(cmbDayBooking.getSelectionModel().getSelectedItem()));
-						newBook.setDate(cmbDayBooking.getSelectionModel().getSelectedItem());
 					}
 				});
+				togbtnMorn.setToggleGroup(timeODayGroup);
+				togbtnAft.setToggleGroup(timeODayGroup);
+				togbtnEven.setToggleGroup(timeODayGroup);
 				newBook.setCus(program.getUser().getID());
+				timeODayGroup.selectedToggleProperty().addListener(new ChangeListener<Toggle>() {
+					public void changed(ObservableValue<? extends Toggle> ov, Toggle old_toggle, Toggle new_toggle) {
+						if(togbtnMorn.isSelected()){
+							togbtnAft.setSelected(false);
+							togbtnEven.setSelected(false);
+							Calendar date = Calendar.getInstance();
+							date.set(Calendar.HOUR_OF_DAY, 8);
+							date.set(Calendar.MINUTE, 0);
+					        for(int i = 0;i<8;i++){
+					        	if(i == 0){togbtnTimeSlot1.setText(date.get(Calendar.HOUR_OF_DAY)+":"+date.get(Calendar.MINUTE)+"0");}
+					        	if(i == 1){togbtnTimeSlot2.setText(date.get(Calendar.HOUR_OF_DAY)+":"+date.get(Calendar.MINUTE));}
+					        	if(i == 2){togbtnTimeSlot3.setText(date.get(Calendar.HOUR_OF_DAY)+":"+date.get(Calendar.MINUTE)+"0");}
+					        	if(i == 3){togbtnTimeSlot4.setText(date.get(Calendar.HOUR_OF_DAY)+":"+date.get(Calendar.MINUTE));}
+					        	if(i == 4){togbtnTimeSlot5.setText(date.get(Calendar.HOUR_OF_DAY)+":"+date.get(Calendar.MINUTE)+"0");}
+					        	if(i == 5){togbtnTimeSlot6.setText(date.get(Calendar.HOUR_OF_DAY)+":"+date.get(Calendar.MINUTE));}
+					        	if(i == 6){togbtnTimeSlot7.setText(date.get(Calendar.HOUR_OF_DAY)+":"+date.get(Calendar.MINUTE)+"0");}
+					        	if(i == 7){togbtnTimeSlot8.setText(date.get(Calendar.HOUR_OF_DAY)+":"+date.get(Calendar.MINUTE));}
+					        	date.add(Calendar.MINUTE, 30);
+					        }
+						}
+						else if(togbtnAft.isSelected()){
+							togbtnMorn.setSelected(false);
+							togbtnEven.setSelected(false);
+							Calendar date = Calendar.getInstance();
+							log.debug("LOGGER: date - "+date);
+							date.set(Calendar.HOUR_OF_DAY, 12);
+							date.set(Calendar.MINUTE, 00);
+							log.debug("LOGGER: date - "+date.get(Calendar.HOUR_OF_DAY));
+					        for(int i = 0;i<8;i++){
+					        	if(i == 0){togbtnTimeSlot1.setText(date.get(Calendar.HOUR_OF_DAY)+":"+date.get(Calendar.MINUTE)+"0");}
+					        	if(i == 1){togbtnTimeSlot2.setText(date.get(Calendar.HOUR_OF_DAY)+":"+date.get(Calendar.MINUTE));}
+					        	if(i == 2){togbtnTimeSlot3.setText(date.get(Calendar.HOUR_OF_DAY)+":"+date.get(Calendar.MINUTE)+"0");}
+					        	if(i == 3){togbtnTimeSlot4.setText(date.get(Calendar.HOUR_OF_DAY)+":"+date.get(Calendar.MINUTE));}
+					        	if(i == 4){togbtnTimeSlot5.setText(date.get(Calendar.HOUR_OF_DAY)+":"+date.get(Calendar.MINUTE)+"0");}
+					        	if(i == 5){togbtnTimeSlot6.setText(date.get(Calendar.HOUR_OF_DAY)+":"+date.get(Calendar.MINUTE));}
+					        	if(i == 6){togbtnTimeSlot7.setText(date.get(Calendar.HOUR_OF_DAY)+":"+date.get(Calendar.MINUTE)+"0");}
+					        	if(i == 7){togbtnTimeSlot8.setText(date.get(Calendar.HOUR_OF_DAY)+":"+date.get(Calendar.MINUTE));}
+					        	date.add(Calendar.MINUTE, 30);
+					        }
+						}
+						else{
+							togbtnMorn.setSelected(false);
+							togbtnAft.setSelected(false);
+							Calendar date = Calendar.getInstance();
+							log.debug("LOGGER: date - "+date);
+							date.set(Calendar.HOUR_OF_DAY, 16);
+							date.set(Calendar.MINUTE, 0);
+							log.debug("LOGGER: date - "+date.get(Calendar.HOUR_OF_DAY));
+					        for(int i = 0;i<8;i++){
+					        	if(i == 0){togbtnTimeSlot1.setText(date.get(Calendar.HOUR_OF_DAY)+":"+date.get(Calendar.MINUTE)+"0");}
+					        	if(i == 1){togbtnTimeSlot2.setText(date.get(Calendar.HOUR_OF_DAY)+":"+date.get(Calendar.MINUTE));}
+					        	if(i == 2){togbtnTimeSlot3.setText(date.get(Calendar.HOUR_OF_DAY)+":"+date.get(Calendar.MINUTE)+"0");}
+					        	if(i == 3){togbtnTimeSlot4.setText(date.get(Calendar.HOUR_OF_DAY)+":"+date.get(Calendar.MINUTE));}
+					        	if(i == 4){togbtnTimeSlot5.setText(date.get(Calendar.HOUR_OF_DAY)+":"+date.get(Calendar.MINUTE)+"0");}
+					        	if(i == 5){togbtnTimeSlot6.setText(date.get(Calendar.HOUR_OF_DAY)+":"+date.get(Calendar.MINUTE));}
+					        	if(i == 6){togbtnTimeSlot7.setText(date.get(Calendar.HOUR_OF_DAY)+":"+date.get(Calendar.MINUTE)+"0");}
+					        	if(i == 7){togbtnTimeSlot8.setText(date.get(Calendar.HOUR_OF_DAY)+":"+date.get(Calendar.MINUTE));}
+					        	date.add(Calendar.MINUTE, 30);
+					        }
+						}
+					}
+				});
+				/*
+				togbtnEven.selectedProperty().addListener((p, ov, nv) -> {
+					
+			    });
+			    */
 			}
 		} else {
 			Platform.exit();
@@ -433,6 +492,7 @@ public class MainController implements Initializable {
 					return cell;
 				}
 			});
+			lblDayDate.setText(program.convertDateToString(cmbDayBooking.getSelectionModel().getSelectedItem()));
 			cmbDayBooking.setButtonCell(new ListCell<Date>() {
 				@Override
 				protected void updateItem(Date t, boolean bln) {
@@ -1480,7 +1540,20 @@ public class MainController implements Initializable {
 	@FXML
 	public void addService()
 	{
-		//TODO
+		try {
+			Stage secondaryStage = new Stage();
+			secondaryStage.getIcons().add(new Image("images/ic_collections_bookmark_black_48dp_2x.png"));
+			Parent root = FXMLLoader.load(getClass().getResource("serviceLayout.fxml"));
+			secondaryStage.setTitle("Login");
+			secondaryStage.setResizable(false);
+			secondaryStage.setScene(new Scene(root));
+			secondaryStage.initModality(Modality.APPLICATION_MODAL);
+			secondaryStage.showAndWait();
+		} catch (IOException ioe) {
+			log.warn(ioe.getMessage());
+		}
+		log.debug("false");
+		loadallServices("");
 	}
 	
 	/**
@@ -1647,12 +1720,17 @@ public class MainController implements Initializable {
 	 */
 	@FXML
 	public void nextView(){
+		Service service = listviewBookingServices.getSelectionModel().getSelectedItem();
 		if(stkpnDateService.isVisible() && stkpnBookingMenu.isVisible())
 		{
 			stkpnDateService.setVisible(false);
 			stkpnTime.setVisible(true);
-			//TODO
-			
+			lblBookingService.setText(service.getName());
+			lblBookingDur.setText(Integer.toString(service.getLengthMin()));
+			lblBookingPrice.setText("$" + Double.toString(service.getPrice()));
+			newBook.setService(service.getID());
+			lblCustBookingDate.setText(program.convertDateToString(cmbDayBooking.getSelectionModel().getSelectedItem()));
+			newBook.setDate(cmbDayBooking.getSelectionModel().getSelectedItem());
 			return;
 		}
 		if(stkpnTime.isVisible() && stkpnBookingMenu.isVisible())

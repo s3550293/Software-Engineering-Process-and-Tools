@@ -407,9 +407,9 @@ public class DatabaseConnection
 			{
 				id = output.getInt(1);
 				empID = output.getInt(2);
-				date = controller.convertStringToDate(output.getString(3));
-				startTime = controller.convertStringToTime(output.getString(4));
-				endTime = controller.convertStringToTime(output.getString(5));
+				date = controller.strToDate(output.getString(3));
+				startTime = controller.strToTime(output.getString(4));
+				endTime = controller.strToTime(output.getString(5));
 				databaseWorkingTime.add(new EmployeeWorkingTime(id,empID,date,startTime,endTime));				
 			}
 			output.close();
@@ -542,9 +542,9 @@ public class DatabaseConnection
 				bookingID = output.getInt(1);
 				cusID = output.getInt(2);
 				empID = output.getInt(3);
-				date = controller.convertStringToDate(output.getString(4));
-				startTime = controller.convertStringToTime(output.getString(5));
-				endTime = controller.convertStringToTime(output.getString(6));
+				date = controller.strToDate(output.getString(4));
+				startTime = controller.strToTime(output.getString(5));
+				endTime = controller.strToTime(output.getString(6));
 				service = output.getInt(7);
 				desc=output.getString(8);
 				databaseBookingTime.add(new Booking(bookingID,cusID,empID,date,startTime,endTime,service,desc));				
@@ -587,9 +587,9 @@ public class DatabaseConnection
 				bookingID = output.getInt(1);
 				cusID = output.getInt(2);
 				empID = output.getInt(3);
-				date = controller.convertStringToDate(output.getString(4));
-				startTime = controller.convertStringToTime(output.getString(5));
-				endTime = controller.convertStringToTime(output.getString(6));
+				date = controller.strToDate(output.getString(4));
+				startTime = controller.strToTime(output.getString(5));
+				endTime = controller.strToTime(output.getString(6));
 				service = output.getInt(7);
 				desc=output.getString(8);
 				databaseBookingTime.add(new Booking(bookingID,cusID,empID,date,startTime,endTime,service,desc));				
@@ -632,9 +632,9 @@ public class DatabaseConnection
 				bookingID = output.getInt(1);
 				cusID = output.getInt(2);
 				empID = output.getInt(3);
-				date = controller.convertStringToDate(output.getString(4));
-				startTime = controller.convertStringToTime(output.getString(5));
-				endTime = controller.convertStringToTime(output.getString(6));
+				date = controller.strToDate(output.getString(4));
+				startTime = controller.strToTime(output.getString(5));
+				endTime = controller.strToTime(output.getString(6));
 				service = output.getInt(7);
 				desc=output.getString(8);
 				getBooking = new Booking(bookingID,cusID,empID,date,startTime,endTime,service,desc);				
@@ -780,9 +780,9 @@ public class DatabaseConnection
 			{
 				id = output.getInt(1);
 				empID = output.getInt(2);
-				date = controller.convertStringToDate(output.getString(3));
-				startTime = controller.convertStringToTime(output.getString(4));
-				endTime = controller.convertStringToTime(output.getString(5));
+				date = controller.strToDate(output.getString(3));
+				startTime = controller.strToTime(output.getString(4));
+				endTime = controller.strToTime(output.getString(5));
 				databaseWorkingTime.add(new EmployeeWorkingTime(id,empID,date,startTime,endTime));				
 			}
 			output.close();
@@ -811,7 +811,7 @@ public class DatabaseConnection
 		for(EmployeeWorkingTime ewt: workTimes)
 		{
 			Date date = ewt.getDate();
-			String dateStr = controller.convertDateToString(date);
+			String dateStr = controller.dateToStr(date);
 			if(dateStr.equals(Date))
 			{
 				workTimesOnDate.add(ewt);
@@ -836,7 +836,7 @@ public class DatabaseConnection
 		for(Booking bk: bookings)
 		{
 			Date date = bk.getDate();
-			String dateStr = controller.convertDateToString(date);
+			String dateStr = controller.dateToStr(date);
 			if(dateStr.equals(Date))
 			{
 				if(bk.getStatus().equals("active"))

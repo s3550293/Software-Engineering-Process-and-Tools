@@ -109,8 +109,8 @@ public class CustomerMenu
 				log.debug(time[0]);
 				log.debug(time[1]);
 				int count = 1;
-				calstart.setTime(controller.convertStringToTime(time[0]));
-				calend.setTime(controller.convertStringToTime(time[1]));
+				calstart.setTime(controller.strToTime(time[0]));
+				calend.setTime(controller.strToTime(time[1]));
 				System.out.println("\nBooking Time");
 				System.out.printf("\n%s", "NO.");
 				System.out.printf("%-2s %s", "", "Time");
@@ -118,20 +118,20 @@ public class CustomerMenu
 				System.out.print("\n---------------------------------------------------------");
 				while (displayloop)
 				{
-					if (controller.convertTimeToString(calstart.getTime())
-							.equals(controller.convertTimeToString(calend.getTime())))
+					if (controller.timeToStr(calstart.getTime())
+							.equals(controller.timeToStr(calend.getTime())))
 					{
 						break;
 					} 
 					else
 					{
 						System.out.printf("\n%2d.", count);
-						System.out.printf("%-2s %-10s", "", controller.convertTimeToString(calstart.getTime()));
-						if(controller.checkBookingStartTime(calstart.getTime(),controller.convertStringToDate(days[date - 1])))
+						System.out.printf("%-2s %-10s", "", controller.timeToStr(calstart.getTime()));
+						if(controller.checkBookingStartTime(calstart.getTime(),controller.strToDate(days[date - 1])))
 						{
 							System.out.printf("%-10s %s", "", "Avail\n");
 						}
-						else if(!controller.checkBookingStartTime(calstart.getTime(),controller.convertStringToDate(days[date - 1])))
+						else if(!controller.checkBookingStartTime(calstart.getTime(),controller.strToDate(days[date - 1])))
 						{
 							System.out.printf("%-10s %s", "", "-----\n");
 						}

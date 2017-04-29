@@ -78,12 +78,12 @@ public class PreLoader extends Preloader{
 		connect.addSerice(new Service("Wash",45,30));
 		connect.addSerice(new Service("Cut and Style",90,60));
 		
-		connect.addBooking(2,1, "05/04/2017", "10:00", "11:15", 0, "active");
-		connect.addBooking(3,1, "10/04/2017", "11:00", "12:15", 0,"active");
-		connect.addBooking(3,2, "06/04/2017", "11:00", "12:00", 0,"active");
+		connect.addBooking(2,1, "30/04/2017", "8:00", "8:40", 0, "active");
+		connect.addBooking(3,1, "30/04/2017", "10:00", "10:40", 0,"active");
+		connect.addBooking(3,2, "30/04/2017", "11:00", "11:59", 0,"active");
 
 		
-		connect.cancelBooking(2);
+		//connect.cancelBooking(2);
     }
 
 }

@@ -170,6 +170,13 @@ public class RegisterController implements Initializable {
         	program.messageBox("ERROR", "Error", "Invalid Date", "");
             return;
         }
+        date = cmbDay.getSelectionModel().getSelectedItem() + "/" + cmbMonth.getSelectionModel().getSelectedItem() + "/" + cmbYear.getSelectionModel().getSelectedItem();
+        if(!program.checkForBackToFuture(date))
+        {
+        	log.debug("LOGGER: doc...ah...are you telling me you built a TIME MACHINE...out of a delorean?!");
+        	program.messageBox("ERROR", "Incorrect DOB", "Invalid DOB", "DOB is in the future");
+        	return;
+        }
         if(cmbRegGender.getSelectionModel().getSelectedItem() == null)
         {
         	program.messageBox("ERROR", "Error", "Invalid Gender", "");
@@ -185,13 +192,6 @@ public class RegisterController implements Initializable {
         	log.debug("LOGGER: Conf Password:"+pfRegConfPassword.getText());
         	program.messageBox("ERROR", "Error", "Passwords Do No Match", "");
             return;
-        }
-        date = cmbDay.getSelectionModel().getSelectedItem() + "/" + cmbMonth.getSelectionModel().getSelectedItem() + "/" + cmbYear.getSelectionModel().getSelectedItem();
-        if(program.checkForBackToFuture(date))
-        {
-        	log.debug("LOGGER: doc...ah...are you telling me you built a TIME MACHINE...out of a delorean?!");
-        	program.messageBox("ERROR", "Incorrect DOB", "Invalid DOB", "DOB is in the future");
-        	return;
         }
         regProgram.registerUser(txtFirstName.getText(), txtLastName.getText(), txtRegUsername.getText(), txtRegEmail.getText(), txtMobileNumber.getText(), date, cmbRegGender.getSelectionModel().getSelectedItem(), pfRegPassword.getText());
         program.messageBox("INFO", "User Added", "User Added", "You have successfully created an account");

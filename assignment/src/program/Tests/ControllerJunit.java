@@ -272,117 +272,117 @@ public class ControllerJunit {
 	@Test
 	public void testDateConvertFunc1()
 	{
-		assertEquals("01/01/2012",controller.convertDateToString(controller.convertStringToDate("01/01/2012")));
+		assertEquals("01/01/2012",controller.dateToStr(controller.strToDate("01/01/2012")));
 	}
 	@Test
 	public void testDateConvertFunc2()
 	{
-		assertEquals("01/01/2012",controller.convertDateToString(controller.convertStringToDate("1/01/2012")));
+		assertEquals("01/01/2012",controller.dateToStr(controller.strToDate("1/01/2012")));
 	}
 	@Test
 	public void testDateConvertFunc3()
 	{
-		assertEquals("30/12/2020",controller.convertDateToString(controller.convertStringToDate("30/12/2020")));
+		assertEquals("30/12/2020",controller.dateToStr(controller.strToDate("30/12/2020")));
 	}
 	@Test
 	public void testDateConvertFunc4()
 	{
-		assertEquals("12/12/2012",controller.convertDateToString(controller.convertStringToDate("12/12/2012")));
+		assertEquals("12/12/2012",controller.dateToStr(controller.strToDate("12/12/2012")));
 	}
 	@Test
 	public void testDateConvertFunc5()
 	{
-		assertEquals("01:30",controller.convertTimeToString(controller.convertStringToTime("1:30")));
+		assertEquals("01:30",controller.timeToStr(controller.strToTime("1:30")));
 	}
 	@Test
 	public void testDateConvertFunc6()
 	{
-		assertEquals("10:01",controller.convertTimeToString(controller.convertStringToTime("10:01")));
+		assertEquals("10:01",controller.timeToStr(controller.strToTime("10:01")));
 	}
 	@Test
 	public void testDateConvertFunc7()
 	{
-		assertEquals("12:12",controller.convertTimeToString(controller.convertStringToTime("12:12")));
+		assertEquals("12:12",controller.timeToStr(controller.strToTime("12:12")));
 	}
 	@Test
 	public void testDateConvertFunc8()
 	{
-		assertEquals("13:45",controller.convertTimeToString(controller.convertStringToTime("13:45")));
+		assertEquals("13:45",controller.timeToStr(controller.strToTime("13:45")));
 	}
 	@Test
 	public void testDateConvertFunc9()
 	{
-		assertEquals("23:59",controller.convertTimeToString(controller.convertStringToTime("23:59")));
+		assertEquals("23:59",controller.timeToStr(controller.strToTime("23:59")));
 	}
 	@Test
 	public void testDateConvertFunc10()
 	{
-		assertEquals(60 , controller.getTimeDifference(controller.convertStringToTime("1:00"),controller.convertStringToTime("2:00")));
+		assertEquals(60 , controller.getTimeDifference(controller.strToTime("1:00"),controller.strToTime("2:00")));
 	}
 	@Test
 	public void testDateConvertFunc11()
 	{
-		assertEquals(660 , controller.getTimeDifference(controller.convertStringToTime("12:00"),controller.convertStringToTime("23:00")));
+		assertEquals(660 , controller.getTimeDifference(controller.strToTime("12:00"),controller.strToTime("23:00")));
 	}
 	@Test
 	public void testDateConvertFunc12()
 	{
-		assertEquals(120 , controller.getTimeDifference(controller.convertStringToTime("11:00"),controller.convertStringToTime("13:00")));
+		assertEquals(120 , controller.getTimeDifference(controller.strToTime("11:00"),controller.strToTime("13:00")));
 	}
 	@Test
 	public void testDateConvertFunc13()
 	{
-		assertEquals(730 , controller.getDateDifference(controller.convertStringToDate("01/01/01"),controller.convertStringToDate("01/01/03")));
+		assertEquals(730 , controller.getDateDifference(controller.strToDate("01/01/01"),controller.strToDate("01/01/03")));
 	}
 	@Test
 	public void testDateConvertFunc14()
 	{
-		assertEquals(7 , controller.getDateDifference(controller.convertStringToDate("23/12/17"),controller.convertStringToDate("30/12/17")));
+		assertEquals(7 , controller.getDateDifference(controller.strToDate("23/12/17"),controller.strToDate("30/12/17")));
 	}
 	@Test
 	public void testDateConvertFunc15()
 	{
-		assertEquals(2 , controller.getDateDifference(controller.convertStringToDate("01/01/99"),controller.convertStringToDate("03/01/99")));
+		assertEquals(2 , controller.getDateDifference(controller.strToDate("01/01/99"),controller.strToDate("03/01/99")));
 	}
 	@Test
 	public void testDateConvertFunc16()
 	{
-		assertEquals(null,controller.convertStringToDate("a/01/2012"));
+		assertEquals(null,controller.strToDate("a/01/2012"));
 	}
 	@Test
 	public void testDateConvertFunc17()
 	{
-		assertEquals(null,controller.convertStringToDate("//03/20000"));
+		assertEquals(null,controller.strToDate("//03/20000"));
 	}
 	@Test
 	public void testDateConvertFunc18()
 	{
-		assertEquals(null,controller.convertStringToDate("19//2/1001"));
+		assertEquals(null,controller.strToDate("19//2/1001"));
 	}
 	@Test
 	public void testDateConvertFunc19()
 	{
-		assertEquals(null,controller.convertStringToDate("stupid"));
+		assertEquals(null,controller.strToDate("stupid"));
 	}
 	@Test
 	public void testDateConvertFunc20()
 	{
-		assertEquals(null,controller.convertStringToTime("01/01/2012"));
+		assertEquals(null,controller.strToTime("01/01/2012"));
 	}
 	@Test
 	public void testDateConvertFunc21()
 	{
-		assertEquals(null,controller.convertStringToTime("stf:fds"));
+		assertEquals(null,controller.strToTime("stf:fds"));
 	}
 	@Test
 	public void testDateConvertFunc22()
 	{
-		assertEquals(null,controller.convertStringToTime("ok:ok"));
+		assertEquals(null,controller.strToTime("ok:ok"));
 	}
 	@Test
 	public void testDateConvertFunc23()
 	{
-		assertEquals(null,controller.convertStringToTime("2012"));
+		assertEquals(null,controller.strToTime("2012"));
 	}
 	
 	
@@ -659,8 +659,8 @@ public class ControllerJunit {
 		date2.set(Calendar.SECOND, 0);
 		date2.set(Calendar.MILLISECOND, 0);
 		long amount = date2.getTimeInMillis();
-		Date date = controller.convertStringToDate("02/04/1998");
-		Date time = controller.convertStringToTime("08:00");
+		Date date = controller.strToDate("02/04/1998");
+		Date time = controller.strToTime("08:00");
 		assertEquals(amount,controller.getTimeFrom1970(date, time));
 	}
 	@Test
@@ -671,8 +671,8 @@ public class ControllerJunit {
 		date2.set(Calendar.SECOND, 0);
 		date2.set(Calendar.MILLISECOND, 0);
 		long amount = date2.getTimeInMillis();
-		Date date = controller.convertStringToDate("22/06/2005");
-		Date time = controller.convertStringToTime("16:00");
+		Date date = controller.strToDate("22/06/2005");
+		Date time = controller.strToTime("16:00");
 		assertEquals(amount,controller.getTimeFrom1970(date, time));
 	}
 	@Test
@@ -683,8 +683,8 @@ public class ControllerJunit {
 		date2.set(Calendar.SECOND, 0);
 		date2.set(Calendar.MILLISECOND, 0);
 		long amount = date2.getTimeInMillis();
-		Date date = controller.convertStringToDate("30/12/2056");
-		Date time = controller.convertStringToTime("12:00");
+		Date date = controller.strToDate("30/12/2056");
+		Date time = controller.strToTime("12:00");
 		assertEquals(amount,controller.getTimeFrom1970(date, time));
 	}
 	@Test
@@ -695,8 +695,8 @@ public class ControllerJunit {
 		date2.set(Calendar.SECOND, 0);
 		date2.set(Calendar.MILLISECOND, 0);
 		long amount = date2.getTimeInMillis();
-		Date date = controller.convertStringToDate("15/06/2018");
-		Date time = controller.convertStringToTime("16:00");
+		Date date = controller.strToDate("15/06/2018");
+		Date time = controller.strToTime("16:00");
 		assertEquals(amount,controller.getTimeFrom1970(date, time));
 	}
 	@Test
@@ -707,8 +707,8 @@ public class ControllerJunit {
 		date2.set(Calendar.SECOND, 0);
 		date2.set(Calendar.MILLISECOND, 0);
 		long amount = date2.getTimeInMillis();
-		Date date = controller.convertStringToDate("15/01/2018");
-		Date time = controller.convertStringToTime("20:00");
+		Date date = controller.strToDate("15/01/2018");
+		Date time = controller.strToTime("20:00");
 		assertEquals(amount,controller.getTimeFrom1970(date, time));
 	}
 	@Test

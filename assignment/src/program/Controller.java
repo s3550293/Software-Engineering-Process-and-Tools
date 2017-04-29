@@ -247,7 +247,7 @@ public class Controller
 	 * @param date
 	 * @return Date date
 	 */
-	public Date convertStringToDate(String date)
+	public Date strToDate(String date)
 	{
 		Date _date = null;
 		SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
@@ -268,7 +268,7 @@ public class Controller
 	 * @param date
 	 * @return String date
 	 */
-	public String convertDateToString(Date date)
+	public String dateToStr(Date date)
 	{
 		String _date = null;
 		SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
@@ -282,7 +282,7 @@ public class Controller
 	 * @param string
 	 * @return Date time
 	 */
-	public Date convertStringToTime(String string)
+	public Date strToTime(String string)
 	{
 		Date _time = null;
 		DateFormat sdf = new SimpleDateFormat("HH:mm");
@@ -302,7 +302,7 @@ public class Controller
 	 * @param time
 	 * @return string time
 	 */
-	public String convertTimeToString(Date time)
+	public String timeToStr(Date time)
 	{
 		String _time = null;
 		DateFormat sdf = new SimpleDateFormat("HH:mm");
@@ -376,9 +376,9 @@ public class Controller
 	{
 		for (EmployeeWorkingTime ew : workDays)
 		{
-			if (date.equals(convertDateToString(ew.getDate())))
+			if (date.equals(dateToStr(ew.getDate())))
 			{
-				return convertDateToString(ew.getDate());
+				return dateToStr(ew.getDate());
 			}
 		}
 		return "";
@@ -400,18 +400,18 @@ public class Controller
 		{
 			for (EmployeeWorkingTime ew : workDays)
 			{
-				if (date.equals(convertDateToString(ew.getDate())))
+				if (date.equals(dateToStr(ew.getDate())))
 				{
-					return convertTimeToString(ew.getStartTime());
+					return timeToStr(ew.getStartTime());
 				}
 			}
 		} else
 		{
 			for (EmployeeWorkingTime ew : workDays)
 			{
-				if (date.equals(convertDateToString(ew.getDate())))
+				if (date.equals(dateToStr(ew.getDate())))
 				{
-					return convertTimeToString(ew.getEndTime());
+					return timeToStr(ew.getEndTime());
 				}
 			}
 		}
@@ -601,7 +601,7 @@ public class Controller
 			for (int j = 0; j < nDays.length; j++)
 			{
 				//String bookedDays=convertDateToString(b.getDate());
-					if (convertDateToString(b.getDate()).equals(nDays[j])&&b.getStatus().equalsIgnoreCase("active"))
+					if (dateToStr(b.getDate()).equals(nDays[j])&&b.getStatus().equalsIgnoreCase("active"))
 					{
 						System.out.printf("%-8s %-5s", "", "Booked");
 						
@@ -636,9 +636,9 @@ public class Controller
 				for (int j = 0; j < nDays.length; j++) {
 					System.out.printf("%s", nDays[j]);
 					if (bookings != null) {
-						if (nDays[j].equals(convertDateToString(bookings.getDate()))) {
-							String startTime = convertTimeToString(bookings.getStartTime());
-							String endTime = convertTimeToString(bookings.getEndTime());
+						if (nDays[j].equals(dateToStr(bookings.getDate()))) {
+							String startTime = timeToStr(bookings.getStartTime());
+							String endTime = timeToStr(bookings.getEndTime());
 							System.out.printf("%6s %-15s %s\n", "", startTime, endTime);
 						} else {
 							System.out.printf("%6s %-15s %s\n", "", "-----", "-----");
@@ -771,9 +771,9 @@ public class Controller
 		for(Booking b: connect.getAllBooking())
 		{
 			log.debug("Booking ID: "+b.getBookingID());
-			if(convertDateToString(b.getDate()).equals(_date))
+			if(dateToStr(b.getDate()).equals(_date))
 			{
-				if(convertTimeToString(b.getStartTime()).equals(_time))
+				if(timeToStr(b.getStartTime()).equals(_time))
 				{
 					return false;
 				}
@@ -854,7 +854,7 @@ public class Controller
 	 */
 	public boolean checkForBackToFuture(String date)
 	{
-		Date _date = convertStringToDate(date);
+		Date _date = strToDate(date);
 		Calendar cal = Calendar.getInstance();
 		Date today = cal.getTime();
 		if(today.after(_date))
@@ -874,13 +874,13 @@ public class Controller
 	public long getTimeFrom1970(Date date, Date time)
 	{
 		log.info("IN getTimeFrom1970");
-		String dateStr = convertDateToString(date);
+		String dateStr = dateToStr(date);
 		int first = dateStr.indexOf("/");
 		int second = dateStr.indexOf("/",first+1);
 		String dayOfMonthStr = dateStr.substring(0,first);
 		String monthStr = dateStr.substring(first+1,second);
 		String yearStr = dateStr.substring(second+1);	
-		String timeStr = convertTimeToString(time);
+		String timeStr = timeToStr(time);
 		int semicolon = timeStr.indexOf(":");
 		log.info("index = "+semicolon+"\n");
 		String hourStr = timeStr.substring(0,semicolon);
@@ -917,10 +917,10 @@ public class Controller
 		ArrayList<Employee> employeesNotAvailable = new ArrayList<Employee>();
 		workTimesOnDate = connect.getWorkTimesOnDate(date);
 		bookingsOnDate = connect.getActiveBookingsOnDate(date);
-		Date date2 = convertStringToDate(date);
-		Date startTime2 = convertStringToTime(startTime);
+		Date date2 = strToDate(date);
+		Date startTime2 = strToTime(startTime);
 		System.out.println("Booking Start Time = "+startTime2);
-		Date endTime2 = convertStringToTime(endTime);
+		Date endTime2 = strToTime(endTime);
 		System.out.println("Booking End Time = "+endTime2);
 		long bookingStartTime = getTimeFrom1970(date2, startTime2);
 		long bookingEndTime = getTimeFrom1970(date2, endTime2);

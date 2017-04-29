@@ -54,12 +54,12 @@ import org.apache.log4j.Logger;
 public class MainController implements Initializable {
 
 	private static Logger log = Logger.getLogger(MainController.class);
-	private Controller program = new Controller();
+	private static Controller program = new Controller();
 	private DatabaseConnection connection = new DatabaseConnection();
 	private Employee employee = null;
 	private Booking booking = null;
 	int globalEmployeeOption = 0;
-	private static Booking newBook=new Booking(0,0,null,null,null,0,null);
+	private static Booking newBook=new Booking(0,0,program.strToDate("05/05/2017"),program.strToTime("08:00"),program.strToTime("09:00"),0,null);
 	public MainController() {}
 	
 	/**************
@@ -1713,7 +1713,9 @@ public class MainController implements Initializable {
 	private void loadpreferedEmp()
 	{
 		//TODO
-		ArrayList<Employee> dateArray = new ArrayList<>();
+		ArrayList<Employee> emList = new ArrayList<>();
+		emList=program.getAvailableEmployeesForSpecifiedTime(program.dateToStr(newBook.getDate()),program.timeToStr(newBook.getStartTime()),program.timeToStr(newBook.getEndTime()));
+		ArrayList<Employee> dateArray = new ArrayList<>(emList);
 		ObservableList<Employee> dateList = FXCollections.observableList(dateArray);
 		if (dateList != null) {
 			cmbPreferEmp.setItems(dateList);
@@ -2208,6 +2210,199 @@ public class MainController implements Initializable {
 			lblCustBookingDate.setText(program.dateToStr(cmbDayBooking.getSelectionModel().getSelectedItem()));
 			newBook.setDate(cmbDayBooking.getSelectionModel().getSelectedItem());
 			checkBookingTime();
+			loadpreferedEmp();
+			togbtnMorn.setToggleGroup(timeODayGroup);
+			togbtnAft.setToggleGroup(timeODayGroup);
+			togbtnEven.setToggleGroup(timeODayGroup);
+			togbtnTimeSlot1.setToggleGroup(timeGroup);
+			togbtnTimeSlot2.setToggleGroup(timeGroup);
+			togbtnTimeSlot3.setToggleGroup(timeGroup);
+			togbtnTimeSlot4.setToggleGroup(timeGroup);
+			togbtnTimeSlot5.setToggleGroup(timeGroup);
+			togbtnTimeSlot6.setToggleGroup(timeGroup);
+			togbtnTimeSlot7.setToggleGroup(timeGroup);
+			togbtnTimeSlot8.setToggleGroup(timeGroup);
+			timeODayGroup.selectedToggleProperty().addListener(new ChangeListener<Toggle>() {
+				public void changed(ObservableValue<? extends Toggle> ov, Toggle old_toggle, Toggle new_toggle) {
+					if(togbtnMorn.isSelected()){
+						togbtnAft.setSelected(false);
+						togbtnEven.setSelected(false);
+						checkBookingTime();
+						timeGroup.selectedToggleProperty().addListener(new ChangeListener<Toggle>() {
+							@Override
+							public void changed(ObservableValue<? extends Toggle> observable, Toggle oldValue,
+									Toggle newValue) {
+								// TODO Auto-generated method stub
+							
+								if(togbtnTimeSlot1.isSelected()){
+									newBook.setStartTime(program.strToTime(togbtnTimeSlot1.getText()));
+									lblBookingTime.setText(togbtnTimeSlot1.getText());
+									loadpreferedEmp();
+									}
+								else if(togbtnTimeSlot2.isSelected()){
+									newBook.setStartTime(program.strToTime(togbtnTimeSlot2.getText()));
+									lblBookingTime.setText(togbtnTimeSlot2.getText());
+									loadpreferedEmp();
+									}
+								else if(togbtnTimeSlot3.isSelected()){
+									newBook.setStartTime(program.strToTime(togbtnTimeSlot3.getText()));
+									lblBookingTime.setText(togbtnTimeSlot3.getText());
+									loadpreferedEmp();
+									}
+								else if(togbtnTimeSlot4.isSelected()){
+									newBook.setStartTime(program.strToTime(togbtnTimeSlot4.getText()));
+									lblBookingTime.setText(togbtnTimeSlot4.getText());
+									loadpreferedEmp();
+									}
+								else if(togbtnTimeSlot5.isSelected()){
+									newBook.setStartTime(program.strToTime(togbtnTimeSlot5.getText()));
+									lblBookingTime.setText(togbtnTimeSlot5.getText());
+									loadpreferedEmp();
+									}
+								else if(togbtnTimeSlot6.isSelected()){
+									newBook.setStartTime(program.strToTime(togbtnTimeSlot6.getText()));
+									lblBookingTime.setText(togbtnTimeSlot6.getText());
+									loadpreferedEmp();
+									}
+								else if(togbtnTimeSlot7.isSelected()){
+									newBook.setStartTime(program.strToTime(togbtnTimeSlot7.getText()));
+									lblBookingTime.setText(togbtnTimeSlot7.getText());
+									loadpreferedEmp();
+									}
+								else if(togbtnTimeSlot8.isSelected()){
+									newBook.setStartTime(program.strToTime(togbtnTimeSlot8.getText()));
+									lblBookingTime.setText(togbtnTimeSlot8.getText());
+									loadpreferedEmp();
+									}
+							}
+						
+						});
+					 checkBookingTime();
+				}
+				   
+					else if(togbtnAft.isSelected()){
+						togbtnMorn.setSelected(false);
+						togbtnEven.setSelected(false);
+						checkBookingTime();
+						timeGroup.selectedToggleProperty().addListener(new ChangeListener<Toggle>() {
+							@Override
+							public void changed(ObservableValue<? extends Toggle> observable, Toggle oldValue,
+									Toggle newValue) {
+								// TODO Auto-generated method stub
+							
+								if(togbtnTimeSlot1.isSelected()){
+									newBook.setStartTime(program.strToTime(togbtnTimeSlot1.getText()));
+									lblBookingTime.setText(togbtnTimeSlot1.getText());
+									loadpreferedEmp();
+									}
+								else if(togbtnTimeSlot2.isSelected()){
+									newBook.setStartTime(program.strToTime(togbtnTimeSlot2.getText()));
+									lblBookingTime.setText(togbtnTimeSlot2.getText());
+									loadpreferedEmp();
+									}
+								else if(togbtnTimeSlot3.isSelected()){
+									newBook.setStartTime(program.strToTime(togbtnTimeSlot3.getText()));
+									lblBookingTime.setText(togbtnTimeSlot3.getText());
+									loadpreferedEmp();
+									}
+								else if(togbtnTimeSlot4.isSelected()){
+									newBook.setStartTime(program.strToTime(togbtnTimeSlot4.getText()));
+									lblBookingTime.setText(togbtnTimeSlot4.getText());
+									loadpreferedEmp();
+									}
+								else if(togbtnTimeSlot5.isSelected()){
+									newBook.setStartTime(program.strToTime(togbtnTimeSlot5.getText()));
+									lblBookingTime.setText(togbtnTimeSlot5.getText());
+									loadpreferedEmp();
+									}
+								else if(togbtnTimeSlot6.isSelected()){
+									newBook.setStartTime(program.strToTime(togbtnTimeSlot6.getText()));
+									lblBookingTime.setText(togbtnTimeSlot6.getText());
+									loadpreferedEmp();
+									}
+								else if(togbtnTimeSlot7.isSelected()){
+									newBook.setStartTime(program.strToTime(togbtnTimeSlot7.getText()));
+									lblBookingTime.setText(togbtnTimeSlot7.getText());
+									loadpreferedEmp();
+									}
+								else if(togbtnTimeSlot8.isSelected()){
+									newBook.setStartTime(program.strToTime(togbtnTimeSlot8.getText()));
+									lblBookingTime.setText(togbtnTimeSlot8.getText());
+									loadpreferedEmp();
+									}
+							}
+						
+						});
+					 checkBookingTime();
+				}
+					else{
+						togbtnMorn.setSelected(false);
+						togbtnAft.setSelected(false);
+						checkBookingTime();
+						timeGroup.selectedToggleProperty().addListener(new ChangeListener<Toggle>() {
+							@Override
+							public void changed(ObservableValue<? extends Toggle> observable, Toggle oldValue,
+									Toggle newValue) {
+								// TODO Auto-generated method stub
+							
+								if(togbtnTimeSlot1.isSelected()){
+									newBook.setStartTime(program.strToTime(togbtnTimeSlot1.getText()));
+									lblBookingTime.setText(togbtnTimeSlot1.getText());
+									loadpreferedEmp();
+									}
+								else if(togbtnTimeSlot2.isSelected()){
+									newBook.setStartTime(program.strToTime(togbtnTimeSlot2.getText()));
+									lblBookingTime.setText(togbtnTimeSlot2.getText());
+									loadpreferedEmp();
+									}
+								else if(togbtnTimeSlot3.isSelected()){
+									newBook.setStartTime(program.strToTime(togbtnTimeSlot3.getText()));
+									lblBookingTime.setText(togbtnTimeSlot3.getText());
+									loadpreferedEmp();
+									}
+								else if(togbtnTimeSlot4.isSelected()){
+									newBook.setStartTime(program.strToTime(togbtnTimeSlot4.getText()));
+									lblBookingTime.setText(togbtnTimeSlot4.getText());
+									loadpreferedEmp();
+									}
+								else if(togbtnTimeSlot5.isSelected()){
+									newBook.setStartTime(program.strToTime(togbtnTimeSlot5.getText()));
+									lblBookingTime.setText(togbtnTimeSlot5.getText());
+									loadpreferedEmp();
+									}
+								else if(togbtnTimeSlot6.isSelected()){
+									newBook.setStartTime(program.strToTime(togbtnTimeSlot6.getText()));
+									lblBookingTime.setText(togbtnTimeSlot6.getText());
+									loadpreferedEmp();
+									}
+								else if(togbtnTimeSlot7.isSelected()){
+									newBook.setStartTime(program.strToTime(togbtnTimeSlot7.getText()));
+									lblBookingTime.setText(togbtnTimeSlot7.getText());
+									loadpreferedEmp();
+									}
+								else if(togbtnTimeSlot8.isSelected()){
+									newBook.setStartTime(program.strToTime(togbtnTimeSlot8.getText()));
+									lblBookingTime.setText(togbtnTimeSlot8.getText());
+									loadpreferedEmp();
+									}
+							}
+						
+						});
+				        checkBookingTime();
+					}
+				}
+			});
+			cmbPreferEmp.valueProperty().addListener(new ChangeListener<Employee>() {
+
+				@Override
+				public void changed(ObservableValue<? extends Employee> arg0, Employee arg1, Employee newValue) {
+					// TODO Auto-generated method stub
+					checkBookingTime();
+					newBook.setEmployee(newValue.getId());
+					lblBookingEmp.setText(newValue.getName());
+				}
+				
+			});
 			return;
 		}
 		if(stkpnTime.isVisible() && stkpnBookingMenu.isVisible())

@@ -284,7 +284,7 @@ public class Controller
 	 */
 	public Date strToTime(String string)
 	{
-		Date _time = null;
+		Date _time=null;
 		DateFormat sdf = new SimpleDateFormat("HH:mm");
 		try
 		{

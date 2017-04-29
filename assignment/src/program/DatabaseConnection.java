@@ -1016,6 +1016,21 @@ public class DatabaseConnection
 		}
 		return service;
 	}
+	public void deleteService(int id)
+	{
+		log.info("IN deleteService\n");
+		String query = "DELETE FROM SERVICES WHERE id = '" + id + "';";
+		try(Connection connect = this.connect(); Statement inject = connect.createStatement())
+		{
+			inject.executeUpdate(query);
+			log.info("Service " + id + " deleted!\n");
+		}
+		catch(SQLException sqle)
+		{
+			log.warn(sqle.getMessage());
+		}
+		log.info("OUT deleteService\n");
+	}
 	
 	/**
 	 * Create booking in database using booking object

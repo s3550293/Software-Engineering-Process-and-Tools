@@ -707,7 +707,7 @@ public class MainController implements Initializable {
 	@FXML
 	public void logout()
 	{
-		
+		//TODO
 	}
 	
 	/**
@@ -838,7 +838,6 @@ public class MainController implements Initializable {
 	 */
 	@FXML
 	public void cancelBooking() {
-		// TODO
 		log.debug("LOGGER: Entered cancelBooking function");
 		if(listviewBookings.getSelectionModel().getSelectedIndex() < 0)
 		{
@@ -893,7 +892,6 @@ public class MainController implements Initializable {
 	public void showAddNewEmp() {
 		boardPaneEmpAdd.setVisible(true);
 		boardPaneEmpOverview.setVisible(false);
-		// TODO
 	}
 
 	/**
@@ -927,7 +925,6 @@ public class MainController implements Initializable {
 		} else {
 			gridpWorkingTimes.setDisable(true);
 		}
-		// TODO
 	}
 
 	/**
@@ -1531,7 +1528,7 @@ public class MainController implements Initializable {
 	
 	/**
 	 * Searches Services List
-	 * @author [Programmer]
+	 * @author [Joseph Garner]
 	 */
 	@FXML
 	public void searchServices()
@@ -1541,7 +1538,7 @@ public class MainController implements Initializable {
 	
 	/**
 	 * Creates a new service
-	 * @author [Programmer]
+	 * @author [Joseph Garner]
 	 */
 	@FXML
 	public void addService()
@@ -1550,37 +1547,69 @@ public class MainController implements Initializable {
 			Stage secondaryStage = new Stage();
 			secondaryStage.getIcons().add(new Image("images/ic_collections_bookmark_black_48dp_2x.png"));
 			Parent root = FXMLLoader.load(getClass().getResource("serviceLayout.fxml"));
-			secondaryStage.setTitle("Login");
+			secondaryStage.setTitle("");
 			secondaryStage.setResizable(false);
 			secondaryStage.setScene(new Scene(root));
 			secondaryStage.initModality(Modality.APPLICATION_MODAL);
 			secondaryStage.showAndWait();
+			secondaryStage.setTitle("Login");
 		} catch (IOException ioe) {
 			log.warn(ioe.getMessage());
-		}
+		}	
 		log.debug("false");
 		loadallServices("");
+		
 	}
 	
 	/**
 	 * Deletes a Service
-	 * @author [Programmer]
+	 * @author [Luke Mason]
 	 */
 	@FXML
 	public void deleteService()
 	{
-		//TODO
-		loadListViewEmp("");
+		log.debug("LOGGER: Entered deleteService function");
+		if(listviewManServices.getSelectionModel().getSelectedIndex() < 0)
+		{
+			program.messageBox("WARN", "oops", "An Service has not been Selected","Please Select a Service and try again");
+			return;
+		}
+		Alert alert = new Alert(AlertType.CONFIRMATION);
+		alert.setTitle("Delete Service");
+		alert.setHeaderText("Delete Selected Service");
+		alert.setContentText("Are you sure?");
+
+		Optional<ButtonType> result = alert.showAndWait();
+		System.out.println(globalEmployeeOption);
+		if (result.get() == ButtonType.OK) {
+			Service service = listviewManServices.getSelectionModel().getSelectedItem();
+			int serviceID = service.getID();
+			System.out.println("Service ID = "+serviceID);
+			connection.deleteService(serviceID);
+			Alert feedback = new Alert(AlertType.INFORMATION);
+			feedback.setTitle("Delete Service");
+			feedback.setHeaderText("Service has been deleted");
+			feedback.showAndWait();
+			lblServiceID.setText("");
+			lblManServiceName.setText("");
+			lblManServicePrice.setText("");
+			lblServiceDura.setText("");
+			refreshService();
+		} 
+		else 
+		{
+			return;
+		}
 	}
 	
 	/**
 	 * Refresh all Services
-	 * @author [Programmer]
+	 * @author [Luke Mason]
 	 */
 	@FXML
 	public void refreshService()
 	{
-		loadListViewEmp("");
+		loadallServices("");
 	}
 	
 	/**************

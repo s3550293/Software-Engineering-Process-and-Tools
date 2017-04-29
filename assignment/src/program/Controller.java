@@ -931,7 +931,7 @@ public class Controller
 			{
 				//compare booking end time to booking start time
 				long booking2EndTime = getTimeFrom1970(bk.getDate(), bk.getEndTime());
-				if(!(booking2EndTime <= bookingStartTime))//If index booking end time is NOT less than booking start time(or equal to)
+				if(!(booking2EndTime < bookingStartTime))//If index booking end time is NOT less than booking start time(or equal to)
 				{
 					employeesNotAvailable.add(connect.getEmployee(bk.getEmployeeID()));
 				}

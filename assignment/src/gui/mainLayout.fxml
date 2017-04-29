@@ -33,7 +33,7 @@
                <top>
                   <MenuBar BorderPane.alignment="CENTER">
                     <menus>
-                      <Menu mnemonicParsing="false" text="File">
+                      <Menu mnemonicParsing="false" onAction="#logout" text="File">
                         <items>
                           <MenuItem mnemonicParsing="false" text="Logout" />
                         </items>
@@ -1063,7 +1063,7 @@
                      <top>
                         <FlowPane alignment="CENTER_RIGHT" prefHeight="40.0" prefWidth="800.0" styleClass="background" BorderPane.alignment="CENTER">
                            <children>
-                              <Button fx:id="btnLogout" mnemonicParsing="false">
+                              <Button fx:id="btnLogout" mnemonicParsing="false" onAction="#logout">
                                  <graphic>
                                     <FlowPane alignment="CENTER" prefHeight="20.0" prefWidth="100.0">
                                        <children>

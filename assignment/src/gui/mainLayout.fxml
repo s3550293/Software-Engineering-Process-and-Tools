@@ -27,7 +27,7 @@
 
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="650.0" prefWidth="800.0" stylesheets="@Theme.css" xmlns="http://javafx.com/javafx/8.0.121" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.MainController">
    <children>
-      <StackPane fx:id="stkBusiness" layoutX="27.0" prefHeight="150.0" prefWidth="773.0" visible="false" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+      <StackPane fx:id="stkBusiness" layoutX="27.0" prefHeight="150.0" prefWidth="773.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
             <BorderPane prefHeight="200.0" prefWidth="200.0">
                <top>
@@ -1094,7 +1094,7 @@
                </center>
             </BorderPane>
          </children></StackPane>
-      <StackPane fx:id="stkCustomer" prefHeight="150.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+      <StackPane fx:id="stkCustomer" prefHeight="150.0" prefWidth="200.0" visible="false" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
             <BorderPane prefHeight="200.0" prefWidth="200.0">
                <center>
@@ -1187,6 +1187,17 @@
                                              </children>
                                           </FlowPane>
                                        </top>
+                                       <bottom>
+                                          <FlowPane alignment="CENTER_LEFT" prefHeight="66.0" prefWidth="800.0" BorderPane.alignment="CENTER">
+                                             <children>
+                                                <Button fx:id="btnRToOwnMen" disable="true" mnemonicParsing="false" onAction="#returnOwnMen" text="Return to Owner Menu">
+                                                   <FlowPane.margin>
+                                                      <Insets left="10.0" />
+                                                   </FlowPane.margin>
+                                                </Button>
+                                             </children>
+                                          </FlowPane>
+                                       </bottom>
                                     </BorderPane>
                                  </children>
                               </StackPane>

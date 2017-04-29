@@ -79,8 +79,8 @@ public class PreLoader extends Preloader{
 		connect.addSerice(new Service("Cut and Style",90,60));
 		
 		connect.addBooking(2,1, "30/04/2017", "8:00", "8:40", 0, "active");
-		connect.addBooking(3,1, "30/04/2017", "10:00", "10:40", 0,"active");
-		connect.addBooking(3,2, "30/04/2017", "11:00", "11:59", 0,"active");
+		connect.addBooking(3,1, "30/04/2017", "11:30", "12:30", 0,"active");
+		connect.addBooking(3,2, "30/04/2017", "15:30", "16:30", 0,"active");
 
 		
 		//connect.cancelBooking(2);

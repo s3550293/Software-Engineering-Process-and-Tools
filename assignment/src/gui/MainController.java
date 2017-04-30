@@ -901,7 +901,7 @@ public class MainController implements Initializable {
 	/**
 	 * Cancels booking (does not remove the booking from view)
 	 * 
-	 * @author [Programmer]
+	 * @author [Luke Mason]
 	 */
 	@FXML
 	public void cancelBooking() {

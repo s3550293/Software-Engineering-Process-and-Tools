@@ -78,14 +78,29 @@ public class PreLoader extends Preloader{
 		connect.addEmployee("Laura Rite",15.2);
 		connect.addEmployee("Harry Potter",18);
 		
-		bMenu.set7DayRosterTime(1,"05/04/2017","08:00","16:00");
-		bMenu.set7DayRosterTime(1,"10/04/2017","08:00","20:00");
+		bMenu.set7DayRosterTime(1,"03/04/2017","08:00","16:00");
+		bMenu.set7DayRosterTime(1,"04/04/2017","08:00","16:00");
+		bMenu.set7DayRosterTime(1,"05/04/2017","08:00","12:00");
+		bMenu.set7DayRosterTime(1,"06/04/2017","08:00","12:00");
+		bMenu.set7DayRosterTime(1,"07/04/2017","08:00","12:00");
+		bMenu.set7DayRosterTime(1,"08/04/2017","12:00","20:00");
+		bMenu.set7DayRosterTime(1,"09/04/2017","08:00","16:00");
 		
-		bMenu.set7DayRosterTime(2,"06/04/2017","12:00","16:00");
-		bMenu.set7DayRosterTime(2,"07/04/2017","12:00","16:00");
+		bMenu.set7DayRosterTime(2,"03/04/2017","08:00","16:00");
+		bMenu.set7DayRosterTime(2,"04/04/2017","08:00","16:00");
+		bMenu.set7DayRosterTime(2,"05/04/2017","08:00","12:00");
+		bMenu.set7DayRosterTime(2,"06/04/2017","08:00","12:00");
+		bMenu.set7DayRosterTime(2,"07/04/2017","08:00","12:00");
+		bMenu.set7DayRosterTime(2,"08/04/2017","12:00","20:00");
+		bMenu.set7DayRosterTime(2,"09/04/2017","08:00","16:00");
 		
-		bMenu.set7DayRosterTime(3,"05/04/2017","08:00","16:00");
-		bMenu.set7DayRosterTime(3,"10/04/2017","08:00","20:00");
+		bMenu.set7DayRosterTime(3,"03/04/2017","08:00","16:00");
+		bMenu.set7DayRosterTime(3,"04/04/2017","08:00","16:00");
+		bMenu.set7DayRosterTime(3,"05/04/2017","08:00","12:00");
+		bMenu.set7DayRosterTime(3,"06/04/2017","08:00","12:00");
+		bMenu.set7DayRosterTime(3,"07/04/2017","08:00","12:00");
+		bMenu.set7DayRosterTime(3,"08/04/2017","12:00","20:00");
+		bMenu.set7DayRosterTime(3,"09/04/2017","08:00","16:00");
 		
 		bMenu.set7DayRosterTime(4,"06/04/2017","12:00","16:00");
 		bMenu.set7DayRosterTime(4,"07/04/2017","12:00","20:00");
@@ -93,8 +108,13 @@ public class PreLoader extends Preloader{
 		bMenu.set7DayRosterTime(5,"05/04/2017","08:00","16:00");
 		bMenu.set7DayRosterTime(5,"10/04/2017","08:00","20:00");
 		
-		bMenu.set7DayRosterTime(6,"06/04/2017","12:00","16:00");
-		bMenu.set7DayRosterTime(6,"07/04/2017","12:00","20:00");
+		bMenu.set7DayRosterTime(6,"03/04/2017","08:00","16:00");
+		bMenu.set7DayRosterTime(6,"04/04/2017","08:00","16:00");
+		bMenu.set7DayRosterTime(6,"05/04/2017","08:00","12:00");
+		bMenu.set7DayRosterTime(6,"06/04/2017","08:00","12:00");
+		bMenu.set7DayRosterTime(6,"07/04/2017","08:00","12:00");
+		bMenu.set7DayRosterTime(6,"08/04/2017","12:00","20:00");
+		bMenu.set7DayRosterTime(6,"09/04/2017","08:00","16:00");
 		
 		bMenu.set7DayRosterTime(7,"05/04/2017","08:00","16:00");
 		bMenu.set7DayRosterTime(7,"10/04/2017","08:00","20:00");
@@ -108,8 +128,13 @@ public class PreLoader extends Preloader{
 		bMenu.set7DayRosterTime(10,"06/04/2017","12:00","16:00");
 		bMenu.set7DayRosterTime(10,"07/04/2017","12:00","20:00");
 		
-		bMenu.set7DayRosterTime(11,"05/04/2017","08:00","16:00");
-		bMenu.set7DayRosterTime(11,"10/04/2017","08:00","20:00");
+		bMenu.set7DayRosterTime(11,"03/04/2017","08:00","16:00");
+		bMenu.set7DayRosterTime(11,"04/04/2017","08:00","16:00");
+		bMenu.set7DayRosterTime(11,"05/04/2017","08:00","12:00");
+		bMenu.set7DayRosterTime(11,"06/04/2017","08:00","12:00");
+		bMenu.set7DayRosterTime(11,"07/04/2017","08:00","12:00");
+		bMenu.set7DayRosterTime(11,"08/04/2017","12:00","20:00");
+		bMenu.set7DayRosterTime(11,"09/04/2017","08:00","16:00");
 		
 		bMenu.set7DayRosterTime(12,"06/04/2017","12:00","16:00");
 		bMenu.set7DayRosterTime(12,"07/04/2017","12:00","20:00");
@@ -117,8 +142,13 @@ public class PreLoader extends Preloader{
 		bMenu.set7DayRosterTime(13,"05/04/2017","08:00","16:00");
 		bMenu.set7DayRosterTime(13,"10/04/2017","08:00","20:00");
 		
-		bMenu.set7DayRosterTime(14,"06/04/2017","12:00","16:00");
-		bMenu.set7DayRosterTime(14,"07/04/2017","12:00","20:00");
+		bMenu.set7DayRosterTime(14,"03/04/2017","08:00","16:00");
+		bMenu.set7DayRosterTime(14,"04/04/2017","08:00","16:00");
+		bMenu.set7DayRosterTime(14,"05/04/2017","08:00","12:00");
+		bMenu.set7DayRosterTime(14,"06/04/2017","08:00","12:00");
+		bMenu.set7DayRosterTime(14,"07/04/2017","08:00","12:00");
+		bMenu.set7DayRosterTime(14,"08/04/2017","12:00","20:00");
+		bMenu.set7DayRosterTime(14,"09/04/2017","08:00","16:00");
 		
 		bMenu.set7DayRosterTime(15,"05/04/2017","08:00","16:00");
 		bMenu.set7DayRosterTime(15,"10/04/2017","08:00","20:00");
@@ -140,7 +170,7 @@ public class PreLoader extends Preloader{
 		connect.addBooking(2,3, "25/04/2017", "8:00", "8:40", 2, "active");
 		connect.addBooking(2,2, "26/04/2017", "8:00", "8:40", 2, "canceled");
 		connect.addBooking(2,3, "27/04/2017", "10:00", "10:40", 1,"active");
-		connect.addBooking(2,2, "28/04/2017", "11:00", "11:59", 1,"canceled");
+		connect.addBooking(2,2, "28/04/2017", "11:00", "11:59", 1,"active");
 		connect.addBooking(2,3, "29/04/2017", "8:00", "8:40", 1, "canceled");
 		
 		connect.addBooking(2,1, "24/05/2017", "8:00", "8:40", 2, "active");

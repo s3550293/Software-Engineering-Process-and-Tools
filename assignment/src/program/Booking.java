@@ -1,5 +1,6 @@
 package program;
 
+
 import java.util.Date;
 
 
@@ -12,7 +13,7 @@ public class Booking {
 	public Booking(int bookingID, int cusID, int empID, Date date, Date startTime, Date endTime, int serviceID, String status)
 	{
 		this.bookingID = bookingID;
-		employeeID = empID;
+		this.employeeID = empID;
 		this.cusID = cusID;
 		this.date = date;
 		this.startTime = startTime;
@@ -23,7 +24,7 @@ public class Booking {
 	public Booking(int cusID,int empID, Date date, Date startTime, Date endTime, int serviceID, String status)
 	{
 		this.cusID = cusID;
-		employeeID = empID;
+		this.employeeID = empID;
 		this.date = date;
 		this.startTime = startTime;
 		this.endTime = endTime;
@@ -77,7 +78,7 @@ public class Booking {
 	}
 	public void setEmployee(int employee)
 	{
-		staffID = employee;
+		employeeID = employee;
 	}
 	public void setDate(Date date)
 	{

@@ -117,7 +117,7 @@ public class DatabaseConnection
 		String _username = "null";
 		String _password = "null";
 		int _accountType = 0;
-		String query = "SELECT * FROM users WHERE id = ?";
+		String query = "SELECT * FROM users WHERE userID = ?";
 		//Creates a null user to return, this can be used to validate user at login
 		User databaseUser = null;
 		try (Connection connect = this.connect(); PreparedStatement  inject  = connect.prepareStatement(query))
@@ -1041,7 +1041,8 @@ public class DatabaseConnection
 	public void createBooking(Booking book){
 		log.info("IN addBookingToDatabase\n");
 		//bookingID is made in the database
-		String query = "INSERT INTO BOOKINGS (userID,employeeID,date,startTime,endTime, serviceID,status)" + "VALUES(" + book.getCustomerId() + ","+book.getEmployeeID()+",'" + book.getDate() + "','" + book.getStartTime() + "','" + book.getEndTime() + "',"+book.getService()+",'" + book.getStatus() + "');";
+		log.debug("LOGGER: emp ID  booking- "+ book.getEmployee());
+		String query = "INSERT INTO BOOKINGS (userID,employeeID,date,startTime,endTime, serviceID,status)" + "VALUES(" + book.getCustomerId() + ","+book.getEmployeeID()+",'" + controller.dateToStr(book.getDate()) + "','" + controller.timeToStr(book.getStartTime()) + "','" + controller.timeToStr(book.getEndTime()) + "',"+book.getService()+",'" + book.getStatus() + "');";
 		try(Connection connect = this.connect(); Statement inject = connect.createStatement())
 		{
 			inject.executeUpdate(query);

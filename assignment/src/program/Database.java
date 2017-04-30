@@ -98,7 +98,9 @@ public class Database
 				+ "endTime VARCHAR(20) NOT NULL," 
 				+ "serviceID integer NOT NULL," 
 				+ "status VARCHAR(20),"
-				+ "FOREIGN KEY (userID) REFERENCES USERS(userID));";
+				+ "FOREIGN KEY (userID) REFERENCES USERS(userID),"
+				+ "FOREIGN KEY (employeeID) REFERENCES EMPLOYEES(employeeID),"
+				+ "FOREIGN KEY (serviceID) REFERENCES SERVICES(id));";
 		String queryServices = "CREATE TABLE IF NOT EXISTS SERVICES (" 
 				+ "id integer PRIMARY KEY AUTOINCREMENT,"
 				+ "service VARCHAR(40) NOT NULL,"

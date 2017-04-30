@@ -59,7 +59,7 @@ public class MainController implements Initializable {
 	private Employee employee = null;
 	private Booking booking = null;
 	int globalEmployeeOption = 0;
-	private static Booking newBook=new Booking(0,0,program.strToDate("05/05/2017"),program.strToTime("08:00"),program.strToTime("09:00"),0,null);
+	private static Booking newBook= new Booking();
 	public MainController() {}
 	
 	/**************
@@ -161,6 +161,9 @@ public class MainController implements Initializable {
 	
 	@FXML
 	StackPane stkpnUserMenu, stkpnBookingMenu, stkpnDateService, stkpnTime, stkpnBookingConfirm;
+	
+	@FXML
+	Label lblBookConDate, lblBookConSer, lblBookConPri, lblBookConDur, lblBookConSTim, lblBookConEmp;
 	
 	@FXML
 	ToggleButton togbtnMorn, togbtnAft, togbtnEven, togbtnTimeSlot1, togbtnTimeSlot2, togbtnTimeSlot3, togbtnTimeSlot4, togbtnTimeSlot5, togbtnTimeSlot6, togbtnTimeSlot7, togbtnTimeSlot8;
@@ -308,7 +311,6 @@ public class MainController implements Initializable {
 				togbtnMorn.setToggleGroup(timeODayGroup);
 				togbtnAft.setToggleGroup(timeODayGroup);
 				togbtnEven.setToggleGroup(timeODayGroup);
-				newBook.setCus(program.getUser().getID());
 				timeODayGroup.selectedToggleProperty().addListener(new ChangeListener<Toggle>() {
 					public void changed(ObservableValue<? extends Toggle> ov, Toggle old_toggle, Toggle new_toggle) {
 						togbtnTimeSlot1.setSelected(false);
@@ -383,7 +385,34 @@ public class MainController implements Initializable {
 					}
 				});
 				togbtnMorn.setSelected(true);
+				togbtnTimeSlot1.setToggleGroup(timeGroup);
+				togbtnTimeSlot2.setToggleGroup(timeGroup);
+				togbtnTimeSlot3.setToggleGroup(timeGroup);
+				togbtnTimeSlot4.setToggleGroup(timeGroup);
+				togbtnTimeSlot5.setToggleGroup(timeGroup);
+				togbtnTimeSlot6.setToggleGroup(timeGroup);
+				togbtnTimeSlot7.setToggleGroup(timeGroup);
+				togbtnTimeSlot8.setToggleGroup(timeGroup);
+				timeGroup.selectedToggleProperty().addListener(new ChangeListener<Toggle>() {
+					public void changed(ObservableValue<? extends Toggle> ov, Toggle old_toggle, Toggle new_toggle) {
+						addBookingTime();
+						Date date = program.calEnTime(newBook.getStartTime(), connection.getService(newBook.getService()).getLengthMin());
+						newBook.setEndTime(date);
+						log.debug("LOGGER: Time Slot Start - "+togbtnTimeSlot1.getText());
+						log.debug("LOGGER: Time Slot End - "+program.timeToStr(newBook.getEndTime()));
+						if(togbtnTimeSlot1.isSelected()){loadpreferedEmp(togbtnTimeSlot1.getText(), program.timeToStr(newBook.getEndTime()));}
+						if(togbtnTimeSlot2.isSelected()){loadpreferedEmp(togbtnTimeSlot2.getText(), program.timeToStr(newBook.getEndTime()));}
+						if(togbtnTimeSlot3.isSelected()){loadpreferedEmp(togbtnTimeSlot3.getText(), program.timeToStr(newBook.getEndTime()));}
+						if(togbtnTimeSlot4.isSelected()){loadpreferedEmp(togbtnTimeSlot4.getText(), program.timeToStr(newBook.getEndTime()));}
+						if(togbtnTimeSlot5.isSelected()){loadpreferedEmp(togbtnTimeSlot5.getText(), program.timeToStr(newBook.getEndTime()));}
+						if(togbtnTimeSlot6.isSelected()){loadpreferedEmp(togbtnTimeSlot6.getText(), program.timeToStr(newBook.getEndTime()));}
+						if(togbtnTimeSlot7.isSelected()){loadpreferedEmp(togbtnTimeSlot7.getText(), program.timeToStr(newBook.getEndTime()));}
+						if(togbtnTimeSlot8.isSelected()){loadpreferedEmp(togbtnTimeSlot8.getText(), program.timeToStr(newBook.getEndTime()));}
+					}
+				});
+				
 			}
+			
 		else {
 			Platform.exit();
 			System.exit(0);
@@ -410,7 +439,7 @@ public class MainController implements Initializable {
 						protected void updateItem(Employee t, boolean bln) {
 							super.updateItem(t, bln);
 							if (t != null) {
-								setText(t.getId() + " " + t.getName() + " " + t.getPayRate());
+								setText(t.getName());
 							}
 							else{
 								listviewEmployees.setPlaceholder(new Label("No Employees"));
@@ -1712,12 +1741,18 @@ public class MainController implements Initializable {
 	@FXML
 	public void createBooking()
 	{
-		//TODO
+		if(listviewCustomers.getSelectionModel().getSelectedItem() == null)
+		{
+			program.messageBox("ERROR", "Error", "A Customer Has Not Been Chosen", "Please select a customer");
+			return;
+		}
 		btnRToOwnMen.setDisable(false);
 		stkBusiness.setVisible(false);
 		stkCustomer.setVisible(true);
 		_user = program.getUser();
 		program.setUser(connection.getUser(listviewCustomers.getSelectionModel().getSelectedItem().getID()));
+		log.debug("LOGGER: user ID - "+listviewCustomers.getSelectionModel().getSelectedItem().getID());
+		log.debug("LOGGER: user - "+program.getUser());
 		newBook.setCus(program.getUser().getID());
 		lblCustomerName.setText(listviewCustomers.getSelectionModel().getSelectedItem().getFullName());
 	}
@@ -1731,15 +1766,16 @@ public class MainController implements Initializable {
 	 * Enters to booking phase
 	 * @author Luke
 	 */
-	private void loadpreferedEmp()
+	private void loadpreferedEmp(String startTime, String endTime)
 	{
 		//TODO
-		ArrayList<Employee> emList = new ArrayList<>();
-		emList=program.getAvailableEmployeesForSpecifiedTime(program.dateToStr(newBook.getDate()),program.timeToStr(newBook.getStartTime()),program.timeToStr(newBook.getEndTime()));
-		ArrayList<Employee> dateArray = new ArrayList<>(emList);
-		ObservableList<Employee> dateList = FXCollections.observableList(dateArray);
-		if (dateList != null) {
-			cmbPreferEmp.setItems(dateList);
+		ArrayList<Employee> emArray = new ArrayList<>();
+		log.debug("LOGGER: date selected - " + lblCustBookingDate.getText());
+		emArray = program.getAvailableEmployeesForSpecifiedTime(lblCustBookingDate.getText(), startTime, endTime);
+		log.debug("LOGGER: Array Length - "+emArray.size());
+		ObservableList<Employee> emList = FXCollections.observableList(emArray);
+		if (emList != null) {
+			cmbPreferEmp.setItems(emList);
 			cmbPreferEmp.setCellFactory(new Callback<ListView<Employee>, ListCell<Employee>>() {
 
 				@Override
@@ -1763,12 +1799,12 @@ public class MainController implements Initializable {
 					return cell;
 				}
 			});
-			cmbBookingDay.setButtonCell(new ListCell<Date>() {
+			cmbPreferEmp.setButtonCell(new ListCell<Employee>() {
 				@Override
-				protected void updateItem(Date t, boolean bln) {
+				protected void updateItem(Employee t, boolean bln) {
 					super.updateItem(t, bln);
 					if (t != null) {
-						setText("");
+						setText(t.getName());
 					} else {
 						setText(null);
 					}
@@ -2222,211 +2258,39 @@ public class MainController implements Initializable {
 	 */
 	@FXML
 	public void nextView(){
+		if(listviewBookingServices.getSelectionModel().getSelectedItem() == null)
+		{
+			program.messageBox("ERROR", "Error", "A Service Has Not Been Chosen", "Please select a service");
+			return;
+		}
+		if(cmbDayBooking.getSelectionModel().getSelectedItem() == null)
+		{
+			program.messageBox("ERROR", "Error", "A Date Has Not Been Chosen", "Please select a date");
+			return;
+		}
 		Service service = listviewBookingServices.getSelectionModel().getSelectedItem();
 		if(stkpnDateService.isVisible() && stkpnBookingMenu.isVisible())
 		{
+			newBook.setCus(program.getUser().getID());
 			stkpnDateService.setVisible(false);
 			stkpnTime.setVisible(true);
 			lblBookingService.setText(service.getName());
-			lblBookingDur.setText(Integer.toString(service.getLengthMin()));
+			lblBookingDur.setText(Integer.toString(service.getLengthMin())+"min");
 			lblBookingPrice.setText("$" + Double.toString(service.getPrice()));
 			newBook.setService(service.getID());
 			lblCustBookingDate.setText(program.dateToStr(cmbDayBooking.getSelectionModel().getSelectedItem()));
 			newBook.setDate(cmbDayBooking.getSelectionModel().getSelectedItem());
 			checkBookingTime();
-			loadpreferedEmp();
-			togbtnMorn.setToggleGroup(timeODayGroup);
-			togbtnAft.setToggleGroup(timeODayGroup);
-			togbtnEven.setToggleGroup(timeODayGroup);
-			togbtnTimeSlot1.setToggleGroup(timeGroup);
-			togbtnTimeSlot2.setToggleGroup(timeGroup);
-			togbtnTimeSlot3.setToggleGroup(timeGroup);
-			togbtnTimeSlot4.setToggleGroup(timeGroup);
-			togbtnTimeSlot5.setToggleGroup(timeGroup);
-			togbtnTimeSlot6.setToggleGroup(timeGroup);
-			togbtnTimeSlot7.setToggleGroup(timeGroup);
-			togbtnTimeSlot8.setToggleGroup(timeGroup);
-			timeODayGroup.selectedToggleProperty().addListener(new ChangeListener<Toggle>() {
-				public void changed(ObservableValue<? extends Toggle> ov, Toggle old_toggle, Toggle new_toggle) {
-					if(togbtnMorn.isSelected()){
-						togbtnAft.setSelected(false);
-						togbtnEven.setSelected(false);
-						checkBookingTime();
-						timeGroup.selectedToggleProperty().addListener(new ChangeListener<Toggle>() {
-							@Override
-							public void changed(ObservableValue<? extends Toggle> observable, Toggle oldValue,
-									Toggle newValue) {
-								// TODO Auto-generated method stub
-							
-								if(togbtnTimeSlot1.isSelected()){
-									newBook.setStartTime(program.strToTime(togbtnTimeSlot1.getText()));
-									lblBookingTime.setText(togbtnTimeSlot1.getText());
-									loadpreferedEmp();
-									}
-								else if(togbtnTimeSlot2.isSelected()){
-									newBook.setStartTime(program.strToTime(togbtnTimeSlot2.getText()));
-									lblBookingTime.setText(togbtnTimeSlot2.getText());
-									loadpreferedEmp();
-									}
-								else if(togbtnTimeSlot3.isSelected()){
-									newBook.setStartTime(program.strToTime(togbtnTimeSlot3.getText()));
-									lblBookingTime.setText(togbtnTimeSlot3.getText());
-									loadpreferedEmp();
-									}
-								else if(togbtnTimeSlot4.isSelected()){
-									newBook.setStartTime(program.strToTime(togbtnTimeSlot4.getText()));
-									lblBookingTime.setText(togbtnTimeSlot4.getText());
-									loadpreferedEmp();
-									}
-								else if(togbtnTimeSlot5.isSelected()){
-									newBook.setStartTime(program.strToTime(togbtnTimeSlot5.getText()));
-									lblBookingTime.setText(togbtnTimeSlot5.getText());
-									loadpreferedEmp();
-									}
-								else if(togbtnTimeSlot6.isSelected()){
-									newBook.setStartTime(program.strToTime(togbtnTimeSlot6.getText()));
-									lblBookingTime.setText(togbtnTimeSlot6.getText());
-									loadpreferedEmp();
-									}
-								else if(togbtnTimeSlot7.isSelected()){
-									newBook.setStartTime(program.strToTime(togbtnTimeSlot7.getText()));
-									lblBookingTime.setText(togbtnTimeSlot7.getText());
-									loadpreferedEmp();
-									}
-								else if(togbtnTimeSlot8.isSelected()){
-									newBook.setStartTime(program.strToTime(togbtnTimeSlot8.getText()));
-									lblBookingTime.setText(togbtnTimeSlot8.getText());
-									loadpreferedEmp();
-									}
-							}
-						
-						});
-					 checkBookingTime();
-				}
-				   
-					else if(togbtnAft.isSelected()){
-						togbtnMorn.setSelected(false);
-						togbtnEven.setSelected(false);
-						checkBookingTime();
-						timeGroup.selectedToggleProperty().addListener(new ChangeListener<Toggle>() {
-							@Override
-							public void changed(ObservableValue<? extends Toggle> observable, Toggle oldValue,
-									Toggle newValue) {
-								// TODO Auto-generated method stub
-							
-								if(togbtnTimeSlot1.isSelected()){
-									newBook.setStartTime(program.strToTime(togbtnTimeSlot1.getText()));
-									lblBookingTime.setText(togbtnTimeSlot1.getText());
-									loadpreferedEmp();
-									}
-								else if(togbtnTimeSlot2.isSelected()){
-									newBook.setStartTime(program.strToTime(togbtnTimeSlot2.getText()));
-									lblBookingTime.setText(togbtnTimeSlot2.getText());
-									loadpreferedEmp();
-									}
-								else if(togbtnTimeSlot3.isSelected()){
-									newBook.setStartTime(program.strToTime(togbtnTimeSlot3.getText()));
-									lblBookingTime.setText(togbtnTimeSlot3.getText());
-									loadpreferedEmp();
-									}
-								else if(togbtnTimeSlot4.isSelected()){
-									newBook.setStartTime(program.strToTime(togbtnTimeSlot4.getText()));
-									lblBookingTime.setText(togbtnTimeSlot4.getText());
-									loadpreferedEmp();
-									}
-								else if(togbtnTimeSlot5.isSelected()){
-									newBook.setStartTime(program.strToTime(togbtnTimeSlot5.getText()));
-									lblBookingTime.setText(togbtnTimeSlot5.getText());
-									loadpreferedEmp();
-									}
-								else if(togbtnTimeSlot6.isSelected()){
-									newBook.setStartTime(program.strToTime(togbtnTimeSlot6.getText()));
-									lblBookingTime.setText(togbtnTimeSlot6.getText());
-									loadpreferedEmp();
-									}
-								else if(togbtnTimeSlot7.isSelected()){
-									newBook.setStartTime(program.strToTime(togbtnTimeSlot7.getText()));
-									lblBookingTime.setText(togbtnTimeSlot7.getText());
-									loadpreferedEmp();
-									}
-								else if(togbtnTimeSlot8.isSelected()){
-									newBook.setStartTime(program.strToTime(togbtnTimeSlot8.getText()));
-									lblBookingTime.setText(togbtnTimeSlot8.getText());
-									loadpreferedEmp();
-									}
-							}
-						
-						});
-					 checkBookingTime();
-				}
-					else{
-						togbtnMorn.setSelected(false);
-						togbtnAft.setSelected(false);
-						checkBookingTime();
-						timeGroup.selectedToggleProperty().addListener(new ChangeListener<Toggle>() {
-							@Override
-							public void changed(ObservableValue<? extends Toggle> observable, Toggle oldValue,
-									Toggle newValue) {
-								// TODO Auto-generated method stub
-							
-								if(togbtnTimeSlot1.isSelected()){
-									newBook.setStartTime(program.strToTime(togbtnTimeSlot1.getText()));
-									lblBookingTime.setText(togbtnTimeSlot1.getText());
-									loadpreferedEmp();
-									}
-								else if(togbtnTimeSlot2.isSelected()){
-									newBook.setStartTime(program.strToTime(togbtnTimeSlot2.getText()));
-									lblBookingTime.setText(togbtnTimeSlot2.getText());
-									loadpreferedEmp();
-									}
-								else if(togbtnTimeSlot3.isSelected()){
-									newBook.setStartTime(program.strToTime(togbtnTimeSlot3.getText()));
-									lblBookingTime.setText(togbtnTimeSlot3.getText());
-									loadpreferedEmp();
-									}
-								else if(togbtnTimeSlot4.isSelected()){
-									newBook.setStartTime(program.strToTime(togbtnTimeSlot4.getText()));
-									lblBookingTime.setText(togbtnTimeSlot4.getText());
-									loadpreferedEmp();
-									}
-								else if(togbtnTimeSlot5.isSelected()){
-									newBook.setStartTime(program.strToTime(togbtnTimeSlot5.getText()));
-									lblBookingTime.setText(togbtnTimeSlot5.getText());
-									loadpreferedEmp();
-									}
-								else if(togbtnTimeSlot6.isSelected()){
-									newBook.setStartTime(program.strToTime(togbtnTimeSlot6.getText()));
-									lblBookingTime.setText(togbtnTimeSlot6.getText());
-									loadpreferedEmp();
-									}
-								else if(togbtnTimeSlot7.isSelected()){
-									newBook.setStartTime(program.strToTime(togbtnTimeSlot7.getText()));
-									lblBookingTime.setText(togbtnTimeSlot7.getText());
-									loadpreferedEmp();
-									}
-								else if(togbtnTimeSlot8.isSelected()){
-									newBook.setStartTime(program.strToTime(togbtnTimeSlot8.getText()));
-									lblBookingTime.setText(togbtnTimeSlot8.getText());
-									loadpreferedEmp();
-									}
-							}
-						
-						});
-				        checkBookingTime();
-					}
-				}
-			});
-			cmbPreferEmp.valueProperty().addListener(new ChangeListener<Employee>() {
-
-				@Override
-				public void changed(ObservableValue<? extends Employee> arg0, Employee arg1, Employee newValue) {
-					// TODO Auto-generated method stub
-					checkBookingTime();
-					newBook.setEmployee(newValue.getId());
-					lblBookingEmp.setText(newValue.getName());
-				}
-				
-			});
+			return;
+		}
+		if(timeGroup.getSelectedToggle() == null)
+		{
+			program.messageBox("ERROR", "Error", "A Time Slot Has Not Been Chosen", "Please select a time slot");
+			return;
+		}
+		if(cmbPreferEmp.getSelectionModel().getSelectedItem() == null)
+		{
+			program.messageBox("ERROR", "Error", "A Employee Has Not Been Chosen", "Please select a Employee");
 			return;
 		}
 		if(stkpnTime.isVisible() && stkpnBookingMenu.isVisible())
@@ -2435,11 +2299,20 @@ public class MainController implements Initializable {
 			stkpnBookingMenu.setVisible(false);
 			stkpnBookingConfirm.setVisible(true);
 			addBookingTime();
-			log.debug("LOGGER: booking start time - "+program.timeToStr(newBook.getStartTime()));
-			//TODO
-			
+			Date date = program.calEnTime(newBook.getStartTime(), service.getLengthMin());
+			newBook.setEndTime(date);
+			newBook.setEmployee(cmbPreferEmp.getSelectionModel().getSelectedItem().getId());
+			log.debug("LOGGER: emp ID - "+cmbPreferEmp.getSelectionModel().getSelectedItem().getId());
+			log.debug("LOGGER: emp ID  booking- "+ newBook.getEmployee());
+			lblBookConSer.setText(service.getName());
+			lblBookConDur.setText(Integer.toString(service.getLengthMin())+"min");
+			lblBookConPri.setText("$" + Double.toString(service.getPrice()));
+			lblBookConDate.setText(program.dateToStr(cmbDayBooking.getSelectionModel().getSelectedItem()));
+			lblBookConSTim.setText(program.timeToStr(newBook.getStartTime()));
+			lblBookConEmp.setText(cmbPreferEmp.getSelectionModel().getSelectedItem().getName());
 			return;
 		}
+		else{}
 		
 	}
 	
@@ -2477,20 +2350,41 @@ public class MainController implements Initializable {
 	 */
 	@FXML
 	public void confirmBooking(){
-		//TODO
 		Alert alert = new Alert(AlertType.CONFIRMATION);
 		alert.setTitle("Book Appointment");
 		alert.setHeaderText("Confirm Apointment");
 		alert.setContentText("Are you sure?");
-
+		log.debug("LOGGER: emp ID  booking- "+ newBook.getEmployee());
 		Optional<ButtonType> result = alert.showAndWait();
 		if (result.get() == ButtonType.OK) {
 			newBook.setStatus("active");
+			log.debug("LOGGER: emp ID  booking- "+ newBook.getEmployee());
 			connection.createBooking(newBook);
 			Alert feedback = new Alert(AlertType.INFORMATION);
 			feedback.setTitle("Book Appointment");
 			feedback.setHeaderText("Appointment has been made");
 			feedback.showAndWait();
+			stkpnDateService.setVisible(true);
+			stkpnBookingConfirm.setVisible(false);
+			stkpnUserMenu.setVisible(true);
+			togbtnTimeSlot1.setSelected(false);
+			togbtnTimeSlot2.setSelected(false);
+			togbtnTimeSlot3.setSelected(false);
+			togbtnTimeSlot4.setSelected(false);
+			togbtnTimeSlot5.setSelected(false);
+			togbtnTimeSlot6.setSelected(false);
+			togbtnTimeSlot7.setSelected(false);
+			togbtnTimeSlot8.setSelected(false);
+			lblBookConSer.setText("");
+			lblBookConDur.setText("");
+			lblBookConPri.setText("");
+			lblBookConDate.setText("");
+			lblBookConSTim.setText("");
+			lblBookConEmp.setText("");
+			lblBookingService.setText("");
+			lblBookingDur.setText("");
+			lblBookingPrice.setText("");
+			lblCustBookingDate.setText("");
 
 		} else {
 			return;
@@ -2500,7 +2394,7 @@ public class MainController implements Initializable {
 	
 	/**
 	 * Returns the business owner to their menus
-	 * @author [Programmer]
+	 * @author Joseph Garner
 	 */
 	@FXML
 	public void returnOwnMen()
@@ -2508,5 +2402,6 @@ public class MainController implements Initializable {
 		btnRToOwnMen.setDisable(true);
 		stkBusiness.setVisible(true);
 		stkCustomer.setVisible(false);
+		btnRToOwnMen.setDisable(true);
 	}
 }

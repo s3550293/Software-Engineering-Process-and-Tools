@@ -87,7 +87,7 @@
                         <FlowPane alignment="CENTER_LEFT" prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="1">
                            <children>
                               <TextField fx:id="txtSerDur" prefHeight="31.0" prefWidth="132.0" />
-                              <Label text="Minuets">
+                              <Label text="Minutes">
                                  <FlowPane.margin>
                                     <Insets left="5.0" />
                                  </FlowPane.margin>

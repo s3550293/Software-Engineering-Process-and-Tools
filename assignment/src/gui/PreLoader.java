@@ -27,16 +27,14 @@ public class PreLoader extends Preloader{
         this.stage = stage;
         stage.setScene(createPreloaderScene());
         stage.show();
-        File varTmpData = new File("db/company.db");
-        if(varTmpData.exists() == false) {
-        	ini();
-        }
-        /*
         File varTmpDir = new File(System.getProperty("user.home")+"/resourcing");
         if(varTmpDir.exists() == false) {
             new File(System.getProperty("user.home")+"/resourcing").mkdir();
         }
-        */
+        File varTmpData = new File(System.getProperty("user.home")+"/resourcing"+"/company.db");
+        if(varTmpData.exists() == false) {
+        	ini();
+        }
     }
 
     @Override
@@ -161,7 +159,8 @@ public class PreLoader extends Preloader{
 
 		connect.addSerice(new Service("Trim",30,25));
 		connect.addSerice(new Service("Wash",45,30));
-		connect.addSerice(new Service("Cut and Style",90,60));
+		connect.addSerice(new Service("Color",50,90));
+		connect.addSerice(new Service("Cut and Style",60,60));
 		
 		connect.addBooking(2,1, "21/04/2017", "10:00", "10:40", 1,"active");
 		connect.addBooking(2,2, "22/04/2017", "11:00", "11:59", 2,"canceled");

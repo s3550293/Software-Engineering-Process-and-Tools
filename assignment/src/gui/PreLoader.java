@@ -63,18 +63,6 @@ public class PreLoader extends Preloader{
 		connect.addEmployee("David Smith",26.6);
 		connect.addEmployee("Will Turner",15);
 		connect.addEmployee("Rob Pointer",14);
-		connect.addEmployee("Adam Mason",12);
-		connect.addEmployee("David Chang",17);
-		connect.addEmployee("Joseph Tun",17);
-		connect.addEmployee("Casey Pointer",17);
-		connect.addEmployee("Danyon Glenk",10);
-		connect.addEmployee("Justin Lui",24);
-		connect.addEmployee("Jan Misso",15.7);
-		connect.addEmployee("Harry Nancarrow",19);
-		connect.addEmployee("Tom Gates",18.54);
-		connect.addEmployee("Emma Snelling",16.3);
-		connect.addEmployee("Laura Rite",15.2);
-		connect.addEmployee("Harry Potter",18);
 		
 		bMenu.set7DayRosterTime(1,"03/04/2017","08:00","16:00");
 		bMenu.set7DayRosterTime(1,"04/04/2017","08:00","16:00");
@@ -133,26 +121,6 @@ public class PreLoader extends Preloader{
 		bMenu.set7DayRosterTime(11,"07/04/2017","08:00","12:00");
 		bMenu.set7DayRosterTime(11,"08/04/2017","12:00","20:00");
 		bMenu.set7DayRosterTime(11,"09/04/2017","08:00","16:00");
-		
-		bMenu.set7DayRosterTime(12,"06/04/2017","12:00","16:00");
-		bMenu.set7DayRosterTime(12,"07/04/2017","12:00","20:00");
-		
-		bMenu.set7DayRosterTime(13,"05/04/2017","08:00","16:00");
-		bMenu.set7DayRosterTime(13,"10/04/2017","08:00","20:00");
-		
-		bMenu.set7DayRosterTime(14,"03/04/2017","08:00","16:00");
-		bMenu.set7DayRosterTime(14,"04/04/2017","08:00","16:00");
-		bMenu.set7DayRosterTime(14,"05/04/2017","08:00","12:00");
-		bMenu.set7DayRosterTime(14,"06/04/2017","08:00","12:00");
-		bMenu.set7DayRosterTime(14,"07/04/2017","08:00","12:00");
-		bMenu.set7DayRosterTime(14,"08/04/2017","12:00","20:00");
-		bMenu.set7DayRosterTime(14,"09/04/2017","08:00","16:00");
-		
-		bMenu.set7DayRosterTime(15,"05/04/2017","08:00","16:00");
-		bMenu.set7DayRosterTime(15,"10/04/2017","08:00","20:00");
-		
-		bMenu.set7DayRosterTime(16,"06/04/2017","12:00","16:00");
-		bMenu.set7DayRosterTime(16,"07/04/2017","12:00","20:00");
 		
 		connect.addUserDetails(2, "William", "Porter", "will@mail.com", "0452368593", "01/01/2002", "Male");
 		connect.addUserDetails(3, "Hannah", "Hawlking", "hannah@mail.com", "0452136859", "20/04/1995", "Famale");

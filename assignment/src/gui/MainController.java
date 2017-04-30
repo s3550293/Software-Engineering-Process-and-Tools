@@ -305,7 +305,10 @@ public class MainController implements Initializable {
 				cmbDayBooking.valueProperty().addListener(new ChangeListener<Date>() {
 					@Override
 					public void changed(ObservableValue ov, Date t, Date t1) {
-						lblDayDate.setText(program.dateToStr(cmbDayBooking.getSelectionModel().getSelectedItem()));
+						if(t1 != null)
+						{
+							lblDayDate.setText(program.dateToStr(cmbDayBooking.getSelectionModel().getSelectedItem()));
+						}
 					}
 				});
 				togbtnMorn.setToggleGroup(timeODayGroup);
@@ -2324,12 +2327,28 @@ public class MainController implements Initializable {
 	public void backView(){
 		if(stkpnDateService.isVisible() && stkpnBookingMenu.isVisible())
 		{
+			lblBookingService.setText("");
+			lblBookingDur.setText("");
+			lblBookingPrice.setText("");
+			lblCustBookingDate.setText("");
+			listviewBookingServices.getSelectionModel().clearSelection();
+			cmbDayBooking.getSelectionModel().clearSelection();
 			stkpnBookingMenu.setVisible(false);
 			stkpnUserMenu.setVisible(true);
 			return;
 		}
 		if(stkpnTime.isVisible() && stkpnBookingMenu.isVisible())
 		{
+			
+			cmbPreferEmp.getSelectionModel().clearSelection();
+			togbtnTimeSlot1.setSelected(false);
+			togbtnTimeSlot2.setSelected(false);
+			togbtnTimeSlot3.setSelected(false);
+			togbtnTimeSlot4.setSelected(false);
+			togbtnTimeSlot5.setSelected(false);
+			togbtnTimeSlot6.setSelected(false);
+			togbtnTimeSlot7.setSelected(false);
+			togbtnTimeSlot8.setSelected(false);
 			stkpnTime.setVisible(false);
 			stkpnDateService.setVisible(true);
 			return;
@@ -2364,6 +2383,8 @@ public class MainController implements Initializable {
 			feedback.setTitle("Book Appointment");
 			feedback.setHeaderText("Appointment has been made");
 			feedback.showAndWait();
+			listviewBookingServices.getSelectionModel().clearSelection();
+			cmbDayBooking.getSelectionModel().clearSelection();
 			stkpnDateService.setVisible(true);
 			stkpnBookingConfirm.setVisible(false);
 			stkpnUserMenu.setVisible(true);

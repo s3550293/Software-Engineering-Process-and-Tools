@@ -284,7 +284,7 @@ public class Controller
 	 */
 	public Date strToTime(String string)
 	{
-		Date _time = null;
+		Date _time=null;
 		DateFormat sdf = new SimpleDateFormat("HH:mm");
 		try
 		{
@@ -971,5 +971,15 @@ public class Controller
 		}
 		log.info("OUT getAvailableEmployeesForBooking");	
 		return employeesWorkingInTimeBlock;
+	}
+	
+	public Date calEnTime(Date staTime, int length)
+	{
+		Date date = null;
+		Calendar cal = Calendar.getInstance();
+		cal.setTime(staTime);
+		cal.add(Calendar.MINUTE, length);
+		date = strToTime(cal.get(Calendar.HOUR_OF_DAY)+":"+cal.get(Calendar.MINUTE));
+		return date;
 	}
 }

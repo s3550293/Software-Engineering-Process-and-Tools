@@ -74,6 +74,7 @@
                                                     <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                                                       <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                                                       <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                                      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                                                     <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                                                   </rowConstraints>
                                                    <BorderPane.margin>
@@ -122,7 +123,7 @@
                                                             <Label fx:id="lblBookingDate" />
                                                          </children>
                                                       </FlowPane>
-                                                      <FlowPane alignment="CENTER_RIGHT" prefHeight="200.0" prefWidth="200.0" GridPane.rowIndex="3">
+                                                      <FlowPane alignment="CENTER_RIGHT" prefHeight="200.0" prefWidth="200.0" GridPane.rowIndex="4">
                                                          <children>
                                                             <Label text="Start time:">
                                                                <FlowPane.margin>
@@ -131,12 +132,12 @@
                                                             </Label>
                                                          </children>
                                                       </FlowPane>
-                                                      <FlowPane alignment="CENTER_LEFT" prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="3">
+                                                      <FlowPane alignment="CENTER_LEFT" prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="4">
                                                          <children>
                                                             <Label fx:id="lblBookingStartTime" />
                                                          </children>
                                                       </FlowPane>
-                                                      <FlowPane alignment="CENTER_RIGHT" prefHeight="200.0" prefWidth="200.0" GridPane.rowIndex="4">
+                                                      <FlowPane alignment="CENTER_RIGHT" prefHeight="200.0" prefWidth="200.0" GridPane.rowIndex="5">
                                                          <children>
                                                             <Label text="End Time:">
                                                                <FlowPane.margin>
@@ -145,12 +146,12 @@
                                                             </Label>
                                                          </children>
                                                       </FlowPane>
-                                                      <FlowPane alignment="CENTER_LEFT" prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="4">
+                                                      <FlowPane alignment="CENTER_LEFT" prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="5">
                                                          <children>
                                                             <Label fx:id="lblBookingEndTime" />
                                                          </children>
                                                       </FlowPane>
-                                                      <FlowPane alignment="CENTER_RIGHT" prefHeight="200.0" prefWidth="200.0" GridPane.rowIndex="5">
+                                                      <FlowPane alignment="CENTER_RIGHT" prefHeight="200.0" prefWidth="200.0" GridPane.rowIndex="6">
                                                          <children>
                                                             <Label text="Status:">
                                                                <FlowPane.margin>
@@ -159,9 +160,23 @@
                                                             </Label>
                                                          </children>
                                                       </FlowPane>
-                                                      <FlowPane alignment="CENTER_LEFT" prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="5">
+                                                      <FlowPane alignment="CENTER_LEFT" prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="6">
                                                          <children>
                                                             <Label fx:id="lblBookingStatus" />
+                                                         </children>
+                                                      </FlowPane>
+                                                      <FlowPane alignment="CENTER_RIGHT" prefHeight="200.0" prefWidth="200.0" GridPane.rowIndex="3">
+                                                         <children>
+                                                            <Label text="Service:">
+                                                               <FlowPane.margin>
+                                                                  <Insets right="10.0" />
+                                                               </FlowPane.margin>
+                                                            </Label>
+                                                         </children>
+                                                      </FlowPane>
+                                                      <FlowPane alignment="CENTER_LEFT" prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="3">
+                                                         <children>
+                                                            <Label fx:id="lblBookServ" />
                                                          </children>
                                                       </FlowPane>
                                                    </children>
@@ -1163,29 +1178,11 @@
                                                    <FlowPane.margin>
                                                       <Insets bottom="100.0" right="20.0" />
                                                    </FlowPane.margin></Button>
-                                                <Button fx:id="btnCancelAppoitment" mnemonicParsing="false" text="Cancel Appointment">
-                                                   <FlowPane.margin>
-                                                      <Insets bottom="100.0" left="20.0" />
-                                                   </FlowPane.margin>
-                                                </Button>
                                              </children>
                                           </FlowPane>
                                        </center>
                                        <top>
-                                          <FlowPane alignment="CENTER" prefHeight="174.0" prefWidth="800.0" BorderPane.alignment="CENTER">
-                                             <children>
-                                                <Label disable="true" text="Choose A Business:">
-                                                   <FlowPane.margin>
-                                                      <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
-                                                   </FlowPane.margin>
-                                                </Label>
-                                                <ComboBox disable="true" prefHeight="25.0" prefWidth="167.0">
-                                                   <FlowPane.margin>
-                                                      <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
-                                                   </FlowPane.margin>
-                                                </ComboBox>
-                                             </children>
-                                          </FlowPane>
+                                          <FlowPane alignment="CENTER" prefHeight="125.0" prefWidth="800.0" BorderPane.alignment="CENTER" />
                                        </top>
                                        <bottom>
                                           <FlowPane alignment="CENTER_LEFT" prefHeight="66.0" prefWidth="800.0" BorderPane.alignment="CENTER">
@@ -1211,30 +1208,45 @@
                                                    <children>
                                                       <BorderPane prefHeight="507.0" prefWidth="497.0">
                                                          <top>
-                                                            <FlowPane alignment="CENTER" prefHeight="73.0" prefWidth="495.0" BorderPane.alignment="CENTER">
+                                                            <GridPane BorderPane.alignment="CENTER">
+                                                               <columnConstraints>
+                                                                  <ColumnConstraints hgrow="SOMETIMES" maxWidth="440.0" minWidth="10.0" prefWidth="266.0" />
+                                                                  <ColumnConstraints hgrow="SOMETIMES" maxWidth="235.0" minWidth="10.0" prefWidth="229.0" />
+                                                               </columnConstraints>
+                                                               <rowConstraints>
+                                                                  <RowConstraints minHeight="10.0" vgrow="SOMETIMES" />
+                                                               </rowConstraints>
                                                                <children>
-                                                                  <Label text="Day:">
-                                                                     <FlowPane.margin>
-                                                                        <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
-                                                                     </FlowPane.margin>
-                                                                  </Label>
-                                                                  <ComboBox fx:id="cmbDayBooking" prefHeight="25.0" prefWidth="193.0" promptText="Day">
-                                                                     <FlowPane.margin>
-                                                                        <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
-                                                                     </FlowPane.margin>
-                                                                  </ComboBox>
-                                                                  <Label text="Date:">
-                                                                     <FlowPane.margin>
-                                                                        <Insets bottom="10.0" left="40.0" right="10.0" top="10.0" />
-                                                                     </FlowPane.margin>
-                                                                  </Label>
-                                                                  <Label fx:id="lblDayDate" text="Label">
-                                                                     <FlowPane.margin>
-                                                                        <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
-                                                                     </FlowPane.margin>
-                                                                  </Label>
+                                                                  <FlowPane alignment="CENTER" prefHeight="73.0" prefWidth="244.0">
+                                                                     <children>
+                                                                        <Label text="Day:">
+                                                                           <FlowPane.margin>
+                                                                              <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                                                                           </FlowPane.margin>
+                                                                        </Label>
+                                                                        <ComboBox fx:id="cmbDayBooking" prefHeight="25.0" prefWidth="193.0" promptText="Day">
+                                                                           <FlowPane.margin>
+                                                                              <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                                                                           </FlowPane.margin>
+                                                                        </ComboBox>
+                                                                     </children>
+                                                                  </FlowPane>
+                                                                  <FlowPane alignment="CENTER_LEFT" prefHeight="73.0" prefWidth="200.0" GridPane.columnIndex="1">
+                                                                     <children>
+                                                                        <Label text="Date:">
+                                                                           <FlowPane.margin>
+                                                                              <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                                                                           </FlowPane.margin>
+                                                                        </Label>
+                                                                        <Label fx:id="lblDayDate">
+                                                                           <FlowPane.margin>
+                                                                              <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                                                                           </FlowPane.margin>
+                                                                        </Label>
+                                                                     </children>
+                                                                  </FlowPane>
                                                                </children>
-                                                            </FlowPane>
+                                                            </GridPane>
                                                          </top>
                                                          <center>
                                                             <ListView fx:id="listviewBookingServices" prefHeight="430.0" prefWidth="193.0" BorderPane.alignment="CENTER">
@@ -1275,7 +1287,7 @@
                                                                   </FlowPane>
                                                                   <FlowPane alignment="CENTER_LEFT" prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1">
                                                                      <children>
-                                                                        <Label fx:id="lblServiceName" text="Label">
+                                                                        <Label fx:id="lblServiceName">
                                                                            <FlowPane.margin>
                                                                               <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
                                                                            </FlowPane.margin>
@@ -1284,7 +1296,7 @@
                                                                   </FlowPane>
                                                                   <FlowPane alignment="CENTER_LEFT" prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="1">
                                                                      <children>
-                                                                        <Label fx:id="lblServiceDur" text="Label">
+                                                                        <Label fx:id="lblServiceDur">
                                                                            <FlowPane.margin>
                                                                               <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
                                                                            </FlowPane.margin>
@@ -1293,7 +1305,7 @@
                                                                   </FlowPane>
                                                                   <FlowPane alignment="CENTER_LEFT" prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="2">
                                                                      <children>
-                                                                        <Label fx:id="lblServicePrice" text="Label">
+                                                                        <Label fx:id="lblServicePrice">
                                                                            <FlowPane.margin>
                                                                               <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
                                                                            </FlowPane.margin>
@@ -1520,7 +1532,7 @@
                                                                      <FlowPane.margin>
                                                                         <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
                                                                      </FlowPane.margin></Label>
-                                                                  <ComboBox fx:id="cmbPreferEmp" prefHeight="25.0" prefWidth="193.0">
+                                                                  <ComboBox fx:id="cmbPreferEmp" prefHeight="25.0" prefWidth="193.0" promptText="Select Employee">
                                                                      <FlowPane.margin>
                                                                         <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
                                                                      </FlowPane.margin></ComboBox>
@@ -1544,8 +1556,6 @@
                                                 <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                                                 <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                                                 <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                                              <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                                              <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                                             </rowConstraints>
                                              <BorderPane.margin>
                                                 <Insets bottom="100.0" left="10.0" right="10.0" top="10.0" />
@@ -1566,19 +1576,9 @@
                                                       <Label text="Duration:" />
                                                    </children>
                                                 </FlowPane>
-                                                <FlowPane alignment="CENTER_RIGHT" prefHeight="200.0" prefWidth="200.0" GridPane.rowIndex="4">
-                                                   <children>
-                                                      <Label text="Start Time:" />
-                                                   </children>
-                                                </FlowPane>
-                                                <FlowPane alignment="CENTER_RIGHT" prefHeight="200.0" prefWidth="200.0" GridPane.rowIndex="5">
-                                                   <children>
-                                                      <Label text="Staff Member:" />
-                                                   </children>
-                                                </FlowPane>
                                                 <FlowPane alignment="CENTER_LEFT" prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1">
                                                    <children>
-                                                      <Label fx:id="lblCustBookingDate" text="Label">
+                                                      <Label fx:id="lblCustBookingDate">
                                                          <FlowPane.margin>
                                                             <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
                                                          </FlowPane.margin>
@@ -1587,7 +1587,7 @@
                                                 </FlowPane>
                                                 <FlowPane alignment="CENTER_LEFT" prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="1">
                                                    <children>
-                                                      <Label fx:id="lblBookingService" text="Label">
+                                                      <Label fx:id="lblBookingService">
                                                          <FlowPane.margin>
                                                             <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
                                                          </FlowPane.margin>
@@ -1596,25 +1596,7 @@
                                                 </FlowPane>
                                                 <FlowPane alignment="CENTER_LEFT" prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="3">
                                                    <children>
-                                                      <Label fx:id="lblBookingDur" text="Label">
-                                                         <FlowPane.margin>
-                                                            <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
-                                                         </FlowPane.margin>
-                                                      </Label>
-                                                   </children>
-                                                </FlowPane>
-                                                <FlowPane alignment="CENTER_LEFT" prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="4">
-                                                   <children>
-                                                      <Label fx:id="lblBookingTime" text="Label">
-                                                         <FlowPane.margin>
-                                                            <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
-                                                         </FlowPane.margin>
-                                                      </Label>
-                                                   </children>
-                                                </FlowPane>
-                                                <FlowPane alignment="CENTER_LEFT" prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="5">
-                                                   <children>
-                                                      <Label fx:id="lblBookingEmp" text="Label">
+                                                      <Label fx:id="lblBookingDur">
                                                          <FlowPane.margin>
                                                             <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
                                                          </FlowPane.margin>
@@ -1628,7 +1610,7 @@
                                                 </FlowPane>
                                                 <FlowPane alignment="CENTER_LEFT" prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="2">
                                                    <children>
-                                                      <Label fx:id="lblBookingPrice" text="Label">
+                                                      <Label fx:id="lblBookingPrice">
                                                          <FlowPane.margin>
                                                             <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
                                                          </FlowPane.margin>
@@ -1724,7 +1706,7 @@
                                                 </FlowPane>
                                                 <FlowPane alignment="CENTER_LEFT" prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1">
                                                    <children>
-                                                      <Label text="Label">
+                                                      <Label fx:id="lblBookConDate" text="Label">
                                                          <FlowPane.margin>
                                                             <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                                                          </FlowPane.margin>
@@ -1733,7 +1715,7 @@
                                                 </FlowPane>
                                                 <FlowPane alignment="CENTER_LEFT" prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="1">
                                                    <children>
-                                                      <Label text="Label">
+                                                      <Label fx:id="lblBookConPri" text="Label">
                                                          <FlowPane.margin>
                                                             <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                                                          </FlowPane.margin>
@@ -1751,7 +1733,7 @@
                                                 </FlowPane>
                                                 <FlowPane alignment="CENTER_LEFT" prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="2">
                                                    <children>
-                                                      <Label text="Label">
+                                                      <Label fx:id="lblBookConSTim" text="Label">
                                                          <FlowPane.margin>
                                                             <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                                                          </FlowPane.margin>
@@ -1778,7 +1760,7 @@
                                                 </FlowPane>
                                                 <FlowPane alignment="CENTER_LEFT" prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="3">
                                                    <children>
-                                                      <Label text="Label">
+                                                      <Label fx:id="lblBookConSer" text="Label">
                                                          <FlowPane.margin>
                                                             <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                                                          </FlowPane.margin>
@@ -1787,7 +1769,7 @@
                                                 </FlowPane>
                                                 <FlowPane alignment="CENTER_LEFT" prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="3" GridPane.rowIndex="1">
                                                    <children>
-                                                      <Label text="Label">
+                                                      <Label fx:id="lblBookConDur" text="Label">
                                                          <FlowPane.margin>
                                                             <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                                                          </FlowPane.margin>
@@ -1796,7 +1778,7 @@
                                                 </FlowPane>
                                                 <FlowPane alignment="CENTER_LEFT" prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="3" GridPane.rowIndex="2">
                                                    <children>
-                                                      <Label text="Label">
+                                                      <Label fx:id="lblBookConEmp" text="Label">
                                                          <FlowPane.margin>
                                                             <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                                                          </FlowPane.margin>

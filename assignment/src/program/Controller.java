@@ -6,6 +6,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 import java.util.Scanner;
 
 import org.apache.log4j.Level;
@@ -21,7 +22,7 @@ public class Controller
 	public Controller(){ log.setLevel(Level.DEBUG);}
 	private static User _user = null;
 	public User getUser(){return _user;}
-	public void setUser(User user){_user = user;}
+	static public void setUser(User user){_user = user;}
 	private static Booking _booking = null;
 	public Booking getBooking(){return _booking;}
 	Scanner kb = new Scanner(System.in);
@@ -40,15 +41,10 @@ public class Controller
 		}
 		for (int i = 0; i < string.length(); i++)
 		{
-			if ((int) string.charAt(i) < 97 || (int) string.charAt(i) > 122)// checks if the letter is not a lowercase letter
+			// checks if the letter is not an upper case letter
+			if ((int) string.charAt(i) < 97 || (int) string.charAt(i) > 122 || (int) string.charAt(i) < 65||(int) string.charAt(i) > 90)// checks if the letter is not a lowercase letter
 			{
-				if ((int) string.charAt(i) < 65 || (int) string.charAt(i) > 90)// checks if the letter is not an upper case letter
-				{
-					if(!((int) string.charAt(i) == 45))//Checks if the letter is not a hyphen '-'
-					{
-						return true;					
-					}
-				}
+					return true;					
 			}
 		}	
 		return false;
@@ -81,6 +77,7 @@ public class Controller
 		}
 	}
 
+	
 	/**
 	 * @author Luke Mason
 	 * Changes the string number into an Integer
@@ -107,140 +104,7 @@ public class Controller
 			return -1;
 		}
 	}
-
-	/**
-	 * @author Luke Mason
-	 * @param choiceStr
-	 * @return two string in array, startTime = [0] and endTime - [1]
-	 */
-	public String[] allocateWorkTimes(String choiceStr)
-	{
-		log.info("IN allocateWorkTimes\n");
-		String[] times = new String[2];
-		if(choiceStr.indexOf("M")!= -1)
-		{
-			times[0] = "8:00";
-			times[1] = "12:00";
-			if(choiceStr.indexOf("A")!= -1)
-			{
-				times[1] = "16:00";
-				if(choiceStr.indexOf("E")!= -1)
-				{
-					times[1] = "20:00";
-				}
-			}
-			else if(choiceStr.indexOf("E")!= -1)
-			{
-				times[1] = "20:00";
-				if(choiceStr.indexOf("A")!= -1)
-				{
-					times[1] = "16:00";
-				}
-			}
-			log.info("OUT allocateWorkTimes\n");
-			return times;
-		}
-		else if(choiceStr.indexOf("A")!= -1)
-		{
-			times[0] = "12:00";
-			times[1] = "16:00";
-			if(choiceStr.indexOf("E")!= -1)
-			{
-				times[1] = "20:00";
-				if(choiceStr.indexOf("M")!= -1)
-				{
-					times[0] = "8:00";
-				}
-			}
-			else if(choiceStr.indexOf("M")!= -1)
-			{
-				times[0] = "8:00";
-				if(choiceStr.indexOf("E")!= -1)
-				{
-					times[1] = "20:00";
-				}
-			}
-			log.info("OUT allocateWorkTimes\n");
-			return times;
-		}
-		else if(choiceStr.indexOf("E")!= -1)
-		{
-			times[0] = "16:00";
-			times[1] = "20:00";
-			if(choiceStr.indexOf("A")!= -1)
-			{
-				times[0] = "12:00";
-				if(choiceStr.indexOf("M")!= -1)
-				{
-					times[0] = "8:00";
-				}
-			}
-			else if(choiceStr.indexOf("M")!= -1)
-			{
-				times[0] = "8:00";
-				if(choiceStr.indexOf("A")!= -1)
-				{
-					times[0] = "12:00";
-				}
-			}
-			log.info("OUT allocateWorkTimes\n");
-			return times;
-		}
-		else
-		{
-			System.out.println("ERROR: Should not be here");
-			log.info("OUT allocateWorkTimes\n");
-			return null;
-		}
-	}
-
-	/**
-	 * @author Luke Mason
-	 * @param choiceStr //Accepts alphabet {M, A, E}
-	 * @return false if string contains wrong alphabet or any duplicate symbol or length is > 3 or length is < 1
-	 */
-	public boolean checkWorkTimeChoice(String choiceStr)
-	{
-		log.info("IN checkWorkTimeChoice\n");
-		int amount = 0; 
-		int amount2 = 0;
-		int amount3 = 0 ;
-		int amount4 = choiceStr.length() - choiceStr.replace("M","").replace("A","").replace("E","").length();
-		
-		if(choiceStr.length()==3)
-		{
-			amount = choiceStr.length() - choiceStr.replace("M","").replace("A","").length();
-			amount2 = choiceStr.length() - choiceStr.replace("M","").replace("E","").length();
-			amount3 = choiceStr.length() - choiceStr.replace("E","").replace("A","").length();
-			if(amount != 2 || amount2 != 2 || amount3 != 2 || amount4 != 3)
-			{
-				System.out.println("Invalid input!");
-				log.info("OUT checkWorkTimeChoice\n");
-				return false;
-			}
-		}
-		if(choiceStr.equals("ME")||choiceStr.equals("EM")||choiceStr.equals("MM")||choiceStr.equals("EE")||choiceStr.equals("AA"))
-		{
-			System.out.println("Invalid input!");
-			log.info("OUT checkWorkTimeChoice\n");
-			return false;
-		}
-		if(choiceStr.length() == 1 && amount4 != 1)
-		{
-			System.out.println("Invalid input!");
-			log.info("OUT checkWorkTimeChoice\n");
-			return false;
-		}
-		if(choiceStr.length()>3 || choiceStr.length()< 1)
-		{
-			System.out.println("Invalid input!");
-			log.info("OUT checkWorkTimeChoice\n");
-			return false;
-		}
-		log.info("OUT checkWorkTimeChoice\n");
-		return true;
-	}
-
+	
 	/**
 	 * @author Joseph Garner
 	 * Converts type String to type Date
@@ -256,7 +120,7 @@ public class Controller
 			_date = sdf.parse(date);
 		} catch (ParseException e)
 		{
-			System.out.println("Convert To Date Error: " + e.getMessage());
+			log.warn("Convert To Date Error: " + e.getMessage()+"\n");
 
 		}
 		return _date;
@@ -291,7 +155,7 @@ public class Controller
 			_time = sdf.parse(string);
 		} catch (ParseException e)
 		{
-			System.out.println(e.getMessage());
+			log.warn(e.getMessage()+"\n");
 			return _time;
 		}
 		return _time;
@@ -312,65 +176,12 @@ public class Controller
 
 	/**
 	 * @author Joseph Garner
-	 * used to compare two times and get the duration between them
-	 * @param time1
-	 * @param time2
-	 * @return
-	 */
-	public long getTimeDifference(Date time1, Date time2)
-	{
-		long val = 0;
-		try
-		{
-			long diff = time2.getTime() - time1.getTime();
-			long diffMinutes = diff / (60 * 1000) % 60;
-			long diffHours = diff / (60 * 60 * 1000) % 24;
-			val = diffMinutes;
-			if (diffHours != 0)
-			{
-				val += diffHours * 60;
-			}
-			System.out.print(val + " minutes, ");
-
-		} catch (Exception e)
-		{
-			e.printStackTrace();
-		}
-		return val;
-	}
-
-	/**
-	 * @author Joseph Garner
-	 * used to compare two dates and get the duration
-	 * @param date1
-	 * @param date2
-	 * @return
-	 */
-	public long getDateDifference(Date date1, Date date2)
-	{
-		long val = 0;
-		try
-		{
-			long diff = date2.getTime() - date1.getTime();
-			long diffDays = diff / (24 * 60 * 60 * 1000);
-			val = diffDays;
-			// System.out.print(diffDays + " days, ");
-
-		} catch (Exception e)
-		{
-			e.printStackTrace();
-		}
-		return val;
-	}
-
-	/**
-	 * @author Joseph Garner
 	 * 
 	 * @param day - day of week e.g monday = 2
 	 * @param workDays
 	 * @return
 	 */
-	public int matchDay(int day, ArrayList<EmployeeWorkingTime> workDays)
+	public int matchDay(int day, List<EmployeeWorkingTime> workDays)
 	{
 		for (EmployeeWorkingTime ew : workDays)
 		{
@@ -382,64 +193,7 @@ public class Controller
 		return 0;
 
 	}
-
-	
-	/**
-	 * @author Joseph Garner
-	 * 
-	 * @param time
-	 * @param date
-	 * @param workDays
-	 * @return
-	 */
-	public String getTimeOnDay(String time, int day, ArrayList<EmployeeWorkingTime> workDays)
-	{
-		if (time.equalsIgnoreCase("start"))
-		{
-			for (EmployeeWorkingTime ew : workDays)
-			{
-				if (day == ew.getDayOfWeek())
-				{
-					return timeToStr(ew.getStartTime());
-				}
-			}
-		} else
-		{
-			for (EmployeeWorkingTime ew : workDays)
-			{
-				if (day == ew.getDayOfWeek())
-				{
-					return timeToStr(ew.getEndTime());
-				}
-			}
-		}
-		return "";
-	}
-	
-	public Boolean checkBookingStartTime(Date time, Date date)
-	{
-		SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
-		String _date = sdf.format(date);
-		sdf = new SimpleDateFormat("HH:mm");
-		String _time = sdf.format(time);
-		log.debug("Time: "+_time+" Date: "+_date);
-		DatabaseConnection connect = new DatabaseConnection();
-		Boolean val = true;
-		for(Booking b: connect.getAllBooking())
-		{
-			log.debug("Booking ID: "+b.getBookingID());
-			if(dateToStr(b.getDate()).equals(_date))
-			{
-				if(timeToStr(b.getStartTime()).equals(_time))
-				{
-					return false;
-				}
-			}
-		}
 		
-		return val;
-	}
-	
 	/**
 	 * displays an alert box to the user
 	 * @author Joseph Garner
@@ -606,26 +360,26 @@ public class Controller
 	 * @param endTime
 	 * @return
 	 */
-	public ArrayList<Employee> getAvailableEmployeesForSpecifiedTime(String date, String startTime, String endTime)
+	public List<Employee> getAvailableEmployeesForSpecifiedTime(String date, String startTime, String endTime)
 	{
 		int day = dateToDay(date);
 		DatabaseConnection connect = new DatabaseConnection();
 		log.info("IN getAvailableEmployeesForBooking");
-		ArrayList<Employee> employeesWorkingInTimeBlock = new ArrayList<Employee>();
-		ArrayList<EmployeeWorkingTime> workTimesOnDay = new ArrayList<EmployeeWorkingTime>();
-		ArrayList<Booking> bookingsOnDate = new ArrayList<Booking>();
-		ArrayList<Employee> employeesNotAvailable = new ArrayList<Employee>();
+		ArrayList<Employee> employeesWorkingInTimeBlock = new ArrayList<>();
+		ArrayList<EmployeeWorkingTime> workTimesOnDay;
+		ArrayList<Booking> bookingsOnDate;
+		ArrayList<Employee> employeesNotAvailable = new ArrayList<>();
 		workTimesOnDay = connect.getWorkTimesOnDay(day);
 		bookingsOnDate = connect.getActiveBookingsOnDate(date);
 		Date date2 = strToDate(date);
 		Date startTime2 = strToTime(startTime);
-		System.out.println("Booking Start Time = "+startTime2);
+		log.debug("Booking Start Time = "+startTime2+"\n");
 		Date endTime2 = strToTime(endTime);
-		System.out.println("Booking End Time = "+endTime2);
+		log.debug("Booking End Time = "+endTime2+"\n");
 		long bookingStartTime = getTimeFrom1970(date2, startTime2);
 		long bookingEndTime = getTimeFrom1970(date2, endTime2);
 		//Check if employees are already booked for that time
-		if(bookingsOnDate.size() > 0)
+		if(!bookingsOnDate.isEmpty())
 		{
 			for(Booking bk: bookingsOnDate)
 			{
@@ -633,17 +387,17 @@ public class Controller
 				long booking2EndTime = getTimeFrom1970(bk.getDate(), bk.getEndTime());
 				if(booking2EndTime > bookingStartTime)//If index booking end time is NOT less than booking start time(or equal to)
 				{
-					System.out.println(booking2EndTime);
-					System.out.println(bookingStartTime+"\n");
+					log.debug(booking2EndTime+"\n");
+					log.debug(bookingStartTime+"\n");
 					employeesNotAvailable.add(connect.getEmployee(bk.getEmployeeID()));
 				}
 			}
 		}
 		for(Employee emp: employeesNotAvailable)
 		{
-			System.out.println(emp);
+			log.info(emp);
 		}
-		if(workTimesOnDay.size() > 0)
+		if(!workTimesOnDay.isEmpty())
 		{
 			for(EmployeeWorkingTime ewt: workTimesOnDay)
 			{
@@ -658,12 +412,12 @@ public class Controller
 				long employeeEndTime = getTimeFrom1970(Date2,ewt.getEndTime());
 				if(bookingEndTime <= employeeEndTime)//If booking end time is less than employee work end time(or equal to)
 				{
-					System.out.println("Booking Date End Time = "+bookingEndTime);
-					System.out.println("<=Employee Work End Time = "+employeeEndTime);
+					log.debug("Booking Date End Time = "+bookingEndTime+"\n");
+					log.debug("<=Employee Work End Time = "+employeeEndTime+"\n");
 					if(bookingStartTime >= employeeStartTime)//If booking start time is later than employee work start time(or equal to)
 					{
-						System.out.println("Booking Date Start Time = "+bookingStartTime);
-						System.out.println(">=Employee Work Start Time = "+employeeStartTime);
+						log.debug("Booking Date Start Time = "+bookingStartTime+"\n");
+						log.debug(">=Employee Work Start Time = "+employeeStartTime+"\n");
 
 						boolean available = true;
 						for(Employee emp: employeesNotAvailable)

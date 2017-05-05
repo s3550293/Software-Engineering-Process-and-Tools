@@ -1761,7 +1761,7 @@ public class MainController implements Initializable {
 	 */
 	private void loadpreferedEmp(String startTime, String endTime) {
 		// TODO
-		ArrayList<Employee> emArray = new ArrayList<>();
+		List<Employee> emArray;
 		log.debug("LOGGER: date selected - " + lblCustBookingDate.getText());
 		emArray = program.getAvailableEmployeesForSpecifiedTime(lblCustBookingDate.getText(), startTime, endTime);
 		log.debug("LOGGER: Array Length - " + emArray.size());

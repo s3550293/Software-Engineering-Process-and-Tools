@@ -8,7 +8,6 @@ import org.apache.log4j.Logger;
 
 public class BusinessMenu
 {
-	
 	private static Logger log = Logger.getLogger(BusinessMenu.class);
 	private boolean flag = true;
 	private Controller controller = new Controller();
@@ -19,14 +18,11 @@ public class BusinessMenu
 	public String lateMidDay = "16:00"; //Late midday
 	public String late = "20:00"; // End Time for day
 	
-	
-	
 	/**
 	 * @author Luke Mason
 	 * Used to check information to add a new employee to database
-	 * 
 	 */
-				
+			
 				/**
 				 * Convert string to Double
 				 * @param employeePayRate

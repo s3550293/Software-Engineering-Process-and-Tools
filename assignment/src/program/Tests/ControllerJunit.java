@@ -9,6 +9,7 @@ import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 
 import org.apache.log4j.Logger;
 import org.junit.After;
@@ -348,36 +349,6 @@ public class ControllerJunit {
 		assertEquals("23:59",controller.timeToStr(controller.strToTime("23:59")));
 	}
 	@Test
-	public void testDateConvertFunc10()
-	{
-		assertEquals(60 , controller.getTimeDifference(controller.strToTime("1:00"),controller.strToTime("2:00")));
-	}
-	@Test
-	public void testDateConvertFunc11()
-	{
-		assertEquals(660 , controller.getTimeDifference(controller.strToTime("12:00"),controller.strToTime("23:00")));
-	}
-	@Test
-	public void testDateConvertFunc12()
-	{
-		assertEquals(120 , controller.getTimeDifference(controller.strToTime("11:00"),controller.strToTime("13:00")));
-	}
-	@Test
-	public void testDateConvertFunc13()
-	{
-		assertEquals(730 , controller.getDateDifference(controller.strToDate("01/01/01"),controller.strToDate("01/01/03")));
-	}
-	@Test
-	public void testDateConvertFunc14()
-	{
-		assertEquals(7 , controller.getDateDifference(controller.strToDate("23/12/17"),controller.strToDate("30/12/17")));
-	}
-	@Test
-	public void testDateConvertFunc15()
-	{
-		assertEquals(2 , controller.getDateDifference(controller.strToDate("01/01/99"),controller.strToDate("03/01/99")));
-	}
-	@Test
 	public void testDateConvertFunc16()
 	{
 		assertEquals(null,controller.strToDate("a/01/2012"));
@@ -416,273 +387,6 @@ public class ControllerJunit {
 	public void testDateConvertFunc23()
 	{
 		assertEquals(null,controller.strToTime("2012"));
-	}
-	
-	
-	@Test
-	public void testCheckWorkTimeChoice1()
-	{
-		assertTrue(controller.checkWorkTimeChoice("MAE"));
-	}
-	@Test
-	public void testCheckWorkTimeChoice2()
-	{
-		assertTrue(controller.checkWorkTimeChoice("MEA"));
-	}
-	@Test
-	public void testCheckWorkTimeChoice3()
-	{
-		assertTrue(controller.checkWorkTimeChoice("AME"));
-	}
-	@Test
-	public void testCheckWorkTimeChoice4()
-	{
-		assertTrue(controller.checkWorkTimeChoice("AEM"));
-	}
-	@Test
-	public void testCheckWorkTimeChoice5()
-	{
-		assertTrue(controller.checkWorkTimeChoice("EAM"));
-	}
-	@Test
-	public void testCheckWorkTimeChoice6()
-	{
-		assertTrue(controller.checkWorkTimeChoice("EMA"));
-	}
-	@Test
-	public void testCheckWorkTimeChoice7()
-	{
-		assertTrue(controller.checkWorkTimeChoice("MA"));
-	}
-	@Test
-	public void testCheckWorkTimeChoice8()
-	{
-		assertFalse(controller.checkWorkTimeChoice("ME"));
-	}
-	@Test
-	public void testCheckWorkTimeChoice9()
-	{
-		assertTrue(controller.checkWorkTimeChoice("AM"));
-	}
-	@Test
-	public void testCheckWorkTimeChoice10()
-	{
-		assertTrue(controller.checkWorkTimeChoice("AE"));
-	}
-	@Test
-	public void testCheckWorkTimeChoice11()
-	{
-		assertTrue(controller.checkWorkTimeChoice("EA"));
-	}
-	@Test
-	public void testCheckWorkTimeChoice12()
-	{
-		assertFalse(controller.checkWorkTimeChoice("EM"));
-	}
-	@Test
-	public void testCheckWorkTimeChoice13()
-	{
-		assertTrue(controller.checkWorkTimeChoice("M"));
-	}
-	@Test
-	public void testCheckWorkTimeChoice14()
-	{
-		assertTrue(controller.checkWorkTimeChoice("A"));
-	}
-	@Test
-	public void testCheckWorkTimeChoice15()
-	{
-		assertTrue(controller.checkWorkTimeChoice("E"));
-	}
-	@Test
-	public void testCheckWorkTimeChoice16()
-	{
-		assertFalse(controller.checkWorkTimeChoice("MM"));
-	}
-	@Test
-	public void testCheckWorkTimeChoice17()
-	{
-		assertFalse(controller.checkWorkTimeChoice("EE"));
-	}
-	@Test
-	public void testCheckWorkTimeChoice18()
-	{
-		assertFalse(controller.checkWorkTimeChoice("AA"));
-	}
-	@Test
-	public void testCheckWorkTimeChoice19()
-	{
-		assertFalse(controller.checkWorkTimeChoice("MAM"));
-	}
-	@Test
-	public void testCheckWorkTimeChoice20()
-	{
-		assertFalse(controller.checkWorkTimeChoice("AMA"));
-	}
-	@Test
-	public void testCheckWorkTimeChoice21()
-	{
-		assertFalse(controller.checkWorkTimeChoice("EEA"));
-	}
-	@Test
-	public void testCheckWorkTimeChoice22()
-	{
-		assertFalse(controller.checkWorkTimeChoice("MMMM"));
-	}
-	@Test
-	public void testCheckWorkTimeChoice23()
-	{
-		assertFalse(controller.checkWorkTimeChoice(""));
-	}
-	@Test
-	public void testCheckWorkTimeChoice26()
-	{
-		assertFalse(controller.checkWorkTimeChoice("f"));
-	}
-	@Test
-	public void testCheckWorkTimeChoice27()
-	{
-		assertFalse(controller.checkWorkTimeChoice("$"));
-	}
-	@Test
-	public void testCheckWorkTimeChoice28()
-	{
-		assertFalse(controller.checkWorkTimeChoice("ASE"));
-	}
-	@Test
-	public void testCheckWorkTimeChoice29()
-	{
-		assertFalse(controller.checkWorkTimeChoice("M.A"));
-	}
-	@Test
-	public void testAllocateWorkTimes1()
-	{
-		String[] times = new String[2];
-		times = controller.allocateWorkTimes("M");
-		String start = times[0];
-		String end = times[1];
-		assertEquals(start, "8:00");
-		assertEquals(end, "12:00");
-	}
-	@Test
-	public void testAllocateWorkTimes2()
-	{
-		String[] times = new String[2];
-		times = controller.allocateWorkTimes("A");
-		String start = times[0];
-		String end = times[1];
-		assertEquals(start, "12:00");
-		assertEquals(end, "16:00");
-	}
-	@Test
-	public void testAllocateWorkTimes3()
-	{
-		String[] times = new String[2];
-		times = controller.allocateWorkTimes("E");
-		String start = times[0];
-		String end = times[1];
-		assertEquals(start, "16:00");
-		assertEquals(end, "20:00");
-	}
-	@Test
-	public void testAllocateWorkTimes4()
-	{
-		String[] times = new String[2];
-		times = controller.allocateWorkTimes("MA");
-		String start = times[0];
-		String end = times[1];
-		assertEquals(start, "8:00");
-		assertEquals(end, "16:00");
-	}
-	@Test
-	public void testAllocateWorkTimes5()
-	{
-		String[] times = new String[2];
-		times = controller.allocateWorkTimes("AM");
-		String start = times[0];
-		String end = times[1];
-		assertEquals(start, "8:00");
-		assertEquals(end, "16:00");
-	}
-	@Test
-	public void testAllocateWorkTimes6()
-	{
-		String[] times = new String[2];
-		times = controller.allocateWorkTimes("AE");
-		String start = times[0];
-		String end = times[1];
-		assertEquals(start, "12:00");
-		assertEquals(end, "20:00");
-	}
-	@Test
-	public void testAllocateWorkTimes7()
-	{
-		String[] times = new String[2];
-		times = controller.allocateWorkTimes("EA");
-		String start = times[0];
-		String end = times[1];
-		assertEquals(start, "12:00");
-		assertEquals(end, "20:00");
-	}
-	@Test
-	public void testAllocateWorkTimes8()
-	{
-		String[] times = new String[2];
-		times = controller.allocateWorkTimes("MAE");
-		String start = times[0];
-		String end = times[1];
-		assertEquals(start, "8:00");
-		assertEquals(end, "20:00");
-	}
-	@Test
-	public void testAllocateWorkTimes9()
-	{
-		String[] times = new String[2];
-		times = controller.allocateWorkTimes("MEA");
-		String start = times[0];
-		String end = times[1];
-		assertEquals(start, "8:00");
-		assertEquals(end, "20:00");
-	}
-	@Test
-	public void testAllocateWorkTimes10()
-	{
-		String[] times = new String[2];
-		times = controller.allocateWorkTimes("AME");
-		String start = times[0];
-		String end = times[1];
-		assertEquals(start, "8:00");
-		assertEquals(end, "20:00");
-	}
-	@Test
-	public void testAllocateWorkTimes11()
-	{
-		String[] times = new String[2];
-		times = controller.allocateWorkTimes("AEM");
-		String start = times[0];
-		String end = times[1];
-		assertEquals(start, "8:00");
-		assertEquals(end, "20:00");
-	}
-	@Test
-	public void testAllocateWorkTimes12()
-	{
-		String[] times = new String[2];
-		times = controller.allocateWorkTimes("EAM");
-		String start = times[0];
-		String end = times[1];
-		assertEquals(start, "8:00");
-		assertEquals(end, "20:00");
-	}
-	@Test
-	public void testAllocateWorkTimes13()
-	{
-		String[] times = new String[2];
-		times = controller.allocateWorkTimes("EMA");
-		String start = times[0];
-		String end = times[1];
-		assertEquals(start, "8:00");
-		assertEquals(end, "20:00");
 	}
 	@Test
 	public void test1GetTimeFrom1970() throws ParseException
@@ -755,7 +459,7 @@ public class ControllerJunit {
 		bMenu.addDayWorkingTime(1,3,false,true,true);
 		bMenu.addDayWorkingTime(2,3,false,true,true);
 
-		ArrayList<Employee> employees = new ArrayList<Employee>();
+		List<Employee> employees;
 		employees = controller.getAvailableEmployeesForSpecifiedTime("09/05/2017", "15:15", "20:00");
 		assertEquals(1,employees.get(0).getId());
 		assertEquals(2,employees.get(1).getId());
@@ -770,7 +474,7 @@ public class ControllerJunit {
 		connect2.addEmployee("Test two",43);
 		bMenu.addDayWorkingTime(1,3,false,true,true);
 		bMenu.addDayWorkingTime(2,3,false,true,true);
-		ArrayList<Employee> employees = new ArrayList<Employee>();
+		List<Employee> employees;
 		employees = controller.getAvailableEmployeesForSpecifiedTime("09/05/2017", "15:15", "20:01");
 		assertEquals(0,employees.size());
 	}
@@ -784,7 +488,7 @@ public class ControllerJunit {
 		connect2.addEmployee("Test two",43);
 		bMenu.addDayWorkingTime(1,4,true,true,false);
 		bMenu.addDayWorkingTime(2,4,true,true,false);
-		ArrayList<Employee> employees = new ArrayList<Employee>();
+		List<Employee> employees;
 		employees = controller.getAvailableEmployeesForSpecifiedTime("10/05/2017", "08:00", "15:00");
 		assertEquals(1,employees.get(0).getId());
 		assertEquals(2,employees.get(1).getId());
@@ -799,7 +503,7 @@ public class ControllerJunit {
 		connect2.addEmployee("Test two",43);
 		bMenu.addDayWorkingTime(1,3,false,true,true);
 		bMenu.addDayWorkingTime(2,3,false,true,true);
-		ArrayList<Employee> employees = new ArrayList<Employee>();
+		List<Employee> employees;
 		employees = controller.getAvailableEmployeesForSpecifiedTime("09/05/2017", "07:59", "15:00");
 		log.debug(employees.size()+"\n");
 		assertEquals(0,employees.size());
@@ -814,7 +518,7 @@ public class ControllerJunit {
 		connect2.addEmployee("Test two",43);
 		bMenu.addDayWorkingTime(1,4,true,true,false);
 		bMenu.addDayWorkingTime(2,4,true,true,false);
-		ArrayList<Employee> employees = new ArrayList<Employee>();
+		List<Employee> employees;
 		connect2.addBooking(1,1, "10/05/2017", "08:00", "9:59", 0, "active");
 		employees = controller.getAvailableEmployeesForSpecifiedTime("10/05/2017", "10:00", "15:00");
 		assertEquals(1,employees.get(0).getId());
@@ -830,7 +534,7 @@ public class ControllerJunit {
 		connect2.addEmployee("Test two",43);
 		bMenu.addDayWorkingTime(1,4,true,true,false);
 		bMenu.addDayWorkingTime(2,4,true,true,false);
-		ArrayList<Employee> employees = new ArrayList<Employee>();
+		List<Employee> employees;
 		connect2.addBooking(2,1, "10/05/2017", "08:00", "10:01", 0, "active");
 		employees = controller.getAvailableEmployeesForSpecifiedTime("10/05/2017", "10:00", "15:00");
 		assertEquals(2,employees.get(0).getId());
@@ -847,7 +551,7 @@ public class ControllerJunit {
 		connect2.addEmployee("Test two",43);
 		bMenu.addDayWorkingTime(1,4,true,true,false);
 		bMenu.addDayWorkingTime(2,4,true,true,false);
-		ArrayList<Employee> employees = new ArrayList<Employee>();
+		List<Employee> employees;
 		connect2.addBooking(2,1, "10/05/2017", "14:59", "16:00", 0, "active");
 		employees = controller.getAvailableEmployeesForSpecifiedTime("10/05/2017", "10:00", "15:00");
 		assertEquals(2,employees.get(0).getId());

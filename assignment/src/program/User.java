@@ -30,6 +30,12 @@ public class User
 		_lname = lname;
 		_phone = phone;
 	}
+	public User(String fname, String lname, String phone)
+	{
+		_fname = fname;
+		_lname = lname;
+		_phone = phone;
+	}
 	public User(){}
 	
 	public int getID(){return _id;}

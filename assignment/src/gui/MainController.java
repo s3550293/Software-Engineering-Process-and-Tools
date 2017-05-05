@@ -1,8 +1,8 @@
 package gui;
 
+import java.io.File;
 import java.io.IOException;
 import java.net.URL;
-import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
@@ -48,7 +48,6 @@ import program.BusinessMenu;
 import program.Service;
 import program.User;
 
-import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 
 public class MainController implements Initializable {
@@ -59,19 +58,21 @@ public class MainController implements Initializable {
 	private Employee employee = null;
 	private Booking booking = null;
 	int globalEmployeeOption = 0;
-	private static Booking newBook= new Booking();
-	public MainController() {}
-	
+	private static Booking newBook = new Booking();
+
+	public MainController() {
+	}
+
 	/**************
 	 * B Owner
 	 **************/
-	
+
 	@FXML
 	ToggleGroup bookingViewGroup = new ToggleGroup();
-	
+
 	@FXML
 	RadioButton rbCurrentBook, rbPastBook;
-	
+
 	@FXML
 	StackPane stkBusiness, stkCustomer;
 
@@ -86,7 +87,8 @@ public class MainController implements Initializable {
 	Label lblEmployeeID, lblEmployeeName, lblEmployeePayrate, lblEmployeeTitle;
 
 	@FXML
-	Label lblBookingID, lblBookingCustomerID, lblBookingDate, lblBookingStartTime, lblBookingEndTime, lblBookingStatus, lblBookServ;
+	Label lblBookingID, lblBookingCustomerID, lblBookingDate, lblBookingStartTime, lblBookingEndTime, lblBookingStatus,
+			lblBookServ;
 
 	@FXML
 	ListView<Booking> listviewBookings;
@@ -114,71 +116,73 @@ public class MainController implements Initializable {
 			btnFriMorning, btnFriAfternoon, btnFriEvening;
 	@FXML
 	ToggleButton btnSatMorning, btnSatAfternoon, btnSatEvening;
-	
+
 	@FXML
 	Label lblServiceID, lblManServiceName, lblManServicePrice, lblServiceDura;
-	
+
 	@FXML
 	ListView<Service> listviewManServices;
-	
+
 	@FXML
 	Button btnRefershServices, btnDeleteService, btnAddService, btnSearchServices;
-	
+
 	@FXML
 	TextField txtSearchService;
-	
+
 	@FXML
 	Label lblCustFirstName, lblCustLastName, lblCustUsername, lblCustEmail, lblCustMobile, lblCustDOB, lblCustGender;
-	
+
 	@FXML
 	ListView<Customer> listviewCustomers;
-	
+
 	@FXML
 	Button btnSearchCustomer, btnDeleteCustomer, btnCreateBooking, btnRefershCustomers;
-	
+
 	@FXML
 	TextField txtSearchCustomer;
-	
-	
+
 	/**************
 	 * Customer
 	 **************/
-	
+
 	@FXML
-	Button btnBookAppointment, btnConfirmBooking, btnNext, btnLogoutCustomer, btnBack, btnCancelAppoitment, btnRToOwnMen;
-	
+	Button btnBookAppointment, btnConfirmBooking, btnNext, btnLogoutCustomer, btnBack, btnCancelAppoitment,
+			btnRToOwnMen;
+
 	@FXML
-	Label lblCustomerName, lblDayDate, lblServiceName, lblServiceDur, lblServicePrice, lblCustBookingDate, lblBookingService, lblBookingPrice, lblBookingDur, lblBookingTime, lblBookingEmp;
-	
+	Label lblCustomerName, lblDayDate, lblServiceName, lblServiceDur, lblServicePrice, lblCustBookingDate,
+			lblBookingService, lblBookingPrice, lblBookingDur, lblBookingTime, lblBookingEmp;
+
 	@FXML
 	ComboBox<Date> cmbDayBooking;
-	
+
 	@FXML
 	ComboBox<Employee> cmbPreferEmp;
-	
+
 	@FXML
 	ListView<Service> listviewBookingServices;
-	
+
 	@FXML
 	StackPane stkpnUserMenu, stkpnBookingMenu, stkpnDateService, stkpnTime, stkpnBookingConfirm;
-	
+
 	@FXML
 	Label lblBookConDate, lblBookConSer, lblBookConPri, lblBookConDur, lblBookConSTim, lblBookConEmp;
-	
+
 	@FXML
-	ToggleButton togbtnMorn, togbtnAft, togbtnEven, togbtnTimeSlot1, togbtnTimeSlot2, togbtnTimeSlot3, togbtnTimeSlot4, togbtnTimeSlot5, togbtnTimeSlot6, togbtnTimeSlot7, togbtnTimeSlot8;
-	
+	ToggleButton togbtnMorn, togbtnAft, togbtnEven, togbtnTimeSlot1, togbtnTimeSlot2, togbtnTimeSlot3, togbtnTimeSlot4,
+			togbtnTimeSlot5, togbtnTimeSlot6, togbtnTimeSlot7, togbtnTimeSlot8;
+
 	@FXML
 	ToggleGroup timeODayGroup = new ToggleGroup();
-	
+
 	@FXML
 	ToggleGroup timeGroup = new ToggleGroup();
-	
+
 	@FXML
 	Label lblAvail1, lblAvail2, lblAvail3, lblAvail4, lblAvail5, lblAvail6, lblAvail7, lblAvail8;
-	
+
 	private User _user = null;
-	
+
 	private Stage stage = null;
 
 	/**
@@ -188,234 +192,323 @@ public class MainController implements Initializable {
 	 */
 	@Override
 	public void initialize(URL url, ResourceBundle rb) {
+		File varTmpData = new File("db/company.db");
+		if (varTmpData.exists() == false) {
+			boolean var = setup();
+			if(var == false){
+				Platform.exit();
+				System.exit(0);
+			}
+		}
 		stkBusiness.setVisible(false);
 		stkCustomer.setVisible(false);
 		boolean var = login();
 		if (var == true) {
 			loadDaySelect();
 			loadallServices("");
-			if(stage != null){
+			if (stage != null) {
 				stage.show();
 			}
 			if (program.getUser().getAccountType() == 1) {
 				stkBusiness.setVisible(true);
 				stkCustomer.setVisible(false);
-			}
-			else {
+			} else {
 				stkBusiness.setVisible(false);
 				stkCustomer.setVisible(true);
 			}
-				rbCurrentBook.setSelected(true);
-				loadListViewEmp("");
-				listviewEmployees.getSelectionModel().selectedItemProperty()
-						.addListener(new ChangeListener<Employee>() {
-							@Override
-							public void changed(ObservableValue<? extends Employee> observable, Employee oldValue,
-									Employee newValue) {
-								if (newValue != null) {
-									employee = newValue;
-									lblEmployeeID.setText(Integer.toString(employee.getId()));
-									lblEmployeeName.setText(employee.getName());
-									lblEmployeePayrate.setText(Double.toString(employee.getPayRate()));
-								}
-							}
-						});
-				loadListViewBook();
-				loadallCustomers();
-				listviewBookings.setPlaceholder(new Label("No Bookings"));
-				listviewCustomers.setPlaceholder(new Label("No Customer"));
-				listviewEmployees.setPlaceholder(new Label("No Employees"));
-				listviewManServices.setPlaceholder(new Label("No Services"));
-				listviewBookings.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<Booking>() {
-					@Override
-					public void changed(ObservableValue<? extends Booking> observable, Booking oldValue,
-							Booking newValue) {
-						if (newValue != null) {
-							booking = newValue;
-							lblBookingID.setText(Integer.toString(booking.getBookingID()));
-							lblBookingCustomerID.setText(connection.getCustomer(booking.getCustomerId()).getFullName());
-							lblBookingDate.setText(program.dateToStr(booking.getDate()));
-							lblBookServ.setText(connection.getService(booking.getService()).getName());
-							lblBookingStartTime.setText(program.timeToStr(booking.getStartTime()));
-							lblBookingEndTime.setText(program.timeToStr(booking.getEndTime()));
-							lblBookingStatus.setText(booking.getStatus());
-						}
+			rbCurrentBook.setSelected(true);
+			loadListViewEmp("");
+			listviewEmployees.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<Employee>() {
+				@Override
+				public void changed(ObservableValue<? extends Employee> observable, Employee oldValue,
+						Employee newValue) {
+					if (newValue != null) {
+						employee = newValue;
+						lblEmployeeID.setText(Integer.toString(employee.getId()));
+						lblEmployeeName.setText(employee.getName());
+						lblEmployeePayrate.setText(Double.toString(employee.getPayRate()));
 					}
-				});
+				}
+			});
+			loadListViewBook();
+			loadallCustomers();
+			listviewBookings.setPlaceholder(new Label("No Bookings"));
+			listviewCustomers.setPlaceholder(new Label("No Customer"));
+			listviewEmployees.setPlaceholder(new Label("No Employees"));
+			listviewManServices.setPlaceholder(new Label("No Services"));
+			listviewBookings.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<Booking>() {
+				@Override
+				public void changed(ObservableValue<? extends Booking> observable, Booking oldValue, Booking newValue) {
+					if (newValue != null) {
+						booking = newValue;
+						lblBookingID.setText(Integer.toString(booking.getBookingID()));
+						lblBookingCustomerID.setText(connection.getCustomer(booking.getCustomerId()).getFullName());
+						lblBookingDate.setText(program.dateToStr(booking.getDate()));
+						lblBookServ.setText(connection.getService(booking.getService()).getName());
+						lblBookingStartTime.setText(program.timeToStr(booking.getStartTime()));
+						lblBookingEndTime.setText(program.timeToStr(booking.getEndTime()));
+						lblBookingStatus.setText(booking.getStatus());
+					}
+				}
+			});
 
-				listviewManServices.getSelectionModel().selectedItemProperty()
-						.addListener(new ChangeListener<Service>() {
-							@Override
-							public void changed(ObservableValue<? extends Service> observable, Service oldValue,
-									Service newValue) {
-								if (newValue != null) {
-									lblServiceID.setText(Integer.toString(newValue.getID()));
-									lblManServiceName.setText(newValue.getName());
-									lblManServicePrice.setText("$" + Double.toString(newValue.getPrice()));
-									lblServiceDura.setText(Integer.toString(newValue.getLengthMin()));
-								}
-							}
-						});
-				listviewCustomers.getSelectionModel().selectedItemProperty()
-						.addListener(new ChangeListener<Customer>() {
-							@Override
-							public void changed(ObservableValue<? extends Customer> observable, Customer oldValue,
-									Customer newValue) {
-								if (newValue != null) {
-									lblCustFirstName.setText(newValue.getFName());
-									lblCustLastName.setText(newValue.getLName());
-									lblCustEmail.setText(newValue.getEmail());
-									lblCustMobile.setText(newValue.getPhone());
-									lblCustDOB.setText(newValue.getDOB());
-									lblCustGender.setText(newValue.getGender());
-								}
-							}
-						});
-				cmbBookingDay.valueProperty().addListener(new ChangeListener<Date>() {
-					@Override
-					public void changed(ObservableValue ov, Date t, Date t1) {
-						loadListViewBook();
+			listviewManServices.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<Service>() {
+				@Override
+				public void changed(ObservableValue<? extends Service> observable, Service oldValue, Service newValue) {
+					if (newValue != null) {
+						lblServiceID.setText(Integer.toString(newValue.getID()));
+						lblManServiceName.setText(newValue.getName());
+						lblManServicePrice.setText("$" + Double.toString(newValue.getPrice()));
+						lblServiceDura.setText(Integer.toString(newValue.getLengthMin()));
 					}
-				});
+				}
+			});
+			listviewCustomers.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<Customer>() {
+				@Override
+				public void changed(ObservableValue<? extends Customer> observable, Customer oldValue,
+						Customer newValue) {
+					if (newValue != null) {
+						lblCustFirstName.setText(newValue.getFName());
+						lblCustLastName.setText(newValue.getLName());
+						lblCustEmail.setText(newValue.getEmail());
+						lblCustMobile.setText(newValue.getPhone());
+						lblCustDOB.setText(newValue.getDOB());
+						lblCustGender.setText(newValue.getGender());
+					}
+				}
+			});
+			cmbBookingDay.valueProperty().addListener(new ChangeListener<Date>() {
+				@Override
+				public void changed(ObservableValue ov, Date t, Date t1) {
+					loadListViewBook();
+				}
+			});
 
-				bookingViewGroup.selectedToggleProperty().addListener(new ChangeListener<Toggle>() {
-					public void changed(ObservableValue<? extends Toggle> ov, Toggle old_toggle, Toggle new_toggle) {
-						loadDaySelect();
-						loadListViewBook();
-					}
-				});
-				lblCustomerName.setText(connection.getCustomer(program.getUser().getID()).getFullName());
-				cmbDayBooking.valueProperty().addListener(new ChangeListener<Date>() {
-					@Override
-					public void changed(ObservableValue ov, Date t, Date t1) {
-						// TODO
-					}
-				});
-				listviewBookingServices.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<Service>() {
-							@Override
-							public void changed(ObservableValue<? extends Service> observable, Service oldValue,
-									Service newValue) {
-								if (newValue != null) {
-									lblServiceName.setText(newValue.getName());
-									lblServiceDur.setText(Integer.toString(newValue.getLengthMin()));
-									lblServicePrice.setText("$" + Double.toString(newValue.getPrice()));
-								}
+			bookingViewGroup.selectedToggleProperty().addListener(new ChangeListener<Toggle>() {
+				public void changed(ObservableValue<? extends Toggle> ov, Toggle old_toggle, Toggle new_toggle) {
+					loadDaySelect();
+					loadListViewBook();
+				}
+			});
+			lblCustomerName.setText(connection.getCustomer(program.getUser().getID()).getFullName());
+			cmbDayBooking.valueProperty().addListener(new ChangeListener<Date>() {
+				@Override
+				public void changed(ObservableValue ov, Date t, Date t1) {
+					// TODO
+				}
+			});
+			listviewBookingServices.getSelectionModel().selectedItemProperty()
+					.addListener(new ChangeListener<Service>() {
+						@Override
+						public void changed(ObservableValue<? extends Service> observable, Service oldValue,
+								Service newValue) {
+							if (newValue != null) {
+								lblServiceName.setText(newValue.getName());
+								lblServiceDur.setText(Integer.toString(newValue.getLengthMin()));
+								lblServicePrice.setText("$" + Double.toString(newValue.getPrice()));
 							}
-						});
-				cmbDayBooking.valueProperty().addListener(new ChangeListener<Date>() {
-					@Override
-					public void changed(ObservableValue ov, Date t, Date t1) {
-						if(t1 != null)
-						{
-							lblDayDate.setText(program.dateToStr(cmbDayBooking.getSelectionModel().getSelectedItem()));
 						}
+					});
+			cmbDayBooking.valueProperty().addListener(new ChangeListener<Date>() {
+				@Override
+				public void changed(ObservableValue ov, Date t, Date t1) {
+					if (t1 != null) {
+						lblDayDate.setText(program.dateToStr(cmbDayBooking.getSelectionModel().getSelectedItem()));
 					}
-				});
-				togbtnMorn.setToggleGroup(timeODayGroup);
-				togbtnAft.setToggleGroup(timeODayGroup);
-				togbtnEven.setToggleGroup(timeODayGroup);
-				timeODayGroup.selectedToggleProperty().addListener(new ChangeListener<Toggle>() {
-					public void changed(ObservableValue<? extends Toggle> ov, Toggle old_toggle, Toggle new_toggle) {
-						togbtnTimeSlot1.setSelected(false);
-						togbtnTimeSlot2.setSelected(false);
-						togbtnTimeSlot3.setSelected(false);
-						togbtnTimeSlot4.setSelected(false);
-						togbtnTimeSlot5.setSelected(false);
-						togbtnTimeSlot6.setSelected(false);
-						togbtnTimeSlot7.setSelected(false);
-						togbtnTimeSlot8.setSelected(false);
-						if(togbtnMorn.isSelected()){
-							togbtnAft.setSelected(false);
-							togbtnEven.setSelected(false);
-							Calendar date = Calendar.getInstance();
-							date.set(Calendar.HOUR_OF_DAY, 8);
-							date.set(Calendar.MINUTE, 0);
-					        for(int i = 0;i<8;i++){
-					        	if(i == 0){togbtnTimeSlot1.setText(date.get(Calendar.HOUR_OF_DAY)+":"+date.get(Calendar.MINUTE)+"0");}
-					        	if(i == 1){togbtnTimeSlot2.setText(date.get(Calendar.HOUR_OF_DAY)+":"+date.get(Calendar.MINUTE));}
-					        	if(i == 2){togbtnTimeSlot3.setText(date.get(Calendar.HOUR_OF_DAY)+":"+date.get(Calendar.MINUTE)+"0");}
-					        	if(i == 3){togbtnTimeSlot4.setText(date.get(Calendar.HOUR_OF_DAY)+":"+date.get(Calendar.MINUTE));}
-					        	if(i == 4){togbtnTimeSlot5.setText(date.get(Calendar.HOUR_OF_DAY)+":"+date.get(Calendar.MINUTE)+"0");}
-					        	if(i == 5){togbtnTimeSlot6.setText(date.get(Calendar.HOUR_OF_DAY)+":"+date.get(Calendar.MINUTE));}
-					        	if(i == 6){togbtnTimeSlot7.setText(date.get(Calendar.HOUR_OF_DAY)+":"+date.get(Calendar.MINUTE)+"0");}
-					        	if(i == 7){togbtnTimeSlot8.setText(date.get(Calendar.HOUR_OF_DAY)+":"+date.get(Calendar.MINUTE));}
-					        	date.add(Calendar.MINUTE, 30);
-					        }
-					        checkBookingTime();
+				}
+			});
+			togbtnMorn.setToggleGroup(timeODayGroup);
+			togbtnAft.setToggleGroup(timeODayGroup);
+			togbtnEven.setToggleGroup(timeODayGroup);
+			timeODayGroup.selectedToggleProperty().addListener(new ChangeListener<Toggle>() {
+				public void changed(ObservableValue<? extends Toggle> ov, Toggle old_toggle, Toggle new_toggle) {
+					togbtnTimeSlot1.setSelected(false);
+					togbtnTimeSlot2.setSelected(false);
+					togbtnTimeSlot3.setSelected(false);
+					togbtnTimeSlot4.setSelected(false);
+					togbtnTimeSlot5.setSelected(false);
+					togbtnTimeSlot6.setSelected(false);
+					togbtnTimeSlot7.setSelected(false);
+					togbtnTimeSlot8.setSelected(false);
+					if (togbtnMorn.isSelected()) {
+						togbtnAft.setSelected(false);
+						togbtnEven.setSelected(false);
+						Calendar date = Calendar.getInstance();
+						date.set(Calendar.HOUR_OF_DAY, 8);
+						date.set(Calendar.MINUTE, 0);
+						for (int i = 0; i < 8; i++) {
+							if (i == 0) {
+								togbtnTimeSlot1.setText(
+										date.get(Calendar.HOUR_OF_DAY) + ":" + date.get(Calendar.MINUTE) + "0");
+							}
+							if (i == 1) {
+								togbtnTimeSlot2
+										.setText(date.get(Calendar.HOUR_OF_DAY) + ":" + date.get(Calendar.MINUTE));
+							}
+							if (i == 2) {
+								togbtnTimeSlot3.setText(
+										date.get(Calendar.HOUR_OF_DAY) + ":" + date.get(Calendar.MINUTE) + "0");
+							}
+							if (i == 3) {
+								togbtnTimeSlot4
+										.setText(date.get(Calendar.HOUR_OF_DAY) + ":" + date.get(Calendar.MINUTE));
+							}
+							if (i == 4) {
+								togbtnTimeSlot5.setText(
+										date.get(Calendar.HOUR_OF_DAY) + ":" + date.get(Calendar.MINUTE) + "0");
+							}
+							if (i == 5) {
+								togbtnTimeSlot6
+										.setText(date.get(Calendar.HOUR_OF_DAY) + ":" + date.get(Calendar.MINUTE));
+							}
+							if (i == 6) {
+								togbtnTimeSlot7.setText(
+										date.get(Calendar.HOUR_OF_DAY) + ":" + date.get(Calendar.MINUTE) + "0");
+							}
+							if (i == 7) {
+								togbtnTimeSlot8
+										.setText(date.get(Calendar.HOUR_OF_DAY) + ":" + date.get(Calendar.MINUTE));
+							}
+							date.add(Calendar.MINUTE, 30);
 						}
-						else if(togbtnAft.isSelected()){
-							togbtnMorn.setSelected(false);
-							togbtnEven.setSelected(false);
-							Calendar date = Calendar.getInstance();
-							log.debug("LOGGER: date - "+date);
-							date.set(Calendar.HOUR_OF_DAY, 12);
-							date.set(Calendar.MINUTE, 00);
-							log.debug("LOGGER: date - "+date.get(Calendar.HOUR_OF_DAY));
-					        for(int i = 0;i<8;i++){
-					        	if(i == 0){togbtnTimeSlot1.setText(date.get(Calendar.HOUR_OF_DAY)+":"+date.get(Calendar.MINUTE)+"0");}
-					        	if(i == 1){togbtnTimeSlot2.setText(date.get(Calendar.HOUR_OF_DAY)+":"+date.get(Calendar.MINUTE));}
-					        	if(i == 2){togbtnTimeSlot3.setText(date.get(Calendar.HOUR_OF_DAY)+":"+date.get(Calendar.MINUTE)+"0");}
-					        	if(i == 3){togbtnTimeSlot4.setText(date.get(Calendar.HOUR_OF_DAY)+":"+date.get(Calendar.MINUTE));}
-					        	if(i == 4){togbtnTimeSlot5.setText(date.get(Calendar.HOUR_OF_DAY)+":"+date.get(Calendar.MINUTE)+"0");}
-					        	if(i == 5){togbtnTimeSlot6.setText(date.get(Calendar.HOUR_OF_DAY)+":"+date.get(Calendar.MINUTE));}
-					        	if(i == 6){togbtnTimeSlot7.setText(date.get(Calendar.HOUR_OF_DAY)+":"+date.get(Calendar.MINUTE)+"0");}
-					        	if(i == 7){togbtnTimeSlot8.setText(date.get(Calendar.HOUR_OF_DAY)+":"+date.get(Calendar.MINUTE));}
-					        	date.add(Calendar.MINUTE, 30);
-					        }
-					        checkBookingTime();
+						checkBookingTime();
+					} else if (togbtnAft.isSelected()) {
+						togbtnMorn.setSelected(false);
+						togbtnEven.setSelected(false);
+						Calendar date = Calendar.getInstance();
+						log.debug("LOGGER: date - " + date);
+						date.set(Calendar.HOUR_OF_DAY, 12);
+						date.set(Calendar.MINUTE, 00);
+						log.debug("LOGGER: date - " + date.get(Calendar.HOUR_OF_DAY));
+						for (int i = 0; i < 8; i++) {
+							if (i == 0) {
+								togbtnTimeSlot1.setText(
+										date.get(Calendar.HOUR_OF_DAY) + ":" + date.get(Calendar.MINUTE) + "0");
+							}
+							if (i == 1) {
+								togbtnTimeSlot2
+										.setText(date.get(Calendar.HOUR_OF_DAY) + ":" + date.get(Calendar.MINUTE));
+							}
+							if (i == 2) {
+								togbtnTimeSlot3.setText(
+										date.get(Calendar.HOUR_OF_DAY) + ":" + date.get(Calendar.MINUTE) + "0");
+							}
+							if (i == 3) {
+								togbtnTimeSlot4
+										.setText(date.get(Calendar.HOUR_OF_DAY) + ":" + date.get(Calendar.MINUTE));
+							}
+							if (i == 4) {
+								togbtnTimeSlot5.setText(
+										date.get(Calendar.HOUR_OF_DAY) + ":" + date.get(Calendar.MINUTE) + "0");
+							}
+							if (i == 5) {
+								togbtnTimeSlot6
+										.setText(date.get(Calendar.HOUR_OF_DAY) + ":" + date.get(Calendar.MINUTE));
+							}
+							if (i == 6) {
+								togbtnTimeSlot7.setText(
+										date.get(Calendar.HOUR_OF_DAY) + ":" + date.get(Calendar.MINUTE) + "0");
+							}
+							if (i == 7) {
+								togbtnTimeSlot8
+										.setText(date.get(Calendar.HOUR_OF_DAY) + ":" + date.get(Calendar.MINUTE));
+							}
+							date.add(Calendar.MINUTE, 30);
 						}
-						else{
-							togbtnMorn.setSelected(false);
-							togbtnAft.setSelected(false);
-							Calendar date = Calendar.getInstance();
-							log.debug("LOGGER: date - "+date);
-							date.set(Calendar.HOUR_OF_DAY, 16);
-							date.set(Calendar.MINUTE, 0);
-							log.debug("LOGGER: date - "+date.get(Calendar.HOUR_OF_DAY));
-					        for(int i = 0;i<8;i++){
-					        	if(i == 0){togbtnTimeSlot1.setText(date.get(Calendar.HOUR_OF_DAY)+":"+date.get(Calendar.MINUTE)+"0");}
-					        	if(i == 1){togbtnTimeSlot2.setText(date.get(Calendar.HOUR_OF_DAY)+":"+date.get(Calendar.MINUTE));}
-					        	if(i == 2){togbtnTimeSlot3.setText(date.get(Calendar.HOUR_OF_DAY)+":"+date.get(Calendar.MINUTE)+"0");}
-					        	if(i == 3){togbtnTimeSlot4.setText(date.get(Calendar.HOUR_OF_DAY)+":"+date.get(Calendar.MINUTE));}
-					        	if(i == 4){togbtnTimeSlot5.setText(date.get(Calendar.HOUR_OF_DAY)+":"+date.get(Calendar.MINUTE)+"0");}
-					        	if(i == 5){togbtnTimeSlot6.setText(date.get(Calendar.HOUR_OF_DAY)+":"+date.get(Calendar.MINUTE));}
-					        	if(i == 6){togbtnTimeSlot7.setText(date.get(Calendar.HOUR_OF_DAY)+":"+date.get(Calendar.MINUTE)+"0");}
-					        	if(i == 7){togbtnTimeSlot8.setText(date.get(Calendar.HOUR_OF_DAY)+":"+date.get(Calendar.MINUTE));}
-					        	date.add(Calendar.MINUTE, 30);
-					        }
-					        checkBookingTime();
+						checkBookingTime();
+					} else {
+						togbtnMorn.setSelected(false);
+						togbtnAft.setSelected(false);
+						Calendar date = Calendar.getInstance();
+						log.debug("LOGGER: date - " + date);
+						date.set(Calendar.HOUR_OF_DAY, 16);
+						date.set(Calendar.MINUTE, 0);
+						log.debug("LOGGER: date - " + date.get(Calendar.HOUR_OF_DAY));
+						for (int i = 0; i < 8; i++) {
+							if (i == 0) {
+								togbtnTimeSlot1.setText(
+										date.get(Calendar.HOUR_OF_DAY) + ":" + date.get(Calendar.MINUTE) + "0");
+							}
+							if (i == 1) {
+								togbtnTimeSlot2
+										.setText(date.get(Calendar.HOUR_OF_DAY) + ":" + date.get(Calendar.MINUTE));
+							}
+							if (i == 2) {
+								togbtnTimeSlot3.setText(
+										date.get(Calendar.HOUR_OF_DAY) + ":" + date.get(Calendar.MINUTE) + "0");
+							}
+							if (i == 3) {
+								togbtnTimeSlot4
+										.setText(date.get(Calendar.HOUR_OF_DAY) + ":" + date.get(Calendar.MINUTE));
+							}
+							if (i == 4) {
+								togbtnTimeSlot5.setText(
+										date.get(Calendar.HOUR_OF_DAY) + ":" + date.get(Calendar.MINUTE) + "0");
+							}
+							if (i == 5) {
+								togbtnTimeSlot6
+										.setText(date.get(Calendar.HOUR_OF_DAY) + ":" + date.get(Calendar.MINUTE));
+							}
+							if (i == 6) {
+								togbtnTimeSlot7.setText(
+										date.get(Calendar.HOUR_OF_DAY) + ":" + date.get(Calendar.MINUTE) + "0");
+							}
+							if (i == 7) {
+								togbtnTimeSlot8
+										.setText(date.get(Calendar.HOUR_OF_DAY) + ":" + date.get(Calendar.MINUTE));
+							}
+							date.add(Calendar.MINUTE, 30);
 						}
+						checkBookingTime();
 					}
-				});
-				togbtnMorn.setSelected(true);
-				togbtnTimeSlot1.setToggleGroup(timeGroup);
-				togbtnTimeSlot2.setToggleGroup(timeGroup);
-				togbtnTimeSlot3.setToggleGroup(timeGroup);
-				togbtnTimeSlot4.setToggleGroup(timeGroup);
-				togbtnTimeSlot5.setToggleGroup(timeGroup);
-				togbtnTimeSlot6.setToggleGroup(timeGroup);
-				togbtnTimeSlot7.setToggleGroup(timeGroup);
-				togbtnTimeSlot8.setToggleGroup(timeGroup);
-				timeGroup.selectedToggleProperty().addListener(new ChangeListener<Toggle>() {
-					public void changed(ObservableValue<? extends Toggle> ov, Toggle old_toggle, Toggle new_toggle) {
-						addBookingTime();
-						Date date = program.calEnTime(newBook.getStartTime(), connection.getService(newBook.getService()).getLengthMin());
-						newBook.setEndTime(date);
-						log.debug("LOGGER: Time Slot Start - "+togbtnTimeSlot1.getText());
-						log.debug("LOGGER: Time Slot End - "+program.timeToStr(newBook.getEndTime()));
-						if(togbtnTimeSlot1.isSelected()){loadpreferedEmp(togbtnTimeSlot1.getText(), program.timeToStr(newBook.getEndTime()));}
-						if(togbtnTimeSlot2.isSelected()){loadpreferedEmp(togbtnTimeSlot2.getText(), program.timeToStr(newBook.getEndTime()));}
-						if(togbtnTimeSlot3.isSelected()){loadpreferedEmp(togbtnTimeSlot3.getText(), program.timeToStr(newBook.getEndTime()));}
-						if(togbtnTimeSlot4.isSelected()){loadpreferedEmp(togbtnTimeSlot4.getText(), program.timeToStr(newBook.getEndTime()));}
-						if(togbtnTimeSlot5.isSelected()){loadpreferedEmp(togbtnTimeSlot5.getText(), program.timeToStr(newBook.getEndTime()));}
-						if(togbtnTimeSlot6.isSelected()){loadpreferedEmp(togbtnTimeSlot6.getText(), program.timeToStr(newBook.getEndTime()));}
-						if(togbtnTimeSlot7.isSelected()){loadpreferedEmp(togbtnTimeSlot7.getText(), program.timeToStr(newBook.getEndTime()));}
-						if(togbtnTimeSlot8.isSelected()){loadpreferedEmp(togbtnTimeSlot8.getText(), program.timeToStr(newBook.getEndTime()));}
+				}
+			});
+			togbtnMorn.setSelected(true);
+			togbtnTimeSlot1.setToggleGroup(timeGroup);
+			togbtnTimeSlot2.setToggleGroup(timeGroup);
+			togbtnTimeSlot3.setToggleGroup(timeGroup);
+			togbtnTimeSlot4.setToggleGroup(timeGroup);
+			togbtnTimeSlot5.setToggleGroup(timeGroup);
+			togbtnTimeSlot6.setToggleGroup(timeGroup);
+			togbtnTimeSlot7.setToggleGroup(timeGroup);
+			togbtnTimeSlot8.setToggleGroup(timeGroup);
+			timeGroup.selectedToggleProperty().addListener(new ChangeListener<Toggle>() {
+				public void changed(ObservableValue<? extends Toggle> ov, Toggle old_toggle, Toggle new_toggle) {
+					addBookingTime();
+					Date date = program.calEnTime(newBook.getStartTime(),
+							connection.getService(newBook.getService()).getLengthMin());
+					newBook.setEndTime(date);
+					log.debug("LOGGER: Time Slot Start - " + togbtnTimeSlot1.getText());
+					log.debug("LOGGER: Time Slot End - " + program.timeToStr(newBook.getEndTime()));
+					if (togbtnTimeSlot1.isSelected()) {
+						loadpreferedEmp(togbtnTimeSlot1.getText(), program.timeToStr(newBook.getEndTime()));
 					}
-				});
-				
-			}
-			
+					if (togbtnTimeSlot2.isSelected()) {
+						loadpreferedEmp(togbtnTimeSlot2.getText(), program.timeToStr(newBook.getEndTime()));
+					}
+					if (togbtnTimeSlot3.isSelected()) {
+						loadpreferedEmp(togbtnTimeSlot3.getText(), program.timeToStr(newBook.getEndTime()));
+					}
+					if (togbtnTimeSlot4.isSelected()) {
+						loadpreferedEmp(togbtnTimeSlot4.getText(), program.timeToStr(newBook.getEndTime()));
+					}
+					if (togbtnTimeSlot5.isSelected()) {
+						loadpreferedEmp(togbtnTimeSlot5.getText(), program.timeToStr(newBook.getEndTime()));
+					}
+					if (togbtnTimeSlot6.isSelected()) {
+						loadpreferedEmp(togbtnTimeSlot6.getText(), program.timeToStr(newBook.getEndTime()));
+					}
+					if (togbtnTimeSlot7.isSelected()) {
+						loadpreferedEmp(togbtnTimeSlot7.getText(), program.timeToStr(newBook.getEndTime()));
+					}
+					if (togbtnTimeSlot8.isSelected()) {
+						loadpreferedEmp(togbtnTimeSlot8.getText(), program.timeToStr(newBook.getEndTime()));
+					}
+				}
+			});
+
+		}
+
 		else {
 			Platform.exit();
 			System.exit(0);
@@ -443,8 +536,7 @@ public class MainController implements Initializable {
 							super.updateItem(t, bln);
 							if (t != null) {
 								setText(t.getName());
-							}
-							else{
+							} else {
 								listviewEmployees.setPlaceholder(new Label("No Employees"));
 							}
 						}
@@ -452,8 +544,7 @@ public class MainController implements Initializable {
 					return cell;
 				}
 			});
-		}
-		else {
+		} else {
 			log.warn("Unable to load Employees");
 		}
 	}
@@ -468,7 +559,7 @@ public class MainController implements Initializable {
 		SimpleDateFormat dayFormat = new SimpleDateFormat("EEEE");
 		Calendar date = Calendar.getInstance();
 		ArrayList<Date> dateArray = new ArrayList<>();
-		log.debug("LOGGER: rbPastBook - "+rbPastBook.isSelected());
+		log.debug("LOGGER: rbPastBook - " + rbPastBook.isSelected());
 		if (rbPastBook.isSelected()) {
 			date.add(Calendar.DAY_OF_MONTH, -1);
 			for (int i = 0; i < 7; i++) {
@@ -547,7 +638,7 @@ public class MainController implements Initializable {
 					return cell;
 				}
 			});
-			
+
 			cmbDayBooking.setButtonCell(new ListCell<Date>() {
 				@Override
 				protected void updateItem(Date t, boolean bln) {
@@ -569,8 +660,7 @@ public class MainController implements Initializable {
 	 * @author Joseph Garner
 	 */
 	private void loadListViewBook() {
-		if(cmbBookingDay.getSelectionModel().getSelectedItem() != null)
-		{
+		if (cmbBookingDay.getSelectionModel().getSelectedItem() != null) {
 			listviewBookings.getItems().clear();
 			Calendar cal = Calendar.getInstance();
 			Date now = null;
@@ -594,16 +684,16 @@ public class MainController implements Initializable {
 				listviewBookings.setCellFactory(new Callback<ListView<Booking>, ListCell<Booking>>() {
 					@Override
 					public ListCell<Booking> call(ListView<Booking> p) {
-	
+
 						ListCell<Booking> cell = new ListCell<Booking>() {
 							@Override
 							protected void updateItem(Booking t, boolean bln) {
 								super.updateItem(t, bln);
 								if (t != null) {
-									setText(t.getBookingID() + " " + connection.getCustomer(t.getCustomerId()).getFullName()
-											+ " " + program.timeToStr(t.getStartTime()));
-								}
-								else{
+									setText(t.getBookingID() + " "
+											+ connection.getCustomer(t.getCustomerId()).getFullName() + " "
+											+ program.timeToStr(t.getStartTime()));
+								} else {
 									listviewBookings.setPlaceholder(new Label("No Bookings"));
 								}
 							}
@@ -616,15 +706,14 @@ public class MainController implements Initializable {
 			}
 		}
 	}
-	
+
 	/**
 	 * loads all bookings into list view
 	 * 
 	 * @author Joseph Garner
 	 */
-	public void loadAllBookings(){
-		if(cmbBookingDay.getSelectionModel().getSelectedItem() != null)
-		{
+	public void loadAllBookings() {
+		if (cmbBookingDay.getSelectionModel().getSelectedItem() != null) {
 			listviewBookings.getItems().clear();
 			ArrayList<Booking> bookArray = new ArrayList<>(connection.getAllBooking());
 			ObservableList<Booking> bookList = FXCollections.observableList(bookArray);
@@ -634,16 +723,16 @@ public class MainController implements Initializable {
 				listviewBookings.setCellFactory(new Callback<ListView<Booking>, ListCell<Booking>>() {
 					@Override
 					public ListCell<Booking> call(ListView<Booking> p) {
-	
+
 						ListCell<Booking> cell = new ListCell<Booking>() {
 							@Override
 							protected void updateItem(Booking t, boolean bln) {
 								super.updateItem(t, bln);
 								if (t != null) {
-									setText(t.getBookingID() + " " + connection.getCustomer(t.getCustomerId()).getFullName()
-											+ " " + program.timeToStr(t.getStartTime()));
-								}
-								else{
+									setText(t.getBookingID() + " "
+											+ connection.getCustomer(t.getCustomerId()).getFullName() + " "
+											+ program.timeToStr(t.getStartTime()));
+								} else {
 									listviewBookings.setPlaceholder(new Label("No Bookings"));
 								}
 							}
@@ -656,14 +745,14 @@ public class MainController implements Initializable {
 			}
 		}
 	}
-	
+
 	/**
 	 * loads all Services into list view
 	 * 
 	 * @author Joseph Garner
 	 */
 	@FXML
-	public void loadallServices(String input){
+	public void loadallServices(String input) {
 		listviewManServices.getItems().clear();
 		ArrayList<Service> serviceArray = new ArrayList<>(connection.getAllServices(input));
 		ObservableList<Service> serviceList = FXCollections.observableList(serviceArray);
@@ -682,8 +771,7 @@ public class MainController implements Initializable {
 							if (t != null) {
 								log.debug("LOGGER: added:" + t.getName());
 								setText(t.getName());
-							}
-							else{
+							} else {
 								listviewManServices.setPlaceholder(new Label("No Services"));
 							}
 						}
@@ -710,14 +798,14 @@ public class MainController implements Initializable {
 			});
 		}
 	}
-	
+
 	/**
 	 * loads all customers into list view
 	 * 
 	 * @author Joseph Garner
 	 */
 	@FXML
-	public void loadallCustomers(){
+	public void loadallCustomers() {
 		listviewCustomers.getItems().clear();
 		ArrayList<Customer> serviceArray = new ArrayList<>(connection.getAllCustomer());
 		ObservableList<Customer> serviceList = FXCollections.observableList(serviceArray);
@@ -734,9 +822,8 @@ public class MainController implements Initializable {
 							super.updateItem(t, bln);
 							if (t != null) {
 								log.debug("LOGGER: added:" + t.getFName());
-								setText(t.getFName()+" "+t.getLName());
-							}
-							else{
+								setText(t.getFName() + " " + t.getLName());
+							} else {
 								listviewCustomers.setPlaceholder(new Label("No Customer"));
 							}
 						}
@@ -750,15 +837,14 @@ public class MainController implements Initializable {
 	/**************
 	 * LOGIN
 	 **************/
-	
+
 	/**
 	 * Logs the user out
 	 * 
 	 * @author [Programmer]
 	 */
 	@FXML
-	public void logout()
-	{
+	public void logout() {
 		stage = (Stage) stkBusiness.getScene().getWindow();
 		Alert alert = new Alert(AlertType.CONFIRMATION);
 		alert.setTitle("Logout");
@@ -770,13 +856,34 @@ public class MainController implements Initializable {
 			stage.hide();
 			program.setUser(null);
 			initialize(null, null);
-		} 
-		else 
-		{
+		} else {
 			return;
 		}
 	}
-	
+
+	@FXML
+	public boolean setup() {
+		log.debug("Setup Started");
+		try {
+			Stage secondaryStage = new Stage();
+			secondaryStage.getIcons().add(new Image("images/ic_collections_bookmark_black_48dp_2x.png"));
+			Parent root = FXMLLoader.load(getClass().getResource("setupLayout.fxml"));
+			secondaryStage.setTitle("Setup");
+			secondaryStage.setResizable(false);
+			secondaryStage.setScene(new Scene(root));
+			secondaryStage.initModality(Modality.APPLICATION_MODAL);
+			secondaryStage.showAndWait();
+			File varTmpData = new File("db/company.db");
+			if (varTmpData.exists() == false) {
+				return false;
+			}
+		} catch (IOException ioe) {
+			log.warn(ioe.getMessage());
+		}
+		log.debug("false");
+		return true;
+	}
+
 	/**
 	 * Returns User to login
 	 * 
@@ -814,26 +921,23 @@ public class MainController implements Initializable {
 	 * @author Joseph Garner
 	 */
 	@FXML
-	public void viewAllBookings()
-	{
-		if(chbkViewAllBook.isSelected())
-    	{
-    		cmbBookingDay.setDisable(true);
-    		rbPastBook.setDisable(true);
-    		rbPastBook.setSelected(false);
-    		rbCurrentBook.setDisable(true);
-    		rbCurrentBook.setSelected(false);
-    		loadAllBookings();
-    	}
-    	else{
-    		cmbBookingDay.setDisable(false);
-    		rbPastBook.setDisable(false);
-    		rbCurrentBook.setDisable(false);
-    		rbCurrentBook.setSelected(true);
-    		loadListViewBook();
-    	}
+	public void viewAllBookings() {
+		if (chbkViewAllBook.isSelected()) {
+			cmbBookingDay.setDisable(true);
+			rbPastBook.setDisable(true);
+			rbPastBook.setSelected(false);
+			rbCurrentBook.setDisable(true);
+			rbCurrentBook.setSelected(false);
+			loadAllBookings();
+		} else {
+			cmbBookingDay.setDisable(false);
+			rbPastBook.setDisable(false);
+			rbCurrentBook.setDisable(false);
+			rbCurrentBook.setSelected(true);
+			loadListViewBook();
+		}
 	}
-	
+
 	/**
 	 * Program Allows the user to search and displays bookings
 	 * 
@@ -857,19 +961,19 @@ public class MainController implements Initializable {
 			fname = connection.getCustomer(b.getCustomerId()).getFName();
 			lname = connection.getCustomer(b.getCustomerId()).getLName();
 			fullName = fname + " " + lname;
-			boolean checkF = program.searchMatch(fname.toUpperCase( ), txtSearchBookings.getText().toUpperCase( ));
-			boolean checkL = program.searchMatch(lname.toUpperCase( ), txtSearchBookings.getText().toUpperCase( ));
-			boolean checkFL = program.searchMatch(fullName.toUpperCase( ), txtSearchBookings.getText().toUpperCase( ));
-			log.debug("LOGGER: Users Name - "+fullName);
+			boolean checkF = program.searchMatch(fname.toUpperCase(), txtSearchBookings.getText().toUpperCase());
+			boolean checkL = program.searchMatch(lname.toUpperCase(), txtSearchBookings.getText().toUpperCase());
+			boolean checkFL = program.searchMatch(fullName.toUpperCase(), txtSearchBookings.getText().toUpperCase());
+			log.debug("LOGGER: Users Name - " + fullName);
 			if (checkF || checkL || checkFL) {
-				if(chbkViewAllBook.isSelected()){
+				if (chbkViewAllBook.isSelected()) {
 					bookArrayView.add(b);
-				}
-				else if (!chbkViewAllBook.isSelected() && dateView.format(now).equals(dateView.format(cmbBookingDay.getSelectionModel().getSelectedItem()))){
+				} else if (!chbkViewAllBook.isSelected() && dateView.format(now)
+						.equals(dateView.format(cmbBookingDay.getSelectionModel().getSelectedItem()))) {
 					bookArrayView.add(b);
 					log.debug("LOGGER: Booking added - " + b.toString());
+				} else {
 				}
-				else{}
 			}
 		}
 		ObservableList<Booking> bookList = FXCollections.observableList(bookArrayView);
@@ -901,14 +1005,14 @@ public class MainController implements Initializable {
 	/**
 	 * Cancels booking (does not remove the booking from view)
 	 * 
-	 * @author [Luke Mason]
+	 * @author Luke Mason
 	 */
 	@FXML
 	public void cancelBooking() {
 		log.debug("LOGGER: Entered cancelBooking function");
-		if(listviewBookings.getSelectionModel().getSelectedIndex() < 0)
-		{
-			program.messageBox("WARN", "oops", "A Booking has not been Selected","Please Select a booking and try again");
+		if (listviewBookings.getSelectionModel().getSelectedIndex() < 0) {
+			program.messageBox("WARN", "oops", "A Booking has not been Selected",
+					"Please Select a booking and try again");
 			return;
 		}
 		Alert alert = new Alert(AlertType.CONFIRMATION);
@@ -932,7 +1036,6 @@ public class MainController implements Initializable {
 		listviewBookings.getSelectionModel().clearSelection();
 		loadListViewBook();
 	}
-	
 
 	/**
 	 * Displays and refreshes booking view to all
@@ -947,8 +1050,8 @@ public class MainController implements Initializable {
 	}
 
 	/**
-	 * Shows add employee
-	 * note tabs should be disabled
+	 * Shows add employee note tabs should be disabled
+	 * 
 	 * @author Luke Mason
 	 */
 
@@ -963,16 +1066,17 @@ public class MainController implements Initializable {
 
 	/**
 	 * Returns User to manage employees
+	 * 
 	 * @author Luke Mason
 	 */
 	@FXML
 	public void cancelAddNewEmp() {
 		boardPaneEmpAdd.setVisible(false);
 		boardPaneEmpOverview.setVisible(true);
-		//Resetting the add Employee board to default values
+		// Resetting the add Employee board to default values
 		txtaddEmpFirstName.setText("");
-		txtAddEmpLastName.setText(""); 
-		txtAddEmpPayRate.setText(""); 
+		txtAddEmpLastName.setText("");
+		txtAddEmpPayRate.setText("");
 		chkbxAddWorkingTimes.setSelected(false);
 		setAllTogglesToFalse();
 		globalEmployeeOption = 0;
@@ -983,7 +1087,7 @@ public class MainController implements Initializable {
 	/**
 	 * Enables and disables working times
 	 * 
-	 * @author [Joseph Garner]
+	 * @author Joseph Garner
 	 */
 	@FXML
 	public void allowWorkingTimes() {
@@ -1000,95 +1104,101 @@ public class MainController implements Initializable {
 	 * @author Luke Mason
 	 */
 	@FXML
-	public void createEmp() 
-	{
+	public void createEmp() {
 		BusinessMenu bMenu = new BusinessMenu();
 		boolean firstName = !program.checkInputToContainInvalidChar(txtaddEmpFirstName.getText());
-		log.debug("First Name = "+firstName+"\n");
-		if(!firstName)
-		{
-			program.messageBox("ERROR", "First Name Invalid", "First Name Invalid","First Name entered is not a valid first name\nReason: First name contains invalid characters");
+		log.debug("First Name = " + firstName + "\n");
+		if (!firstName) {
+			program.messageBox("ERROR", "First Name Invalid", "First Name Invalid",
+					"First Name entered is not a valid first name\nReason: First name contains invalid characters");
 			return;
 		}
 		boolean lastName = !program.checkInputToContainInvalidChar(txtAddEmpLastName.getText());
-		log.debug("last Name = "+lastName+"\n");
-		if(!lastName)
-		{
-			program.messageBox("ERROR", "Last Name Invalid", "Last Name Invalid","Last Name entered is not a valid last name\nReason: Last name contains invalid characters");
+		log.debug("last Name = " + lastName + "\n");
+		if (!lastName) {
+			program.messageBox("ERROR", "Last Name Invalid", "Last Name Invalid",
+					"Last Name entered is not a valid last name\nReason: Last name contains invalid characters");
 			return;
 		}
 		double payRate = bMenu.strPayRateToDouble(txtAddEmpPayRate.getText());
-		log.debug("pay rate = "+payRate+"\n");
+		log.debug("pay rate = " + payRate + "\n");
 		boolean PayRate = bMenu.checkEmployeePayRate(payRate);
-		log.debug("is pay rate okay? "+PayRate+"\n");
-		if(!PayRate)
-		{
-			program.messageBox("ERROR", "Pay Rate Invalid", "Pay Rate Invalid","Pay rate entered is not a valid pay rate\nReason: Pay Rate is not 0 - 1000");
+		log.debug("is pay rate okay? " + PayRate + "\n");
+		if (!PayRate) {
+			program.messageBox("ERROR", "Pay Rate Invalid", "Pay Rate Invalid",
+					"Pay rate entered is not a valid pay rate\nReason: Pay Rate is not 0 - 1000");
 			return;
 		}
 
-		if(PayRate && firstName && lastName)
-		{	
-			log.debug("globalEmployeeOption = "+globalEmployeeOption+"\n");
-			log.debug("chkboxWorkingTimes = "+chkbxAddWorkingTimes.isSelected()+"\n");
-			if(chkbxAddWorkingTimes.isSelected())
-			{
-				if(!bMenu.checkWorkTimes(btnSunMorning.isSelected(), btnSunAfternoon.isSelected(), btnSunEvening.isSelected(), btnMonMorning.isSelected(), btnMonAfternoon.isSelected(), btnMonEvening.isSelected()
-						, btnTueMorning.isSelected(), btnTueAfternoon.isSelected(), btnTueEvening.isSelected(), btnWedMorning.isSelected()
-						, btnWedAfternoon.isSelected(), btnWedEvening.isSelected(), btnThurMorning.isSelected(), btnThurAfternoon.isSelected()
-						, btnThurEvening.isSelected(), btnFriMorning.isSelected(), btnFriAfternoon.isSelected(), btnFriEvening.isSelected()
-						, btnSatMorning.isSelected(), btnSatAfternoon.isSelected(), btnSatEvening.isSelected()))
-				{
+		if (PayRate && firstName && lastName) {
+			log.debug("globalEmployeeOption = " + globalEmployeeOption + "\n");
+			log.debug("chkboxWorkingTimes = " + chkbxAddWorkingTimes.isSelected() + "\n");
+			if (chkbxAddWorkingTimes.isSelected()) {
+				if (!bMenu.checkWorkTimes(btnSunMorning.isSelected(), btnSunAfternoon.isSelected(),
+						btnSunEvening.isSelected(), btnMonMorning.isSelected(), btnMonAfternoon.isSelected(),
+						btnMonEvening.isSelected(), btnTueMorning.isSelected(), btnTueAfternoon.isSelected(),
+						btnTueEvening.isSelected(), btnWedMorning.isSelected(), btnWedAfternoon.isSelected(),
+						btnWedEvening.isSelected(), btnThurMorning.isSelected(), btnThurAfternoon.isSelected(),
+						btnThurEvening.isSelected(), btnFriMorning.isSelected(), btnFriAfternoon.isSelected(),
+						btnFriEvening.isSelected(), btnSatMorning.isSelected(), btnSatAfternoon.isSelected(),
+						btnSatEvening.isSelected())) {
 					return;
 				}
-				if(globalEmployeeOption == 0)
-				{
-					bMenu.addEmployee(txtaddEmpFirstName.getText(),txtAddEmpLastName.getText(), payRate);
+				if (globalEmployeeOption == 0) {
+					bMenu.addEmployee(txtaddEmpFirstName.getText(), txtAddEmpLastName.getText(), payRate);
 					int id = bMenu.getLastEmployeeId();
-					bMenu.addWorkingTimes(id,btnSunMorning.isSelected(), btnSunAfternoon.isSelected()
-							, btnSunEvening.isSelected(), btnMonMorning.isSelected(), btnMonAfternoon.isSelected(), btnMonEvening.isSelected()
-							, btnTueMorning.isSelected(), btnTueAfternoon.isSelected(), btnTueEvening.isSelected(), btnWedMorning.isSelected()
-							, btnWedAfternoon.isSelected(), btnWedEvening.isSelected(), btnThurMorning.isSelected(), btnThurAfternoon.isSelected()
-							, btnThurEvening.isSelected(), btnFriMorning.isSelected(), btnFriAfternoon.isSelected(), btnFriEvening.isSelected()
-							, btnSatMorning.isSelected(), btnSatAfternoon.isSelected(), btnSatEvening.isSelected());
-					program.messageBox("SUCCESS", "New Employee Added", "New Employee Added",txtaddEmpFirstName.getText()+" "+txtAddEmpLastName.getText()+" with $"+payRate+"/h was Added!"); 
-				}
-				else
-				{				
+					bMenu.addWorkingTimes(id, btnSunMorning.isSelected(), btnSunAfternoon.isSelected(),
+							btnSunEvening.isSelected(), btnMonMorning.isSelected(), btnMonAfternoon.isSelected(),
+							btnMonEvening.isSelected(), btnTueMorning.isSelected(), btnTueAfternoon.isSelected(),
+							btnTueEvening.isSelected(), btnWedMorning.isSelected(), btnWedAfternoon.isSelected(),
+							btnWedEvening.isSelected(), btnThurMorning.isSelected(), btnThurAfternoon.isSelected(),
+							btnThurEvening.isSelected(), btnFriMorning.isSelected(), btnFriAfternoon.isSelected(),
+							btnFriEvening.isSelected(), btnSatMorning.isSelected(), btnSatAfternoon.isSelected(),
+							btnSatEvening.isSelected());
+					program.messageBox("SUCCESS", "New Employee Added", "New Employee Added",
+							txtaddEmpFirstName.getText() + " " + txtAddEmpLastName.getText() + " with $" + payRate
+									+ "/h was Added!");
+				} else {
 					Employee employee = listviewEmployees.getSelectionModel().getSelectedItem();
 					int employeeID = employee.getId();
-					changeEmployeesDetails(employeeID,txtaddEmpFirstName.getText(), txtAddEmpLastName.getText(), payRate);
-					bMenu.addWorkingTimes(employeeID,btnSunMorning.isSelected(), btnSunAfternoon.isSelected()
-							, btnSunEvening.isSelected(), btnMonMorning.isSelected(), btnMonAfternoon.isSelected(), btnMonEvening.isSelected()
-							, btnTueMorning.isSelected(), btnTueAfternoon.isSelected(), btnTueEvening.isSelected(), btnWedMorning.isSelected()
-							, btnWedAfternoon.isSelected(), btnWedEvening.isSelected(), btnThurMorning.isSelected(), btnThurAfternoon.isSelected()
-							, btnThurEvening.isSelected(), btnFriMorning.isSelected(), btnFriAfternoon.isSelected(), btnFriEvening.isSelected()
-							, btnSatMorning.isSelected(), btnSatAfternoon.isSelected(), btnSatEvening.isSelected());					
-						program.messageBox("SUCCESS", "Employee Details Updated", "Employee Details Updated",txtaddEmpFirstName.getText()+" "+txtAddEmpLastName.getText()+" with $"+payRate+"/h was updated!"); 
+					changeEmployeesDetails(employeeID, txtaddEmpFirstName.getText(), txtAddEmpLastName.getText(),
+							payRate);
+					bMenu.addWorkingTimes(employeeID, btnSunMorning.isSelected(), btnSunAfternoon.isSelected(),
+							btnSunEvening.isSelected(), btnMonMorning.isSelected(), btnMonAfternoon.isSelected(),
+							btnMonEvening.isSelected(), btnTueMorning.isSelected(), btnTueAfternoon.isSelected(),
+							btnTueEvening.isSelected(), btnWedMorning.isSelected(), btnWedAfternoon.isSelected(),
+							btnWedEvening.isSelected(), btnThurMorning.isSelected(), btnThurAfternoon.isSelected(),
+							btnThurEvening.isSelected(), btnFriMorning.isSelected(), btnFriAfternoon.isSelected(),
+							btnFriEvening.isSelected(), btnSatMorning.isSelected(), btnSatAfternoon.isSelected(),
+							btnSatEvening.isSelected());
+					program.messageBox("SUCCESS", "Employee Details Updated", "Employee Details Updated",
+							txtaddEmpFirstName.getText() + " " + txtAddEmpLastName.getText() + " with $" + payRate
+									+ "/h was updated!");
 					lblEmployeeTitle.setText("Add New Employee");
 					globalEmployeeOption = 0;
 				}
-			}
-			else
-			{
-				if(globalEmployeeOption == 0)
-				{
-					bMenu.addEmployee(txtaddEmpFirstName.getText(),txtAddEmpLastName.getText(), payRate);	
-					program.messageBox("SUCCESS", "SUCCESS", "New Employee Added",txtaddEmpFirstName.getText()+" "+txtAddEmpLastName.getText()+" with $"+payRate+"/h was Added!");
-				}
-				else
-				{
+			} else {
+				if (globalEmployeeOption == 0) {
+					bMenu.addEmployee(txtaddEmpFirstName.getText(), txtAddEmpLastName.getText(), payRate);
+					program.messageBox("SUCCESS", "SUCCESS", "New Employee Added", txtaddEmpFirstName.getText() + " "
+							+ txtAddEmpLastName.getText() + " with $" + payRate + "/h was Added!");
+				} else {
 					Employee employee = listviewEmployees.getSelectionModel().getSelectedItem();
 					int employeeID = employee.getId();
-					setAllTogglesToFalse();//wiping the work times
-					changeEmployeesDetails(employeeID,txtaddEmpFirstName.getText(), txtAddEmpLastName.getText(), payRate);
-					bMenu.addWorkingTimes(employeeID,btnSunMorning.isSelected(), btnSunAfternoon.isSelected()
-							, btnSunEvening.isSelected(), btnMonMorning.isSelected(), btnMonAfternoon.isSelected(), btnMonEvening.isSelected()
-							, btnTueMorning.isSelected(), btnTueAfternoon.isSelected(), btnTueEvening.isSelected(), btnWedMorning.isSelected()
-							, btnWedAfternoon.isSelected(), btnWedEvening.isSelected(), btnThurMorning.isSelected(), btnThurAfternoon.isSelected()
-							, btnThurEvening.isSelected(), btnFriMorning.isSelected(), btnFriAfternoon.isSelected(), btnFriEvening.isSelected()
-							, btnSatMorning.isSelected(), btnSatAfternoon.isSelected(), btnSatEvening.isSelected());
-					program.messageBox("SUCCESS", "Employee Details Updated", "Employee Details Updated",txtaddEmpFirstName.getText()+" "+txtAddEmpLastName.getText()+" with $"+payRate+"/h was updated!"); 
+					setAllTogglesToFalse();// wiping the work times
+					changeEmployeesDetails(employeeID, txtaddEmpFirstName.getText(), txtAddEmpLastName.getText(),
+							payRate);
+					bMenu.addWorkingTimes(employeeID, btnSunMorning.isSelected(), btnSunAfternoon.isSelected(),
+							btnSunEvening.isSelected(), btnMonMorning.isSelected(), btnMonAfternoon.isSelected(),
+							btnMonEvening.isSelected(), btnTueMorning.isSelected(), btnTueAfternoon.isSelected(),
+							btnTueEvening.isSelected(), btnWedMorning.isSelected(), btnWedAfternoon.isSelected(),
+							btnWedEvening.isSelected(), btnThurMorning.isSelected(), btnThurAfternoon.isSelected(),
+							btnThurEvening.isSelected(), btnFriMorning.isSelected(), btnFriAfternoon.isSelected(),
+							btnFriEvening.isSelected(), btnSatMorning.isSelected(), btnSatAfternoon.isSelected(),
+							btnSatEvening.isSelected());
+					program.messageBox("SUCCESS", "Employee Details Updated", "Employee Details Updated",
+							txtaddEmpFirstName.getText() + " " + txtAddEmpLastName.getText() + " with $" + payRate
+									+ "/h was updated!");
 					lblEmployeeTitle.setText("Add New Employee");
 					globalEmployeeOption = 0;
 				}
@@ -1097,26 +1207,25 @@ public class MainController implements Initializable {
 		refreshEmployeeView();
 		cancelAddNewEmp();
 	}
-	
+
 	/**
 	 * updates the employees names and payrates in database
+	 * 
 	 * @param empID
 	 * @param fName
 	 * @param lName
 	 * @param pRate
 	 */
-	public void changeEmployeesDetails(int empID,String fName, String lName, double pRate)
-	{	
-		String name = fName+" "+lName;
+	public void changeEmployeesDetails(int empID, String fName, String lName, double pRate) {
+		String name = fName + " " + lName;
 		connection.updateEmployeeName(empID, name);
-		connection.updateEmployeePayRate(empID,pRate);
+		connection.updateEmployeePayRate(empID, pRate);
 	}
-	
+
 	/**
 	 * Sets all the workTime toggles to false
 	 */
-	public void setAllTogglesToFalse()
-	{
+	public void setAllTogglesToFalse() {
 		btnSunMorning.setSelected(false);
 		btnSunAfternoon.setSelected(false);
 		btnSunEvening.setSelected(false);
@@ -1139,15 +1248,15 @@ public class MainController implements Initializable {
 		btnSatAfternoon.setSelected(false);
 		btnSatEvening.setSelected(false);
 	}
-	
+
 	/**
 	 * Resets the filtered employee list view
+	 * 
 	 * @author Luke Mason
 	 */
 	@FXML
 
-	public void refreshEmployeeView()
-	{
+	public void refreshEmployeeView() {
 		txtSearchEmployee.setText("");
 		loadListViewEmp("");
 		lblEmployeeID.setText("");
@@ -1158,94 +1267,88 @@ public class MainController implements Initializable {
 
 	/**
 	 * Filters the list of employees
+	 * 
 	 * @author Luke Mason
 	 */
 	@FXML
 
-	public void searchEmployee()
-	{
+	public void searchEmployee() {
 		String name = txtSearchEmployee.getText();
 		loadListViewEmp(name);
 	}
 
 	/**
 	 * Views Employees Details
+	 * 
 	 * @author Luke Mason
 	 */
 	@FXML
 
-	public void viewEmpDetails()
-	{
-		BusinessMenu bMenu = new BusinessMenu();		
-		//Initializing variables
+	public void viewEmpDetails() {
+		BusinessMenu bMenu = new BusinessMenu();
+		// Initializing variables
 		int employeeID = -1;
 
 		String ePayRate = "";
 		lblEmployeeTitle.setText("Change Employee Details");
-		//Checking if an item has been selected
-		if(listviewEmployees.getSelectionModel().getSelectedIndex() < 0)
-		{
-			program.messageBox("WARN", "oops", "An Employee has not been Selected","Please Select an employee and try again");
+		// Checking if an item has been selected
+		if (listviewEmployees.getSelectionModel().getSelectedIndex() < 0) {
+			program.messageBox("WARN", "oops", "An Employee has not been Selected",
+					"Please Select an employee and try again");
 			return;
 		}
 		Employee employee = listviewEmployees.getSelectionModel().getSelectedItem();
 		employeeID = employee.getId();
 
-		//Getting first and last name from full name string
+		// Getting first and last name from full name string
 		String empFullName = employee.getName();
 
 		int index = empFullName.indexOf(' ');
-		if(index < 0)
-		{
-			program.messageBox("ERROR", "No space in employee Name", "Please manually change that employee","Please UPDATE the employee name direct from database");
+		if (index < 0) {
+			program.messageBox("ERROR", "No space in employee Name", "Please manually change that employee",
+					"Please UPDATE the employee name direct from database");
 			return;
 		}
-		String eFirstName = empFullName.substring(0,index);
+		String eFirstName = empFullName.substring(0, index);
 
-		String eLastName = empFullName.substring(index+1);
+		String eLastName = empFullName.substring(index + 1);
 
-		//converting double to string
+		// converting double to string
 		double EPayRate = employee.getPayRate();
 
-		ePayRate = ""+EPayRate;
-		//Assigning textFields with known Strings
+		ePayRate = "" + EPayRate;
+		// Assigning textFields with known Strings
 		txtaddEmpFirstName.setText(eFirstName);
-		txtAddEmpLastName.setText(eLastName); 
-		txtAddEmpPayRate.setText(ePayRate); 
+		txtAddEmpLastName.setText(eLastName);
+		txtAddEmpPayRate.setText(ePayRate);
 		ArrayList<EmployeeWorkingTime> workTimes = new ArrayList<EmployeeWorkingTime>();
-		//work time contains, WorkTimeID|EmployeeID|Date|StartTime|EndTime	
+		// work time contains, WorkTimeID|EmployeeID|Date|StartTime|EndTime
 		workTimes = connection.getEmployeeWorkingTimes(employeeID);
 		int checkBox = 0;
-		System.out.println("Work Time Size = "+workTimes.size());
-		if(workTimes.size() > 0)
-		{
+		System.out.println("Work Time Size = " + workTimes.size());
+		if (workTimes.size() > 0) {
 			SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
 			String[] dateArray = new String[7];
-			
-			//Getting dates for first 7days
+
+			// Getting dates for first 7days
 			Calendar c = Calendar.getInstance();
 			c.setTime(workTimes.get(0).getDate());
-			for(int i = 1;i<=7; i++)
-			{
-				dateArray[i-1] = sdf.format(c.getTime());//puts each date from every loop into array
+			for (int i = 1; i <= 7; i++) {
+				dateArray[i - 1] = sdf.format(c.getTime());// puts each date
+															// from every loop
+															// into array
 				c.add(Calendar.DAY_OF_MONTH, 1);
-			}		
-			for(int j = 0; j<7; j++)
-			{
-				for(EmployeeWorkingTime wTime: workTimes)
-				{
+			}
+			for (int j = 0; j < 7; j++) {
+				for (EmployeeWorkingTime wTime : workTimes) {
 					String date = program.dateToStr(wTime.getDate());
-					if(date.equals(dateArray[j]))
-					{
+					if (date.equals(dateArray[j])) {
 						String startTime = program.timeToStr(wTime.getStartTime());
 						String endTime = program.timeToStr(wTime.getEndTime());
-						int timeBlock = bMenu.getTimeBlock(startTime,endTime);
-						if(timeBlock == -1)
-						{
+						int timeBlock = bMenu.getTimeBlock(startTime, endTime);
+						if (timeBlock == -1) {
 							System.out.println("INVALID TIME BLOCK DETECTED");
-						}
-						else
-						{
+						} else {
 							Calendar d = Calendar.getInstance();
 							Date date2 = program.strToDate(dateArray[j]);
 							d.setTime(date2);
@@ -1257,13 +1360,10 @@ public class MainController implements Initializable {
 				}
 			}
 		}
-		if(checkBox == 0)
-		{
+		if (checkBox == 0) {
 			chkbxAddWorkingTimes.setSelected(false);
 			gridpWorkingTimes.setDisable(true);
-		}
-		else
-		{
+		} else {
 			chkbxAddWorkingTimes.setSelected(true);
 			gridpWorkingTimes.setDisable(false);
 		}
@@ -1272,296 +1372,220 @@ public class MainController implements Initializable {
 	}
 
 	/**
-	 * sets a certain day's toggles according to a combination of morning, afternoon and evening
+	 * sets a certain day's toggles according to a combination of morning,
+	 * afternoon and evening
+	 * 
 	 * @param dayOfWeek
 	 * @param timeBlock
 	 */
-	public void changeButtonsOfDay(int dayOfWeek, int timeBlock)
-	{
-		switch(dayOfWeek)
-		{
-			case 1: 
-				if(timeBlock == 1)
-				{
-					btnSunMorning.setSelected(true);
-					btnSunAfternoon.setSelected(true);
-					btnSunEvening.setSelected(true);
-				}
-				else if(timeBlock == 2)
-				{
-					btnSunMorning.setSelected(true);
-					btnSunAfternoon.setSelected(true);
-					btnSunEvening.setSelected(false);
-				}
-				else if(timeBlock == 3)
-				{
-					btnSunMorning.setSelected(false);
-					btnSunAfternoon.setSelected(true);
-					btnSunEvening.setSelected(true);
-				}
-				else if(timeBlock == 4)
-				{
-					btnSunMorning.setSelected(true);
-					btnSunAfternoon.setSelected(false);
-					btnSunEvening.setSelected(false);
-				}
-				else if(timeBlock == 5)
-				{
-					btnSunMorning.setSelected(false);
-					btnSunAfternoon.setSelected(true);
-					btnSunEvening.setSelected(false);
-				}
-				else if(timeBlock == 6)
-				{
-					btnSunMorning.setSelected(false);
-					btnSunAfternoon.setSelected(false);
-					btnSunEvening.setSelected(true);
-				}
-				break;
-			case 2: 
-				if(timeBlock == 1)
-				{
-					btnMonMorning.setSelected(true);
-					btnMonAfternoon.setSelected(true);
-					btnMonEvening.setSelected(true);
-				}
-				else if(timeBlock == 2)
-				{
-					btnMonMorning.setSelected(true);
-					btnMonAfternoon.setSelected(true);
-					btnMonEvening.setSelected(false);
-				}
-				else if(timeBlock == 3)
-				{
-					btnMonMorning.setSelected(false);
-					btnMonAfternoon.setSelected(true);
-					btnMonEvening.setSelected(true);
-				}
-				else if(timeBlock == 4)
-				{
-					btnMonMorning.setSelected(true);
-					btnMonAfternoon.setSelected(false);
-					btnMonEvening.setSelected(false);
-				}
-				else if(timeBlock == 5)
-				{
-					btnMonMorning.setSelected(false);
-					btnMonAfternoon.setSelected(true);
-					btnMonEvening.setSelected(false);
-				}
-				else if(timeBlock == 6)
-				{
-					btnMonMorning.setSelected(false);
-					btnMonAfternoon.setSelected(false);
-					btnMonEvening.setSelected(true);
-				}
-				break;
-			case 3: 
-				if(timeBlock == 1)
-				{
-					btnTueMorning.setSelected(true);
-					btnTueAfternoon.setSelected(true);
-					btnTueEvening.setSelected(true);
-				}
-				else if(timeBlock == 2)
-				{
-					btnTueMorning.setSelected(true);
-					btnTueAfternoon.setSelected(true);
-					btnTueEvening.setSelected(false);
-				}
-				else if(timeBlock == 3)
-				{
-					btnTueMorning.setSelected(false);
-					btnTueAfternoon.setSelected(true);
-					btnTueEvening.setSelected(true);
-				}
-				else if(timeBlock == 4)
-				{
-					btnTueMorning.setSelected(true);
-					btnTueAfternoon.setSelected(false);
-					btnTueEvening.setSelected(false);
-				}
-				else if(timeBlock == 5)
-				{
-					btnTueMorning.setSelected(false);
-					btnTueAfternoon.setSelected(true);
-					btnTueEvening.setSelected(false);
-				}
-				else if(timeBlock == 6)
-				{
-					btnTueMorning.setSelected(false);
-					btnTueAfternoon.setSelected(false);
-					btnTueEvening.setSelected(true);
-				}
-				break;
-			case 4: 
-				if(timeBlock == 1)
-				{
-					btnWedMorning.setSelected(true);
-					btnWedAfternoon.setSelected(true);
-					btnWedEvening.setSelected(true);
-				}
-				else if(timeBlock == 2)
-				{
-					btnWedMorning.setSelected(true);
-					btnWedAfternoon.setSelected(true);
-					btnWedEvening.setSelected(false);
-				}
-				else if(timeBlock == 3)
-				{
-					btnWedMorning.setSelected(false);
-					btnWedAfternoon.setSelected(true);
-					btnWedEvening.setSelected(true);
-				}
-				else if(timeBlock == 4)
-				{
-					btnWedMorning.setSelected(true);
-					btnWedAfternoon.setSelected(false);
-					btnWedEvening.setSelected(false);
-				}
-				else if(timeBlock == 5)
-				{
-					btnWedMorning.setSelected(false);
-					btnWedAfternoon.setSelected(true);
-					btnWedEvening.setSelected(false);
-				}
-				else if(timeBlock == 6)
-				{
-					btnWedMorning.setSelected(false);
-					btnWedAfternoon.setSelected(false);
-					btnWedEvening.setSelected(true);
-				}
-				break;
-			case 5: 
-				if(timeBlock == 1)
-				{
-					btnThurMorning.setSelected(true);
-					btnThurAfternoon.setSelected(true);
-					btnThurEvening.setSelected(true);
-				}
-				else if(timeBlock == 2)
-				{
-					btnThurMorning.setSelected(true);
-					btnThurAfternoon.setSelected(true);
-					btnThurEvening.setSelected(false);
-				}
-				else if(timeBlock == 3)
-				{
-					btnThurMorning.setSelected(false);
-					btnThurAfternoon.setSelected(true);
-					btnThurEvening.setSelected(true);
-				}
-				else if(timeBlock == 4)
-				{
-					btnThurMorning.setSelected(true);
-					btnThurAfternoon.setSelected(false);
-					btnThurEvening.setSelected(false);
-				}
-				else if(timeBlock == 5)
-				{
-					btnThurMorning.setSelected(false);
-					btnThurAfternoon.setSelected(true);
-					btnThurEvening.setSelected(false);
-				}
-				else if(timeBlock == 6)
-				{
-					btnThurMorning.setSelected(false);
-					btnThurAfternoon.setSelected(false);
-					btnThurEvening.setSelected(true);
-				}
-				break;
-			case 6: 
-				if(timeBlock == 1)
-				{
-					btnFriMorning.setSelected(true);
-					btnFriAfternoon.setSelected(true);
-					btnFriEvening.setSelected(true);
-				}
-				else if(timeBlock == 2)
-				{
-					btnFriMorning.setSelected(true);
-					btnFriAfternoon.setSelected(true);
-					btnFriEvening.setSelected(false);
-				}
-				else if(timeBlock == 3)
-				{
-					btnFriMorning.setSelected(false);
-					btnFriAfternoon.setSelected(true);
-					btnFriEvening.setSelected(true);
-				}
-				else if(timeBlock == 4)
-				{
-					btnFriMorning.setSelected(true);
-					btnFriAfternoon.setSelected(false);
-					btnFriEvening.setSelected(false);
-				}
-				else if(timeBlock == 5)
-				{
-					btnFriMorning.setSelected(false);
-					btnFriAfternoon.setSelected(true);
-					btnFriEvening.setSelected(false);
-				}
-				else if(timeBlock == 6)
-				{
-					btnFriMorning.setSelected(false);
-					btnFriAfternoon.setSelected(false);
-					btnFriEvening.setSelected(true);
-				}
-				break;
-			case 7: 
-				if(timeBlock == 1)
-				{
-					btnSatMorning.setSelected(true);
-					btnSatAfternoon.setSelected(true);
-					btnSatEvening.setSelected(true);
-				}
-				else if(timeBlock == 2)
-				{
-					btnSatMorning.setSelected(true);
-					btnSatAfternoon.setSelected(true);
-					btnSatEvening.setSelected(false);
-				}
-				else if(timeBlock == 3)
-				{
-					btnSatMorning.setSelected(false);
-					btnSatAfternoon.setSelected(true);
-					btnSatEvening.setSelected(true);
-				}
-				else if(timeBlock == 4)
-				{
-					btnSatMorning.setSelected(true);
-					btnSatAfternoon.setSelected(false);
-					btnSatEvening.setSelected(false);
-				}
-				else if(timeBlock == 5)
-				{
-					btnSatMorning.setSelected(false);
-					btnSatAfternoon.setSelected(true);
-					btnSatEvening.setSelected(false);
-				}
-				else if(timeBlock == 6)
-				{
-					btnSatMorning.setSelected(false);
-					btnSatAfternoon.setSelected(false);
-					btnSatEvening.setSelected(true);
-				}
-				break;
-			default:
-				program.messageBox("WARN", "Error: Something happened with dayOfWeek", "dayOfWeek did not register to a day","Please consult Luke Mason for the crap coding");
+	public void changeButtonsOfDay(int dayOfWeek, int timeBlock) {
+		switch (dayOfWeek) {
+		case 1:
+			if (timeBlock == 1) {
+				btnSunMorning.setSelected(true);
+				btnSunAfternoon.setSelected(true);
+				btnSunEvening.setSelected(true);
+			} else if (timeBlock == 2) {
+				btnSunMorning.setSelected(true);
+				btnSunAfternoon.setSelected(true);
+				btnSunEvening.setSelected(false);
+			} else if (timeBlock == 3) {
+				btnSunMorning.setSelected(false);
+				btnSunAfternoon.setSelected(true);
+				btnSunEvening.setSelected(true);
+			} else if (timeBlock == 4) {
+				btnSunMorning.setSelected(true);
+				btnSunAfternoon.setSelected(false);
+				btnSunEvening.setSelected(false);
+			} else if (timeBlock == 5) {
+				btnSunMorning.setSelected(false);
+				btnSunAfternoon.setSelected(true);
+				btnSunEvening.setSelected(false);
+			} else if (timeBlock == 6) {
+				btnSunMorning.setSelected(false);
+				btnSunAfternoon.setSelected(false);
+				btnSunEvening.setSelected(true);
+			}
+			break;
+		case 2:
+			if (timeBlock == 1) {
+				btnMonMorning.setSelected(true);
+				btnMonAfternoon.setSelected(true);
+				btnMonEvening.setSelected(true);
+			} else if (timeBlock == 2) {
+				btnMonMorning.setSelected(true);
+				btnMonAfternoon.setSelected(true);
+				btnMonEvening.setSelected(false);
+			} else if (timeBlock == 3) {
+				btnMonMorning.setSelected(false);
+				btnMonAfternoon.setSelected(true);
+				btnMonEvening.setSelected(true);
+			} else if (timeBlock == 4) {
+				btnMonMorning.setSelected(true);
+				btnMonAfternoon.setSelected(false);
+				btnMonEvening.setSelected(false);
+			} else if (timeBlock == 5) {
+				btnMonMorning.setSelected(false);
+				btnMonAfternoon.setSelected(true);
+				btnMonEvening.setSelected(false);
+			} else if (timeBlock == 6) {
+				btnMonMorning.setSelected(false);
+				btnMonAfternoon.setSelected(false);
+				btnMonEvening.setSelected(true);
+			}
+			break;
+		case 3:
+			if (timeBlock == 1) {
+				btnTueMorning.setSelected(true);
+				btnTueAfternoon.setSelected(true);
+				btnTueEvening.setSelected(true);
+			} else if (timeBlock == 2) {
+				btnTueMorning.setSelected(true);
+				btnTueAfternoon.setSelected(true);
+				btnTueEvening.setSelected(false);
+			} else if (timeBlock == 3) {
+				btnTueMorning.setSelected(false);
+				btnTueAfternoon.setSelected(true);
+				btnTueEvening.setSelected(true);
+			} else if (timeBlock == 4) {
+				btnTueMorning.setSelected(true);
+				btnTueAfternoon.setSelected(false);
+				btnTueEvening.setSelected(false);
+			} else if (timeBlock == 5) {
+				btnTueMorning.setSelected(false);
+				btnTueAfternoon.setSelected(true);
+				btnTueEvening.setSelected(false);
+			} else if (timeBlock == 6) {
+				btnTueMorning.setSelected(false);
+				btnTueAfternoon.setSelected(false);
+				btnTueEvening.setSelected(true);
+			}
+			break;
+		case 4:
+			if (timeBlock == 1) {
+				btnWedMorning.setSelected(true);
+				btnWedAfternoon.setSelected(true);
+				btnWedEvening.setSelected(true);
+			} else if (timeBlock == 2) {
+				btnWedMorning.setSelected(true);
+				btnWedAfternoon.setSelected(true);
+				btnWedEvening.setSelected(false);
+			} else if (timeBlock == 3) {
+				btnWedMorning.setSelected(false);
+				btnWedAfternoon.setSelected(true);
+				btnWedEvening.setSelected(true);
+			} else if (timeBlock == 4) {
+				btnWedMorning.setSelected(true);
+				btnWedAfternoon.setSelected(false);
+				btnWedEvening.setSelected(false);
+			} else if (timeBlock == 5) {
+				btnWedMorning.setSelected(false);
+				btnWedAfternoon.setSelected(true);
+				btnWedEvening.setSelected(false);
+			} else if (timeBlock == 6) {
+				btnWedMorning.setSelected(false);
+				btnWedAfternoon.setSelected(false);
+				btnWedEvening.setSelected(true);
+			}
+			break;
+		case 5:
+			if (timeBlock == 1) {
+				btnThurMorning.setSelected(true);
+				btnThurAfternoon.setSelected(true);
+				btnThurEvening.setSelected(true);
+			} else if (timeBlock == 2) {
+				btnThurMorning.setSelected(true);
+				btnThurAfternoon.setSelected(true);
+				btnThurEvening.setSelected(false);
+			} else if (timeBlock == 3) {
+				btnThurMorning.setSelected(false);
+				btnThurAfternoon.setSelected(true);
+				btnThurEvening.setSelected(true);
+			} else if (timeBlock == 4) {
+				btnThurMorning.setSelected(true);
+				btnThurAfternoon.setSelected(false);
+				btnThurEvening.setSelected(false);
+			} else if (timeBlock == 5) {
+				btnThurMorning.setSelected(false);
+				btnThurAfternoon.setSelected(true);
+				btnThurEvening.setSelected(false);
+			} else if (timeBlock == 6) {
+				btnThurMorning.setSelected(false);
+				btnThurAfternoon.setSelected(false);
+				btnThurEvening.setSelected(true);
+			}
+			break;
+		case 6:
+			if (timeBlock == 1) {
+				btnFriMorning.setSelected(true);
+				btnFriAfternoon.setSelected(true);
+				btnFriEvening.setSelected(true);
+			} else if (timeBlock == 2) {
+				btnFriMorning.setSelected(true);
+				btnFriAfternoon.setSelected(true);
+				btnFriEvening.setSelected(false);
+			} else if (timeBlock == 3) {
+				btnFriMorning.setSelected(false);
+				btnFriAfternoon.setSelected(true);
+				btnFriEvening.setSelected(true);
+			} else if (timeBlock == 4) {
+				btnFriMorning.setSelected(true);
+				btnFriAfternoon.setSelected(false);
+				btnFriEvening.setSelected(false);
+			} else if (timeBlock == 5) {
+				btnFriMorning.setSelected(false);
+				btnFriAfternoon.setSelected(true);
+				btnFriEvening.setSelected(false);
+			} else if (timeBlock == 6) {
+				btnFriMorning.setSelected(false);
+				btnFriAfternoon.setSelected(false);
+				btnFriEvening.setSelected(true);
+			}
+			break;
+		case 7:
+			if (timeBlock == 1) {
+				btnSatMorning.setSelected(true);
+				btnSatAfternoon.setSelected(true);
+				btnSatEvening.setSelected(true);
+			} else if (timeBlock == 2) {
+				btnSatMorning.setSelected(true);
+				btnSatAfternoon.setSelected(true);
+				btnSatEvening.setSelected(false);
+			} else if (timeBlock == 3) {
+				btnSatMorning.setSelected(false);
+				btnSatAfternoon.setSelected(true);
+				btnSatEvening.setSelected(true);
+			} else if (timeBlock == 4) {
+				btnSatMorning.setSelected(true);
+				btnSatAfternoon.setSelected(false);
+				btnSatEvening.setSelected(false);
+			} else if (timeBlock == 5) {
+				btnSatMorning.setSelected(false);
+				btnSatAfternoon.setSelected(true);
+				btnSatEvening.setSelected(false);
+			} else if (timeBlock == 6) {
+				btnSatMorning.setSelected(false);
+				btnSatAfternoon.setSelected(false);
+				btnSatEvening.setSelected(true);
+			}
+			break;
+		default:
+			program.messageBox("WARN", "Error: Something happened with dayOfWeek",
+					"dayOfWeek did not register to a day", "Please consult Luke Mason for the crap coding");
 		}
 	}
-	
+
 	/**
 	 * Deletes Employee
+	 * 
 	 * @author Luke Mason
 	 */
 	@FXML
-	public void deleteEmplyee() 
-	{
+	public void deleteEmplyee() {
 		log.debug("LOGGER: Entered deleteEmployee function");
-		if(listviewEmployees.getSelectionModel().getSelectedIndex() < 0)
-		{
-			program.messageBox("WARN", "oops", "An Employee has not been Selected","Please Select an employee and try again");
+		if (listviewEmployees.getSelectionModel().getSelectedIndex() < 0) {
+			program.messageBox("WARN", "oops", "An Employee has not been Selected",
+					"Please Select an employee and try again");
 			return;
 		}
 		Alert alert = new Alert(AlertType.CONFIRMATION);
@@ -1580,35 +1604,33 @@ public class MainController implements Initializable {
 			feedback.setHeaderText("Employee has been deleted");
 			feedback.showAndWait();
 			refreshEmployeeView();
-			
-		} 
-		else 
-		{
+
+		} else {
 			return;
 		}
 	}
-	
+
 	/**************
 	 * SERVICES
 	 **************/
-	
+
 	/**
 	 * Searches Services List
-	 * @author [Joseph Garner]
+	 * 
+	 * @author Joseph Garner
 	 */
 	@FXML
-	public void searchServices()
-	{
+	public void searchServices() {
 		loadListViewEmp(txtSearchService.getText());
 	}
-	
+
 	/**
 	 * Creates a new service
-	 * @author [Joseph Garner]
+	 * 
+	 * @author Joseph Garner
 	 */
 	@FXML
-	public void addService()
-	{
+	public void addService() {
 		try {
 			Stage secondaryStage = new Stage();
 			secondaryStage.getIcons().add(new Image("images/ic_collections_bookmark_black_48dp_2x.png"));
@@ -1618,26 +1640,26 @@ public class MainController implements Initializable {
 			secondaryStage.setScene(new Scene(root));
 			secondaryStage.initModality(Modality.APPLICATION_MODAL);
 			secondaryStage.showAndWait();
-			secondaryStage.setTitle("Login");
+			secondaryStage.setTitle("Add Service");
 		} catch (IOException ioe) {
 			log.warn(ioe.getMessage());
-		}	
+		}
 		log.debug("false");
 		loadallServices("");
-		
+
 	}
-	
+
 	/**
 	 * Deletes a Service
-	 * @author [Luke Mason]
+	 * 
+	 * @author Luke Mason
 	 */
 	@FXML
-	public void deleteService()
-	{
+	public void deleteService() {
 		log.debug("LOGGER: Entered deleteService function");
-		if(listviewManServices.getSelectionModel().getSelectedIndex() < 0)
-		{
-			program.messageBox("WARN", "oops", "An Service has not been Selected","Please Select a Service and try again");
+		if (listviewManServices.getSelectionModel().getSelectedIndex() < 0) {
+			program.messageBox("WARN", "oops", "An Service has not been Selected",
+					"Please Select a Service and try again");
 			return;
 		}
 		Alert alert = new Alert(AlertType.CONFIRMATION);
@@ -1649,7 +1671,7 @@ public class MainController implements Initializable {
 		if (result.get() == ButtonType.OK) {
 			Service service = listviewManServices.getSelectionModel().getSelectedItem();
 			int serviceID = service.getID();
-			System.out.println("Service ID = "+serviceID);
+			System.out.println("Service ID = " + serviceID);
 			connection.deleteService(serviceID);
 			Alert feedback = new Alert(AlertType.INFORMATION);
 			feedback.setTitle("Delete Service");
@@ -1660,35 +1682,32 @@ public class MainController implements Initializable {
 			lblManServicePrice.setText("");
 			lblServiceDura.setText("");
 			refreshService();
-		} 
-		else 
-		{
+		} else {
 			return;
 		}
 	}
-	
+
 	/**
 	 * Refresh all Services
-	 * @author [Luke Mason]
+	 * 
+	 * @author Luke Mason
 	 */
 	@FXML
-	public void refreshService()
-	{
+	public void refreshService() {
 		loadallServices("");
 	}
-	
+
 	/**************
 	 * BMENU CUSTOMERS
 	 **************/
-	
-	
+
 	/**
 	 * Searches Customers
-	 * @author [Programmer]
+	 * 
+	 * @author Joseph Garner
 	 */
 	@FXML
-	public void searchCustomers()
-	{
+	public void searchCustomers() {
 		listviewCustomers.getItems().clear();
 		ArrayList<Customer> customerArray = new ArrayList<>(connection.getAllCustomer());
 		ArrayList<Customer> customerArrayView = new ArrayList<>();
@@ -1699,12 +1718,12 @@ public class MainController implements Initializable {
 			fname = connection.getCustomer(c.getID()).getFName();
 			lname = connection.getCustomer(c.getID()).getLName();
 			fullName = fname + " " + lname;
-			boolean checkF = program.searchMatch(fname.toUpperCase( ), txtSearchCustomer.getText().toUpperCase());
-			boolean checkL = program.searchMatch(lname.toUpperCase( ), txtSearchCustomer.getText().toUpperCase());
-			boolean checkFL = program.searchMatch(fullName.toUpperCase( ), txtSearchCustomer.getText().toUpperCase());
-			log.debug("LOGGER: Users Name - "+fullName);
+			boolean checkF = program.searchMatch(fname.toUpperCase(), txtSearchCustomer.getText().toUpperCase());
+			boolean checkL = program.searchMatch(lname.toUpperCase(), txtSearchCustomer.getText().toUpperCase());
+			boolean checkFL = program.searchMatch(fullName.toUpperCase(), txtSearchCustomer.getText().toUpperCase());
+			log.debug("LOGGER: Users Name - " + fullName);
 			if (checkF || checkL || checkFL) {
-					customerArrayView.add(c);
+				customerArrayView.add(c);
 			}
 		}
 		ObservableList<Customer> customerList = FXCollections.observableList(customerArrayView);
@@ -1721,9 +1740,8 @@ public class MainController implements Initializable {
 							super.updateItem(t, bln);
 							if (t != null) {
 								log.debug("LOGGER: added:" + t.getFName());
-								setText(t.getFName()+" "+t.getLName());
-							}
-							else{
+								setText(t.getFName() + " " + t.getLName());
+							} else {
 								listviewCustomers.setPlaceholder(new Label("No Customer"));
 							}
 						}
@@ -1731,21 +1749,19 @@ public class MainController implements Initializable {
 					return cell;
 				}
 			});
-		}
-		else {
+		} else {
 			program.messageBox("WARN", "Search Result", "No Search Results Found", "");
 		}
 	}
-	
+
 	/**
 	 * Creates a booking for selected customer
+	 * 
 	 * @author Joseph Garner
 	 */
 	@FXML
-	public void createBooking()
-	{
-		if(listviewCustomers.getSelectionModel().getSelectedItem() == null)
-		{
+	public void createBooking() {
+		if (listviewCustomers.getSelectionModel().getSelectedItem() == null) {
 			program.messageBox("ERROR", "Error", "A Customer Has Not Been Chosen", "Please select a customer");
 			return;
 		}
@@ -1754,28 +1770,26 @@ public class MainController implements Initializable {
 		stkCustomer.setVisible(true);
 		_user = program.getUser();
 		program.setUser(connection.getUser(listviewCustomers.getSelectionModel().getSelectedItem().getID()));
-		log.debug("LOGGER: user ID - "+listviewCustomers.getSelectionModel().getSelectedItem().getID());
-		log.debug("LOGGER: user - "+program.getUser());
+		log.debug("LOGGER: user ID - " + listviewCustomers.getSelectionModel().getSelectedItem().getID());
+		log.debug("LOGGER: user - " + program.getUser());
 		newBook.setCus(program.getUser().getID());
 		lblCustomerName.setText(listviewCustomers.getSelectionModel().getSelectedItem().getFullName());
 	}
-	
-	
-	
+
 	/**************
 	 * Customer
 	 **************/
 	/**
 	 * Enters to booking phase
+	 * 
 	 * @author Luke
 	 */
-	private void loadpreferedEmp(String startTime, String endTime)
-	{
-		//TODO
+	private void loadpreferedEmp(String startTime, String endTime) {
+		// TODO
 		ArrayList<Employee> emArray = new ArrayList<>();
 		log.debug("LOGGER: date selected - " + lblCustBookingDate.getText());
 		emArray = program.getAvailableEmployeesForSpecifiedTime(lblCustBookingDate.getText(), startTime, endTime);
-		log.debug("LOGGER: Array Length - "+emArray.size());
+		log.debug("LOGGER: Array Length - " + emArray.size());
 		ObservableList<Employee> emList = FXCollections.observableList(emArray);
 		if (emList != null) {
 			cmbPreferEmp.setItems(emList);
@@ -1816,9 +1830,10 @@ public class MainController implements Initializable {
 			});
 		}
 	}
-	
+
 	/**
 	 * Enters to booking phase
+	 * 
 	 * @author [Programmer]
 	 */
 	@FXML
@@ -1829,9 +1844,8 @@ public class MainController implements Initializable {
 			stkpnBookingMenu.setVisible(true);
 		}
 	}
-	
-	private void checkBookingTime()
-	{
+
+	private void checkBookingTime() {
 		togbtnTimeSlot1.setDisable(false);
 		togbtnTimeSlot2.setDisable(false);
 		togbtnTimeSlot3.setDisable(false);
@@ -1856,429 +1870,410 @@ public class MainController implements Initializable {
 		lblAvail7.setStyle("-fx-text-fill: #008b00;");
 		lblAvail8.setText("Available");
 		lblAvail8.setStyle("-fx-text-fill: #008b00;");
-		
-		if(newBook.getDate() != null){
+
+		if (newBook.getDate() != null) {
 			Date stD = null;
 			Date enD = null;
 			List<Booking> bookings = new ArrayList<Booking>(connection.getAllBooking());
-			for(Booking b : bookings)
-			{
+			for (Booking b : bookings) {
 				stD = b.getStartTime();
 				enD = b.getEndTime();
-				log.debug("LOGGER: start time - "+stD+" end time - "+enD);
-				if(b.getStatus() != "canceled")
-				{
-					if(program.dateToStr(newBook.getDate()).equals(program.dateToStr(b.getDate())))
-					{
+				log.debug("LOGGER: start time - " + stD + " end time - " + enD);
+				if (b.getStatus() != "canceled") {
+					if (program.dateToStr(newBook.getDate()).equals(program.dateToStr(b.getDate()))) {
 						log.debug("LOGGER: Dates Match");
-						if(togbtnMorn.isSelected()){
-							if(stD.compareTo(program.strToTime(togbtnTimeSlot1.getText())) == 0){
+						if (togbtnMorn.isSelected()) {
+							if (stD.compareTo(program.strToTime(togbtnTimeSlot1.getText())) == 0) {
 								log.debug("LOGGER: Time Matchs 8:00");
 								togbtnTimeSlot1.setDisable(true);
 								lblAvail1.setText("Unavailable");
 								lblAvail1.setStyle("-fx-text-fill: #ff0000;");
-							}
-							else if(stD.equals(program.strToTime(togbtnTimeSlot2.getText()))){
+							} else if (stD.equals(program.strToTime(togbtnTimeSlot2.getText()))) {
 								togbtnTimeSlot2.setDisable(true);
 								lblAvail2.setText("Unavailable");
 								lblAvail2.setStyle("-fx-text-fill: #ff0000;");
-							}
-							else if(stD.equals(program.strToTime(togbtnTimeSlot3.getText()))){
+							} else if (stD.equals(program.strToTime(togbtnTimeSlot3.getText()))) {
 								togbtnTimeSlot3.setDisable(true);
 								lblAvail3.setText("Unavailable");
 								lblAvail3.setStyle("-fx-text-fill: #ff0000;");
-							}
-							else if(stD.equals(program.strToTime(togbtnTimeSlot4.getText()))){
+							} else if (stD.equals(program.strToTime(togbtnTimeSlot4.getText()))) {
 								togbtnTimeSlot4.setDisable(true);
 								lblAvail4.setText("Unavailable");
 								lblAvail4.setStyle("-fx-text-fill: #ff0000;");
-							}
-							else if(stD.equals(program.strToTime(togbtnTimeSlot5.getText()))){
+							} else if (stD.equals(program.strToTime(togbtnTimeSlot5.getText()))) {
 								togbtnTimeSlot5.setDisable(true);
 								lblAvail5.setText("Unavailable");
 								lblAvail5.setStyle("-fx-text-fill: #ff0000;");
-							}
-							else if(stD.equals(program.strToTime(togbtnTimeSlot6.getText()))){
+							} else if (stD.equals(program.strToTime(togbtnTimeSlot6.getText()))) {
 								togbtnTimeSlot6.setDisable(true);
 								lblAvail6.setText("Unavailable");
 								lblAvail6.setStyle("-fx-text-fill: #ff0000;");
-							}
-							else if(stD.equals(program.strToTime(togbtnTimeSlot7.getText()))){
+							} else if (stD.equals(program.strToTime(togbtnTimeSlot7.getText()))) {
 								togbtnTimeSlot7.setDisable(true);
 								lblAvail7.setText("Unavailable");
 								lblAvail7.setStyle("-fx-text-fill: #ff0000;");
-							}
-							else if(stD.equals(program.strToTime(togbtnTimeSlot8.getText()))){
+							} else if (stD.equals(program.strToTime(togbtnTimeSlot8.getText()))) {
 								togbtnTimeSlot8.setDisable(true);
 								lblAvail8.setText("Unavailable");
 								lblAvail8.setStyle("-fx-text-fill: #ff0000;");
 							}
-							
-							if(enD.after(program.strToTime(togbtnTimeSlot2.getText())) && enD.before(program.strToTime(togbtnTimeSlot3.getText()))){
+
+							if (enD.after(program.strToTime(togbtnTimeSlot2.getText()))
+									&& enD.before(program.strToTime(togbtnTimeSlot3.getText()))) {
 								togbtnTimeSlot2.setDisable(true);
 								lblAvail2.setText("Unavailable");
 								lblAvail2.setStyle("-fx-text-fill: #ff0000;");
 							}
-							if(enD.after(program.strToTime(togbtnTimeSlot3.getText())) && enD.before(program.strToTime(togbtnTimeSlot4.getText()))){
+							if (enD.after(program.strToTime(togbtnTimeSlot3.getText()))
+									&& enD.before(program.strToTime(togbtnTimeSlot4.getText()))) {
 								togbtnTimeSlot3.setDisable(true);
 								lblAvail3.setText("Unavailable");
 								lblAvail3.setStyle("-fx-text-fill: #ff0000;");
 							}
-							if(enD.after(program.strToTime(togbtnTimeSlot4.getText())) && enD.before(program.strToTime(togbtnTimeSlot5.getText()))){
+							if (enD.after(program.strToTime(togbtnTimeSlot4.getText()))
+									&& enD.before(program.strToTime(togbtnTimeSlot5.getText()))) {
 								togbtnTimeSlot4.setDisable(true);
 								lblAvail4.setText("Unavailable");
 								lblAvail4.setStyle("-fx-text-fill: #ff0000;");
 							}
-							if(enD.after(program.strToTime(togbtnTimeSlot5.getText())) && enD.before(program.strToTime(togbtnTimeSlot6.getText()))){
+							if (enD.after(program.strToTime(togbtnTimeSlot5.getText()))
+									&& enD.before(program.strToTime(togbtnTimeSlot6.getText()))) {
 								togbtnTimeSlot5.setDisable(true);
 								lblAvail5.setText("Unavailable");
 								lblAvail5.setStyle("-fx-text-fill: #ff0000;");
 							}
-							if(enD.after(program.strToTime(togbtnTimeSlot6.getText())) && enD.before(program.strToTime(togbtnTimeSlot7.getText()))){
+							if (enD.after(program.strToTime(togbtnTimeSlot6.getText()))
+									&& enD.before(program.strToTime(togbtnTimeSlot7.getText()))) {
 								togbtnTimeSlot6.setDisable(true);
 								lblAvail6.setText("Unavailable");
 								lblAvail6.setStyle("-fx-text-fill: #ff0000;");
 							}
-							if(enD.after(program.strToTime(togbtnTimeSlot7.getText())) && enD.before(program.strToTime(togbtnTimeSlot8.getText()))){
+							if (enD.after(program.strToTime(togbtnTimeSlot7.getText()))
+									&& enD.before(program.strToTime(togbtnTimeSlot8.getText()))) {
 								togbtnTimeSlot7.setDisable(true);
 								lblAvail7.setText("Unavailable");
 								lblAvail7.setStyle("-fx-text-fill: #ff0000;");
 							}
-							if(enD.after(program.strToTime(togbtnTimeSlot8.getText())) && enD.before(program.strToTime("12:00"))){
+							if (enD.after(program.strToTime(togbtnTimeSlot8.getText()))
+									&& enD.before(program.strToTime("12:00"))) {
 								togbtnTimeSlot8.setDisable(true);
 								lblAvail8.setText("Unavailable");
 								lblAvail8.setStyle("-fx-text-fill: #ff0000;");
 							}
-							log.debug("LOGGER: Button 8 date - "+program.strToTime(togbtnTimeSlot8.getText()));
-						}
-						else if(togbtnAft.isSelected()){
-							if(stD.compareTo(program.strToTime(togbtnTimeSlot1.getText())) == 0){
+							log.debug("LOGGER: Button 8 date - " + program.strToTime(togbtnTimeSlot8.getText()));
+						} else if (togbtnAft.isSelected()) {
+							if (stD.compareTo(program.strToTime(togbtnTimeSlot1.getText())) == 0) {
 								log.debug("LOGGER: Time Matchs 8:00");
 								togbtnTimeSlot1.setDisable(true);
 								lblAvail1.setText("Unavailable");
 								lblAvail1.setStyle("-fx-text-fill: #ff0000;");
-							}
-							else if(stD.equals(program.strToTime(togbtnTimeSlot2.getText()))){
+							} else if (stD.equals(program.strToTime(togbtnTimeSlot2.getText()))) {
 								togbtnTimeSlot2.setDisable(true);
 								lblAvail2.setText("Unavailable");
 								lblAvail2.setStyle("-fx-text-fill: #ff0000;");
-							}
-							else if(stD.equals(program.strToTime(togbtnTimeSlot3.getText()))){
+							} else if (stD.equals(program.strToTime(togbtnTimeSlot3.getText()))) {
 								togbtnTimeSlot3.setDisable(true);
 								lblAvail3.setText("Unavailable");
 								lblAvail3.setStyle("-fx-text-fill: #ff0000;");
-							}
-							else if(stD.equals(program.strToTime(togbtnTimeSlot4.getText()))){
+							} else if (stD.equals(program.strToTime(togbtnTimeSlot4.getText()))) {
 								togbtnTimeSlot4.setDisable(true);
 								lblAvail4.setText("Unavailable");
 								lblAvail4.setStyle("-fx-text-fill: #ff0000;");
-							}
-							else if(stD.equals(program.strToTime(togbtnTimeSlot5.getText()))){
+							} else if (stD.equals(program.strToTime(togbtnTimeSlot5.getText()))) {
 								togbtnTimeSlot5.setDisable(true);
 								lblAvail5.setText("Unavailable");
 								lblAvail5.setStyle("-fx-text-fill: #ff0000;");
-							}
-							else if(stD.equals(program.strToTime(togbtnTimeSlot6.getText()))){
+							} else if (stD.equals(program.strToTime(togbtnTimeSlot6.getText()))) {
 								togbtnTimeSlot6.setDisable(true);
 								lblAvail6.setText("Unavailable");
 								lblAvail6.setStyle("-fx-text-fill: #ff0000;");
-							}
-							else if(stD.equals(program.strToTime(togbtnTimeSlot7.getText()))){
+							} else if (stD.equals(program.strToTime(togbtnTimeSlot7.getText()))) {
 								togbtnTimeSlot7.setDisable(true);
 								lblAvail7.setText("Unavailable");
 								lblAvail7.setStyle("-fx-text-fill: #ff0000;");
-							}
-							else if(stD.equals(program.strToTime(togbtnTimeSlot8.getText()))){
+							} else if (stD.equals(program.strToTime(togbtnTimeSlot8.getText()))) {
 								togbtnTimeSlot8.setDisable(true);
 								lblAvail8.setText("Unavailable");
 								lblAvail8.setStyle("-fx-text-fill: #ff0000;");
 							}
-							if(enD.after(program.strToTime(togbtnTimeSlot1.getText())) && enD.before(program.strToTime("12:31"))){
+							if (enD.after(program.strToTime(togbtnTimeSlot1.getText()))
+									&& enD.before(program.strToTime("12:31"))) {
 								togbtnTimeSlot1.setDisable(true);
 								lblAvail1.setText("Unavailable");
 								lblAvail1.setStyle("-fx-text-fill: #ff0000;");
-							}
-							else if(enD.after(program.strToTime(togbtnTimeSlot2.getText())) && enD.before(program.strToTime("13:01"))){
+							} else if (enD.after(program.strToTime(togbtnTimeSlot2.getText()))
+									&& enD.before(program.strToTime("13:01"))) {
 								togbtnTimeSlot2.setDisable(true);
 								lblAvail2.setText("Unavailable");
 								lblAvail2.setStyle("-fx-text-fill: #ff0000;");
 							}
-							if(enD.after(program.strToTime(togbtnTimeSlot3.getText())) && enD.before(program.strToTime("13:31"))){
+							if (enD.after(program.strToTime(togbtnTimeSlot3.getText()))
+									&& enD.before(program.strToTime("13:31"))) {
 								togbtnTimeSlot3.setDisable(true);
 								lblAvail3.setText("Unavailable");
 								lblAvail3.setStyle("-fx-text-fill: #ff0000;");
 							}
-							if(enD.after(program.strToTime(togbtnTimeSlot4.getText())) && enD.before(program.strToTime("14:01"))){
+							if (enD.after(program.strToTime(togbtnTimeSlot4.getText()))
+									&& enD.before(program.strToTime("14:01"))) {
 								togbtnTimeSlot4.setDisable(true);
 								lblAvail4.setText("Unavailable");
 								lblAvail4.setStyle("-fx-text-fill: #ff0000;");
 							}
-							if(enD.after(program.strToTime(togbtnTimeSlot5.getText())) && enD.before(program.strToTime("14:31"))){
+							if (enD.after(program.strToTime(togbtnTimeSlot5.getText()))
+									&& enD.before(program.strToTime("14:31"))) {
 								togbtnTimeSlot5.setDisable(true);
 								lblAvail5.setText("Unavailable");
 								lblAvail5.setStyle("-fx-text-fill: #ff0000;");
 							}
-							if(enD.after(program.strToTime(togbtnTimeSlot6.getText())) && enD.before(program.strToTime("15:01"))){
+							if (enD.after(program.strToTime(togbtnTimeSlot6.getText()))
+									&& enD.before(program.strToTime("15:01"))) {
 								togbtnTimeSlot6.setDisable(true);
 								lblAvail6.setText("Unavailable");
 								lblAvail6.setStyle("-fx-text-fill: #ff0000;");
 							}
-							if(enD.after(program.strToTime(togbtnTimeSlot7.getText())) && enD.before(program.strToTime("15:31"))){
+							if (enD.after(program.strToTime(togbtnTimeSlot7.getText()))
+									&& enD.before(program.strToTime("15:31"))) {
 								togbtnTimeSlot7.setDisable(true);
 								lblAvail7.setText("Unavailable");
 								lblAvail7.setStyle("-fx-text-fill: #ff0000;");
 							}
-							if(enD.after(program.strToTime(togbtnTimeSlot8.getText()))){
+							if (enD.after(program.strToTime(togbtnTimeSlot8.getText()))) {
 								togbtnTimeSlot8.setDisable(true);
 								lblAvail8.setText("Unavailable");
 								lblAvail8.setStyle("-fx-text-fill: #ff0000;");
 							}
-						}
-						else if(togbtnEven.isSelected()){
-							if(stD.compareTo(program.strToTime(togbtnTimeSlot1.getText())) == 0){
+						} else if (togbtnEven.isSelected()) {
+							if (stD.compareTo(program.strToTime(togbtnTimeSlot1.getText())) == 0) {
 								log.debug("LOGGER: Time Matchs 8:00");
 								togbtnTimeSlot1.setDisable(true);
 								lblAvail1.setText("Unavailable");
 								lblAvail1.setStyle("-fx-text-fill: #ff0000;");
-							}
-							else if(stD.equals(program.strToTime(togbtnTimeSlot2.getText()))){
+							} else if (stD.equals(program.strToTime(togbtnTimeSlot2.getText()))) {
 								togbtnTimeSlot2.setDisable(true);
 								lblAvail2.setText("Unavailable");
 								lblAvail2.setStyle("-fx-text-fill: #ff0000;");
-							}
-							else if(stD.equals(program.strToTime(togbtnTimeSlot3.getText()))){
+							} else if (stD.equals(program.strToTime(togbtnTimeSlot3.getText()))) {
 								togbtnTimeSlot3.setDisable(true);
 								lblAvail3.setText("Unavailable");
 								lblAvail3.setStyle("-fx-text-fill: #ff0000;");
-							}
-							else if(stD.equals(program.strToTime(togbtnTimeSlot4.getText()))){
+							} else if (stD.equals(program.strToTime(togbtnTimeSlot4.getText()))) {
 								togbtnTimeSlot4.setDisable(true);
 								lblAvail4.setText("Unavailable");
 								lblAvail4.setStyle("-fx-text-fill: #ff0000;");
-							}
-							else if(stD.equals(program.strToTime(togbtnTimeSlot5.getText()))){
+							} else if (stD.equals(program.strToTime(togbtnTimeSlot5.getText()))) {
 								togbtnTimeSlot5.setDisable(true);
 								lblAvail5.setText("Unavailable");
 								lblAvail5.setStyle("-fx-text-fill: #ff0000;");
-							}
-							else if(stD.equals(program.strToTime(togbtnTimeSlot6.getText()))){
+							} else if (stD.equals(program.strToTime(togbtnTimeSlot6.getText()))) {
 								togbtnTimeSlot6.setDisable(true);
 								lblAvail6.setText("Unavailable");
 								lblAvail6.setStyle("-fx-text-fill: #ff0000;");
-							}
-							else if(stD.equals(program.strToTime(togbtnTimeSlot7.getText()))){
+							} else if (stD.equals(program.strToTime(togbtnTimeSlot7.getText()))) {
 								togbtnTimeSlot7.setDisable(true);
 								lblAvail7.setText("Unavailable");
 								lblAvail7.setStyle("-fx-text-fill: #ff0000;");
-							}
-							else if(stD.equals(program.strToTime(togbtnTimeSlot8.getText()))){
+							} else if (stD.equals(program.strToTime(togbtnTimeSlot8.getText()))) {
 								togbtnTimeSlot8.setDisable(true);
 								lblAvail8.setText("Unavailable");
 								lblAvail8.setStyle("-fx-text-fill: #ff0000;");
 							}
-							if(enD.after(program.strToTime(togbtnTimeSlot1.getText())) && enD.before(program.strToTime("16:31"))){
+							if (enD.after(program.strToTime(togbtnTimeSlot1.getText()))
+									&& enD.before(program.strToTime("16:31"))) {
 								togbtnTimeSlot1.setDisable(true);
 								lblAvail1.setText("Unavailable");
 								lblAvail1.setStyle("-fx-text-fill: #ff0000;");
-							}
-							else if(enD.after(program.strToTime(togbtnTimeSlot2.getText())) && enD.before(program.strToTime("17:01"))){
+							} else if (enD.after(program.strToTime(togbtnTimeSlot2.getText()))
+									&& enD.before(program.strToTime("17:01"))) {
 								togbtnTimeSlot2.setDisable(true);
 								lblAvail2.setText("Unavailable");
 								lblAvail2.setStyle("-fx-text-fill: #ff0000;");
 							}
-							if(enD.after(program.strToTime(togbtnTimeSlot3.getText())) && enD.before(program.strToTime("17:31"))){
+							if (enD.after(program.strToTime(togbtnTimeSlot3.getText()))
+									&& enD.before(program.strToTime("17:31"))) {
 								togbtnTimeSlot3.setDisable(true);
 								lblAvail3.setText("Unavailable");
 								lblAvail3.setStyle("-fx-text-fill: #ff0000;");
 							}
-							if(enD.after(program.strToTime(togbtnTimeSlot4.getText())) && enD.before(program.strToTime("18:01"))){
+							if (enD.after(program.strToTime(togbtnTimeSlot4.getText()))
+									&& enD.before(program.strToTime("18:01"))) {
 								togbtnTimeSlot4.setDisable(true);
 								lblAvail4.setText("Unavailable");
 								lblAvail4.setStyle("-fx-text-fill: #ff0000;");
 							}
-							if(enD.after(program.strToTime(togbtnTimeSlot5.getText())) && enD.before(program.strToTime("18:31"))){
+							if (enD.after(program.strToTime(togbtnTimeSlot5.getText()))
+									&& enD.before(program.strToTime("18:31"))) {
 								togbtnTimeSlot5.setDisable(true);
 								lblAvail5.setText("Unavailable");
 								lblAvail5.setStyle("-fx-text-fill: #ff0000;");
 							}
-							if(enD.after(program.strToTime(togbtnTimeSlot6.getText())) && enD.before(program.strToTime("19:01"))){
+							if (enD.after(program.strToTime(togbtnTimeSlot6.getText()))
+									&& enD.before(program.strToTime("19:01"))) {
 								togbtnTimeSlot6.setDisable(true);
 								lblAvail6.setText("Unavailable");
 								lblAvail6.setStyle("-fx-text-fill: #ff0000;");
 							}
-							if(enD.after(program.strToTime(togbtnTimeSlot7.getText())) && enD.before(program.strToTime("19:31"))){
+							if (enD.after(program.strToTime(togbtnTimeSlot7.getText()))
+									&& enD.before(program.strToTime("19:31"))) {
 								togbtnTimeSlot7.setDisable(true);
 								lblAvail7.setText("Unavailable");
 								lblAvail7.setStyle("-fx-text-fill: #ff0000;");
 							}
-							if(enD.after(program.strToTime(togbtnTimeSlot8.getText()))){
+							if (enD.after(program.strToTime(togbtnTimeSlot8.getText()))) {
 								togbtnTimeSlot8.setDisable(true);
 								lblAvail8.setText("Unavailable");
 								lblAvail8.setStyle("-fx-text-fill: #ff0000;");
 							}
+						} else {
 						}
-						else{}
 					}
 				}
 			}
 		}
 	}
-	
+
 	/**
 	 * Moves the customer forward
+	 * 
 	 * @author Joseph Garner
 	 */
-	private void addBookingTime()
-	{
-		if(togbtnTimeSlot1.isSelected())
-		{
-			if(togbtnMorn.isSelected()){
+	private void addBookingTime() {
+		if (togbtnTimeSlot1.isSelected()) {
+			if (togbtnMorn.isSelected()) {
 				newBook.setStartTime(program.strToTime(togbtnTimeSlot1.getText()));
 				return;
 			}
-			if(togbtnAft.isSelected()){
+			if (togbtnAft.isSelected()) {
 				newBook.setStartTime(program.strToTime(togbtnTimeSlot1.getText()));
 				return;
 			}
-			if(togbtnEven.isSelected()){
+			if (togbtnEven.isSelected()) {
 				newBook.setStartTime(program.strToTime(togbtnTimeSlot1.getText()));
 				return;
 			}
 		}
-		if(togbtnTimeSlot2.isSelected())
-		{
-			if(togbtnMorn.isSelected()){
+		if (togbtnTimeSlot2.isSelected()) {
+			if (togbtnMorn.isSelected()) {
 				newBook.setStartTime(program.strToTime(togbtnTimeSlot2.getText()));
 				return;
 			}
-			if(togbtnAft.isSelected()){
+			if (togbtnAft.isSelected()) {
 				newBook.setStartTime(program.strToTime(togbtnTimeSlot2.getText()));
 				return;
 			}
-			if(togbtnEven.isSelected()){
+			if (togbtnEven.isSelected()) {
 				newBook.setStartTime(program.strToTime(togbtnTimeSlot2.getText()));
 				return;
 			}
 		}
-		if(togbtnTimeSlot3.isSelected())
-		{
-			if(togbtnMorn.isSelected()){
+		if (togbtnTimeSlot3.isSelected()) {
+			if (togbtnMorn.isSelected()) {
 				newBook.setStartTime(program.strToTime(togbtnTimeSlot3.getText()));
 				return;
 			}
-			if(togbtnAft.isSelected()){
+			if (togbtnAft.isSelected()) {
 				newBook.setStartTime(program.strToTime(togbtnTimeSlot3.getText()));
 				return;
 			}
-			if(togbtnEven.isSelected()){
+			if (togbtnEven.isSelected()) {
 				newBook.setStartTime(program.strToTime(togbtnTimeSlot3.getText()));
 				return;
 			}
 		}
-		if(togbtnTimeSlot4.isSelected())
-		{
-			if(togbtnMorn.isSelected()){
+		if (togbtnTimeSlot4.isSelected()) {
+			if (togbtnMorn.isSelected()) {
 				newBook.setStartTime(program.strToTime(togbtnTimeSlot4.getText()));
 				return;
 			}
-			if(togbtnAft.isSelected()){
+			if (togbtnAft.isSelected()) {
 				newBook.setStartTime(program.strToTime(togbtnTimeSlot4.getText()));
 				return;
 			}
-			if(togbtnEven.isSelected()){
+			if (togbtnEven.isSelected()) {
 				newBook.setStartTime(program.strToTime(togbtnTimeSlot4.getText()));
 				return;
 			}
 		}
-		if(togbtnTimeSlot5.isSelected())
-		{
-			if(togbtnMorn.isSelected()){
+		if (togbtnTimeSlot5.isSelected()) {
+			if (togbtnMorn.isSelected()) {
 				newBook.setStartTime(program.strToTime(togbtnTimeSlot5.getText()));
 				return;
 			}
-			if(togbtnAft.isSelected()){
+			if (togbtnAft.isSelected()) {
 				newBook.setStartTime(program.strToTime(togbtnTimeSlot5.getText()));
 				return;
 			}
-			if(togbtnEven.isSelected()){
+			if (togbtnEven.isSelected()) {
 				newBook.setStartTime(program.strToTime(togbtnTimeSlot5.getText()));
 				return;
 			}
 		}
-		if(togbtnTimeSlot6.isSelected())
-		{
-			if(togbtnMorn.isSelected()){
+		if (togbtnTimeSlot6.isSelected()) {
+			if (togbtnMorn.isSelected()) {
 				newBook.setStartTime(program.strToTime(togbtnTimeSlot6.getText()));
 				return;
 			}
-			if(togbtnAft.isSelected()){
+			if (togbtnAft.isSelected()) {
 				newBook.setStartTime(program.strToTime(togbtnTimeSlot6.getText()));
 				return;
 			}
-			if(togbtnEven.isSelected()){
+			if (togbtnEven.isSelected()) {
 				newBook.setStartTime(program.strToTime(togbtnTimeSlot6.getText()));
 				return;
 			}
 		}
-		if(togbtnTimeSlot7.isSelected())
-		{
-			if(togbtnMorn.isSelected()){
+		if (togbtnTimeSlot7.isSelected()) {
+			if (togbtnMorn.isSelected()) {
 				newBook.setStartTime(program.strToTime(togbtnTimeSlot7.getText()));
 				return;
 			}
-			if(togbtnAft.isSelected()){
+			if (togbtnAft.isSelected()) {
 				newBook.setStartTime(program.strToTime(togbtnTimeSlot7.getText()));
 				return;
 			}
-			if(togbtnEven.isSelected()){
+			if (togbtnEven.isSelected()) {
 				newBook.setStartTime(program.strToTime(togbtnTimeSlot7.getText()));
 				return;
 			}
 		}
-		if(togbtnTimeSlot8.isSelected())
-		{
-			if(togbtnMorn.isSelected()){
+		if (togbtnTimeSlot8.isSelected()) {
+			if (togbtnMorn.isSelected()) {
 				newBook.setStartTime(program.strToTime(togbtnTimeSlot8.getText()));
 				return;
 			}
-			if(togbtnAft.isSelected()){
+			if (togbtnAft.isSelected()) {
 				newBook.setStartTime(program.strToTime(togbtnTimeSlot8.getText()));
 				return;
 			}
-			if(togbtnEven.isSelected()){
+			if (togbtnEven.isSelected()) {
 				newBook.setStartTime(program.strToTime(togbtnTimeSlot8.getText()));
 				return;
 			}
 		}
-		
-		
-		
+
 	}
 
 	/**
 	 * Moves the customer forward
+	 * 
 	 * @author [Programmer]
 	 */
 	@FXML
-	public void nextView(){
-		if(listviewBookingServices.getSelectionModel().getSelectedItem() == null)
-		{
+	public void nextView() {
+		if (listviewBookingServices.getSelectionModel().getSelectedItem() == null) {
 			program.messageBox("ERROR", "Error", "A Service Has Not Been Chosen", "Please select a service");
 			return;
 		}
-		if(cmbDayBooking.getSelectionModel().getSelectedItem() == null)
-		{
+		if (cmbDayBooking.getSelectionModel().getSelectedItem() == null) {
 			program.messageBox("ERROR", "Error", "A Date Has Not Been Chosen", "Please select a date");
 			return;
 		}
 		Service service = listviewBookingServices.getSelectionModel().getSelectedItem();
-		if(stkpnDateService.isVisible() && stkpnBookingMenu.isVisible())
-		{
+		if (stkpnDateService.isVisible() && stkpnBookingMenu.isVisible()) {
 			newBook.setCus(program.getUser().getID());
 			stkpnDateService.setVisible(false);
 			stkpnTime.setVisible(true);
 			lblBookingService.setText(service.getName());
-			lblBookingDur.setText(Integer.toString(service.getLengthMin())+"min");
+			lblBookingDur.setText(Integer.toString(service.getLengthMin()) + "min");
 			lblBookingPrice.setText("$" + Double.toString(service.getPrice()));
 			newBook.setService(service.getID());
 			lblCustBookingDate.setText(program.dateToStr(cmbDayBooking.getSelectionModel().getSelectedItem()));
@@ -2286,18 +2281,15 @@ public class MainController implements Initializable {
 			checkBookingTime();
 			return;
 		}
-		if(timeGroup.getSelectedToggle() == null)
-		{
+		if (timeGroup.getSelectedToggle() == null) {
 			program.messageBox("ERROR", "Error", "A Time Slot Has Not Been Chosen", "Please select a time slot");
 			return;
 		}
-		if(cmbPreferEmp.getSelectionModel().getSelectedItem() == null)
-		{
+		if (cmbPreferEmp.getSelectionModel().getSelectedItem() == null) {
 			program.messageBox("ERROR", "Error", "A Employee Has Not Been Chosen", "Please select a Employee");
 			return;
 		}
-		if(stkpnTime.isVisible() && stkpnBookingMenu.isVisible())
-		{
+		if (stkpnTime.isVisible() && stkpnBookingMenu.isVisible()) {
 			stkpnTime.setVisible(false);
 			stkpnBookingMenu.setVisible(false);
 			stkpnBookingConfirm.setVisible(true);
@@ -2305,28 +2297,28 @@ public class MainController implements Initializable {
 			Date date = program.calEnTime(newBook.getStartTime(), service.getLengthMin());
 			newBook.setEndTime(date);
 			newBook.setEmployee(cmbPreferEmp.getSelectionModel().getSelectedItem().getId());
-			log.debug("LOGGER: emp ID - "+cmbPreferEmp.getSelectionModel().getSelectedItem().getId());
-			log.debug("LOGGER: emp ID  booking- "+ newBook.getEmployee());
+			log.debug("LOGGER: emp ID - " + cmbPreferEmp.getSelectionModel().getSelectedItem().getId());
+			log.debug("LOGGER: emp ID  booking- " + newBook.getEmployee());
 			lblBookConSer.setText(service.getName());
-			lblBookConDur.setText(Integer.toString(service.getLengthMin())+"min");
+			lblBookConDur.setText(Integer.toString(service.getLengthMin()) + "min");
 			lblBookConPri.setText("$" + Double.toString(service.getPrice()));
 			lblBookConDate.setText(program.dateToStr(cmbDayBooking.getSelectionModel().getSelectedItem()));
 			lblBookConSTim.setText(program.timeToStr(newBook.getStartTime()));
 			lblBookConEmp.setText(cmbPreferEmp.getSelectionModel().getSelectedItem().getName());
 			return;
+		} else {
 		}
-		else{}
-		
+
 	}
-	
+
 	/**
 	 * Moves the customer backward
+	 * 
 	 * @author Joseph Garner
 	 */
 	@FXML
-	public void backView(){
-		if(stkpnDateService.isVisible() && stkpnBookingMenu.isVisible())
-		{
+	public void backView() {
+		if (stkpnDateService.isVisible() && stkpnBookingMenu.isVisible()) {
 			lblBookingService.setText("");
 			lblBookingDur.setText("");
 			lblBookingPrice.setText("");
@@ -2337,9 +2329,8 @@ public class MainController implements Initializable {
 			stkpnUserMenu.setVisible(true);
 			return;
 		}
-		if(stkpnTime.isVisible() && stkpnBookingMenu.isVisible())
-		{
-			
+		if (stkpnTime.isVisible() && stkpnBookingMenu.isVisible()) {
+
 			cmbPreferEmp.getSelectionModel().clearSelection();
 			togbtnTimeSlot1.setSelected(false);
 			togbtnTimeSlot2.setSelected(false);
@@ -2353,31 +2344,30 @@ public class MainController implements Initializable {
 			stkpnDateService.setVisible(true);
 			return;
 		}
-		if(stkpnBookingConfirm.isVisible())
-		{
+		if (stkpnBookingConfirm.isVisible()) {
 			stkpnBookingConfirm.setVisible(false);
 			stkpnTime.setVisible(true);
 			stkpnBookingMenu.setVisible(true);
 			return;
 		}
-		
+
 	}
-	
+
 	/**
 	 * 
 	 * @author [Programmer]
 	 */
 	@FXML
-	public void confirmBooking(){
+	public void confirmBooking() {
 		Alert alert = new Alert(AlertType.CONFIRMATION);
 		alert.setTitle("Book Appointment");
 		alert.setHeaderText("Confirm Apointment");
 		alert.setContentText("Are you sure?");
-		log.debug("LOGGER: emp ID  booking- "+ newBook.getEmployee());
+		log.debug("LOGGER: emp ID  booking- " + newBook.getEmployee());
 		Optional<ButtonType> result = alert.showAndWait();
 		if (result.get() == ButtonType.OK) {
 			newBook.setStatus("active");
-			log.debug("LOGGER: emp ID  booking- "+ newBook.getEmployee());
+			log.debug("LOGGER: emp ID  booking- " + newBook.getEmployee());
 			connection.createBooking(newBook);
 			Alert feedback = new Alert(AlertType.INFORMATION);
 			feedback.setTitle("Book Appointment");
@@ -2410,19 +2400,20 @@ public class MainController implements Initializable {
 		} else {
 			return;
 		}
-		
+
 	}
-	
+
 	/**
 	 * Returns the business owner to their menus
+	 * 
 	 * @author Joseph Garner
 	 */
 	@FXML
-	public void returnOwnMen()
-	{
+	public void returnOwnMen() {
 		btnRToOwnMen.setDisable(true);
 		stkBusiness.setVisible(true);
 		stkCustomer.setVisible(false);
 		btnRToOwnMen.setDisable(true);
 	}
+
 }

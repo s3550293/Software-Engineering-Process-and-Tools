@@ -46,6 +46,8 @@ public class SetupController implements Initializable {
 		dispMFClose();
 		dispSSOpen();
 		dispSSClose();
+		//createDB();
+		//ini();
 	}
 	/**
 	 * Moves the user to the starting view
@@ -321,83 +323,84 @@ public class SetupController implements Initializable {
 		connect.addEmployee("Laura Rite",15.2);
 		connect.addEmployee("Harry Potter",18);
 		
-		bMenu.set7DayRosterTime(1,"03/04/2017","08:00","16:00");
-		bMenu.set7DayRosterTime(1,"04/04/2017","08:00","16:00");
-		bMenu.set7DayRosterTime(1,"05/04/2017","08:00","12:00");
-		bMenu.set7DayRosterTime(1,"06/04/2017","08:00","12:00");
-		bMenu.set7DayRosterTime(1,"07/04/2017","08:00","12:00");
-		bMenu.set7DayRosterTime(1,"08/04/2017","12:00","20:00");
-		bMenu.set7DayRosterTime(1,"09/04/2017","08:00","16:00");
+		bMenu.addDayWorkingTime(1,1,true,true,false);
+		bMenu.addDayWorkingTime(1,2,true,true,false);
+		bMenu.addDayWorkingTime(1,3,true,false,false);
+		bMenu.addDayWorkingTime(1,4,true,false,false);
+		bMenu.addDayWorkingTime(1,5,true,false,false);
+		bMenu.addDayWorkingTime(1,6,false,true,true);
+		bMenu.addDayWorkingTime(1,7,true,true,false);
 		
-		bMenu.set7DayRosterTime(2,"03/04/2017","08:00","16:00");
-		bMenu.set7DayRosterTime(2,"04/04/2017","08:00","16:00");
-		bMenu.set7DayRosterTime(2,"05/04/2017","08:00","12:00");
-		bMenu.set7DayRosterTime(2,"06/04/2017","08:00","12:00");
-		bMenu.set7DayRosterTime(2,"07/04/2017","08:00","12:00");
-		bMenu.set7DayRosterTime(2,"08/04/2017","12:00","20:00");
-		bMenu.set7DayRosterTime(2,"09/04/2017","08:00","16:00");
+		bMenu.addDayWorkingTime(2,1,true,true,false);
+		bMenu.addDayWorkingTime(2,2,true,true,false);
+		bMenu.addDayWorkingTime(2,3,true,false,false);
+		bMenu.addDayWorkingTime(2,4,true,false,false);
+		bMenu.addDayWorkingTime(2,5,true,false,false);
+		bMenu.addDayWorkingTime(2,6,false,true,true);
+		bMenu.addDayWorkingTime(2,7,true,true,false);
 		
-		bMenu.set7DayRosterTime(3,"03/04/2017","08:00","16:00");
-		bMenu.set7DayRosterTime(3,"04/04/2017","08:00","16:00");
-		bMenu.set7DayRosterTime(3,"05/04/2017","08:00","12:00");
-		bMenu.set7DayRosterTime(3,"06/04/2017","08:00","12:00");
-		bMenu.set7DayRosterTime(3,"07/04/2017","08:00","12:00");
-		bMenu.set7DayRosterTime(3,"08/04/2017","12:00","20:00");
-		bMenu.set7DayRosterTime(3,"09/04/2017","08:00","16:00");
+		bMenu.addDayWorkingTime(3,1,true,true,false);
+		bMenu.addDayWorkingTime(3,2,true,true,false);
+		bMenu.addDayWorkingTime(3,3,true,false,false);
+		bMenu.addDayWorkingTime(3,4,true,false,false);
+		bMenu.addDayWorkingTime(3,5,true,false,false);
+		bMenu.addDayWorkingTime(3,6,false,true,true);
+		bMenu.addDayWorkingTime(3,7,true,true,false);
 		
-		bMenu.set7DayRosterTime(4,"06/04/2017","12:00","16:00");
-		bMenu.set7DayRosterTime(4,"07/04/2017","12:00","20:00");
+		bMenu.addDayWorkingTime(4,5,false,true,false);
+		bMenu.addDayWorkingTime(4,6,false,true,true);
 		
-		bMenu.set7DayRosterTime(5,"05/04/2017","08:00","16:00");
-		bMenu.set7DayRosterTime(5,"10/04/2017","08:00","20:00");
+		bMenu.addDayWorkingTime(5,1,true,true,false);
+		bMenu.addDayWorkingTime(5,7,true,true,true);
 		
-		bMenu.set7DayRosterTime(6,"03/04/2017","08:00","16:00");
-		bMenu.set7DayRosterTime(6,"04/04/2017","08:00","16:00");
-		bMenu.set7DayRosterTime(6,"05/04/2017","08:00","12:00");
-		bMenu.set7DayRosterTime(6,"06/04/2017","08:00","12:00");
-		bMenu.set7DayRosterTime(6,"07/04/2017","08:00","12:00");
-		bMenu.set7DayRosterTime(6,"08/04/2017","12:00","20:00");
-		bMenu.set7DayRosterTime(6,"09/04/2017","08:00","16:00");
+		bMenu.addDayWorkingTime(6,1,true,true,false);
+		bMenu.addDayWorkingTime(6,2,true,true,false);
+		bMenu.addDayWorkingTime(6,3,true,false,false);
+		bMenu.addDayWorkingTime(6,4,true,false,false);
+		bMenu.addDayWorkingTime(6,5,true,false,false);
+		bMenu.addDayWorkingTime(6,6,false,true,true);
+		bMenu.addDayWorkingTime(6,7,true,true,false);
 		
-		bMenu.set7DayRosterTime(7,"05/04/2017","08:00","16:00");
-		bMenu.set7DayRosterTime(7,"10/04/2017","08:00","20:00");
+		bMenu.addDayWorkingTime(7,1,true,true,false);
+		bMenu.addDayWorkingTime(7,6,true,true,true);
 		
-		bMenu.set7DayRosterTime(8,"06/04/2017","12:00","16:00");
-		bMenu.set7DayRosterTime(8,"07/04/2017","12:00","20:00");
+		bMenu.addDayWorkingTime(8,5,false,true,false);
+		bMenu.addDayWorkingTime(8,6,false,true,true);
 		
-		bMenu.set7DayRosterTime(9,"05/04/2017","08:00","16:00");
-		bMenu.set7DayRosterTime(9,"10/04/2017","08:00","20:00");
+		bMenu.addDayWorkingTime(9,4,true,true,false);
+		bMenu.addDayWorkingTime(9,6,true,true,true);
 		
-		bMenu.set7DayRosterTime(10,"06/04/2017","12:00","16:00");
-		bMenu.set7DayRosterTime(10,"07/04/2017","12:00","20:00");
+		bMenu.addDayWorkingTime(10,3,false,true,false);
+		bMenu.addDayWorkingTime(10,4,false,true,true);
 		
-		bMenu.set7DayRosterTime(11,"03/04/2017","08:00","16:00");
-		bMenu.set7DayRosterTime(11,"04/04/2017","08:00","16:00");
-		bMenu.set7DayRosterTime(11,"05/04/2017","08:00","12:00");
-		bMenu.set7DayRosterTime(11,"06/04/2017","08:00","12:00");
-		bMenu.set7DayRosterTime(11,"07/04/2017","08:00","12:00");
-		bMenu.set7DayRosterTime(11,"08/04/2017","12:00","20:00");
-		bMenu.set7DayRosterTime(11,"09/04/2017","08:00","16:00");
+		bMenu.addDayWorkingTime(11,1,true,true,false);
+		bMenu.addDayWorkingTime(11,2,true,true,false);
+		bMenu.addDayWorkingTime(11,3,true,true,false);
+		bMenu.addDayWorkingTime(11,4,true,false,false);
+		bMenu.addDayWorkingTime(11,5,true,false,false);
+		bMenu.addDayWorkingTime(11,6,true,false,false);
+		bMenu.addDayWorkingTime(11,7,false,true,true);
 		
-		bMenu.set7DayRosterTime(12,"06/04/2017","12:00","16:00");
-		bMenu.set7DayRosterTime(12,"07/04/2017","12:00","20:00");
 		
-		bMenu.set7DayRosterTime(13,"05/04/2017","08:00","16:00");
-		bMenu.set7DayRosterTime(13,"10/04/2017","08:00","20:00");
+		bMenu.addDayWorkingTime(12,2,false,true,false);
+		bMenu.addDayWorkingTime(12,4,false,true,true);
 		
-		bMenu.set7DayRosterTime(14,"03/04/2017","08:00","16:00");
-		bMenu.set7DayRosterTime(14,"04/04/2017","08:00","16:00");
-		bMenu.set7DayRosterTime(14,"05/04/2017","08:00","12:00");
-		bMenu.set7DayRosterTime(14,"06/04/2017","08:00","12:00");
-		bMenu.set7DayRosterTime(14,"07/04/2017","08:00","12:00");
-		bMenu.set7DayRosterTime(14,"08/04/2017","12:00","20:00");
-		bMenu.set7DayRosterTime(14,"09/04/2017","08:00","16:00");
+		bMenu.addDayWorkingTime(13,5,true,true,false);
+		bMenu.addDayWorkingTime(13,7,true,true,true);
 		
-		bMenu.set7DayRosterTime(15,"05/04/2017","08:00","16:00");
-		bMenu.set7DayRosterTime(15,"10/04/2017","08:00","20:00");
+		bMenu.addDayWorkingTime(14,1,true,true,false);
+		bMenu.addDayWorkingTime(14,2,true,true,false);
+		bMenu.addDayWorkingTime(14,3,true,false,false);
+		bMenu.addDayWorkingTime(14,4,true,false,false);
+		bMenu.addDayWorkingTime(14,5,true,false,false);
+		bMenu.addDayWorkingTime(14,6,false,true,true);
+		bMenu.addDayWorkingTime(14,7,true,true,false);
 		
-		bMenu.set7DayRosterTime(16,"06/04/2017","12:00","16:00");
-		bMenu.set7DayRosterTime(16,"07/04/2017","12:00","20:00");
+		bMenu.addDayWorkingTime(15,1,true,true,false);
+		bMenu.addDayWorkingTime(15,7,true,true,true);
+		
+		bMenu.addDayWorkingTime(16,4,false,true,false);
+		bMenu.addDayWorkingTime(16,6,false,true,true);
 		
 		connect.addUserDetails(2, "William", "Porter", "will@mail.com", "0452368593", "01/01/2002", "Male");
 		connect.addUserDetails(3, "Hannah", "Hawlking", "hannah@mail.com", "0452136859", "20/04/1995", "Famale");

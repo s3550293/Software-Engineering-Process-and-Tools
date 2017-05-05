@@ -3,7 +3,8 @@ package program;
 import java.util.Date;
 
 public class BusinessOwner extends User {
-	private String _business, _address;
+	private String _business;
+	private String _address;
 	private Date _weekdayStart;
 	private Date _weekdayEnd;
 	private Date _weekendStart;

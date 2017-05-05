@@ -339,7 +339,6 @@ public class Controller
 		return val;
 	}
 
-	
 	/**
 	 * @author Joseph Garner
 	 * used to compare two dates and get the duration
@@ -364,24 +363,23 @@ public class Controller
 		return val;
 	}
 
-
 	/**
 	 * @author Joseph Garner
 	 * 
-	 * @param date
+	 * @param day - day of week e.g monday = 2
 	 * @param workDays
 	 * @return
 	 */
-	public String matchDate(String date, ArrayList<EmployeeWorkingTime> workDays)
+	public int matchDay(int day, ArrayList<EmployeeWorkingTime> workDays)
 	{
 		for (EmployeeWorkingTime ew : workDays)
 		{
-			if (date.equals(dateToStr(ew.getDate())))
+			if (day == ew.getDayOfWeek())
 			{
-				return dateToStr(ew.getDate());
+				return ew.getDayOfWeek();
 			}
 		}
-		return "";
+		return 0;
 
 	}
 
@@ -394,13 +392,13 @@ public class Controller
 	 * @param workDays
 	 * @return
 	 */
-	public String getTime(String time, String date, ArrayList<EmployeeWorkingTime> workDays)
+	public String getTimeOnDay(String time, int day, ArrayList<EmployeeWorkingTime> workDays)
 	{
 		if (time.equalsIgnoreCase("start"))
 		{
 			for (EmployeeWorkingTime ew : workDays)
 			{
-				if (date.equals(dateToStr(ew.getDate())))
+				if (day == ew.getDayOfWeek())
 				{
 					return timeToStr(ew.getStartTime());
 				}
@@ -409,354 +407,13 @@ public class Controller
 		{
 			for (EmployeeWorkingTime ew : workDays)
 			{
-				if (date.equals(dateToStr(ew.getDate())))
+				if (day == ew.getDayOfWeek())
 				{
 					return timeToStr(ew.getEndTime());
 				}
 			}
 		}
 		return "";
-	}
-	
-	/**
-	 * @author Bryan
-	 * Loop to display bookings for previous 7days
-	 * @param 
-	 * @return 
-	 */
-	public void checkPreviousBooking() {
-		boolean loopflag = true;
-		while (loopflag) {
-			SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
-			Calendar c = Calendar.getInstance();
-			String pDays[] = new String[7];
-			String today;
-			for (int i = 0; i < 7; i++) {
-				c.add(Calendar.DATE, -1);
-				today = sdf.format(c.getTime());
-				pDays[i] = today;
-			}
-			displayBooking(pDays);
-		}
-	}
-	
-	/**
-	 * @author Bryan
-	 * Loop to display bookings for next 7days
-	 * @param 
-	 * @return 
-	 */
-	public void checkNextBooking()
-	{
-		boolean loopflag = true;
-		while (loopflag)
-		{
-			SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
-			Calendar c = Calendar.getInstance();
-			String nDays[] = new String[7];
-			String today;
-			for (int i = 0; i <7 ; i++)
-			{
-				today = sdf.format(c.getTime());
-				c.add(Calendar.DATE, 1);
-				nDays[i] = today;
-			}
-			displayBooking(nDays);
-		}
-	}
-	
-	/**
-	 * @author Bryan
-	 * Method to display bookings
-	 * @param int, String[]
-	 * @return void
-	 */
-	@SuppressWarnings("resource")
-	public void displayBooking(String[] days){
-		Scanner sc = new Scanner(System.in);
-		boolean loopflag = true;
-		DatabaseConnection connect = new DatabaseConnection();
-		ArrayList<Booking> bookList = connect.getAllBooking();
-		BusinessMenu business=new BusinessMenu();
-		//display bookings within selected dates
-		displayDetailedBooking_Date(bookList, days);
-		
-		boolean tryLoop = true;
-		do{
-		Booking bookings = new Booking();
-		String input;
-		int bookKey = 0;
-		System.out.println("\nPlease enter booking id to view more or 'quit' to quit");
-		input = sc.nextLine();
-		if (input.equalsIgnoreCase("quit")) {
-			 business.companyMenu();
-		}
-		try {
-			Integer.parseInt(input);
-		} catch (NumberFormatException e) {
-			loopflag = true;
-			System.out.println("Invalid Input.");
-			break;
-		}
-		 
-		bookKey = Integer.parseInt(input);
-		//display bookings times within a day
-		
-		if(displayDetailedBooking_StartEndTime(bookKey,bookings, input,bookList,days,tryLoop,loopflag))
-		{
-			System.out.println("Invalid Input");
-			loopflag=true;
-			break;
-		}
-		else{
-			loopflag=true;
-			break;
-		}
-	}while(tryLoop);
-		
-		
-	}
-
-	/**
-	 * @author Bryan Soh, David(Panhaseth Heang)
-	 * 
-	 * @param 
-	 * @return integer(book id)
-	 */
-	@SuppressWarnings("resource")
-	public int checkNextBooking_GetBookID()
-	{
-		boolean loopflag = true;
-		while (loopflag)
-		{
-			//get all the bookings 
-			//display all the bookings within 7days before and after
-			Scanner sc = new Scanner(System.in);
-			DatabaseConnection connect = new DatabaseConnection();
-			ArrayList<Booking> bookList = connect.getAllBooking();
-			SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
-			Calendar c = Calendar.getInstance();
-			String nDays[] = new String[7];
-			String today;
-			for (int i = 0; i <7 ; i++)
-			{
-				c.add(Calendar.DATE, 1);
-				today = sdf.format(c.getTime());
-				nDays[i] = today;
-			}
-			
-			displayDetailedBooking_Date(bookList, nDays);
-			
-			Booking bookings = new Booking();
-			boolean tryLoop = true;
-			do{
-				String input;
-				int bookKey = 0;
-				System.out.println("\nPlease enter booking id to view more or 'quit' to quit");
-				input = sc.nextLine();
-				if (input.equalsIgnoreCase("quit")) {
-					return 0;
-				}
-				
-				try 
-				{ 
-					  Integer.parseInt(input); 
-				} 
-				catch(NumberFormatException e) 
-				{
-					  	tryLoop=true;
-					  	System.out.println("Invalid Input");
-						break; 
-				}
-				bookKey = Integer.parseInt(input);
-				displayDetailedBooking_StartEndTime(bookKey,bookings, input,bookList,nDays,tryLoop,loopflag);
-						
-				return bookKey;
-			}while(tryLoop);
-		}
-		return 0;
-	}
-	
-	/**
-	 * @author Bryan Soh, David(Panhaseth Heang)
-	 * Display date overview table of booking for 7 days
-	 * @param 
-	 * @return 
-	 */
-	public void displayDetailedBooking_Date(ArrayList<Booking> bookList, String nDays[]){
-		System.out.printf("\n%s", "ID");
-		System.out.printf("%-2s %s", "", "Customer ID");
-		System.out.printf("%-20s %s", "", nDays[0]);
-		for(int i=1;i<nDays.length;i++)
-		{
-			System.out.printf("%-3s %s", "", nDays[i]);
-		}
-		System.out.print(
-				"\n----------------------------------------------------------------------------------------------------------------------------------------");
-		
-		for (Booking b : bookList)
-		{
-			System.out.printf("\n%d %-2s %-24s", b.getBookingID(), "", b.getCustomerId());
-			
-			for (int j = 0; j < nDays.length; j++)
-			{
-				//String bookedDays=convertDateToString(b.getDate());
-					if (dateToStr(b.getDate()).equals(nDays[j])&&b.getStatus().equalsIgnoreCase("active"))
-					{
-						System.out.printf("%-8s %-5s", "", "Booked");
-						
-					}
-					else
-					{
-						System.out.printf("%-8s %-5s", "", "-----");
-					}
-				} 
-			}
-		}
-	
-	
-	/**
-	 * @author Bryan Soh, David(Panhaseth Heang)
-	 * A detailed display after user select book id, shows start time and end time of booking
-	 * @param 
-	 * @return 
-	 */
-	public boolean displayDetailedBooking_StartEndTime(int bookKey, Booking bookings, String input, ArrayList<Booking> bookList, String nDays[], Boolean tryLoop, Boolean loopflag)
-	{
-		
-		DatabaseConnection connect = new DatabaseConnection();
-		
-		for (int b = 0; b < bookList.size(); b++) {
-			if (bookList.get(b).getBookingID() == bookKey) {
-				bookings = connect.getOneBooking(bookKey);
-				System.out.printf("\nBookID: %-15s CusID: %-2s\n", bookings.getBookingID(),
-						bookings.getCustomerId());
-				System.out.printf("\n%-15s %-15s %s\n", "Date", "Start Time", "End Time");
-				System.out.println("----------------------------------------------------");
-				for (int j = 0; j < nDays.length; j++) {
-					System.out.printf("%s", nDays[j]);
-					if (bookings != null) {
-						if (nDays[j].equals(dateToStr(bookings.getDate()))) {
-							String startTime = timeToStr(bookings.getStartTime());
-							String endTime = timeToStr(bookings.getEndTime());
-							System.out.printf("%6s %-15s %s\n", "", startTime, endTime);
-						} else {
-							System.out.printf("%6s %-15s %s\n", "", "-----", "-----");
-						}
-					} else {
-						System.out.printf("%6s %-15s %s\n", "", "-----", "-----");
-					}
-				}
-				tryLoop = false;
-				b = bookList.size();
-			}
-		}
-		return tryLoop;
-	}
-	
-	/**
-	 * @author David(Panhaseth Heang)
-	 * get booking id and set its status to 'cancel'
-	 * @param 
-	 * @return
-	 */
-	@SuppressWarnings("resource")
-	public void cancelBooking(){
-		DatabaseConnection conn = new DatabaseConnection();
-		Scanner sc = new Scanner(System.in);
-		Boolean loop = false;
-		
-		do{
-			int bookID = checkNextBooking_GetBookID();
-			if(bookID == 0){
-				return;
-			}
-			System.out.println("\nPlease enter 'cancel' to cancel book id " + bookID + " or 'return'");
-			String input = sc.nextLine();
-			if(input.equalsIgnoreCase("cancel")){
-				conn.cancelBooking(bookID);
-				
-			}else if(input.equalsIgnoreCase("return"))
-			{
-				loop = false;
-			}else{
-				System.out.println("Please enter an appropriate input!");
-				continue;
-			}
-				
-		}while(loop == false);
-		
-	}
-	
-
-	/**
-	 * @author Bryan Soh, David(Panhaseth Heang)
-	 * Display date overview table of availability for 7 days
-	 * @param 
-	 * @return 
-	 */
-	public void displayDetailedWorking_Date(String[] days,ArrayList<Employee> emList,ArrayList<EmployeeWorkingTime> workDays) {
-		DatabaseConnection connect = new DatabaseConnection();
-		System.out.printf("\n%s", "ID");
-		System.out.printf("%-2s %s", "", "Employee");
-		System.out.printf("%-20s %s", "", days[0]);
-		for (int i = 1; i < days.length; i++) {
-			System.out.printf("%-3s %s", "", days[i]);
-		}
-		System.out.print(
-				"\n----------------------------------------------------------------------------------------------------------------------------------------");
-		for (Employee e : emList) {
-			System.out.printf("\n%d %-2s %-20s", e.getId(), "", e.getName());
-			workDays = connect.getEmployeeWorkingTimes(e.getId());
-			for (int j = 0; j < 7; j++) {
-				if (!workDays.isEmpty()) {
-					if (days[j].equals(matchDate(days[j], workDays))) {
-						System.out.printf("%-8s %-5s", "", "Avail");
-					} else {
-						System.out.printf("%-8s %-5s", "", "-----");
-					}
-				} else {
-					System.out.printf("%-8s %-5s", "", "-----");
-				}
-			}
-
-		}
-	}
-	
-	/**
-	 * @author Bryan Soh,David(Panhaseth Heang)
-	 * A detailed display after user select employee id, shows start time and end time of booking
-	 * @param 
-	 * @return 
-	 */
-	public boolean displayDetailedWorking_Time(int empKey, Employee employee, String input, ArrayList<Employee> emList,ArrayList<EmployeeWorkingTime> workDays, String days[], Boolean tryLoop, Boolean loopflag){
-		DatabaseConnection connect = new DatabaseConnection();
-		
-		for (int b = 0; b < emList.size(); b++) {
-			if (emList.get(b).getId() == empKey) {
-				employee = connect.getEmployee(empKey);
-				workDays = connect.getEmployeeWorkingTimes(empKey);
-				System.out.printf("\nName: %-15s Payrate: %-2.2f\n", employee.getName(), employee.getPayRate());
-				System.out.printf("\n%-15s %-15s %s\n", "Date", "Start Time", "End Time");
-				System.out.println("----------------------------------------------------");
-				for (int j = 0; j < 7; j++) {
-					System.out.printf("%s", days[j]);
-					if (!workDays.isEmpty()) {
-						if (days[j].equals(matchDate(days[j], workDays))) {
-							System.out.printf("%6s %-15s %s\n", "", getTime("start", days[j], workDays),
-									getTime("end", days[j], workDays));
-						} else {
-							System.out.printf("%6s %-15s %s\n", "", "-----", "-----");
-						}
-					} else {
-						System.out.printf("%6s %-15s %s\n", "", "-----", "-----");
-					}
-				}
-				tryLoop = false;
-				b = emList.size();
-			}
-		}
-		return tryLoop;
 	}
 	
 	public Boolean checkBookingStartTime(Date time, Date date)
@@ -865,11 +522,11 @@ public class Controller
 	}
 	
 	/**
+	 * @author Luke Mason
 	 * combines date and time to create new date then gets milliseconds from it
 	 * @param date
 	 * @param time
 	 * @return milliseconds from 1970
-	 * @author Luke Mason
 	 */
 	public long getTimeFrom1970(Date date, Date time)
 	{
@@ -901,6 +558,48 @@ public class Controller
 	}
 	
 	/**
+	 * @author Luke Mason
+	 * converts a dat into the day it represents, e.g 05/05/2017 -> Friday -> 6
+	 */
+	public int dateToDay(String date)
+	{
+		int dayOfWeek = 0;
+		Calendar d = Calendar.getInstance();
+		Date date2 = strToDate(date);
+		if(date2 == null)
+		{
+			return dayOfWeek;
+		}
+		d.setTime(date2);
+		dayOfWeek = d.get(Calendar.DAY_OF_WEEK);
+		return dayOfWeek;
+	}
+	
+	/**
+	 * @author Luke Mason
+	 * gets upcoming day's date
+	 * @param day
+	 * @return
+	 */
+	public String getUpcomingStrDateForDay(int day)
+	{
+		String date = null;
+		Calendar c = Calendar.getInstance();
+		for (int i = 0; i < 7; i++) 
+		{
+			int iDay = c.get(Calendar.DAY_OF_WEEK);// puts each date from every loop into array
+			if(day == iDay)
+			{
+				date = dateToStr(c.getTime());
+				break;
+			}
+			 c.add(Calendar.DAY_OF_MONTH, 1);
+		}
+		return date;
+	}
+	
+	/**
+	 * @author Luke Mason
 	 * Gets Employees that are available to provide service on given date
 	 * @param date
 	 * @param startTime
@@ -909,13 +608,14 @@ public class Controller
 	 */
 	public ArrayList<Employee> getAvailableEmployeesForSpecifiedTime(String date, String startTime, String endTime)
 	{
+		int day = dateToDay(date);
 		DatabaseConnection connect = new DatabaseConnection();
 		log.info("IN getAvailableEmployeesForBooking");
 		ArrayList<Employee> employeesWorkingInTimeBlock = new ArrayList<Employee>();
-		ArrayList<EmployeeWorkingTime> workTimesOnDate = new ArrayList<EmployeeWorkingTime>();
+		ArrayList<EmployeeWorkingTime> workTimesOnDay = new ArrayList<EmployeeWorkingTime>();
 		ArrayList<Booking> bookingsOnDate = new ArrayList<Booking>();
 		ArrayList<Employee> employeesNotAvailable = new ArrayList<Employee>();
-		workTimesOnDate = connect.getWorkTimesOnDate(date);
+		workTimesOnDay = connect.getWorkTimesOnDay(day);
 		bookingsOnDate = connect.getActiveBookingsOnDate(date);
 		Date date2 = strToDate(date);
 		Date startTime2 = strToTime(startTime);
@@ -943,13 +643,19 @@ public class Controller
 		{
 			System.out.println(emp);
 		}
-		if(workTimesOnDate.size() > 0)
+		if(workTimesOnDay.size() > 0)
 		{
-			for(EmployeeWorkingTime ewt: workTimesOnDate)
+			for(EmployeeWorkingTime ewt: workTimesOnDay)
 			{
 				//Getting work time start and end time
-				long employeeStartTime = getTimeFrom1970(ewt.getDate(),ewt.getStartTime());
-				long employeeEndTime = getTimeFrom1970(ewt.getDate(),ewt.getEndTime());
+				int day1 = ewt.getDayOfWeek();
+				int day2 = ewt.getDayOfWeek();
+				String strDate1 = getUpcomingStrDateForDay(day1);
+				String strDate2 = getUpcomingStrDateForDay(day2);
+				Date Date1 = strToDate(strDate1);
+				Date Date2 = strToDate(strDate2);
+				long employeeStartTime = getTimeFrom1970(Date1,ewt.getStartTime());
+				long employeeEndTime = getTimeFrom1970(Date2,ewt.getEndTime());
 				if(bookingEndTime <= employeeEndTime)//If booking end time is less than employee work end time(or equal to)
 				{
 					System.out.println("Booking Date End Time = "+bookingEndTime);

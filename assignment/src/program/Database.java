@@ -21,7 +21,6 @@ public class Database
 	{
 		log.setLevel(Level.WARN);
 		createNewDatabase(filename);
-
 	}
 
 	/*
@@ -85,7 +84,7 @@ public class Database
 		String queryEmployeesWorkingTimes = "CREATE TABLE IF NOT EXISTS EMPLOYEES_WORKING_TIMES ("
 				+ "id integer PRIMARY KEY AUTOINCREMENT," 
 				+ "employeeID integer NOT NULL,"
-				+ "date VARCHAR(20) NOT NULL," 
+				+ "dayOfWeek integer NOT NULL," 
 				+ "startTime VARCHAR(20) NOT NULL," 
 				+ "endTime VARCHAR(20) NOT NULL,"
 				+ "FOREIGN KEY(employeeID) REFERENCES EMPLOYEES(employeeID));";
@@ -191,7 +190,7 @@ public class Database
 				+ "payRate integer NOT NULL);";
 
 		String queryEmployeesWorkingTimes = "CREATE TABLE IF NOT EXISTS EMPLOYEES_WORKING_TIMES ("
-				+ "employeeID INT NOT NULL," + "date VARCHAR(12) NOT NULL," + "startTime VARCHAR(12) NOT NULL,"
+				+ "employeeID INT NOT NULL," + "dayOfWeek integer NOT NULL," + "startTime VARCHAR(12) NOT NULL,"
 				+ "endTime VARCHAR(12) NOT NULL," + "FOREIGN KEY(employeeID) REFERENCES employees(employeeID));";
 		String queryBookings = "CREATE TABLE IF NOT EXISTS BOOKINGS (" + "id integer PRIMARY KEY AUTOINCREMENT,"
 				+ "userID integer NOT NULL," + "date text NOT NULL," + "startTime text NOT NULL,"

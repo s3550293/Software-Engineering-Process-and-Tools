@@ -91,8 +91,8 @@ public class DatabaseConnectionJUnit {
 		connect.addEmployee("Luke Boi", 24.57);
 		connect.addEmployee("Mason Smith", 24.57);
 		connect.addEmployee("Jane Smith", 24.57);
-		connect.addEmployeeWorkingTime(1,"03/12/2017","08:00","20:00");//Assigning employee Luke with 2 working times
-		connect.addEmployeeWorkingTime(1,"02/03/2017","08:00","20:00");
+		connect.addEmployeeWorkingTime(1,1,"06:30","20:00");//Assigning employee Luke with 2 working times
+		connect.addEmployeeWorkingTime(1,4,"12:35","20:00");
 		connect.addBooking(1,1, "03/12/2017", "10:30", "11:59",0, "active");
 		connect.addBooking(2,1, "02/03/2017", "11:30", "12:30",0, "active");
 		connect.addBooking(3,1, "03/12/2017", "12:00", "14:00",0, "active");
@@ -227,7 +227,7 @@ public class DatabaseConnectionJUnit {
 		EmployeeWorkingTime emplWorking = new EmployeeWorkingTime();
 		for(EmployeeWorkingTime empWork: lukesWorkingTimes)
 		{
-			if(empWork.getId() == 1)
+			if(empWork.getId() == 1)//Getting first work time
 				emplWorking = empWork;
 		}
 		assertTrue(emplWorking.getId()==1);
@@ -239,11 +239,11 @@ public class DatabaseConnectionJUnit {
 		EmployeeWorkingTime emplWorking = new EmployeeWorkingTime();
 		for(EmployeeWorkingTime empWork: lukesWorkingTimes)
 		{
-			if(empWork.getId() == 1)
+			if(empWork.getId() == 1)//Getting first work time
 				emplWorking = empWork;
 		}
 		assertTrue(emplWorking.getId()==1);
-		assertEquals("03/12/2017", controller.dateToStr(emplWorking.getDate()));
+		assertTrue(1 == emplWorking.getDayOfWeek());
 	}
 	@Test
 	public void testGetEmployeeWorkingTimes4()
@@ -252,10 +252,10 @@ public class DatabaseConnectionJUnit {
 		EmployeeWorkingTime emplWorking = new EmployeeWorkingTime();
 		for(EmployeeWorkingTime empWork: lukesWorkingTimes)
 		{
-			if(empWork.getId() == 1)
+			if(empWork.getId() == 1)//Getting first work time
 				emplWorking = empWork;
 		}
-		assertEquals("08:00", controller.timeToStr(emplWorking.getStartTime()));
+		assertEquals("06:30", controller.timeToStr(emplWorking.getStartTime()));
 	}
 	@Test
 	public void testGetEmployeeWorkingTimes5()
@@ -264,11 +264,61 @@ public class DatabaseConnectionJUnit {
 		EmployeeWorkingTime emplWorking = new EmployeeWorkingTime();
 		for(EmployeeWorkingTime empWork: lukesWorkingTimes)
 		{
-			if(empWork.getId() == 1)
+			if(empWork.getId() == 1)//Getting first work time
 				emplWorking = empWork;
 		}
 		assertEquals("20:00", controller.timeToStr(emplWorking.getEndTime()));
 	}
+	@Test
+	public void testGetEmployeeWorkingTimes6()
+	{	
+		ArrayList<EmployeeWorkingTime> lukesWorkingTimes = connect.getEmployeeWorkingTimes(1);
+		EmployeeWorkingTime emplWorking = new EmployeeWorkingTime();
+		for(EmployeeWorkingTime empWork: lukesWorkingTimes)
+		{
+			if(empWork.getId() == 2)//Getting second work time
+				emplWorking = empWork;
+		}
+		assertTrue(emplWorking.getId()==2);
+	}
+	@Test
+	public void testGetEmployeeWorkingTimes7()
+	{	
+		ArrayList<EmployeeWorkingTime> lukesWorkingTimes = connect.getEmployeeWorkingTimes(1);
+		EmployeeWorkingTime emplWorking = new EmployeeWorkingTime();
+		for(EmployeeWorkingTime empWork: lukesWorkingTimes)
+		{
+			if(empWork.getId() == 2)//Getting second work time
+				emplWorking = empWork;
+		}
+		assertTrue(emplWorking.getId()==2);
+		assertTrue(4 == emplWorking.getDayOfWeek());
+	}
+	@Test
+	public void testGetEmployeeWorkingTimes8()
+	{	
+		ArrayList<EmployeeWorkingTime> lukesWorkingTimes = connect.getEmployeeWorkingTimes(1);
+		EmployeeWorkingTime emplWorking = new EmployeeWorkingTime();
+		for(EmployeeWorkingTime empWork: lukesWorkingTimes)
+		{
+			if(empWork.getId() == 2)//Getting second work time
+				emplWorking = empWork;
+		}
+		assertEquals("12:35", controller.timeToStr(emplWorking.getStartTime()));
+	}
+	@Test
+	public void testGetEmployeeWorkingTimes9()
+	{	
+		ArrayList<EmployeeWorkingTime> lukesWorkingTimes = connect.getEmployeeWorkingTimes(1);
+		EmployeeWorkingTime emplWorking = new EmployeeWorkingTime();
+		for(EmployeeWorkingTime empWork: lukesWorkingTimes)
+		{
+			if(empWork.getId() == 2)//Getting second work time
+				emplWorking = empWork;
+		}
+		assertEquals("20:00", controller.timeToStr(emplWorking.getEndTime()));
+	}
+	
 	@Test
 	public void testAddBookingToDatabase_CustomerID()
 	{	
@@ -326,9 +376,13 @@ public class DatabaseConnectionJUnit {
 		assertTrue(connect.cancelBooking(3));
 		
 		books = connect.getAllBooking();
-		assertEquals("cancel",books.get(0).getStatus());
+		System.out.print("THIS ONE!~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
+		System.out.println(books.get(0).getStatus());
+		System.out.println(books.get(1).getStatus());
+		System.out.println(books.get(2).getStatus());
+		assertEquals("canceled",books.get(0).getStatus());
 		assertEquals("active",books.get(1).getStatus());
-		assertEquals("cancel",books.get(2).getStatus());	
+		assertEquals("canceled",books.get(2).getStatus());	
 	}
 	
 	@Test

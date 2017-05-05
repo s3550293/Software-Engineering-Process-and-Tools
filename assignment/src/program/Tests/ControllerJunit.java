@@ -14,6 +14,8 @@ import org.apache.log4j.Logger;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
+
+import program.BusinessMenu;
 import program.Controller;
 import program.Database;
 import program.DatabaseConnection;
@@ -24,6 +26,7 @@ public class ControllerJunit {
 	Controller controller = new Controller();
 	DatabaseConnection connect2 = new DatabaseConnection();
 	DatabaseConnectionJUnit connection2 = new DatabaseConnectionJUnit();
+	BusinessMenu bMenu = new BusinessMenu();
 	@Before
 	public void setUp()
 	{
@@ -42,25 +45,56 @@ public class ControllerJunit {
 		{
 			log.info(sqle.getMessage()+"\n");
 		}
-		//Creates ALL TABLES
-		Database db = new Database("company.db");
-		db.createTable("company.db");
-		connect2.addEmployee("Test one",25);
-		connect2.addEmployee("Test two",43);
-		
-		connect2.addEmployeeWorkingTime(1,"05/06/2017","08:00","16:00");
-		connect2.addEmployeeWorkingTime(1,"06/06/2017","08:00","20:00");
-		connect2.addEmployeeWorkingTime(1,"07/06/2017","08:00","16:00");
-		connect2.addEmployeeWorkingTime(1,"08/06/2017","12:00","20:00");
-		connect2.addEmployeeWorkingTime(1,"09/06/2017","08:00","16:00");
-		connect2.addEmployeeWorkingTime(1,"10/06/2017","08:00","20:00");
-
-		connect2.addEmployeeWorkingTime(2,"05/06/2017","08:00","16:00");
-		connect2.addEmployeeWorkingTime(2,"06/06/2017","08:00","20:00");
-		connect2.addEmployeeWorkingTime(2,"07/06/2017","08:00","16:00");
-		connect2.addEmployeeWorkingTime(2,"08/06/2017","12:00","20:00");
-		connect2.addEmployeeWorkingTime(2,"09/06/2017","08:00","16:00");
-		connect2.addEmployeeWorkingTime(2,"10/06/2017","08:00","20:00");
+	}
+	@Test
+	public void testGetUpcomingStrDateForDay()
+	{
+		assertEquals("08/05/2017",controller.getUpcomingStrDateForDay(2));
+	}
+	@Test
+	public void testDateToDay()
+	{
+		assertTrue(6 == controller.dateToDay("05/05/2017"));
+	}
+	@Test
+	public void testDateToDay1()
+	{
+		assertTrue(7 == controller.dateToDay("03/06/2017"));
+	}
+	@Test
+	public void testDateToDay2()
+	{
+		assertTrue(1 == controller.dateToDay("04/06/2017"));
+	}
+	@Test
+	public void testDateToDay3()
+	{
+		assertTrue(2 == controller.dateToDay("05/06/2017"));
+	}
+	@Test
+	public void testDateToDay4()
+	{
+		assertTrue(3 == controller.dateToDay("06/06/2017"));
+	}
+	@Test
+	public void testDateToDay5()
+	{
+		assertTrue(4 == controller.dateToDay("07/06/2017"));
+	}
+	@Test
+	public void testDateToDay6()
+	{
+		assertTrue(5 == controller.dateToDay("08/06/2017"));
+	}
+	@Test
+	public void testDateToDay7()
+	{
+		assertTrue(6 == controller.dateToDay("09/06/2017"));
+	}
+	@Test
+	public void testDateToDay8()
+	{
+		assertTrue(7 == controller.dateToDay("10/06/2017"));
 	}
 	@Test
 	public void testCheckInputToContainNonAlphabetChar1() 
@@ -713,49 +747,92 @@ public class ControllerJunit {
 	@Test
 	public void testGetAvailableEmployeesForSpecifiedTime1()
 	{
+		//Creates ALL TABLES
+		Database db = new Database("company.db");
+		db.createTable("company.db");
+		connect2.addEmployee("Test one",25);
+		connect2.addEmployee("Test two",43);
+		bMenu.addDayWorkingTime(1,3,false,true,true);
+		bMenu.addDayWorkingTime(2,3,false,true,true);
+
 		ArrayList<Employee> employees = new ArrayList<Employee>();
-		employees = controller.getAvailableEmployeesForSpecifiedTime("06/06/2017", "15:15", "20:00");
+		employees = controller.getAvailableEmployeesForSpecifiedTime("09/05/2017", "15:15", "20:00");
 		assertEquals(1,employees.get(0).getId());
 		assertEquals(2,employees.get(1).getId());
 	}
 	@Test
 	public void testGetAvailableEmployeesForSpecifiedTime2()
 	{
+		//Creates ALL TABLES
+		Database db = new Database("company.db");
+		db.createTable("company.db");
+		connect2.addEmployee("Test one",25);
+		connect2.addEmployee("Test two",43);
+		bMenu.addDayWorkingTime(1,3,false,true,true);
+		bMenu.addDayWorkingTime(2,3,false,true,true);
 		ArrayList<Employee> employees = new ArrayList<Employee>();
-		employees = controller.getAvailableEmployeesForSpecifiedTime("06/06/2017", "15:15", "20:01");
+		employees = controller.getAvailableEmployeesForSpecifiedTime("09/05/2017", "15:15", "20:01");
 		assertEquals(0,employees.size());
 	}
 	@Test
 	public void testGetAvailableEmployeesForSpecifiedTime3()
 	{
+		//Creates ALL TABLES
+		Database db = new Database("company.db");
+		db.createTable("company.db");
+		connect2.addEmployee("Test one",25);
+		connect2.addEmployee("Test two",43);
+		bMenu.addDayWorkingTime(1,4,true,true,false);
+		bMenu.addDayWorkingTime(2,4,true,true,false);
 		ArrayList<Employee> employees = new ArrayList<Employee>();
-		employees = controller.getAvailableEmployeesForSpecifiedTime("06/06/2017", "08:00", "15:00");
+		employees = controller.getAvailableEmployeesForSpecifiedTime("10/05/2017", "08:00", "15:00");
 		assertEquals(1,employees.get(0).getId());
 		assertEquals(2,employees.get(1).getId());
 	}
 	@Test
 	public void testGetAvailableEmployeesForSpecifiedTime4()
 	{
+		//Creates ALL TABLES
+		Database db = new Database("company.db");
+		db.createTable("company.db");
+		connect2.addEmployee("Test one",25);
+		connect2.addEmployee("Test two",43);
+		bMenu.addDayWorkingTime(1,3,false,true,true);
+		bMenu.addDayWorkingTime(2,3,false,true,true);
 		ArrayList<Employee> employees = new ArrayList<Employee>();
-		employees = controller.getAvailableEmployeesForSpecifiedTime("06/06/2017", "07:59", "15:00");
+		employees = controller.getAvailableEmployeesForSpecifiedTime("09/05/2017", "07:59", "15:00");
 		log.debug(employees.size()+"\n");
 		assertEquals(0,employees.size());
 	}
 	@Test
 	public void testGetAvailableEmployeesForSpecifiedTime5()
 	{
+		//Creates ALL TABLES
+		Database db = new Database("company.db");
+		db.createTable("company.db");
+		connect2.addEmployee("Test one",25);
+		connect2.addEmployee("Test two",43);
+		bMenu.addDayWorkingTime(1,4,true,true,false);
+		bMenu.addDayWorkingTime(2,4,true,true,false);
 		ArrayList<Employee> employees = new ArrayList<Employee>();
-		connect2.addBooking(1,1, "06/06/2017", "08:00", "9:59", 0, "active");
-		employees = controller.getAvailableEmployeesForSpecifiedTime("06/06/2017", "10:00", "15:00");
+		connect2.addBooking(1,1, "10/05/2017", "08:00", "9:59", 0, "active");
+		employees = controller.getAvailableEmployeesForSpecifiedTime("10/05/2017", "10:00", "15:00");
 		assertEquals(1,employees.get(0).getId());
 		assertEquals(2,employees.get(1).getId());
 	}
 	@Test
 	public void testGetAvailableEmployeesForSpecifiedTime6()
 	{
+		//Creates ALL TABLES
+		Database db = new Database("company.db");
+		db.createTable("company.db");
+		connect2.addEmployee("Test one",25);
+		connect2.addEmployee("Test two",43);
+		bMenu.addDayWorkingTime(1,4,true,true,false);
+		bMenu.addDayWorkingTime(2,4,true,true,false);
 		ArrayList<Employee> employees = new ArrayList<Employee>();
-		connect2.addBooking(2,1, "06/06/2017", "08:00", "10:01", 0, "active");
-		employees = controller.getAvailableEmployeesForSpecifiedTime("06/06/2017", "10:00", "15:00");
+		connect2.addBooking(2,1, "10/05/2017", "08:00", "10:01", 0, "active");
+		employees = controller.getAvailableEmployeesForSpecifiedTime("10/05/2017", "10:00", "15:00");
 		assertEquals(2,employees.get(0).getId());
 		log.debug(employees.size()+"\n");
 		assertEquals(1,employees.size());
@@ -763,9 +840,16 @@ public class ControllerJunit {
 	@Test
 	public void testGetAvailableEmployeesForSpecifiedTime7()
 	{
+		//Creates ALL TABLES
+		Database db = new Database("company.db");
+		db.createTable("company.db");
+		connect2.addEmployee("Test one",25);
+		connect2.addEmployee("Test two",43);
+		bMenu.addDayWorkingTime(1,4,true,true,false);
+		bMenu.addDayWorkingTime(2,4,true,true,false);
 		ArrayList<Employee> employees = new ArrayList<Employee>();
-		connect2.addBooking(2,1, "06/06/2017", "14:59", "16:00", 0, "active");
-		employees = controller.getAvailableEmployeesForSpecifiedTime("06/06/2017", "10:00", "15:00");
+		connect2.addBooking(2,1, "10/05/2017", "14:59", "16:00", 0, "active");
+		employees = controller.getAvailableEmployeesForSpecifiedTime("10/05/2017", "10:00", "15:00");
 		assertEquals(2,employees.get(0).getId());
 		log.debug(employees.size()+"\n");
 		assertEquals(1,employees.size());

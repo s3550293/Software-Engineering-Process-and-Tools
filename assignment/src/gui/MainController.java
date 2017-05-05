@@ -1288,7 +1288,6 @@ public class MainController implements Initializable {
 		BusinessMenu bMenu = new BusinessMenu();
 		// Initializing variables
 		int employeeID = -1;
-
 		String ePayRate = "";
 		lblEmployeeTitle.setText("Change Employee Details");
 		// Checking if an item has been selected
@@ -1299,23 +1298,17 @@ public class MainController implements Initializable {
 		}
 		Employee employee = listviewEmployees.getSelectionModel().getSelectedItem();
 		employeeID = employee.getId();
-
 		// Getting first and last name from full name string
 		String empFullName = employee.getName();
-
 		int index = empFullName.indexOf(' ');
 		if (index < 0) {
-			program.messageBox("ERROR", "No space in employee Name", "Please manually change that employee",
-					"Please UPDATE the employee name direct from database");
+			program.messageBox("ERROR", "No 'space character' in employee Name", "Please manually change that employee","Please UPDATE the employee name direct from database");
 			return;
 		}
 		String eFirstName = empFullName.substring(0, index);
-
 		String eLastName = empFullName.substring(index + 1);
-
 		// converting double to string
 		double EPayRate = employee.getPayRate();
-
 		ePayRate = "" + EPayRate;
 		// Assigning textFields with known Strings
 		txtaddEmpFirstName.setText(eFirstName);
@@ -1325,39 +1318,21 @@ public class MainController implements Initializable {
 		// work time contains, WorkTimeID|EmployeeID|Date|StartTime|EndTime
 		workTimes = connection.getEmployeeWorkingTimes(employeeID);
 		int checkBox = 0;
-		System.out.println("Work Time Size = " + workTimes.size());
-		if (workTimes.size() > 0) {
-			SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
-			String[] dateArray = new String[7];
-
-			// Getting dates for first 7days
-			Calendar c = Calendar.getInstance();
-			c.setTime(workTimes.get(0).getDate());
-			for (int i = 1; i <= 7; i++) {
-				dateArray[i - 1] = sdf.format(c.getTime());// puts each date
-															// from every loop
-															// into array
-				c.add(Calendar.DAY_OF_MONTH, 1);
+		log.debug("Work Time Size = " + workTimes.size());
+		for(int i = 0; i < workTimes.size(); i++)
+		{
+			String startTime = program.timeToStr(workTimes.get(i).getStartTime());
+			String endTime = program.timeToStr(workTimes.get(i).getEndTime());
+			log.info("Start Time ="+startTime+"\n");
+			log.info("End Time ="+endTime+"\n");
+			int timeBlock = bMenu.getTimeBlock(startTime,endTime);
+			if (timeBlock == -1) {
+				log.warn("INVALID TIME BLOCK DETECTED\n");
 			}
-			for (int j = 0; j < 7; j++) {
-				for (EmployeeWorkingTime wTime : workTimes) {
-					String date = program.dateToStr(wTime.getDate());
-					if (date.equals(dateArray[j])) {
-						String startTime = program.timeToStr(wTime.getStartTime());
-						String endTime = program.timeToStr(wTime.getEndTime());
-						int timeBlock = bMenu.getTimeBlock(startTime, endTime);
-						if (timeBlock == -1) {
-							System.out.println("INVALID TIME BLOCK DETECTED");
-						} else {
-							Calendar d = Calendar.getInstance();
-							Date date2 = program.strToDate(dateArray[j]);
-							d.setTime(date2);
-							int dayOfWeek = d.get(Calendar.DAY_OF_WEEK);
-							changeButtonsOfDay(dayOfWeek, timeBlock);
-							checkBox++;
-						}
-					}
-				}
+			else
+			{
+				changeButtonsOfDay(workTimes.get(i).getDayOfWeek(), timeBlock);
+				++checkBox;
 			}
 		}
 		if (checkBox == 0) {

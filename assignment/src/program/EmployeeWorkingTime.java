@@ -4,15 +4,15 @@ import java.util.Date;
 
 public class EmployeeWorkingTime 
 {
-	private int id, empID;
-	private Date date, startTime, endTime;
+	private int id, empID, dayOfWeek;
+	private Date startTime, endTime;
 	
 	public EmployeeWorkingTime(){}
-	public EmployeeWorkingTime(int id, int empID, Date date, Date startTime, Date endTime)
+	public EmployeeWorkingTime(int id, int empID, int dayOfWeek, Date startTime, Date endTime)
 	{
 		this.id = id;
 		this.empID = empID;
-		this.date = date;
+		this.dayOfWeek = dayOfWeek;
 		this.startTime = startTime;
 		this.endTime = endTime;
 	}
@@ -25,9 +25,9 @@ public class EmployeeWorkingTime
 	{
 		return empID;
 	}
-	public Date getDate()
+	public int getDayOfWeek()
 	{
-		return date;
+		return dayOfWeek;
 	}
 	public Date getStartTime()
 	{
@@ -37,9 +37,9 @@ public class EmployeeWorkingTime
 	{
 		return endTime;
 	}
-	public void setDate(Date date)
+	public void setDayOfWeek(int dayOfWeek)
 	{
-		this.date = date;
+		this.dayOfWeek = dayOfWeek;
 	}
 	public void setStartTime(Date startTime)
 	{
@@ -51,6 +51,6 @@ public class EmployeeWorkingTime
 	}
 	public String toString()
 	{
-		return "ID: " + id + "   Date: " + date + "   Start Time: " + startTime+ "   End Time: " + endTime;
+		return "ID: " + id + "   Day Of Week: " + dayOfWeek + "   Start Time: " + startTime+ "   End Time: " + endTime;
 	}
 }

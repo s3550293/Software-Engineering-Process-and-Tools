@@ -26,21 +26,6 @@ public class BusinessMenuJUnit {
 		assertTrue(bMenu.checkEmployeePayRate(0));
 	}
 	@Test
-	public void testSet7DayRosterTime1()
-	{
-		assertTrue(bMenu.set7DayRosterTime(57,"02/12/2017", "8:00", "16:00"));
-	}
-	@Test
-	public void testSet7DayRosterTime2()
-	{
-		assertFalse(bMenu.set7DayRosterTime(57,"lol/04/2017", "8:00", "16:00"));
-	}
-	@Test
-	public void testSet7DayRosterTime3()
-	{
-		assertFalse(bMenu.set7DayRosterTime(57,"", "8:00", "16:00"));
-	}
-	@Test
 	public void testCheckWorkTimes1()
 	{
 		assertEquals(1,bMenu.getWorkTimes(true,true,true));

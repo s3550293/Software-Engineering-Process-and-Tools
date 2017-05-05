@@ -373,21 +373,21 @@ public class DatabaseConnection
 	 * @param startTime
 	 * @param endTime
 	 */
-	public void addEmployeeWorkingTime(int empID, String date, String startTime, String endTime)
+	public void addEmployeeWorkingTime(int empID, int dayOfWeek, String startTime, String endTime)
 	{
 		log.info("IN addEmployeeWorkingTimeToDatabase\n");
-		String query = "INSERT INTO EMPLOYEES_WORKING_TIMES(employeeID, date, startTime, endTime) " + "VALUES ("+ empID +",'"+ date +"','"+ startTime +"','"+ endTime +"');";
+		String query = "INSERT INTO EMPLOYEES_WORKING_TIMES(employeeID, dayOfWeek, startTime, endTime) " + "VALUES ("+ empID +","+ dayOfWeek +",'"+ startTime +"','"+ endTime +"');";
 		try(Connection connect = this.connect(); Statement inject = connect.createStatement())
 		{
 			inject.executeUpdate(query);
-			log.info("Work Time Added - EmpID " + empID+ " date: "+date+" Start Time: "+startTime+" End Time: "+endTime+"\n");
+			log.debug("Work Time Added - EmpID " + empID+ " Day Of Week: "+dayOfWeek+" Start Time: "+startTime+" End Time: "+endTime+"\n");
 		}
 		catch(SQLException sqle)
 		{
 			//System.out.println(sqle.getMessage());
 			//System.out.println(date);
 			log.warn(sqle.getMessage());
-			log.info(date);
+			log.info(dayOfWeek);
 		}
 		log.info("OUT addEmployeeWorkingTimeToDatabase\n");
 	}
@@ -433,7 +433,8 @@ public class DatabaseConnection
 		ArrayList<EmployeeWorkingTime> databaseWorkingTime = new ArrayList<EmployeeWorkingTime>();
 		int id = 0;
 		int empID = 0;
-		Date date, startTime, endTime;
+		int dayOfWeek = 0;
+		Date startTime, endTime;
 		String query = "SELECT * FROM EMPLOYEES_WORKING_TIMES WHERE employeeID = ?"; 
 
 		try (Connection connect = this.connect(); PreparedStatement  inject  = connect.prepareStatement(query))
@@ -446,10 +447,10 @@ public class DatabaseConnection
 			{
 				id = output.getInt(1);
 				empID = output.getInt(2);
-				date = controller.strToDate(output.getString(3));
+				dayOfWeek = output.getInt(3);
 				startTime = controller.strToTime(output.getString(4));
 				endTime = controller.strToTime(output.getString(5));
-				databaseWorkingTime.add(new EmployeeWorkingTime(id,empID,date,startTime,endTime));				
+				databaseWorkingTime.add(new EmployeeWorkingTime(id,empID,dayOfWeek,startTime,endTime));				
 			}
 			output.close();
 		}
@@ -462,26 +463,6 @@ public class DatabaseConnection
 		return databaseWorkingTime;
 	}
 	
-	/*/**
-	 * Rounds a double to x amount of decimal places then return the rounded double
-	 * @param value
-	 * @param places
-	 * @return
-	 */
-	/*public static double round(double value, int places) {
-	    if (places < 0) throw new IllegalArgumentException();
-
-	    long factor = (long) Math.pow(10, places);
-	    value = value * factor;
-	    long tmp = Math.round(value);
-	    return (double) tmp / factor;
-	}*/
-	
-	/**
-	 * Drops table name from database
-	 * @param tableName
-	 * @return
-	 */
 	public boolean dropTable(String tableName)
 	{
 		log.info("IN dropTable\n");
@@ -688,7 +669,7 @@ public class DatabaseConnection
 		return getBooking;
 	}
 	
-	/*
+	/**
 	 * set booking status to 'cancel'
 	 * @param bookID
 	 * @return true or false
@@ -747,6 +728,12 @@ public class DatabaseConnection
 		log.info("OUT deleteUser\n");
 		return false;
 	}
+	
+	/**
+	 * Updates Employees Name
+	 * @param empID
+	 * @param name
+	 */
 	public void updateEmployeeName(int empID,String name)
 	{
 		log.info("IN updateEmployeeName\n");
@@ -763,6 +750,12 @@ public class DatabaseConnection
 		}
 		log.info("OUT updateEmployeeName\n");
 	}
+	
+	/**
+	 * Updates employee's pay rate
+	 * @param empID
+	 * @param pRate
+	 */
 	public void updateEmployeePayRate(int empID, double pRate)
 	{
 		log.info("IN updateEmployeePayRate\n");
@@ -779,6 +772,12 @@ public class DatabaseConnection
 		}
 		log.info("OUT updateEmployeePayRate\n");
 	}
+	
+	/**
+	 * Deletes specified employee and there working times
+	 * @param employeeID
+	 * @return
+	 */
 	public boolean deleteEmployee(int employeeID)
 	{
 		log.info("IN deleteEmployee\n");
@@ -796,6 +795,7 @@ public class DatabaseConnection
 		log.info("OUT deleteEmployee\n");
 		return false;
 	}
+	
 	/**
 	 * Gets all working times from database
 	 * @param employeeId
@@ -807,7 +807,8 @@ public class DatabaseConnection
 		ArrayList<EmployeeWorkingTime> databaseWorkingTime = new ArrayList<EmployeeWorkingTime>();
 		int id = 0;
 		int empID = 0;
-		Date date, startTime, endTime;
+		int dayOfWeek = 0;
+		Date startTime, endTime;
 		String query = "SELECT * FROM EMPLOYEES_WORKING_TIMES;"; 
 
 		try (Connection connect = this.connect(); PreparedStatement  inject  = connect.prepareStatement(query))
@@ -819,10 +820,10 @@ public class DatabaseConnection
 			{
 				id = output.getInt(1);
 				empID = output.getInt(2);
-				date = controller.strToDate(output.getString(3));
+				dayOfWeek = output.getInt(3);
 				startTime = controller.strToTime(output.getString(4));
 				endTime = controller.strToTime(output.getString(5));
-				databaseWorkingTime.add(new EmployeeWorkingTime(id,empID,date,startTime,endTime));				
+				databaseWorkingTime.add(new EmployeeWorkingTime(id,empID,dayOfWeek,startTime,endTime));				
 			}
 			output.close();
 		}
@@ -836,12 +837,12 @@ public class DatabaseConnection
 	}
 	
 	/**
-	 * Get Work Times on given date
+	 * Get Work Times on given day
 	 * @param Date
 	 * @return array of work times
 	 * @author Luke Mason
 	 */
-	public ArrayList<EmployeeWorkingTime> getWorkTimesOnDate(String Date)
+	public ArrayList<EmployeeWorkingTime> getWorkTimesOnDay(int day)
 	{
 		log.info("IN getWorkTimesOnDate");
 		ArrayList<EmployeeWorkingTime> workTimesOnDate = new ArrayList<EmployeeWorkingTime>();
@@ -849,9 +850,8 @@ public class DatabaseConnection
 		workTimes = getAllWorkingTimes();
 		for(EmployeeWorkingTime ewt: workTimes)
 		{
-			Date date = ewt.getDate();
-			String dateStr = controller.dateToStr(date);
-			if(dateStr.equals(Date))
+			int dayOfWeek = ewt.getDayOfWeek();
+			if(dayOfWeek == day)
 			{
 				workTimesOnDate.add(ewt);
 			}
@@ -1016,6 +1016,11 @@ public class DatabaseConnection
 		}
 		return service;
 	}
+	
+	/**
+	 * Deletes specified service
+	 * @param id
+	 */
 	public void deleteService(int id)
 	{
 		log.info("IN deleteService\n");

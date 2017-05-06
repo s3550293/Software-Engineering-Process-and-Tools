@@ -5,6 +5,7 @@ import java.sql.DatabaseMetaData;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.Date;
 
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
@@ -110,7 +111,17 @@ public class Database
 				+ "serviceID integer NOT NULL," 
 				+ "FOREIGN KEY(bookingID) REFERENCES BOOKINGS(id),"
 				+ "FOREIGN KEY(serviceID) REFERENCES SERVICES(id));";
-
+		String queryBusiness = "CREATE TABLE IF NOT EXISTS BUSINESS (" 
+				+ "id interger PRIMARY KEY AUTOINCREMENT,"
+				+ "bName VARCHAR(30) NOT NULL,"
+				+ "fName VARCHAR(30) NOT NULL,"
+				+ "lName VARCHAR(30) NOT NULL,"
+				+ "Phone VARCHAR(30) NOT NULL,"
+				+ "address VARCHAR(30) NOT NULL,"
+				+ "weekdayStart VARCHAR(20) NOT NULL,"
+				+ "weekdayEnd VARCHAR(20) NOT NULL," 
+				+ "weekendStart VARCHAR(20) NOT NULL,"
+				+ "weekendEnd VARCHAR(20) NOT NULL);";
 		/*
 		 * Attempting to connect to the database so tables can be created
 		 */
@@ -141,6 +152,9 @@ public class Database
 			
 			smt.executeUpdate(queryBookingServiceLink);
 			log.debug("Table 'BS LINK' added");
+			//Creating Table 'BUSINESS'
+			smt.executeUpdate(queryBusiness);
+			log.debug("Table 'BUSINESS' added");
 		} catch (SQLException sqle)
 		{
 			// System.out.println("ERROR: couldn't add table:
@@ -195,6 +209,10 @@ public class Database
 		String queryBookings = "CREATE TABLE IF NOT EXISTS BOOKINGS (" + "id integer PRIMARY KEY AUTOINCREMENT,"
 				+ "userID integer NOT NULL," + "date text NOT NULL," + "startTime text NOT NULL,"
 				+ "endTime text NOT NULL," + "desc text," + "FOREIGN KEY (userID) REFERENCES users(userID));";
+		String queryBusiness = "CREATE TABLE IF NOT EXISTS BUSINESS (" + "id integer PRIMARY KEY AUTOINCREMENT,"
+				+ "bName VARCHAR(30) NOT NULL,"+ "fName VARCHAR(30) NOT NULL,"+ "lName VARCHAR(30) NOT NULL,"
+				+ "Phone VARCHAR(30) NOT NULL,"+ "address VARCHAR(30) NOT NULL,"+ "weekdayStart VARCHAR(20) NOT NULL,"
+				+ "weekdayEnd VARCHAR(20) NOT NULL," + "weekendStart VARCHAR(20) NOT NULL,"+ "weekendEnd VARCHAR(20) NOT NULL,";
 
 		/*
 		 * Attempting to connect to the database so tables can be created
@@ -220,6 +238,10 @@ public class Database
 			// Creating Table 'BOOKINGS'
 			smt.executeUpdate(queryBookings);
 			System.out.println("Table 'BOOKINGS' added");
+			
+			// Creating Table 'BUSINESS'
+			smt.executeUpdate(queryBusiness);
+			System.out.println("Table 'BUSINESS' added");
 		} catch (SQLException sqle)
 		{
 			System.out.println("Adding Table: " + sqle.getMessage());

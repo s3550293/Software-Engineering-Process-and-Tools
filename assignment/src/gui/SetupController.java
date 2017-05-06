@@ -19,12 +19,16 @@ import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 import javafx.util.Callback;
 import program.BusinessMenu;
+import program.BusinessOwner;
+import program.Controller;
 import program.Database;
 import program.DatabaseConnection;
 import program.Service;
 
 public class SetupController implements Initializable {
-	
+	private Controller program = new Controller();
+	private DatabaseConnection connection = new DatabaseConnection();
+	private static BusinessOwner business = new BusinessOwner();
 	/*
 	 * Oder of panes stkpWelcome > stkpDetails > stkpTimeSlot > (Setup Finishes and database is created) > stkpSelectColor
 	 */
@@ -68,14 +72,53 @@ public class SetupController implements Initializable {
 		
 		if(stkpDetails.isVisible())
 		{
+			if (program.checkInputToContainInvalidChar(txtFNam.getText().toString())) {
+				program.messageBox("ERROR", "Error", "First Name field is empty or contains an invalid character", "");
+				return;
+			}
+			if (program.checkInputToContainInvalidChar(txtLNam.getText().toString())) {
+				program.messageBox("ERROR", "Error", "Last Name field is empty or contains an invalid character", "");
+				return;
+			}
+			if (program.checkInputToContainInvalidChar(txtBNam.getText().toString())) {
+				program.messageBox("ERROR", "Error", "Business Name field is empty or contains an invalid character", "");
+				return;
+			}
+			if(txtBPho.getText().length() != 10)
+	        {
+	        	program.messageBox("ERROR", "Error", "Invalid Phone Number", "");
+	            return;
+	        }
+			if(program.changeInputIntoValidInt(txtBPho.getText().toString()) == -1)
+	        {
+	        	program.messageBox("ERROR", "Error", "Invalid Phone Number", "");
+	            return;
+	        }
+			if(txtaBAdre.getText().length() ==0){
+				program.messageBox("ERROR", "Error", "Address field is empty or contains an invalid character", "");
+				return;
+			}
+			business.setFName(txtFNam.getText());
+			business.setLName(txtLNam.getText());
+			business.setBusiness(txtBNam.getText());
+			business.setPhone(txtBPho.getText());
+			business.setAddress(txtaBAdre.getText());
+
 			stkpTimeSlot.setVisible(true);
 			stkpDetails.setVisible(false);
+			return;
 		}
 		if(stkpTimeSlot.isVisible())
 		{
+			
+			business.setWeekdayStart(program.strToTime(cmbMFClose.getSelectionModel().getSelectedItem()));
+			business.setWeekdayEnd(program.strToTime(cmbMFClose.getSelectionModel().getSelectedItem()));
+			business.setWeekendStart(program.strToTime(cmbSSOpen.getSelectionModel().getSelectedItem()));
+			business.setWeekdendEnd(program.strToTime(cmbSSClose.getSelectionModel().getSelectedItem()));
 			stkpSelectColor.setVisible(true);
 			stkpTimeSlot.setVisible(false);
 			createBO();
+			return;
 		}
 	}
 	/**
@@ -90,11 +133,12 @@ public class SetupController implements Initializable {
 	
 	/**
 	 * 
-	 * @author [Programmer]
+	 * @author Bryan
 	 */
 	@FXML
-	public void createBO(){
-		//TODO
+	public void createBO() {
+		// TODO
+		connection.createBusiness(business);
 	}
 	
 	/**

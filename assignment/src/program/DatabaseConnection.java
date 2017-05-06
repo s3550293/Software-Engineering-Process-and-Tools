@@ -1066,10 +1066,10 @@ public class DatabaseConnection
 	 * @return 
 	 * @author Bryan
 	 */	
-	public void addBusiness(String bName,String fName,String lName,String phone,String address,Date weekdayStart,Date weekdayEnd,Date weekendStart ,Date endTime ,Date weekendEnd){
+	public void addBusiness(String bName,String fName,String lName,String phone,String address,String weekdayStart,String weekdayEnd,String weekendStart ,String weekendEnd){
 		log.info("IN addBusinessToDatabase\n");
 		//BusinessID is made in the database
-		String query = "INSERT INTO BUSINESS (bName,fName,lName,phone,address,weekdayStart,weekdayEnd,weekendStart, weekendEnd)" + "VALUES(" + bName + ","+ fName + ","+ lName + ","+ phone + ","+ address + ","+weekdayStart+",'" + weekdayEnd + "','" + weekendStart + "','" + endTime + "',"+weekendEnd+"');";
+		String query = "INSERT INTO BUSINESS (bName,fName,lName,phone,address,weekdayStart,weekdayEnd,weekendStart, weekendEnd)" + "VALUES(" + bName + ","+ fName + ","+ lName + ","+ phone + ","+ address + ","+weekdayStart+",'" + weekdayEnd + "','" + weekendStart + "',"+weekendEnd+"');";
 		try(Connection connect = this.connect(); Statement inject = connect.createStatement())
 		{
 			inject.executeUpdate(query);
@@ -1147,7 +1147,7 @@ public class DatabaseConnection
 			ResultSet output = inject.executeQuery();
 			while (output.next())
 			{
-				busID = output.getInt(1);
+				bID = output.getInt(1);
 				bName = output.getString(2);
 				fName= output.getString(3);
 				lName= output.getString(4);
@@ -1157,7 +1157,7 @@ public class DatabaseConnection
 				weekDayEnd = controller.strToTime(output.getString(8));
 				weekendStart = controller.strToTime(output.getString(9));
 				weekendEnd = controller.strToTime(output.getString(10));
-				getBusiness= new BusinessOwner(busID,bName,fName,lName, phone, address,weekDayStart,weekDayEnd,weekendStart,weekendEnd);	
+				getBusiness= new BusinessOwner(bID,bName,fName,lName, phone, address,weekDayStart,weekDayEnd,weekendStart,weekendEnd);	
 			}
 			output.close();
 		}
@@ -1169,5 +1169,27 @@ public class DatabaseConnection
 		return getBusiness;
 	}
 	
+	/**
+	 * add Business
+	 * @param 
+	 * @return 
+	 * @author Bryan
+	 */	
+	public void createBusiness(BusinessOwner business){
+		log.info("IN addBusinessToDatabase\n");
+		//BusinessID is made in the database
+		String query = "INSERT INTO BUSINESS (bName,fName,lName,phone,address,weekdayStart,weekdayEnd,weekendStart,weekendEnd)" + "VALUES('" + business.getBusiness() + "','" + business.getFName() + "','" + business.getLName() + "','" + business.getPhone() + "','" + business.getAddress() + "','" + business.getWeekdayStart() + "','" + business.getWeekdayEnd() + "','" + business.getWeekendStart() + "','" + business.getWeekendEnd()+"');";
+		try(Connection connect = this.connect(); Statement inject = connect.createStatement())
+		{
+			inject.executeUpdate(query);
+			log.info("Business Added - Business Name: "+business.getBusiness()+" weekdayStart: "+business.getWeekdayStart()+" weekdayEnd: "+business.getWeekdayEnd()+" weekendStart: "+business.getWeekendStart() +" weekendEnd: "+business.getWeekendEnd()+"\n");
+		}
+		catch(SQLException sqle)
+		{
+			log.warn(sqle.getMessage());
+		}
+		log.info("OUT addBusinessToDatabase\n");
+		
+	}
 	
 }

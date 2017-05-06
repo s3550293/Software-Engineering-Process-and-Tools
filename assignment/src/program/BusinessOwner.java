@@ -24,17 +24,6 @@ public class BusinessOwner extends User {
 		_weekendEnd = weekendEnd;
 	}
 
-	public BusinessOwner(String business, String fname, String lname, String phone, String address, Date weekdayStart,
-			Date weekdayEnd, Date weekendStart, Date weekendEnd) {
-		super(fname, lname, phone);
-		_business = business;
-		_address = address;
-		_weekdayStart = weekdayStart;
-		_weekdayEnd = weekdayEnd;
-		_weekendStart = weekendStart;
-		_weekendEnd = weekendEnd;
-	}
-
 	public int getID() {
 		return _id;
 	}

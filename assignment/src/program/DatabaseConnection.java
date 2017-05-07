@@ -59,20 +59,7 @@ public class DatabaseConnection
 		 * account type boolean 1 for business owner 0 for user
 		 */
 		String query = "INSERT INTO users(username, password, accountType) " + "VALUES('"+username+"','"+password+"','"+accountType+"')";
-		try(Connection connect = this.connect(); Statement inject = connect.createStatement())
-		{
-			/*
-			 * Sets the '?' values into the query
-			 */
-			inject.executeUpdate(query);
-			//System.out.println("User Added");
-			log.info("User Added\n");
-		}
-		catch(SQLException sqle)
-		{
-			//System.out.println(sqle.getMessage());
-			log.warn(sqle.getMessage());
-		}
+		executeQuery(query, "User Added\n");
 		log.info("OUT addUser\n");
 	}
 	/**
@@ -88,20 +75,7 @@ public class DatabaseConnection
 		 * account type boolean 1 for business owner 0 for user
 		 */
 		String query = "INSERT INTO CLIENTDETAILS(id, FName, LName, Email, Phone, DOB, Gender) " + "VALUES("+id+",'"+fname+"','"+lname+"','"+email+"','"+phone+"','"+dob+"','"+gender+"')";
-		try(Connection connect = this.connect(); Statement inject = connect.createStatement())
-		{
-			/*
-			 * Sets the '?' values into the query
-			 */
-			inject.executeUpdate(query);
-			//System.out.println("User Added");
-			log.info("User Added\n");
-		}
-		catch(SQLException sqle)
-		{
-			//System.out.println(sqle.getMessage());
-			log.warn(sqle.getMessage());
-		}
+		executeQuery(query, "User Added\n");
 		log.info("OUT addUserDetails\n");
 	}
 	
@@ -353,16 +327,7 @@ public class DatabaseConnection
 	{
 		log.info("IN addEmployee\n");
 		String query = "INSERT INTO EMPLOYEES(name, payRate) " + "VALUES ('" + name + "'," + payRate + ");";
-		try(Connection connect = this.connect(); Statement inject = connect.createStatement())
-		{
-			inject.executeUpdate(query);
-			log.info("Employee '"+name+"' Added\n");
-		}
-		catch(SQLException sqle)
-		{
-			//System.out.println(sqle.getMessage());
-			log.warn(sqle.getMessage());
-		}
+		executeQuery(query, "Employee '"+name+"' Added\n");
 		log.info("OUT addEmployee\n");
 	}
 	
@@ -377,18 +342,7 @@ public class DatabaseConnection
 	{
 		log.info("IN addEmployeeWorkingTimeToDatabase\n");
 		String query = "INSERT INTO EMPLOYEES_WORKING_TIMES(employeeID, dayOfWeek, startTime, endTime) " + "VALUES ("+ empID +","+ dayOfWeek +",'"+ startTime +"','"+ endTime +"');";
-		try(Connection connect = this.connect(); Statement inject = connect.createStatement())
-		{
-			inject.executeUpdate(query);
-			log.debug("Work Time Added - EmpID " + empID+ " Day Of Week: "+dayOfWeek+" Start Time: "+startTime+" End Time: "+endTime+"\n");
-		}
-		catch(SQLException sqle)
-		{
-			//System.out.println(sqle.getMessage());
-			//System.out.println(date);
-			log.warn(sqle.getMessage());
-			log.info(dayOfWeek);
-		}
+		executeQuery(query, "Work Time Added - EmpID " + empID+ " Day Of Week: "+dayOfWeek+" Start Time: "+startTime+" End Time: "+endTime+"\n");
 		log.info("OUT addEmployeeWorkingTimeToDatabase\n");
 	}
 	
@@ -400,26 +354,8 @@ public class DatabaseConnection
 	{
 		log.info("IN deleteUser\n");
 		String query = "DELETE FROM users WHERE username LIKE '" + userName + "'";
-		try(Connection connect = this.connect(); Statement inject = connect.createStatement())
-		{
-			inject.executeUpdate(query);
-			log.info("User " + userName + " deleted\n");
-		}
-		catch(SQLException sqle)
-		{
-			//System.out.println(sqle.getMessage());
-			log.warn(sqle.getMessage());
-		}
+		executeQuery(query, "User " + userName + " deleted\n");
 		log.info("OUT deleteUser\n");
-	}
-	
-	/**
-	 * Delete Booking from database
-	 * @param id - allows the user to delete a select booking
-	 */
-	public void deleteBooking(int id)
-	{
-		
 	}
 	
 	/**
@@ -522,15 +458,7 @@ public class DatabaseConnection
 		log.info("IN addBookingToDatabase\n");
 		//bookingID is made in the database
 		String query = "INSERT INTO BOOKINGS (userID,employeeID,date,startTime,endTime, serviceID,status)" + "VALUES(" + userId + ","+empID+",'" + date + "','" + startTime + "','" + endTime + "',"+service+",'" + status + "');";
-		try(Connection connect = this.connect(); Statement inject = connect.createStatement())
-		{
-			inject.executeUpdate(query);
-			log.info("Booking Added - User ID: "+userId+" Date: "+date+" Start Time: "+startTime+" End Time: "+endTime+" ServiceNmb: "+service+" Status: "+status+"\n");
-		}
-		catch(SQLException sqle)
-		{
-			log.warn(sqle.getMessage());
-		}
+		executeQuery(query, "Booking Added - User ID: "+userId+" Date: "+date+" Start Time: "+startTime+" End Time: "+endTime+" ServiceNmb: "+service+" Status: "+status+"\n");
 		log.info("OUT addBookingToDatabase\n");
 	}
 	
@@ -679,6 +607,7 @@ public class DatabaseConnection
 		log.info("IN cancelBooking\n");
 		ArrayList<Booking> bookList = getAllBooking();
 		Boolean exists = false;
+		//check if the booking exists using bookID
 		for(Booking b : bookList){
 			if(b.getBookingID() == bookID){
 				exists = true;
@@ -700,31 +629,22 @@ public class DatabaseConnection
 		}
 		catch(SQLException sqle)
 		{
-			//System.out.println(sqle.getMessage());
 			log.warn(sqle.getMessage());
 			log.info("OUT cancelBooking\n");
 			return false;
 		}
 	}
 	/**
+	 * Clear an employee's working time using employeeID
 	 * @author Luke Mason
 	 * @param EmployeeID
-	 * @return
+	 * @return Boolean true or false
 	 */
 	public boolean clearWorkTimes(int employeeID)
 	{
 		log.info("IN deleteUser\n");
 		String query = "DELETE FROM  EMPLOYEES_WORKING_TIMES WHERE employeeID = '" + employeeID + "';";
-		try(Connection connect = this.connect(); Statement inject = connect.createStatement())
-		{
-			inject.executeUpdate(query);
-			log.info("WorkTimes for ID " + employeeID + " deleted!!\n");
-		}
-		catch(SQLException sqle)
-		{
-			//System.out.println(sqle.getMessage());
-			log.warn(sqle.getMessage());
-		}
+		executeQuery(query, "WorkTimes for ID " + employeeID + " deleted!!\n");
 		log.info("OUT deleteUser\n");
 		return false;
 	}
@@ -738,16 +658,7 @@ public class DatabaseConnection
 	{
 		log.info("IN updateEmployeeName\n");
 		String query = "UPDATE employees SET name = '"+name+"' WHERE employeeID = "+empID+";";
-		try(Connection connect = this.connect(); Statement inject = connect.createStatement())
-		{
-			inject.executeUpdate(query);
-			log.info("name for ID " + empID + " updated\n");
-		}
-		catch(SQLException sqle)
-		{
-			//System.out.println(sqle.getMessage());
-			log.warn(sqle.getMessage());
-		}
+		executeQuery(query, "name for ID " + empID + " updated\n");
 		log.info("OUT updateEmployeeName\n");
 	}
 	
@@ -760,16 +671,7 @@ public class DatabaseConnection
 	{
 		log.info("IN updateEmployeePayRate\n");
 		String query = "UPDATE employees SET payRate = '"+pRate+"' WHERE employeeID = "+empID+";";
-		try(Connection connect = this.connect(); Statement inject = connect.createStatement())
-		{
-			inject.executeUpdate(query);
-			log.info("name for ID " + empID + " updated\n");
-		}
-		catch(SQLException sqle)
-		{
-			//System.out.println(sqle.getMessage());
-			log.warn(sqle.getMessage());
-		}
+		executeQuery(query, "name for ID " + empID + " updated\n");
 		log.info("OUT updateEmployeePayRate\n");
 	}
 	
@@ -782,16 +684,7 @@ public class DatabaseConnection
 	{
 		log.info("IN deleteEmployee\n");
 		String query = "DELETE FROM EMPLOYEES WHERE employeeID = '" + employeeID + "';";
-		try(Connection connect = this.connect(); Statement inject = connect.createStatement())
-		{
-			inject.executeUpdate(query);
-			log.info("Employee " + employeeID + " deleted!\n");
-		}
-		catch(SQLException sqle)
-		{
-			//System.out.println(sqle.getMessage());
-			log.warn(sqle.getMessage());
-		}
+		executeQuery(query, "Employee " + employeeID + " deleted!\n");
 		log.info("OUT deleteEmployee\n");
 		return false;
 	}
@@ -896,10 +789,19 @@ public class DatabaseConnection
 	public void addSerice(Service service)
 	{
 		String query = "INSERT INTO SERVICES(service, length, cost) " + "VALUES('"+service.getName()+"',"+service.getLengthMin()+","+service.getPrice()+")";
+		executeQuery(query, "User Added\n");
+	}
+	
+	/**
+	 * Execute Query on the database
+	 * @param query
+	 * @param loginfo
+	 */
+	public void executeQuery(String query, String loginfo){
 		try(Connection connect = this.connect(); Statement inject = connect.createStatement())
 		{
 			inject.executeUpdate(query);
-			log.info("User Added\n");
+			log.info(loginfo);
 		}
 		catch(SQLException sqle)
 		{
@@ -1061,8 +963,8 @@ public class DatabaseConnection
 	}
 	
 	/**
-	 * add Business
-	 * @param 
+	 * add Business 
+	 * @param bName, fName, lName, phone, address, weekdayStart, weekdayEnd, weekdayEnd, weekendStart, endTime, weekendEnd
 	 * @return 
 	 * @author Bryan
 	 */	
@@ -1142,7 +1044,7 @@ public class DatabaseConnection
 		try (Connection connect = this.connect(); PreparedStatement  inject  = connect.prepareStatement(query))
 		{
 			//Sets '?' to user name in the query
-			//crates a user from the found information
+			//creates a user from the found information
 			inject.setInt(1, busID);
 			ResultSet output = inject.executeQuery();
 			while (output.next())

@@ -358,7 +358,7 @@ public class Controller
 	 * @param date
 	 * @param startTime
 	 * @param endTime
-	 * @return
+	 * @return List of Available Employee's object
 	 */
 	public List<Employee> getAvailableEmployeesForSpecifiedTime(String date, String startTime, String endTime)
 	{
@@ -378,21 +378,8 @@ public class Controller
 		log.debug("Booking End Time = "+endTime2+"\n");
 		long bookingStartTime = getTimeFrom1970(date2, startTime2);
 		long bookingEndTime = getTimeFrom1970(date2, endTime2);
-		//Check if employees are already booked for that time
-		if(!bookingsOnDate.isEmpty())
-		{
-			for(Booking bk: bookingsOnDate)
-			{
-				//compare booking end time to booking start time
-				long booking2EndTime = getTimeFrom1970(bk.getDate(), bk.getEndTime());
-				if(booking2EndTime > bookingStartTime)//If index booking end time is NOT less than booking start time(or equal to)
-				{
-					log.debug(booking2EndTime+"\n");
-					log.debug(bookingStartTime+"\n");
-					employeesNotAvailable.add(connect.getEmployee(bk.getEmployeeID()));
-				}
-			}
-		}
+		//Check if employees are already booked for that time and add to 'employeesNotAvailable' list
+		employeesNotAvailable = checkForBookedEmployeeThenAddToList(bookingsOnDate, bookingStartTime, employeesNotAvailable);
 		for(Employee emp: employeesNotAvailable)
 		{
 			log.info(emp);
@@ -410,27 +397,19 @@ public class Controller
 				Date Date2 = strToDate(strDate2);
 				long employeeStartTime = getTimeFrom1970(Date1,ewt.getStartTime());
 				long employeeEndTime = getTimeFrom1970(Date2,ewt.getEndTime());
-				if(bookingEndTime <= employeeEndTime)//If booking end time is less than employee work end time(or equal to)
-				{
-					log.debug("Booking Date End Time = "+bookingEndTime+"\n");
-					log.debug("<=Employee Work End Time = "+employeeEndTime+"\n");
-					if(bookingStartTime >= employeeStartTime)//If booking start time is later than employee work start time(or equal to)
+				
+				if(checkValidBoundBetweenBookingAndEmployeeTimes(bookingStartTime, bookingEndTime, employeeStartTime, employeeEndTime)){
+					boolean available = true;
+					for(Employee emp: employeesNotAvailable)
 					{
-						log.debug("Booking Date Start Time = "+bookingStartTime+"\n");
-						log.debug(">=Employee Work Start Time = "+employeeStartTime+"\n");
-
-						boolean available = true;
-						for(Employee emp: employeesNotAvailable)
+						if(emp.getId() == ewt.getEmpID())//If employee is already taken
 						{
-							if(emp.getId() == ewt.getEmpID())//If employee is already taken
-							{
-								available = false;
-							}
+							available = false;
 						}
-						if(available)
-						{
-							employeesWorkingInTimeBlock.add(connect.getEmployee(ewt.getEmpID()));
-						}
+					}
+					if(available)
+					{
+						employeesWorkingInTimeBlock.add(connect.getEmployee(ewt.getEmpID()));
 					}
 				}
 			}		
@@ -438,6 +417,61 @@ public class Controller
 		log.info("OUT getAvailableEmployeesForBooking");	
 		return employeesWorkingInTimeBlock;
 	}
+	
+	/**
+	 * @author Luke Mason
+	 * @editor David
+	 * Check if employee are already booked for the time slot
+	 * @param bookingsOnDate
+	 * @param bookingStartTime
+	 * @param employeesNotAvailable
+	 * @return List of Employee's object
+	 */
+	public ArrayList<Employee> checkForBookedEmployeeThenAddToList(ArrayList<Booking> bookingsOnDate, long bookingStartTime, ArrayList<Employee> employeesNotAvailable){
+		DatabaseConnection connect = new DatabaseConnection();
+		//Check if employees are already booked for that time
+		if(!bookingsOnDate.isEmpty())
+		{
+			for(Booking bk: bookingsOnDate)
+			{
+				//compare booking end time to booking start time
+				long booking2EndTime = getTimeFrom1970(bk.getDate(), bk.getEndTime());
+				if(booking2EndTime > bookingStartTime)//If index booking end time is NOT less than booking start time(or equal to)
+				{
+					log.debug(booking2EndTime+"\n");
+					log.debug(bookingStartTime+"\n");
+					employeesNotAvailable.add(connect.getEmployee(bk.getEmployeeID()));
+				}
+			}
+		}
+		return employeesNotAvailable;
+	}
+	
+	/**
+	 * @author Luke Mason
+	 * @editor David 
+	 * Check if booking time's bound is equal or within the employee working time's bound.
+	 * @param bookingStartTime
+	 * @param bookingEndTime
+	 * @param employeeStartTime
+	 * @param employeeEndTime
+	 * @return true or false
+	 */
+	public boolean checkValidBoundBetweenBookingAndEmployeeTimes(long bookingStartTime, long bookingEndTime, long employeeStartTime, long employeeEndTime){
+		if(bookingEndTime <= employeeEndTime)//If booking end time is less than employee work end time(or equal to)
+		{
+			log.debug("Booking Date End Time = "+bookingEndTime+"\n");
+			log.debug("<=Employee Work End Time = "+employeeEndTime+"\n");
+			if(bookingStartTime >= employeeStartTime)//If booking start time is later than employee work start time(or equal to)
+			{
+				log.debug("Booking Date Start Time = "+bookingStartTime+"\n");
+				log.debug(">=Employee Work Start Time = "+employeeStartTime+"\n");
+				return true;
+			}
+		}
+		return false;
+	}
+	
 	
 	public Date calEnTime(Date staTime, int length)
 	{

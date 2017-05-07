@@ -61,11 +61,11 @@ public class BusinessOwner extends User {
 	}
 
 	public void setWeekendStart(Date weekendS) {
-		_weekdayStart = weekendS;
+		_weekendStart = weekendS;
 	}
 
-	public void setWeekdendEnd(Date weekendE) {
-		_weekdayStart = weekendE;
+	public void setWeekendEnd(Date weekendE) {
+		_weekendEnd = weekendE;
 	}
 
 	public void setBusiness(String business) {

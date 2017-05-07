@@ -42,7 +42,7 @@ public class Controller
 		for (int i = 0; i < string.length(); i++)
 		{
 			// checks if the letter is not an upper case letter
-			if ((int) string.charAt(i) < 97 || (int) string.charAt(i) > 122 || (int) string.charAt(i) < 65||(int) string.charAt(i) > 90)// checks if the letter is not a lowercase letter
+			if ((int) string.charAt(i) < 65 || (int) string.charAt(i) > 122 || ((int) string.charAt(i) < 97 &&(int) string.charAt(i) > 90))// checks if the letter is not a lowercase letter
 			{
 					return true;					
 			}

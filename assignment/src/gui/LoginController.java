@@ -44,12 +44,12 @@ public class LoginController implements Initializable {
 	}
 	
 	/**
-	 * Logs User in
+	 * Check login detail and log the user in, 
+	 * and terminate the application if maximum failed attempts reach
 	 * @author Joseph Garner
 	 */
 	@FXML
 	public void loginAction() {
-		//TODO
 		Stage loginstage = (Stage) btnLogin.getScene().getWindow();
 		int loginCheck = loginFuction.logInProcess(txtUserLogin.getText(), txtPassLogin.getText());
 		if(loginCount < 10){
@@ -83,7 +83,6 @@ public class LoginController implements Initializable {
 	 */
 	@FXML
 	public void registerAction(){
-		//TODO
 		try {
             Stage secondaryStage = new Stage();
             secondaryStage.getIcons().add(new Image("images/ic_collections_bookmark_black_48dp_2x.png"));

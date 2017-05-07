@@ -8,13 +8,13 @@ import org.apache.log4j.Logger;
 public class Login
 {
 	private static Logger log = Logger.getLogger(Login.class);
-	private Controller controller = new Controller();
 	
 	public Login(){
 		log.setLevel(Level.DEBUG);
 	}
 	
 	/**
+	 * @author David, Bryan
 	 * Validate the user name and password if they are valid or invalid, and determine user's type
 	 * @param userName
 	 * @param pass

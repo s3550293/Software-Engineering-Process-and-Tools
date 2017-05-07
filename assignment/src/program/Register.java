@@ -17,7 +17,11 @@ public class Register
 		connect.addUserDetails(connect.getUser(username).getID(),fname,lname, email, mobilenumber, dob, gender);	
 	}
 	
-	//This method checks if the username is equal to one already in the database
+	/**
+	 * @author Joseph Garner
+	 * Checks if the username is equal to one already in the database
+	 * @return true if username already taken, else false
+	 */
 	public boolean checkTakenUsername(String username)
 	{
 		boolean output = true;
@@ -31,7 +35,14 @@ public class Register
 		}
 		return output;
 	}
-	//Checks the length of the password
+	
+	/**
+	 * @author Joseph Garner
+	 * Checks and validate password
+	 * Password must contain at least 1 upper-case letter, 1 lower-case letter, 1 number
+	 * and the length is 6 at the minimum
+	 * @return true if the pass complies to standard, else false
+	 */
 	public boolean checkPassword(String _password)
 	{
 		boolean upper=false;

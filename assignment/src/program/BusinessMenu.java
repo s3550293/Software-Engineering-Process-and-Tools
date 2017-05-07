@@ -39,7 +39,7 @@ public class BusinessMenu
 				/**
 				 * Checks if employee pay rate is less than 0 (Error)
 				 * @param employeePayRate
-				 * @return
+				 * @return true, or false if pay rate is out of bound
 				 */
 				public boolean checkEmployeePayRate(double employeePayRate)
 				{
@@ -70,6 +70,7 @@ public class BusinessMenu
 				
 				/**
 				 * Gets the last employeeID in the database
+				 * @return an id number of the last employee
 				 */
 				public int getLastEmployeeId()
 				{
@@ -193,6 +194,7 @@ public class BusinessMenu
 				 * @param btnSatMorning
 				 * @param btnSatAfternoon
 				 * @param btnSatEvening
+				 * @return true
 				 */
 				public boolean addWorkingTimes(int id,boolean btnSunMorning,boolean btnSunAfternoon,boolean btnSunEvening,boolean btnMonMorning,boolean btnMonAfternoon,boolean btnMonEvening,boolean btnTueMorning,boolean btnTueAfternoon,boolean btnTueEvening,boolean btnWedMorning,boolean btnWedAfternoon,boolean btnWedEvening,boolean btnThurMorning,boolean btnThurAfternoon,boolean btnThurEvening,boolean btnFriMorning,boolean btnFriAfternoon,boolean btnFriEvening,boolean btnSatMorning,boolean btnSatAfternoon,boolean btnSatEvening)
 				{
@@ -265,7 +267,7 @@ public class BusinessMenu
 				/**
 				 * Assigns timeBlock number to a startTime and endTime
 				 * @param checkTimes
-				 * @return
+				 * @return array of 2 String's objects; Start Time and End Times
 				 */
 				public String[] getStartEndTimes(int checkTimes)
 				{
@@ -309,14 +311,15 @@ public class BusinessMenu
 				}
 			
 				/**
-				 * checks return value of checkWorkingTimes and getStartEndTimes. Then Calls set7dayRosterTime
+				 * Checks return value of checkWorkingTimes and getStartEndTimes. 
+				 * Then Calls set7dayRosterTime.
 				 * @param day
 				 * @param employeeID
 				 * @param date
 				 * @param morning
 				 * @param afternoon
 				 * @param evening
-				 * @return
+				 * @return true, or false if invalid
 				 */
 				public boolean addDayWorkingTime(int employeeID,int dayOfWeek,boolean morning, boolean afternoon, boolean evening)
 				{
@@ -346,10 +349,11 @@ public class BusinessMenu
 				}
 				
 				/**
-				 * Give a number representing a combination of morning,afternoon and evening
+				 * Get Time Block of the day from a combination of morning, afternoon and evening
 				 * @param startTime
 				 * @param endTime
-				 * @return
+				 * @return an integer representing a combination of morning,afternoon and evening, 
+				 * 			-1 if time block is invalid
 				 */
 				public int getTimeBlock(String startTime, String endTime)
 				{

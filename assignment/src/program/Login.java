@@ -15,19 +15,18 @@ public class Login
 	}
 	
 	/**
-	 * 
+	 * Validate the user name and password if they are valid or invalid, and determine user's type
 	 * @param userName
 	 * @param pass
 	 * @return 0 for valid Customer
 	 * 		   1 for valid Business Owner
-	 *        -1 for non-existent user
+	 *        -1 for nonexistent user
 	 *        -2 for incorrect password
 	 *        -3 for empty user name or password
 	 */
 	public int logInProcess(String userName, String pass){
 		boolean passCheck = false;
 		DatabaseConnection connect = new DatabaseConnection();
-		
 	
 		if(userName.equals(connect.getUser(userName).getUsername()))
 		{
@@ -37,11 +36,11 @@ public class Login
 				{
 					passCheck=true;
 					if(connect.getUser(userName).getAccountType() == 1){
-						controller.setUser(connect.getUser(userName));
+						Controller.setUser(connect.getUser(userName));
 						log.debug("LOGGER: User - "+connect.getUser(userName).getFullName());
 						return 1;
 					}else{
-						controller.setUser(connect.getUser(userName));
+						Controller.setUser(connect.getUser(userName));
 						log.debug("LOGGER: User - "+connect.getUser(userName).getFullName());
 						return 0;
 					}

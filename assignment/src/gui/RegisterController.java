@@ -85,7 +85,7 @@ public class RegisterController implements Initializable {
 		cmbMonth.valueProperty().addListener(new ChangeListener<String>() {
 	        @Override public void changed(ObservableValue ov, String t, String t1) {
 	        	log.debug("LOGGER: t1 value - "+t1);
-	        	if(t1.equals("4") || t1.equals("6") || t1.equals("10") || t1.equals("11")){
+	        	if(t1.equals("4") || t1.equals("6") || t1.equals("9") || t1.equals("11")){
 	        		cmbDay.getItems().clear();
 	        		List<String> listDay = new ArrayList<String>();
 	        		for(int i =1; i<31;i++){listDay.add(Integer.toString(i));}

@@ -126,12 +126,11 @@ public class SetupController implements Initializable {
 				program.messageBox("ERROR", "Error", "Closing Hours Has Not Been Chosen", "Please select a time");
 				return;
 			}
+			
 			business.setWeekdayStart(program.strToTime(cmbMFOpen.getSelectionModel().getSelectedItem()));
 			business.setWeekdayEnd(program.strToTime(cmbMFClose.getSelectionModel().getSelectedItem()));
 			business.setWeekendStart(program.strToTime(cmbSSOpen.getSelectionModel().getSelectedItem()));
 			business.setWeekendEnd(program.strToTime(cmbSSClose.getSelectionModel().getSelectedItem()));
-			System.out.println(business.getWeekdayStart());
-			System.out.println(business.getWeekendEnd());
 			if(business.getWeekdayStart().after(business.getWeekdayEnd()))
 			{
 				program.messageBox("ERROR", "Error", "Invalid choice. Open hours later than closing hours", "");
@@ -144,6 +143,7 @@ public class SetupController implements Initializable {
 			}
 			stkpSelectColor.setVisible(true);
 			stkpTimeSlot.setVisible(false);
+			createDB();
 			createBO();
 			return;
 		}

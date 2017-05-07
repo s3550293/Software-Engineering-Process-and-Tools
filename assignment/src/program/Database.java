@@ -112,7 +112,7 @@ public class Database
 				+ "FOREIGN KEY(bookingID) REFERENCES BOOKINGS(id),"
 				+ "FOREIGN KEY(serviceID) REFERENCES SERVICES(id));";
 		String queryBusiness = "CREATE TABLE IF NOT EXISTS BUSINESS (" 
-				+ "id interger PRIMARY KEY AUTOINCREMENT,"
+				+ "id INTEGER PRIMARY KEY AUTOINCREMENT,"
 				+ "bName VARCHAR(30) NOT NULL,"
 				+ "fName VARCHAR(30) NOT NULL,"
 				+ "lName VARCHAR(30) NOT NULL,"

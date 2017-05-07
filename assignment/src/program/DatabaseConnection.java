@@ -1080,7 +1080,7 @@ public class DatabaseConnection
 	public void createBusiness(BusinessOwner business){
 		log.info("IN addBusinessToDatabase\n");
 		//BusinessID is made in the database
-		String query = "INSERT INTO BUSINESS (bName,fName,lName,phone,address,weekdayStart,weekdayEnd,weekendStart,weekendEnd)" + "VALUES('" + business.getBusiness() + "','" + business.getFName() + "','" + business.getLName() + "','" + business.getPhone() + "','" + business.getAddress() + "','" + business.getWeekdayStart() + "','" + business.getWeekdayEnd() + "','" + business.getWeekendStart() + "','" + business.getWeekendEnd()+"');";
+		String query = "INSERT INTO BUSINESS (bName,fName,lName,phone,address,weekdayStart,weekdayEnd,weekendStart,weekendEnd)" + "VALUES('" + business.getBusiness() + "','" + business.getFName() + "','" + business.getLName() + "','" + business.getPhone() + "','" + business.getAddress() + "','" + controller.timeToStr(business.getWeekdayStart()) + "','" +controller.timeToStr(business.getWeekdayEnd()) + "','" + controller.timeToStr(business.getWeekendStart()) + "','" +controller.timeToStr(business.getWeekendEnd())+"');";
 		try(Connection connect = this.connect(); Statement inject = connect.createStatement())
 		{
 			inject.executeUpdate(query);

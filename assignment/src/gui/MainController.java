@@ -64,7 +64,7 @@ public class MainController implements Initializable {
 	}
 
 	/**************
-	 * B Owner
+	 * Business Owner
 	 **************/
 
 	@FXML
@@ -336,41 +336,7 @@ public class MainController implements Initializable {
 						Calendar date = Calendar.getInstance();
 						date.set(Calendar.HOUR_OF_DAY, 8);
 						date.set(Calendar.MINUTE, 0);
-						for (int i = 0; i < 8; i++) {
-							if (i == 0) {
-								togbtnTimeSlot1.setText(
-										date.get(Calendar.HOUR_OF_DAY) + ":" + date.get(Calendar.MINUTE) + "0");
-							}
-							if (i == 1) {
-								togbtnTimeSlot2
-										.setText(date.get(Calendar.HOUR_OF_DAY) + ":" + date.get(Calendar.MINUTE));
-							}
-							if (i == 2) {
-								togbtnTimeSlot3.setText(
-										date.get(Calendar.HOUR_OF_DAY) + ":" + date.get(Calendar.MINUTE) + "0");
-							}
-							if (i == 3) {
-								togbtnTimeSlot4
-										.setText(date.get(Calendar.HOUR_OF_DAY) + ":" + date.get(Calendar.MINUTE));
-							}
-							if (i == 4) {
-								togbtnTimeSlot5.setText(
-										date.get(Calendar.HOUR_OF_DAY) + ":" + date.get(Calendar.MINUTE) + "0");
-							}
-							if (i == 5) {
-								togbtnTimeSlot6
-										.setText(date.get(Calendar.HOUR_OF_DAY) + ":" + date.get(Calendar.MINUTE));
-							}
-							if (i == 6) {
-								togbtnTimeSlot7.setText(
-										date.get(Calendar.HOUR_OF_DAY) + ":" + date.get(Calendar.MINUTE) + "0");
-							}
-							if (i == 7) {
-								togbtnTimeSlot8
-										.setText(date.get(Calendar.HOUR_OF_DAY) + ":" + date.get(Calendar.MINUTE));
-							}
-							date.add(Calendar.MINUTE, 30);
-						}
+						diplayBookingTime(date);
 						checkBookingTime();
 					} else if (togbtnAft.isSelected()) {
 						togbtnMorn.setSelected(false);
@@ -380,41 +346,7 @@ public class MainController implements Initializable {
 						date.set(Calendar.HOUR_OF_DAY, 12);
 						date.set(Calendar.MINUTE, 00);
 						log.debug("LOGGER: date - " + date.get(Calendar.HOUR_OF_DAY));
-						for (int i = 0; i < 8; i++) {
-							if (i == 0) {
-								togbtnTimeSlot1.setText(
-										date.get(Calendar.HOUR_OF_DAY) + ":" + date.get(Calendar.MINUTE) + "0");
-							}
-							if (i == 1) {
-								togbtnTimeSlot2
-										.setText(date.get(Calendar.HOUR_OF_DAY) + ":" + date.get(Calendar.MINUTE));
-							}
-							if (i == 2) {
-								togbtnTimeSlot3.setText(
-										date.get(Calendar.HOUR_OF_DAY) + ":" + date.get(Calendar.MINUTE) + "0");
-							}
-							if (i == 3) {
-								togbtnTimeSlot4
-										.setText(date.get(Calendar.HOUR_OF_DAY) + ":" + date.get(Calendar.MINUTE));
-							}
-							if (i == 4) {
-								togbtnTimeSlot5.setText(
-										date.get(Calendar.HOUR_OF_DAY) + ":" + date.get(Calendar.MINUTE) + "0");
-							}
-							if (i == 5) {
-								togbtnTimeSlot6
-										.setText(date.get(Calendar.HOUR_OF_DAY) + ":" + date.get(Calendar.MINUTE));
-							}
-							if (i == 6) {
-								togbtnTimeSlot7.setText(
-										date.get(Calendar.HOUR_OF_DAY) + ":" + date.get(Calendar.MINUTE) + "0");
-							}
-							if (i == 7) {
-								togbtnTimeSlot8
-										.setText(date.get(Calendar.HOUR_OF_DAY) + ":" + date.get(Calendar.MINUTE));
-							}
-							date.add(Calendar.MINUTE, 30);
-						}
+						diplayBookingTime(date);
 						checkBookingTime();
 					} else {
 						togbtnMorn.setSelected(false);
@@ -424,41 +356,7 @@ public class MainController implements Initializable {
 						date.set(Calendar.HOUR_OF_DAY, 16);
 						date.set(Calendar.MINUTE, 0);
 						log.debug("LOGGER: date - " + date.get(Calendar.HOUR_OF_DAY));
-						for (int i = 0; i < 8; i++) {
-							if (i == 0) {
-								togbtnTimeSlot1.setText(
-										date.get(Calendar.HOUR_OF_DAY) + ":" + date.get(Calendar.MINUTE) + "0");
-							}
-							if (i == 1) {
-								togbtnTimeSlot2
-										.setText(date.get(Calendar.HOUR_OF_DAY) + ":" + date.get(Calendar.MINUTE));
-							}
-							if (i == 2) {
-								togbtnTimeSlot3.setText(
-										date.get(Calendar.HOUR_OF_DAY) + ":" + date.get(Calendar.MINUTE) + "0");
-							}
-							if (i == 3) {
-								togbtnTimeSlot4
-										.setText(date.get(Calendar.HOUR_OF_DAY) + ":" + date.get(Calendar.MINUTE));
-							}
-							if (i == 4) {
-								togbtnTimeSlot5.setText(
-										date.get(Calendar.HOUR_OF_DAY) + ":" + date.get(Calendar.MINUTE) + "0");
-							}
-							if (i == 5) {
-								togbtnTimeSlot6
-										.setText(date.get(Calendar.HOUR_OF_DAY) + ":" + date.get(Calendar.MINUTE));
-							}
-							if (i == 6) {
-								togbtnTimeSlot7.setText(
-										date.get(Calendar.HOUR_OF_DAY) + ":" + date.get(Calendar.MINUTE) + "0");
-							}
-							if (i == 7) {
-								togbtnTimeSlot8
-										.setText(date.get(Calendar.HOUR_OF_DAY) + ":" + date.get(Calendar.MINUTE));
-							}
-							date.add(Calendar.MINUTE, 30);
-						}
+						diplayBookingTime(date);
 						checkBookingTime();
 					}
 				}
@@ -515,6 +413,50 @@ public class MainController implements Initializable {
 		}
 	}
 
+	/**
+	 * @author Joseph Garner
+	 * @editor David
+	 * Display Booking Time for the three shifts(morning, afternoon, evening) in 30 minutes interval
+	 * @param calendar
+	 */
+	public void diplayBookingTime(Calendar date){
+		for (int i = 0; i < 8; i++) {
+			if (i == 0) {
+				togbtnTimeSlot1.setText(
+						date.get(Calendar.HOUR_OF_DAY) + ":" + date.get(Calendar.MINUTE) + "0");
+			}
+			if (i == 1) {
+				togbtnTimeSlot2
+						.setText(date.get(Calendar.HOUR_OF_DAY) + ":" + date.get(Calendar.MINUTE));
+			}
+			if (i == 2) {
+				togbtnTimeSlot3.setText(
+						date.get(Calendar.HOUR_OF_DAY) + ":" + date.get(Calendar.MINUTE) + "0");
+			}
+			if (i == 3) {
+				togbtnTimeSlot4
+						.setText(date.get(Calendar.HOUR_OF_DAY) + ":" + date.get(Calendar.MINUTE));
+			}
+			if (i == 4) {
+				togbtnTimeSlot5.setText(
+						date.get(Calendar.HOUR_OF_DAY) + ":" + date.get(Calendar.MINUTE) + "0");
+			}
+			if (i == 5) {
+				togbtnTimeSlot6
+						.setText(date.get(Calendar.HOUR_OF_DAY) + ":" + date.get(Calendar.MINUTE));
+			}
+			if (i == 6) {
+				togbtnTimeSlot7.setText(
+						date.get(Calendar.HOUR_OF_DAY) + ":" + date.get(Calendar.MINUTE) + "0");
+			}
+			if (i == 7) {
+				togbtnTimeSlot8
+						.setText(date.get(Calendar.HOUR_OF_DAY) + ":" + date.get(Calendar.MINUTE));
+			}
+			date.add(Calendar.MINUTE, 30);
+		}
+	}
+	
 	/**
 	 * Returns User to login
 	 * 
@@ -1347,6 +1289,44 @@ public class MainController implements Initializable {
 	}
 
 	/**
+	 * @author Luke Mason
+	 * @editor David
+	 * Display Toggle buttons status, from the time block given 
+	 * @param timeBlock
+	 * @param btnMorn
+	 * @param btnAft
+	 * @param btnEven
+	 */
+	public void diplayTogglesFromTimeBlock(int timeBlock, ToggleButton btnMorn, ToggleButton btnAft, ToggleButton btnEven){
+		if (timeBlock == 1) {
+			btnMorn.setSelected(true);
+			btnAft.setSelected(true);
+			btnEven.setSelected(true);
+		} else if (timeBlock == 2) {
+			btnMorn.setSelected(true);
+			btnAft.setSelected(true);
+			btnEven.setSelected(false);
+		} else if (timeBlock == 3) {
+			btnMorn.setSelected(false);
+			btnAft.setSelected(true);
+			btnEven.setSelected(true);
+		} else if (timeBlock == 4) {
+			btnMorn.setSelected(true);
+			btnAft.setSelected(false);
+			btnEven.setSelected(false);
+		} else if (timeBlock == 5) {
+			btnMorn.setSelected(false);
+			btnAft.setSelected(true);
+			btnEven.setSelected(false);
+		} else if (timeBlock == 6) {
+			btnMorn.setSelected(false);
+			btnAft.setSelected(false);
+			btnEven.setSelected(true);
+		}
+	}
+	
+	
+	/**
 	 * sets a certain day's toggles according to a combination of morning,
 	 * afternoon and evening
 	 * 
@@ -1356,193 +1336,25 @@ public class MainController implements Initializable {
 	public void changeButtonsOfDay(int dayOfWeek, int timeBlock) {
 		switch (dayOfWeek) {
 		case 1:
-			if (timeBlock == 1) {
-				btnSunMorning.setSelected(true);
-				btnSunAfternoon.setSelected(true);
-				btnSunEvening.setSelected(true);
-			} else if (timeBlock == 2) {
-				btnSunMorning.setSelected(true);
-				btnSunAfternoon.setSelected(true);
-				btnSunEvening.setSelected(false);
-			} else if (timeBlock == 3) {
-				btnSunMorning.setSelected(false);
-				btnSunAfternoon.setSelected(true);
-				btnSunEvening.setSelected(true);
-			} else if (timeBlock == 4) {
-				btnSunMorning.setSelected(true);
-				btnSunAfternoon.setSelected(false);
-				btnSunEvening.setSelected(false);
-			} else if (timeBlock == 5) {
-				btnSunMorning.setSelected(false);
-				btnSunAfternoon.setSelected(true);
-				btnSunEvening.setSelected(false);
-			} else if (timeBlock == 6) {
-				btnSunMorning.setSelected(false);
-				btnSunAfternoon.setSelected(false);
-				btnSunEvening.setSelected(true);
-			}
+			diplayTogglesFromTimeBlock(timeBlock, btnSunMorning, btnSunAfternoon, btnSunEvening);
 			break;
 		case 2:
-			if (timeBlock == 1) {
-				btnMonMorning.setSelected(true);
-				btnMonAfternoon.setSelected(true);
-				btnMonEvening.setSelected(true);
-			} else if (timeBlock == 2) {
-				btnMonMorning.setSelected(true);
-				btnMonAfternoon.setSelected(true);
-				btnMonEvening.setSelected(false);
-			} else if (timeBlock == 3) {
-				btnMonMorning.setSelected(false);
-				btnMonAfternoon.setSelected(true);
-				btnMonEvening.setSelected(true);
-			} else if (timeBlock == 4) {
-				btnMonMorning.setSelected(true);
-				btnMonAfternoon.setSelected(false);
-				btnMonEvening.setSelected(false);
-			} else if (timeBlock == 5) {
-				btnMonMorning.setSelected(false);
-				btnMonAfternoon.setSelected(true);
-				btnMonEvening.setSelected(false);
-			} else if (timeBlock == 6) {
-				btnMonMorning.setSelected(false);
-				btnMonAfternoon.setSelected(false);
-				btnMonEvening.setSelected(true);
-			}
+			diplayTogglesFromTimeBlock(timeBlock, btnMonMorning, btnMonAfternoon, btnMonEvening);
 			break;
 		case 3:
-			if (timeBlock == 1) {
-				btnTueMorning.setSelected(true);
-				btnTueAfternoon.setSelected(true);
-				btnTueEvening.setSelected(true);
-			} else if (timeBlock == 2) {
-				btnTueMorning.setSelected(true);
-				btnTueAfternoon.setSelected(true);
-				btnTueEvening.setSelected(false);
-			} else if (timeBlock == 3) {
-				btnTueMorning.setSelected(false);
-				btnTueAfternoon.setSelected(true);
-				btnTueEvening.setSelected(true);
-			} else if (timeBlock == 4) {
-				btnTueMorning.setSelected(true);
-				btnTueAfternoon.setSelected(false);
-				btnTueEvening.setSelected(false);
-			} else if (timeBlock == 5) {
-				btnTueMorning.setSelected(false);
-				btnTueAfternoon.setSelected(true);
-				btnTueEvening.setSelected(false);
-			} else if (timeBlock == 6) {
-				btnTueMorning.setSelected(false);
-				btnTueAfternoon.setSelected(false);
-				btnTueEvening.setSelected(true);
-			}
+			diplayTogglesFromTimeBlock(timeBlock, btnTueMorning, btnTueAfternoon, btnTueEvening);
 			break;
 		case 4:
-			if (timeBlock == 1) {
-				btnWedMorning.setSelected(true);
-				btnWedAfternoon.setSelected(true);
-				btnWedEvening.setSelected(true);
-			} else if (timeBlock == 2) {
-				btnWedMorning.setSelected(true);
-				btnWedAfternoon.setSelected(true);
-				btnWedEvening.setSelected(false);
-			} else if (timeBlock == 3) {
-				btnWedMorning.setSelected(false);
-				btnWedAfternoon.setSelected(true);
-				btnWedEvening.setSelected(true);
-			} else if (timeBlock == 4) {
-				btnWedMorning.setSelected(true);
-				btnWedAfternoon.setSelected(false);
-				btnWedEvening.setSelected(false);
-			} else if (timeBlock == 5) {
-				btnWedMorning.setSelected(false);
-				btnWedAfternoon.setSelected(true);
-				btnWedEvening.setSelected(false);
-			} else if (timeBlock == 6) {
-				btnWedMorning.setSelected(false);
-				btnWedAfternoon.setSelected(false);
-				btnWedEvening.setSelected(true);
-			}
+			diplayTogglesFromTimeBlock(timeBlock, btnWedMorning, btnWedAfternoon, btnWedEvening);
 			break;
 		case 5:
-			if (timeBlock == 1) {
-				btnThurMorning.setSelected(true);
-				btnThurAfternoon.setSelected(true);
-				btnThurEvening.setSelected(true);
-			} else if (timeBlock == 2) {
-				btnThurMorning.setSelected(true);
-				btnThurAfternoon.setSelected(true);
-				btnThurEvening.setSelected(false);
-			} else if (timeBlock == 3) {
-				btnThurMorning.setSelected(false);
-				btnThurAfternoon.setSelected(true);
-				btnThurEvening.setSelected(true);
-			} else if (timeBlock == 4) {
-				btnThurMorning.setSelected(true);
-				btnThurAfternoon.setSelected(false);
-				btnThurEvening.setSelected(false);
-			} else if (timeBlock == 5) {
-				btnThurMorning.setSelected(false);
-				btnThurAfternoon.setSelected(true);
-				btnThurEvening.setSelected(false);
-			} else if (timeBlock == 6) {
-				btnThurMorning.setSelected(false);
-				btnThurAfternoon.setSelected(false);
-				btnThurEvening.setSelected(true);
-			}
+			diplayTogglesFromTimeBlock(timeBlock, btnThurMorning, btnThurAfternoon, btnThurEvening);
 			break;
 		case 6:
-			if (timeBlock == 1) {
-				btnFriMorning.setSelected(true);
-				btnFriAfternoon.setSelected(true);
-				btnFriEvening.setSelected(true);
-			} else if (timeBlock == 2) {
-				btnFriMorning.setSelected(true);
-				btnFriAfternoon.setSelected(true);
-				btnFriEvening.setSelected(false);
-			} else if (timeBlock == 3) {
-				btnFriMorning.setSelected(false);
-				btnFriAfternoon.setSelected(true);
-				btnFriEvening.setSelected(true);
-			} else if (timeBlock == 4) {
-				btnFriMorning.setSelected(true);
-				btnFriAfternoon.setSelected(false);
-				btnFriEvening.setSelected(false);
-			} else if (timeBlock == 5) {
-				btnFriMorning.setSelected(false);
-				btnFriAfternoon.setSelected(true);
-				btnFriEvening.setSelected(false);
-			} else if (timeBlock == 6) {
-				btnFriMorning.setSelected(false);
-				btnFriAfternoon.setSelected(false);
-				btnFriEvening.setSelected(true);
-			}
+			diplayTogglesFromTimeBlock(timeBlock, btnFriMorning, btnFriAfternoon, btnFriEvening);
 			break;
 		case 7:
-			if (timeBlock == 1) {
-				btnSatMorning.setSelected(true);
-				btnSatAfternoon.setSelected(true);
-				btnSatEvening.setSelected(true);
-			} else if (timeBlock == 2) {
-				btnSatMorning.setSelected(true);
-				btnSatAfternoon.setSelected(true);
-				btnSatEvening.setSelected(false);
-			} else if (timeBlock == 3) {
-				btnSatMorning.setSelected(false);
-				btnSatAfternoon.setSelected(true);
-				btnSatEvening.setSelected(true);
-			} else if (timeBlock == 4) {
-				btnSatMorning.setSelected(true);
-				btnSatAfternoon.setSelected(false);
-				btnSatEvening.setSelected(false);
-			} else if (timeBlock == 5) {
-				btnSatMorning.setSelected(false);
-				btnSatAfternoon.setSelected(true);
-				btnSatEvening.setSelected(false);
-			} else if (timeBlock == 6) {
-				btnSatMorning.setSelected(false);
-				btnSatAfternoon.setSelected(false);
-				btnSatEvening.setSelected(true);
-			}
+			diplayTogglesFromTimeBlock(timeBlock, btnSatMorning, btnSatAfternoon, btnSatEvening);
 			break;
 		default:
 			program.messageBox("WARN", "Error: Something happened with dayOfWeek",
@@ -1556,7 +1368,7 @@ public class MainController implements Initializable {
 	 * @author Luke Mason
 	 */
 	@FXML
-	public void deleteEmplyee() {
+	public void deleteEmployee() {
 		log.debug("LOGGER: Entered deleteEmployee function");
 		if (listviewEmployees.getSelectionModel().getSelectedIndex() < 0) {
 			program.messageBox("WARN", "oops", "An Employee has not been Selected",

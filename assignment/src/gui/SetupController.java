@@ -3,18 +3,22 @@ package gui;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.ResourceBundle;
+
+import org.apache.log4j.Logger;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.Node;
+import javafx.scene.Scene;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 import javafx.util.Callback;
@@ -23,20 +27,26 @@ import program.BusinessOwner;
 import program.Controller;
 import program.Database;
 import program.DatabaseConnection;
+import program.Register;
 import program.Service;
 
 public class SetupController implements Initializable {
-	private Controller program = new Controller();
-	private DatabaseConnection connection = new DatabaseConnection();
+	public final static Logger log = Logger.getLogger(SetupController.class);
+	private final Controller program = new Controller();
+	private final  DatabaseConnection connection = new DatabaseConnection();
 	private static BusinessOwner business = new BusinessOwner();
+	public final Register regpro = new Register();
 	/*
 	 * Oder of panes stkpWelcome > stkpDetails > stkpTimeSlot > (Setup Finishes and database is created) > stkpSelectColor
 	 */
 	@FXML
-	StackPane stkpWelcome, stkpDetails, stkpTimeSlot, stkpSelectColor;
+	AnchorPane root;
 	
 	@FXML
-	TextField txtFNam, txtLNam, txtBNam, txtBPho;
+	StackPane stkpWelcome, stkpDetails, stkpTimeSlot, stkpLogin, stkpSelectColor;
+	
+	@FXML
+	TextField txtFNam, txtLNam, txtBNam, txtBPho, txtUserNam, txtPass, txtConPass;
 	
 	@FXML
 	TextArea txtaBAdre;
@@ -141,8 +151,31 @@ public class SetupController implements Initializable {
 				program.messageBox("ERROR", "Error", "Invalid choice. Open hours later than closing hours", "");
 				return;
 			}
-			stkpSelectColor.setVisible(true);
+			stkpLogin.setVisible(true);
 			stkpTimeSlot.setVisible(false);
+			return;
+		}
+		if(stkpLogin.isVisible())
+		{
+	        if (program.checkInputToContainInvalidChar(txtUserNam.getText().toString())) {
+	            program.messageBox("ERROR", "Error", "Invalid Username", "");
+	            return;
+	        }
+	        if(!regpro.checkPassword(txtPass.getText())){
+	        	program.messageBox("ERROR", "Error", "Invalid Password", "Password must be longer then 6 characters and contain Uppercase, lowercase and number characters");
+	            return;
+	        }
+	        if(!txtPass.getText().toString().equals(txtConPass.getText().toString()))
+	        {
+	        	log.debug("LOGGER: Password:"+txtPass.getText());
+	        	log.debug("LOGGER: Conf Password:"+txtConPass.getText());
+	        	program.messageBox("ERROR", "Error", "Passwords Do No Match", "");
+	            return;
+	        }
+	        business.setUsern(txtUserNam.getText());
+	        business.setPass(txtPass.getText());
+			stkpSelectColor.setVisible(true);
+			stkpLogin.setVisible(false);
 			createDB();
 			createBO();
 			return;
@@ -154,8 +187,16 @@ public class SetupController implements Initializable {
 	 */
 	@FXML
 	public void back(){
-		stkpTimeSlot.setVisible(false);
-		stkpDetails.setVisible(true);
+		if(stkpTimeSlot.isVisible()){
+			stkpTimeSlot.setVisible(false);
+			stkpDetails.setVisible(true);
+			return;
+		}
+		if(stkpLogin.isVisible()){
+			stkpTimeSlot.setVisible(true);
+			stkpLogin.setVisible(false);
+		}
+		
 	}
 	
 	/**
@@ -165,6 +206,8 @@ public class SetupController implements Initializable {
 	@FXML
 	public void createBO() {
 		// TODO
+		connection.addUser(business.getUsername(), business.getPassword(), 1);
+		business.setID(connection.getUser(business.getUsername()).getID());
 		connection.createBusiness(business);
 	}
 	
@@ -362,6 +405,13 @@ public class SetupController implements Initializable {
 				}
 			});
 		}
+	}
+	
+	@FXML
+	public void chgCol(){
+		log.debug("LOGGER Change color");
+		root.setStyle("-fx-base1: #42f4b0");
+		root.setStyle("-fx-base3: Black;");
 	}
 	
 	

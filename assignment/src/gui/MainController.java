@@ -1632,6 +1632,10 @@ public class MainController implements Initializable {
 		}
 	}
 
+	/**
+	 * Check and display booking time during booking
+	 * Disable toggle button, after booking
+	 */
 	private void checkBookingTime() {
 		togbtnTimeSlot1.setDisable(false);
 		togbtnTimeSlot2.setDisable(false);
@@ -1670,251 +1674,159 @@ public class MainController implements Initializable {
 					if (program.dateToStr(newBook.getDate()).equals(program.dateToStr(b.getDate()))) {
 						log.debug("LOGGER: Dates Match");
 						if (togbtnMorn.isSelected()) {
-							if (stD.compareTo(program.strToTime(togbtnTimeSlot1.getText())) == 0) {
-								log.debug("LOGGER: Time Matchs 8:00");
-								togbtnTimeSlot1.setDisable(true);
-								lblAvail1.setText("Unavailable");
-								lblAvail1.setStyle("-fx-text-fill: #ff0000;");
-							} else if (stD.equals(program.strToTime(togbtnTimeSlot2.getText()))) {
-								togbtnTimeSlot2.setDisable(true);
-								lblAvail2.setText("Unavailable");
-								lblAvail2.setStyle("-fx-text-fill: #ff0000;");
-							} else if (stD.equals(program.strToTime(togbtnTimeSlot3.getText()))) {
-								togbtnTimeSlot3.setDisable(true);
-								lblAvail3.setText("Unavailable");
-								lblAvail3.setStyle("-fx-text-fill: #ff0000;");
-							} else if (stD.equals(program.strToTime(togbtnTimeSlot4.getText()))) {
-								togbtnTimeSlot4.setDisable(true);
-								lblAvail4.setText("Unavailable");
-								lblAvail4.setStyle("-fx-text-fill: #ff0000;");
-							} else if (stD.equals(program.strToTime(togbtnTimeSlot5.getText()))) {
-								togbtnTimeSlot5.setDisable(true);
-								lblAvail5.setText("Unavailable");
-								lblAvail5.setStyle("-fx-text-fill: #ff0000;");
-							} else if (stD.equals(program.strToTime(togbtnTimeSlot6.getText()))) {
-								togbtnTimeSlot6.setDisable(true);
-								lblAvail6.setText("Unavailable");
-								lblAvail6.setStyle("-fx-text-fill: #ff0000;");
-							} else if (stD.equals(program.strToTime(togbtnTimeSlot7.getText()))) {
-								togbtnTimeSlot7.setDisable(true);
-								lblAvail7.setText("Unavailable");
-								lblAvail7.setStyle("-fx-text-fill: #ff0000;");
-							} else if (stD.equals(program.strToTime(togbtnTimeSlot8.getText()))) {
-								togbtnTimeSlot8.setDisable(true);
-								lblAvail8.setText("Unavailable");
-								lblAvail8.setStyle("-fx-text-fill: #ff0000;");
-							}
-
-							if (enD.after(program.strToTime(togbtnTimeSlot2.getText()))
-									&& enD.before(program.strToTime(togbtnTimeSlot3.getText()))) {
-								togbtnTimeSlot2.setDisable(true);
-								lblAvail2.setText("Unavailable");
-								lblAvail2.setStyle("-fx-text-fill: #ff0000;");
-							}
-							if (enD.after(program.strToTime(togbtnTimeSlot3.getText()))
-									&& enD.before(program.strToTime(togbtnTimeSlot4.getText()))) {
-								togbtnTimeSlot3.setDisable(true);
-								lblAvail3.setText("Unavailable");
-								lblAvail3.setStyle("-fx-text-fill: #ff0000;");
-							}
-							if (enD.after(program.strToTime(togbtnTimeSlot4.getText()))
-									&& enD.before(program.strToTime(togbtnTimeSlot5.getText()))) {
-								togbtnTimeSlot4.setDisable(true);
-								lblAvail4.setText("Unavailable");
-								lblAvail4.setStyle("-fx-text-fill: #ff0000;");
-							}
-							if (enD.after(program.strToTime(togbtnTimeSlot5.getText()))
-									&& enD.before(program.strToTime(togbtnTimeSlot6.getText()))) {
-								togbtnTimeSlot5.setDisable(true);
-								lblAvail5.setText("Unavailable");
-								lblAvail5.setStyle("-fx-text-fill: #ff0000;");
-							}
-							if (enD.after(program.strToTime(togbtnTimeSlot6.getText()))
-									&& enD.before(program.strToTime(togbtnTimeSlot7.getText()))) {
-								togbtnTimeSlot6.setDisable(true);
-								lblAvail6.setText("Unavailable");
-								lblAvail6.setStyle("-fx-text-fill: #ff0000;");
-							}
-							if (enD.after(program.strToTime(togbtnTimeSlot7.getText()))
-									&& enD.before(program.strToTime(togbtnTimeSlot8.getText()))) {
-								togbtnTimeSlot7.setDisable(true);
-								lblAvail7.setText("Unavailable");
-								lblAvail7.setStyle("-fx-text-fill: #ff0000;");
-							}
-							if (enD.after(program.strToTime(togbtnTimeSlot8.getText()))
-									&& enD.before(program.strToTime("12:00"))) {
-								togbtnTimeSlot8.setDisable(true);
-								lblAvail8.setText("Unavailable");
-								lblAvail8.setStyle("-fx-text-fill: #ff0000;");
-							}
+							checkStartTimeTogglesOnBooking(stD);
+							
+							checkEndTimeForEachBookingSessionAndDisableToggleIfOverlapping(true, enD, "", 
+									"8:31", togbtnTimeSlot2.getText(), "9:01", togbtnTimeSlot3.getText(), 
+									"9:31", togbtnTimeSlot4.getText(), "10:01", togbtnTimeSlot5.getText(),
+									"10:31", togbtnTimeSlot6.getText(), "11:01", togbtnTimeSlot7.getText(), 
+									"11:31", togbtnTimeSlot8.getText());
+							
 							log.debug("LOGGER: Button 8 date - " + program.strToTime(togbtnTimeSlot8.getText()));
 						} else if (togbtnAft.isSelected()) {
-							if (stD.compareTo(program.strToTime(togbtnTimeSlot1.getText())) == 0) {
-								log.debug("LOGGER: Time Matchs 8:00");
-								togbtnTimeSlot1.setDisable(true);
-								lblAvail1.setText("Unavailable");
-								lblAvail1.setStyle("-fx-text-fill: #ff0000;");
-							} else if (stD.equals(program.strToTime(togbtnTimeSlot2.getText()))) {
-								togbtnTimeSlot2.setDisable(true);
-								lblAvail2.setText("Unavailable");
-								lblAvail2.setStyle("-fx-text-fill: #ff0000;");
-							} else if (stD.equals(program.strToTime(togbtnTimeSlot3.getText()))) {
-								togbtnTimeSlot3.setDisable(true);
-								lblAvail3.setText("Unavailable");
-								lblAvail3.setStyle("-fx-text-fill: #ff0000;");
-							} else if (stD.equals(program.strToTime(togbtnTimeSlot4.getText()))) {
-								togbtnTimeSlot4.setDisable(true);
-								lblAvail4.setText("Unavailable");
-								lblAvail4.setStyle("-fx-text-fill: #ff0000;");
-							} else if (stD.equals(program.strToTime(togbtnTimeSlot5.getText()))) {
-								togbtnTimeSlot5.setDisable(true);
-								lblAvail5.setText("Unavailable");
-								lblAvail5.setStyle("-fx-text-fill: #ff0000;");
-							} else if (stD.equals(program.strToTime(togbtnTimeSlot6.getText()))) {
-								togbtnTimeSlot6.setDisable(true);
-								lblAvail6.setText("Unavailable");
-								lblAvail6.setStyle("-fx-text-fill: #ff0000;");
-							} else if (stD.equals(program.strToTime(togbtnTimeSlot7.getText()))) {
-								togbtnTimeSlot7.setDisable(true);
-								lblAvail7.setText("Unavailable");
-								lblAvail7.setStyle("-fx-text-fill: #ff0000;");
-							} else if (stD.equals(program.strToTime(togbtnTimeSlot8.getText()))) {
-								togbtnTimeSlot8.setDisable(true);
-								lblAvail8.setText("Unavailable");
-								lblAvail8.setStyle("-fx-text-fill: #ff0000;");
-							}
-							if (enD.after(program.strToTime(togbtnTimeSlot1.getText()))
-									&& enD.before(program.strToTime("12:31"))) {
-								togbtnTimeSlot1.setDisable(true);
-								lblAvail1.setText("Unavailable");
-								lblAvail1.setStyle("-fx-text-fill: #ff0000;");
-							} else if (enD.after(program.strToTime(togbtnTimeSlot2.getText()))
-									&& enD.before(program.strToTime("13:01"))) {
-								togbtnTimeSlot2.setDisable(true);
-								lblAvail2.setText("Unavailable");
-								lblAvail2.setStyle("-fx-text-fill: #ff0000;");
-							}
-							if (enD.after(program.strToTime(togbtnTimeSlot3.getText()))
-									&& enD.before(program.strToTime("13:31"))) {
-								togbtnTimeSlot3.setDisable(true);
-								lblAvail3.setText("Unavailable");
-								lblAvail3.setStyle("-fx-text-fill: #ff0000;");
-							}
-							if (enD.after(program.strToTime(togbtnTimeSlot4.getText()))
-									&& enD.before(program.strToTime("14:01"))) {
-								togbtnTimeSlot4.setDisable(true);
-								lblAvail4.setText("Unavailable");
-								lblAvail4.setStyle("-fx-text-fill: #ff0000;");
-							}
-							if (enD.after(program.strToTime(togbtnTimeSlot5.getText()))
-									&& enD.before(program.strToTime("14:31"))) {
-								togbtnTimeSlot5.setDisable(true);
-								lblAvail5.setText("Unavailable");
-								lblAvail5.setStyle("-fx-text-fill: #ff0000;");
-							}
-							if (enD.after(program.strToTime(togbtnTimeSlot6.getText()))
-									&& enD.before(program.strToTime("15:01"))) {
-								togbtnTimeSlot6.setDisable(true);
-								lblAvail6.setText("Unavailable");
-								lblAvail6.setStyle("-fx-text-fill: #ff0000;");
-							}
-							if (enD.after(program.strToTime(togbtnTimeSlot7.getText()))
-									&& enD.before(program.strToTime("15:31"))) {
-								togbtnTimeSlot7.setDisable(true);
-								lblAvail7.setText("Unavailable");
-								lblAvail7.setStyle("-fx-text-fill: #ff0000;");
-							}
-							if (enD.after(program.strToTime(togbtnTimeSlot8.getText()))) {
-								togbtnTimeSlot8.setDisable(true);
-								lblAvail8.setText("Unavailable");
-								lblAvail8.setStyle("-fx-text-fill: #ff0000;");
-							}
+							checkStartTimeTogglesOnBooking(stD);
+							checkEndTimeForEachBookingSessionAndDisableToggleIfOverlapping(true, enD, togbtnTimeSlot1.getText(), 
+									"12:31", togbtnTimeSlot2.getText(), "13:01", togbtnTimeSlot3.getText(), 
+									"13:31", togbtnTimeSlot4.getText(), "14:01", togbtnTimeSlot5.getText(),
+									"14:31", togbtnTimeSlot6.getText(), "15:01", togbtnTimeSlot7.getText(), 
+									"15:31", togbtnTimeSlot8.getText());
+							
 						} else if (togbtnEven.isSelected()) {
-							if (stD.compareTo(program.strToTime(togbtnTimeSlot1.getText())) == 0) {
-								log.debug("LOGGER: Time Matchs 8:00");
-								togbtnTimeSlot1.setDisable(true);
-								lblAvail1.setText("Unavailable");
-								lblAvail1.setStyle("-fx-text-fill: #ff0000;");
-							} else if (stD.equals(program.strToTime(togbtnTimeSlot2.getText()))) {
-								togbtnTimeSlot2.setDisable(true);
-								lblAvail2.setText("Unavailable");
-								lblAvail2.setStyle("-fx-text-fill: #ff0000;");
-							} else if (stD.equals(program.strToTime(togbtnTimeSlot3.getText()))) {
-								togbtnTimeSlot3.setDisable(true);
-								lblAvail3.setText("Unavailable");
-								lblAvail3.setStyle("-fx-text-fill: #ff0000;");
-							} else if (stD.equals(program.strToTime(togbtnTimeSlot4.getText()))) {
-								togbtnTimeSlot4.setDisable(true);
-								lblAvail4.setText("Unavailable");
-								lblAvail4.setStyle("-fx-text-fill: #ff0000;");
-							} else if (stD.equals(program.strToTime(togbtnTimeSlot5.getText()))) {
-								togbtnTimeSlot5.setDisable(true);
-								lblAvail5.setText("Unavailable");
-								lblAvail5.setStyle("-fx-text-fill: #ff0000;");
-							} else if (stD.equals(program.strToTime(togbtnTimeSlot6.getText()))) {
-								togbtnTimeSlot6.setDisable(true);
-								lblAvail6.setText("Unavailable");
-								lblAvail6.setStyle("-fx-text-fill: #ff0000;");
-							} else if (stD.equals(program.strToTime(togbtnTimeSlot7.getText()))) {
-								togbtnTimeSlot7.setDisable(true);
-								lblAvail7.setText("Unavailable");
-								lblAvail7.setStyle("-fx-text-fill: #ff0000;");
-							} else if (stD.equals(program.strToTime(togbtnTimeSlot8.getText()))) {
-								togbtnTimeSlot8.setDisable(true);
-								lblAvail8.setText("Unavailable");
-								lblAvail8.setStyle("-fx-text-fill: #ff0000;");
-							}
-							if (enD.after(program.strToTime(togbtnTimeSlot1.getText()))
-									&& enD.before(program.strToTime("16:31"))) {
-								togbtnTimeSlot1.setDisable(true);
-								lblAvail1.setText("Unavailable");
-								lblAvail1.setStyle("-fx-text-fill: #ff0000;");
-							} else if (enD.after(program.strToTime(togbtnTimeSlot2.getText()))
-									&& enD.before(program.strToTime("17:01"))) {
-								togbtnTimeSlot2.setDisable(true);
-								lblAvail2.setText("Unavailable");
-								lblAvail2.setStyle("-fx-text-fill: #ff0000;");
-							}
-							if (enD.after(program.strToTime(togbtnTimeSlot3.getText()))
-									&& enD.before(program.strToTime("17:31"))) {
-								togbtnTimeSlot3.setDisable(true);
-								lblAvail3.setText("Unavailable");
-								lblAvail3.setStyle("-fx-text-fill: #ff0000;");
-							}
-							if (enD.after(program.strToTime(togbtnTimeSlot4.getText()))
-									&& enD.before(program.strToTime("18:01"))) {
-								togbtnTimeSlot4.setDisable(true);
-								lblAvail4.setText("Unavailable");
-								lblAvail4.setStyle("-fx-text-fill: #ff0000;");
-							}
-							if (enD.after(program.strToTime(togbtnTimeSlot5.getText()))
-									&& enD.before(program.strToTime("18:31"))) {
-								togbtnTimeSlot5.setDisable(true);
-								lblAvail5.setText("Unavailable");
-								lblAvail5.setStyle("-fx-text-fill: #ff0000;");
-							}
-							if (enD.after(program.strToTime(togbtnTimeSlot6.getText()))
-									&& enD.before(program.strToTime("19:01"))) {
-								togbtnTimeSlot6.setDisable(true);
-								lblAvail6.setText("Unavailable");
-								lblAvail6.setStyle("-fx-text-fill: #ff0000;");
-							}
-							if (enD.after(program.strToTime(togbtnTimeSlot7.getText()))
-									&& enD.before(program.strToTime("19:31"))) {
-								togbtnTimeSlot7.setDisable(true);
-								lblAvail7.setText("Unavailable");
-								lblAvail7.setStyle("-fx-text-fill: #ff0000;");
-							}
-							if (enD.after(program.strToTime(togbtnTimeSlot8.getText()))) {
-								togbtnTimeSlot8.setDisable(true);
-								lblAvail8.setText("Unavailable");
-								lblAvail8.setStyle("-fx-text-fill: #ff0000;");
-							}
+							checkStartTimeTogglesOnBooking(stD);
+							checkEndTimeForEachBookingSessionAndDisableToggleIfOverlapping(true, enD, togbtnTimeSlot1.getText(), 
+									"16:31", togbtnTimeSlot2.getText(), "17:01", togbtnTimeSlot3.getText(), 
+									"17:31", togbtnTimeSlot4.getText(), "18:01", togbtnTimeSlot5.getText(),
+									"18:31", togbtnTimeSlot6.getText(), "19:01", togbtnTimeSlot7.getText(), 
+									"19:31", togbtnTimeSlot8.getText());
 						} else {
 						}
 					}
 				}
 			}
+		}
+	}
+	
+	/**
+	 * Check EndTime of previous booking and disable buttons appropriately
+	 * @param mornshift
+	 * @param enD
+	 * @param timeslot1
+	 * @param timeslot2B
+	 * @param timeslot2
+	 * @param timeslot3B
+	 * @param timeslot3
+	 * @param timeslot4B
+	 * @param timeslot4
+	 * @param timeslot5B
+	 * @param timeslot5
+	 * @param timeslot6B
+	 * @param timeslot6
+	 * @param timeslot7B
+	 * @param timeslot7
+	 * @param timeslot8B
+	 * @param timeslot8
+	 */
+	public void checkEndTimeForEachBookingSessionAndDisableToggleIfOverlapping
+			(Boolean mornshift, Date enD, String timeslot1,
+			String timeslot2B, String timeslot2, String timeslot3B, String timeslot3, 
+			String timeslot4B, String timeslot4, String timeslot5B, String timeslot5, 
+			String timeslot6B, String timeslot6, String timeslot7B, String timeslot7,
+			String timeslot8B, String timeslot8){
+		
+		/*
+		 *  In morning shift, the first timeslot cannot be disable initially.
+		 *  but in other shifts, the first timeslot may be disable as the booking session is carried over from the previous shift.
+		 */
+		if(!mornshift){
+			if (enD.after(program.strToTime(timeslot1))
+					&& enD.before(program.strToTime(timeslot2B))) {
+				togbtnTimeSlot1.setDisable(true);
+				lblAvail1.setText("Unavailable");
+				lblAvail1.setStyle("-fx-text-fill: #ff0000;");
+			}
+		}
+		
+        if (enD.after(program.strToTime(timeslot2))
+				&& enD.before(program.strToTime(timeslot3B))) {
+			togbtnTimeSlot2.setDisable(true);
+			lblAvail2.setText("Unavailable");
+			lblAvail2.setStyle("-fx-text-fill: #ff0000;");
+		}
+		if (enD.after(program.strToTime(timeslot3))
+				&& enD.before(program.strToTime(timeslot4B))) {
+			togbtnTimeSlot3.setDisable(true);
+			lblAvail3.setText("Unavailable");
+			lblAvail3.setStyle("-fx-text-fill: #ff0000;");
+		}
+		if (enD.after(program.strToTime(timeslot4))
+				&& enD.before(program.strToTime(timeslot5B))) {
+			togbtnTimeSlot4.setDisable(true);
+			lblAvail4.setText("Unavailable");
+			lblAvail4.setStyle("-fx-text-fill: #ff0000;");
+		}
+		if (enD.after(program.strToTime(timeslot5))
+				&& enD.before(program.strToTime(timeslot6B))) {
+			togbtnTimeSlot5.setDisable(true);
+			lblAvail5.setText("Unavailable");
+			lblAvail5.setStyle("-fx-text-fill: #ff0000;");
+		}
+		if (enD.after(program.strToTime(timeslot6))
+				&& enD.before(program.strToTime(timeslot7B))) {
+			togbtnTimeSlot6.setDisable(true);
+			lblAvail6.setText("Unavailable");
+			lblAvail6.setStyle("-fx-text-fill: #ff0000;");
+		}
+		if (enD.after(program.strToTime(timeslot7))
+				&& enD.before(program.strToTime(timeslot8B))) {
+			togbtnTimeSlot7.setDisable(true);
+			lblAvail7.setText("Unavailable");
+			lblAvail7.setStyle("-fx-text-fill: #ff0000;");
+		}
+		if (enD.after(program.strToTime(timeslot8))) {
+			togbtnTimeSlot8.setDisable(true);
+			lblAvail8.setText("Unavailable");
+			lblAvail8.setStyle("-fx-text-fill: #ff0000;");
+		}
+	}
+	
+	/**
+	 * Check a specified toggle button for StartTime and disable them after booking
+	 * @param <Date> Start Date
+	 */
+	public void checkStartTimeTogglesOnBooking(Date stD){
+		if (stD.compareTo(program.strToTime(togbtnTimeSlot1.getText())) == 0) {
+			log.debug("LOGGER: Time Matchs 8:00");
+			togbtnTimeSlot1.setDisable(true);
+			lblAvail1.setText("Unavailable");
+			lblAvail1.setStyle("-fx-text-fill: #ff0000;");
+		} else if (stD.equals(program.strToTime(togbtnTimeSlot2.getText()))) {
+			togbtnTimeSlot2.setDisable(true);
+			lblAvail2.setText("Unavailable");
+			lblAvail2.setStyle("-fx-text-fill: #ff0000;");
+		} else if (stD.equals(program.strToTime(togbtnTimeSlot3.getText()))) {
+			togbtnTimeSlot3.setDisable(true);
+			lblAvail3.setText("Unavailable");
+			lblAvail3.setStyle("-fx-text-fill: #ff0000;");
+		} else if (stD.equals(program.strToTime(togbtnTimeSlot4.getText()))) {
+			togbtnTimeSlot4.setDisable(true);
+			lblAvail4.setText("Unavailable");
+			lblAvail4.setStyle("-fx-text-fill: #ff0000;");
+		} else if (stD.equals(program.strToTime(togbtnTimeSlot5.getText()))) {
+			togbtnTimeSlot5.setDisable(true);
+			lblAvail5.setText("Unavailable");
+			lblAvail5.setStyle("-fx-text-fill: #ff0000;");
+		} else if (stD.equals(program.strToTime(togbtnTimeSlot6.getText()))) {
+			togbtnTimeSlot6.setDisable(true);
+			lblAvail6.setText("Unavailable");
+			lblAvail6.setStyle("-fx-text-fill: #ff0000;");
+		} else if (stD.equals(program.strToTime(togbtnTimeSlot7.getText()))) {
+			togbtnTimeSlot7.setDisable(true);
+			lblAvail7.setText("Unavailable");
+			lblAvail7.setStyle("-fx-text-fill: #ff0000;");
+		} else if (stD.equals(program.strToTime(togbtnTimeSlot8.getText()))) {
+			togbtnTimeSlot8.setDisable(true);
+			lblAvail8.setText("Unavailable");
+			lblAvail8.setStyle("-fx-text-fill: #ff0000;");
 		}
 	}
 

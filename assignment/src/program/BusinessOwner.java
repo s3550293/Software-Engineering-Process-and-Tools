@@ -27,7 +27,7 @@ public class BusinessOwner extends User {
 	public int getID() {
 		return _id;
 	}
-
+	
 	public String getBusiness() {
 		return _business;
 	}

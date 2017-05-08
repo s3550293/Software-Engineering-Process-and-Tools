@@ -112,7 +112,7 @@ public class Database
 				+ "FOREIGN KEY(bookingID) REFERENCES BOOKINGS(id),"
 				+ "FOREIGN KEY(serviceID) REFERENCES SERVICES(id));";
 		String queryBusiness = "CREATE TABLE IF NOT EXISTS BUSINESS (" 
-				+ "id INTEGER PRIMARY KEY AUTOINCREMENT,"
+				+ "id integer NOT NULL,"
 				+ "bName VARCHAR(30) NOT NULL,"
 				+ "fName VARCHAR(30) NOT NULL,"
 				+ "lName VARCHAR(30) NOT NULL,"
@@ -121,7 +121,8 @@ public class Database
 				+ "weekdayStart VARCHAR(20) NOT NULL,"
 				+ "weekdayEnd VARCHAR(20) NOT NULL," 
 				+ "weekendStart VARCHAR(20) NOT NULL,"
-				+ "weekendEnd VARCHAR(20) NOT NULL);";
+				+ "weekendEnd VARCHAR(20) NOT NULL,"
+				+ "FOREIGN KEY(id) REFERENCES USERS(userID));";
 		/*
 		 * Attempting to connect to the database so tables can be created
 		 */

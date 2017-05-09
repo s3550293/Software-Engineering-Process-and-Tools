@@ -8,15 +8,17 @@
     -fx-base1: #446CB3;
     -fx-base2: black;
     -fx-base3: White;
+    -fx-base4: #EDEDED;
 }
 
+
 .background {
-    -fx-background-color: derive(#EDEDED,20%);
+    -fx-background-color: derive(-fx-base4,20%);
 }
 
 /*TABBED PANES*/
 .tab-pane .tab-header-area .tab-header-background{
-    -fx-background-color: derive(#EDEDED,20%);
+    -fx-background-color: derive(-fx-base4,20%);
 }
 .tab {
     -fx-focus-color: transparent;
@@ -24,7 +26,7 @@
 }
 .tab-pane .tab
 {
-    -fx-background-color: derive(#EDEDED,-20%);
+    -fx-background-color: derive(-fx-base4,-20%);
 
 }
 .tab .tab-label {
@@ -127,7 +129,7 @@
 
 .list-view .list-cell:filled:hover {
     -fx-background-color: -fx-base1;
-    -fx-text-fill: #EDEDED;
+    -fx-text-fill: -fx-base4;
 }
 
 
@@ -168,7 +170,7 @@
     -fx-background-color: -fx-base1;
     -fx-font-family: "Segoe UI", Helvetica, Arial, sans-serif;
     -fx-font-size: 11pt;
-    -fx-text-fill: #d8d8d8;
+    -fx-text-fill: -fx-base3;
     -fx-background-insets: 0 0 0 0, 0, 1, 2;
 }
 
@@ -182,7 +184,7 @@
         linear-gradient(to bottom, derive(-fx-base1,-90%) 0%, derive(-fx-base1,-60%) 100%),
         linear-gradient(to bottom, derive(-fx-base1,-60%) 0%, derive(-fx-base1,-35%) 50%, derive(-fx-base1,-30%) 98%, derive(-fx-base1,-50%) 100%),
         linear-gradient(to right, rgba(0,0,0,0.2) 0%, rgba(0,0,0,0) 40%, rgba(0,0,0,0) 190%, rgba(0,0,0,0.3) 200%);
-    -fx-text-fill: #EDEDED;
+    -fx-text-fill: -fx-base3;
 }
 
 .button:disabled, .button:default:disabled {

@@ -81,7 +81,6 @@ public class Database
 				+ "employeeID integer PRIMARY KEY AUTOINCREMENT," 
 				+ "name VARCHAR(40) NOT NULL,"
 				+ "payRate DOUBLE NOT NULL);";
-
 		String queryEmployeesWorkingTimes = "CREATE TABLE IF NOT EXISTS EMPLOYEES_WORKING_TIMES ("
 				+ "id integer PRIMARY KEY AUTOINCREMENT," 
 				+ "employeeID integer NOT NULL,"

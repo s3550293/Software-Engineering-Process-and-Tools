@@ -410,8 +410,8 @@ public class SetupController implements Initializable {
 	@FXML
 	public void chgCol(){
 		log.debug("LOGGER Change color");
-		root.setStyle("-fx-base1: #42f4b0");
-		root.setStyle("-fx-base3: Black;");
+		root.setStyle("-fx-base1: #42f4b0; -fx-base3: Black;");
+		//root.setStyle("-fx-base3: Black;");
 	}
 	
 	

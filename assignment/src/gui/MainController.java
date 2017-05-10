@@ -204,6 +204,7 @@ public class MainController implements Initializable {
 		stkCustomer.setVisible(false);
 		boolean var = login();
 		if (var == true) {
+			setColor();
 			loadDaySelect();
 			loadallServices("");
 			if (stage != null) {
@@ -232,26 +233,7 @@ public class MainController implements Initializable {
 			});
 			loadListViewBook();
 			loadallCustomers();
-			listviewBookings.setPlaceholder(new Label("No Bookings"));
-			listviewCustomers.setPlaceholder(new Label("No Customer"));
-			listviewEmployees.setPlaceholder(new Label("No Employees"));
-			listviewManServices.setPlaceholder(new Label("No Services"));
-			listviewBookings.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<Booking>() {
-				@Override
-				public void changed(ObservableValue<? extends Booking> observable, Booking oldValue, Booking newValue) {
-					if (newValue != null) {
-						booking = newValue;
-						lblBookingID.setText(Integer.toString(booking.getBookingID()));
-						lblBookingCustomerID.setText(connection.getCustomer(booking.getCustomerId()).getFullName());
-						lblBookingDate.setText(program.dateToStr(booking.getDate()));
-						lblBookServ.setText(connection.getService(booking.getService()).getName());
-						lblBookingStartTime.setText(program.timeToStr(booking.getStartTime()));
-						lblBookingEndTime.setText(program.timeToStr(booking.getEndTime()));
-						lblBookingStatus.setText(booking.getStatus());
-					}
-				}
-			});
-
+			listLVBookini();
 			listviewManServices.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<Service>() {
 				@Override
 				public void changed(ObservableValue<? extends Service> observable, Service oldValue, Service newValue) {
@@ -317,93 +299,8 @@ public class MainController implements Initializable {
 					}
 				}
 			});
-			togbtnMorn.setToggleGroup(timeODayGroup);
-			togbtnAft.setToggleGroup(timeODayGroup);
-			togbtnEven.setToggleGroup(timeODayGroup);
-			timeODayGroup.selectedToggleProperty().addListener(new ChangeListener<Toggle>() {
-				public void changed(ObservableValue<? extends Toggle> ov, Toggle old_toggle, Toggle new_toggle) {
-					togbtnTimeSlot1.setSelected(false);
-					togbtnTimeSlot2.setSelected(false);
-					togbtnTimeSlot3.setSelected(false);
-					togbtnTimeSlot4.setSelected(false);
-					togbtnTimeSlot5.setSelected(false);
-					togbtnTimeSlot6.setSelected(false);
-					togbtnTimeSlot7.setSelected(false);
-					togbtnTimeSlot8.setSelected(false);
-					if (togbtnMorn.isSelected()) {
-						togbtnAft.setSelected(false);
-						togbtnEven.setSelected(false);
-						Calendar date = Calendar.getInstance();
-						date.set(Calendar.HOUR_OF_DAY, 8);
-						date.set(Calendar.MINUTE, 0);
-						diplayBookingTime(date);
-						checkBookingTime();
-					} else if (togbtnAft.isSelected()) {
-						togbtnMorn.setSelected(false);
-						togbtnEven.setSelected(false);
-						Calendar date = Calendar.getInstance();
-						log.debug("LOGGER: date - " + date);
-						date.set(Calendar.HOUR_OF_DAY, 12);
-						date.set(Calendar.MINUTE, 00);
-						log.debug("LOGGER: date - " + date.get(Calendar.HOUR_OF_DAY));
-						diplayBookingTime(date);
-						checkBookingTime();
-					} else {
-						togbtnMorn.setSelected(false);
-						togbtnAft.setSelected(false);
-						Calendar date = Calendar.getInstance();
-						log.debug("LOGGER: date - " + date);
-						date.set(Calendar.HOUR_OF_DAY, 16);
-						date.set(Calendar.MINUTE, 0);
-						log.debug("LOGGER: date - " + date.get(Calendar.HOUR_OF_DAY));
-						diplayBookingTime(date);
-						checkBookingTime();
-					}
-				}
-			});
-			togbtnMorn.setSelected(true);
-			togbtnTimeSlot1.setToggleGroup(timeGroup);
-			togbtnTimeSlot2.setToggleGroup(timeGroup);
-			togbtnTimeSlot3.setToggleGroup(timeGroup);
-			togbtnTimeSlot4.setToggleGroup(timeGroup);
-			togbtnTimeSlot5.setToggleGroup(timeGroup);
-			togbtnTimeSlot6.setToggleGroup(timeGroup);
-			togbtnTimeSlot7.setToggleGroup(timeGroup);
-			togbtnTimeSlot8.setToggleGroup(timeGroup);
-			timeGroup.selectedToggleProperty().addListener(new ChangeListener<Toggle>() {
-				public void changed(ObservableValue<? extends Toggle> ov, Toggle old_toggle, Toggle new_toggle) {
-					addBookingTime();
-					Date date = program.calEnTime(newBook.getStartTime(),
-							connection.getService(newBook.getService()).getLengthMin());
-					newBook.setEndTime(date);
-					log.debug("LOGGER: Time Slot Start - " + togbtnTimeSlot1.getText());
-					log.debug("LOGGER: Time Slot End - " + program.timeToStr(newBook.getEndTime()));
-					if (togbtnTimeSlot1.isSelected()) {
-						loadpreferedEmp(togbtnTimeSlot1.getText(), program.timeToStr(newBook.getEndTime()));
-					}
-					if (togbtnTimeSlot2.isSelected()) {
-						loadpreferedEmp(togbtnTimeSlot2.getText(), program.timeToStr(newBook.getEndTime()));
-					}
-					if (togbtnTimeSlot3.isSelected()) {
-						loadpreferedEmp(togbtnTimeSlot3.getText(), program.timeToStr(newBook.getEndTime()));
-					}
-					if (togbtnTimeSlot4.isSelected()) {
-						loadpreferedEmp(togbtnTimeSlot4.getText(), program.timeToStr(newBook.getEndTime()));
-					}
-					if (togbtnTimeSlot5.isSelected()) {
-						loadpreferedEmp(togbtnTimeSlot5.getText(), program.timeToStr(newBook.getEndTime()));
-					}
-					if (togbtnTimeSlot6.isSelected()) {
-						loadpreferedEmp(togbtnTimeSlot6.getText(), program.timeToStr(newBook.getEndTime()));
-					}
-					if (togbtnTimeSlot7.isSelected()) {
-						loadpreferedEmp(togbtnTimeSlot7.getText(), program.timeToStr(newBook.getEndTime()));
-					}
-					if (togbtnTimeSlot8.isSelected()) {
-						loadpreferedEmp(togbtnTimeSlot8.getText(), program.timeToStr(newBook.getEndTime()));
-					}
-				}
-			});
+			listTogTDini();
+			listTogTSini();
 
 		}
 
@@ -1483,6 +1380,13 @@ public class MainController implements Initializable {
 	public void refreshService() {
 		loadallServices("");
 	}
+	
+	/**
+	 * @author Joseph Garner
+	 */
+	private void setColor(){
+		//TODO
+	}
 
 	/**************
 	 * BMENU CUSTOMERS
@@ -2113,6 +2017,122 @@ public class MainController implements Initializable {
 		stkBusiness.setVisible(true);
 		stkCustomer.setVisible(false);
 		btnRToOwnMen.setDisable(true);
+	}
+	
+	
+	private void listTogTSini(){
+		togbtnMorn.setSelected(true);
+		togbtnTimeSlot1.setToggleGroup(timeGroup);
+		togbtnTimeSlot2.setToggleGroup(timeGroup);
+		togbtnTimeSlot3.setToggleGroup(timeGroup);
+		togbtnTimeSlot4.setToggleGroup(timeGroup);
+		togbtnTimeSlot5.setToggleGroup(timeGroup);
+		togbtnTimeSlot6.setToggleGroup(timeGroup);
+		togbtnTimeSlot7.setToggleGroup(timeGroup);
+		togbtnTimeSlot8.setToggleGroup(timeGroup);
+		timeGroup.selectedToggleProperty().addListener(new ChangeListener<Toggle>() {
+			public void changed(ObservableValue<? extends Toggle> ov, Toggle old_toggle, Toggle new_toggle) {
+				addBookingTime();
+				Date date = program.calEnTime(newBook.getStartTime(),
+						connection.getService(newBook.getService()).getLengthMin());
+				newBook.setEndTime(date);
+				log.debug("LOGGER: Time Slot Start - " + togbtnTimeSlot1.getText());
+				log.debug("LOGGER: Time Slot End - " + program.timeToStr(newBook.getEndTime()));
+				if (togbtnTimeSlot1.isSelected()) {
+					loadpreferedEmp(togbtnTimeSlot1.getText(), program.timeToStr(newBook.getEndTime()));
+				}
+				if (togbtnTimeSlot2.isSelected()) {
+					loadpreferedEmp(togbtnTimeSlot2.getText(), program.timeToStr(newBook.getEndTime()));
+				}
+				if (togbtnTimeSlot3.isSelected()) {
+					loadpreferedEmp(togbtnTimeSlot3.getText(), program.timeToStr(newBook.getEndTime()));
+				}
+				if (togbtnTimeSlot4.isSelected()) {
+					loadpreferedEmp(togbtnTimeSlot4.getText(), program.timeToStr(newBook.getEndTime()));
+				}
+				if (togbtnTimeSlot5.isSelected()) {
+					loadpreferedEmp(togbtnTimeSlot5.getText(), program.timeToStr(newBook.getEndTime()));
+				}
+				if (togbtnTimeSlot6.isSelected()) {
+					loadpreferedEmp(togbtnTimeSlot6.getText(), program.timeToStr(newBook.getEndTime()));
+				}
+				if (togbtnTimeSlot7.isSelected()) {
+					loadpreferedEmp(togbtnTimeSlot7.getText(), program.timeToStr(newBook.getEndTime()));
+				}
+				if (togbtnTimeSlot8.isSelected()) {
+					loadpreferedEmp(togbtnTimeSlot8.getText(), program.timeToStr(newBook.getEndTime()));
+				}
+			}
+		});
+	}
+	
+	private void listTogTDini(){
+		togbtnMorn.setToggleGroup(timeODayGroup);
+		togbtnAft.setToggleGroup(timeODayGroup);
+		togbtnEven.setToggleGroup(timeODayGroup);
+		timeODayGroup.selectedToggleProperty().addListener(new ChangeListener<Toggle>() {
+			public void changed(ObservableValue<? extends Toggle> ov, Toggle old_toggle, Toggle new_toggle) {
+				togbtnTimeSlot1.setSelected(false);
+				togbtnTimeSlot2.setSelected(false);
+				togbtnTimeSlot3.setSelected(false);
+				togbtnTimeSlot4.setSelected(false);
+				togbtnTimeSlot5.setSelected(false);
+				togbtnTimeSlot6.setSelected(false);
+				togbtnTimeSlot7.setSelected(false);
+				togbtnTimeSlot8.setSelected(false);
+				if (togbtnMorn.isSelected()) {
+					togbtnAft.setSelected(false);
+					togbtnEven.setSelected(false);
+					Calendar date = Calendar.getInstance();
+					date.set(Calendar.HOUR_OF_DAY, 8);
+					date.set(Calendar.MINUTE, 0);
+					diplayBookingTime(date);
+					checkBookingTime();
+				} else if (togbtnAft.isSelected()) {
+					togbtnMorn.setSelected(false);
+					togbtnEven.setSelected(false);
+					Calendar date = Calendar.getInstance();
+					log.debug("LOGGER: date - " + date);
+					date.set(Calendar.HOUR_OF_DAY, 12);
+					date.set(Calendar.MINUTE, 00);
+					log.debug("LOGGER: date - " + date.get(Calendar.HOUR_OF_DAY));
+					diplayBookingTime(date);
+					checkBookingTime();
+				} else {
+					togbtnMorn.setSelected(false);
+					togbtnAft.setSelected(false);
+					Calendar date = Calendar.getInstance();
+					log.debug("LOGGER: date - " + date);
+					date.set(Calendar.HOUR_OF_DAY, 16);
+					date.set(Calendar.MINUTE, 0);
+					log.debug("LOGGER: date - " + date.get(Calendar.HOUR_OF_DAY));
+					diplayBookingTime(date);
+					checkBookingTime();
+				}
+			}
+		});
+	}
+	
+	private void listLVBookini(){
+		listviewBookings.setPlaceholder(new Label("No Bookings"));
+		listviewCustomers.setPlaceholder(new Label("No Customer"));
+		listviewEmployees.setPlaceholder(new Label("No Employees"));
+		listviewManServices.setPlaceholder(new Label("No Services"));
+		listviewBookings.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<Booking>() {
+			@Override
+			public void changed(ObservableValue<? extends Booking> observable, Booking oldValue, Booking newValue) {
+				if (newValue != null) {
+					booking = newValue;
+					lblBookingID.setText(Integer.toString(booking.getBookingID()));
+					lblBookingCustomerID.setText(connection.getCustomer(booking.getCustomerId()).getFullName());
+					lblBookingDate.setText(program.dateToStr(booking.getDate()));
+					lblBookServ.setText(connection.getService(booking.getService()).getName());
+					lblBookingStartTime.setText(program.timeToStr(booking.getStartTime()));
+					lblBookingEndTime.setText(program.timeToStr(booking.getEndTime()));
+					lblBookingStatus.setText(booking.getStatus());
+				}
+			}
+		});
 	}
 
 }

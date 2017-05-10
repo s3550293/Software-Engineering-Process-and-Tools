@@ -5,10 +5,12 @@
 .root{
     -fx-focus-color: transparent;
     -fx-faint-focus-color: transparent;
-    -fx-base1: #446CB3;
-    -fx-base2: black;
-    -fx-base3: White;
-    -fx-base4: #EDEDED;
+    /*buttons*/
+    -fx-base1: #446CB3; /*Button Color*/
+    -fx-base2: black; /*buttons*/
+    -fx-base3: White; /*Button Text*/
+    /*LABELS*/
+    -fx-base4: #EDEDED; /*Selected text*/
 }
 
 
@@ -61,7 +63,7 @@
 .label-button {
     -fx-font-size: 11pt;
     -fx-font-family: "Segoe UI", Helvetica, Arial, sans-serif;
-    -fx-text-fill: #d8d8d8;
+    -fx-text-fill: -fx-base4;
     -fx-opacity: 1;
 }
 

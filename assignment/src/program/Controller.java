@@ -313,7 +313,7 @@ public class Controller
 	
 	/**
 	 * @author Luke Mason
-	 * converts a dat into the day it represents, e.g 05/05/2017 -> Friday -> 6
+	 * converts a data into the day it represents, e.g 05/05/2017 -> Friday -> 6
 	 */
 	public int dateToDay(String date)
 	{

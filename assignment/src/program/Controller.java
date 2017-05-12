@@ -22,7 +22,7 @@ public class Controller
 	public Controller(){ log.setLevel(Level.DEBUG);}
 	private static User _user = null;
 	public User getUser(){return _user;}
-	static public void setUser(User user){_user = user;}
+	public void setUser(User user){_user = user;}
 	private static Booking _booking = null;
 	public Booking getBooking(){return _booking;}
 	Scanner kb = new Scanner(System.in);

@@ -911,7 +911,15 @@ public class BusinessController  implements Initializable  {
 			String endTime = program.timeToStr(workTimes.get(i).getEndTime());
 			log.info("Start Time ="+startTime+"\n");
 			log.info("End Time ="+endTime+"\n");
-			int timeBlock = bMenu.getTimeBlock(startTime,endTime);
+			int timeBlock;
+			if(workTimes.get(i).getDayOfWeek() != 1 && workTimes.get(i).getDayOfWeek()!= 7)
+			{
+				timeBlock = bMenu.getTimeBlock(startTime,endTime,0);
+			}
+			else
+			{
+				timeBlock = bMenu.getTimeBlock(startTime,endTime,1);
+			}
 			if (timeBlock == -1) {
 				log.warn("INVALID TIME BLOCK DETECTED\n");
 			}
@@ -973,7 +981,7 @@ public class BusinessController  implements Initializable  {
 	/**
 	 * sets a certain day's toggles according to a combination of morning,
 	 * afternoon and evening
-	 * 
+	 * @author Luke Mason
 	 * @param dayOfWeek
 	 * @param timeBlock
 	 */

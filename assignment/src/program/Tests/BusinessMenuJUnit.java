@@ -14,7 +14,7 @@ public class BusinessMenuJUnit {
 	{
 		
 	}
-
+	
 	@Test
 	public void testCheckEmployeePayRate1()
 	{
@@ -69,7 +69,7 @@ public class BusinessMenuJUnit {
 	public void testGetStartEndTimes0()
 	{
 		String[] array = new String[2];
-		array = bMenu.getStartEndTimes(-1);
+		array = bMenu.getStartEndTimes(-1,0);
 		assertEquals(array[0],"");
 		assertEquals(array[1],"");
 	}
@@ -77,7 +77,7 @@ public class BusinessMenuJUnit {
 	public void testGetStartEndTimes1()
 	{
 		String[] array = new String[2];
-		array = bMenu.getStartEndTimes(7);
+		array = bMenu.getStartEndTimes(7,0);
 		assertEquals(array[0],"");
 		assertEquals(array[1],"");
 	}
@@ -85,7 +85,7 @@ public class BusinessMenuJUnit {
 	public void testGetStartEndTimes2()
 	{
 		String[] array = new String[2];
-		array = bMenu.getStartEndTimes(0);
+		array = bMenu.getStartEndTimes(0,0);
 		assertEquals(array[0],"");
 		assertEquals(array[1],"");
 	}
@@ -93,23 +93,23 @@ public class BusinessMenuJUnit {
 	public void testGetStartEndTimes3()
 	{
 		String[] array = new String[2];
-		array = bMenu.getStartEndTimes(1);
-		assertEquals(array[0],"8:00");
+		array = bMenu.getStartEndTimes(1,0);
+		assertEquals(array[0],"08:00");
 		assertEquals(array[1],"20:00");
 	}
 	@Test
 	public void testGetStartEndTimes4()
 	{
 		String[] array = new String[2];
-		array = bMenu.getStartEndTimes(2);
-		assertEquals(array[0],"8:00");
+		array = bMenu.getStartEndTimes(2,0);
+		assertEquals(array[0],"08:00");
 		assertEquals(array[1],"16:00");
 	}
 	@Test
 	public void testGetStartEndTimes5()
 	{
 		String[] array = new String[2];
-		array = bMenu.getStartEndTimes(3);
+		array = bMenu.getStartEndTimes(3,0);
 		assertEquals(array[0],"12:00");
 		assertEquals(array[1],"20:00");
 	}
@@ -117,15 +117,15 @@ public class BusinessMenuJUnit {
 	public void testGetStartEndTimes6()
 	{
 		String[] array = new String[2];
-		array = bMenu.getStartEndTimes(4);
-		assertEquals(array[0],"8:00");
+		array = bMenu.getStartEndTimes(4,0);
+		assertEquals(array[0],"08:00");
 		assertEquals(array[1],"12:00");
 	}
 	@Test
 	public void testGetStartEndTimes7()
 	{
 		String[] array = new String[2];
-		array = bMenu.getStartEndTimes(5);
+		array = bMenu.getStartEndTimes(5,0);
 		assertEquals(array[0],"12:00");
 		assertEquals(array[1],"16:00");
 	}
@@ -133,7 +133,7 @@ public class BusinessMenuJUnit {
 	public void testGetStartEndTimes8()
 	{
 		String[] array = new String[2];
-		array = bMenu.getStartEndTimes(6);
+		array = bMenu.getStartEndTimes(6,0);
 		assertEquals(array[0],"16:00");
 		assertEquals(array[1],"20:00");
 	}

@@ -22,6 +22,63 @@ public class BusinessMenu
 	 * @author Luke Mason
 	 * Used to check information to add a new employee to database
 	 */
+				/**
+				 * Gets a start time and end time and splits the time between them into 3 blocks which are bounded by 4 different times.
+				 * @param startTime - HH:MM
+				 * @param endTime - HH:MM
+				 * @return
+				 */
+				public String[] splitTimeIntoThreeBlocks(String startTime, String endTime)
+				{
+					//A-a represents startTime, B-b represents endTime
+					String[] times = {"","","",""};
+					//Getting substring hours
+					String A = startTime.substring(0,2);
+					String B = endTime.substring(0,2);
+					//Getting substring minutes
+					String a = startTime.substring(2);
+					String b = endTime.substring(2);
+					//converting strings into integers
+					int AA = Integer.parseInt(A);
+					int BB = Integer.parseInt(B);
+					int aa = Integer.parseInt(a);
+					int bb = Integer.parseInt(b);
+					//getting minutes from hours
+					int AAA = AA * 60;
+					int BBB = BB * 60;
+					//getting total minutes
+					int aaa = AAA + aa;
+					int bbb = BBB + bb;
+					//Getting time minutes between startTime aaa and endTime bbb
+					int timeDifference = bbb - aaa;
+					//getting 1 third of time difference
+					int thirdOfTime = timeDifference/3;
+					//Assigning times
+					times[0] = startTime;
+					//converting minutes into HH:MM
+					int middayEarlyTime = aaa + thirdOfTime;
+					int middayLateTime = middayEarlyTime + thirdOfTime;
+					int hours;
+					int minutes;
+					String formattedHours;
+					String formattedMinutes;
+					//Formatting numbers to two digitse.g 02 04 06 10 12 etc	
+					hours = middayEarlyTime/60;
+					formattedHours = String.format("%02d", hours);
+					minutes = middayEarlyTime%60;
+					formattedMinutes = String.format("%02d", minutes);
+					//Assigning time for middayEarlyTime
+					times[1] = formattedHours+":"+formattedMinutes;
+					//Formatting numbers to two digitse.g 02 04 06 10 12 etc
+					hours = middayLateTime/60;
+					formattedHours = String.format("%02d", hours);
+					minutes = middayLateTime%60;
+					formattedMinutes = String.format("%02d", minutes);
+					//Assigning time for middayLateTime
+					times[1] = formattedHours+":"+ formattedMinutes;
+					times[3] = endTime;
+					return times;
+				}
 			
 				/**
 				 * Convert string to Double

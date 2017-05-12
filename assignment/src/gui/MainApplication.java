@@ -16,14 +16,11 @@ public class MainApplication extends Application {
     public MainApplication(){}
     @Override
     public void start(Stage primaryStage) throws Exception{
-        Parent root = FXMLLoader.load(getClass().getResource("mainLayout.fxml"));
-        primaryStage.setTitle("Application");
+        Parent root = FXMLLoader.load(getClass().getResource("loginLayout.fxml"));
+        primaryStage.setTitle("Login");
         primaryStage.setScene(new Scene(root));
         primaryStage.getIcons().add(new Image("images/ic_collections_bookmark_black_48dp_2x.png"));
-        primaryStage.setMinWidth(800);
-        primaryStage.setMinHeight(650);
-        primaryStage.setMaxWidth(1000);
-        primaryStage.setMaxHeight(850);
+        primaryStage.setResizable(false);
         primaryStage.show();
 
     }

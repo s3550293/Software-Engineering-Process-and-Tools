@@ -1,6 +1,5 @@
 package program;
 
-import java.util.*;
 
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
@@ -8,7 +7,7 @@ import org.apache.log4j.Logger;
 public class Login
 {
 	private static Logger log = Logger.getLogger(Login.class);
-	
+	private final Controller program = new Controller();
 	public Login(){
 		log.setLevel(Level.DEBUG);
 	}
@@ -36,11 +35,11 @@ public class Login
 				{
 					passCheck=true;
 					if(connect.getUser(userName).getAccountType() == 1){
-						Controller.setUser(connect.getUser(userName));
+						program.setUser(connect.getUser(userName));
 						log.debug("LOGGER: User - "+connect.getUser(userName).getFullName());
 						return 1;
 					}else{
-						Controller.setUser(connect.getUser(userName));
+						program.setUser(connect.getUser(userName));
 						log.debug("LOGGER: User - "+connect.getUser(userName).getFullName());
 						return 0;
 					}

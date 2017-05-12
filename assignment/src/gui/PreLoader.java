@@ -5,10 +5,6 @@ import javafx.scene.Scene;
 import javafx.scene.control.ProgressBar;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
-import program.BusinessMenu;
-import program.Database;
-import program.DatabaseConnection;
-import program.Service;
 
 import java.io.File;
 

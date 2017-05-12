@@ -207,6 +207,7 @@ public class SetupController implements Initializable {
 		connection.addUser(business.getUsername(), business.getPassword(), 1);
 		business.setID(connection.getUser(business.getUsername()).getID());
 		connection.createBusiness(business);
+		ini();
 	}
 	
 	/**

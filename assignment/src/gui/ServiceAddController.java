@@ -5,7 +5,6 @@ import org.apache.log4j.Logger;
 import javafx.fxml.FXML;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
-import program.BusinessMenu;
 import program.Controller;
 import program.DatabaseConnection;
 import program.Service;

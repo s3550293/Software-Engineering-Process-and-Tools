@@ -1,5 +1,6 @@
 package gui;
 
+import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -40,7 +41,18 @@ public class LoginController implements Initializable {
 	
 	public void initialize(URL url, ResourceBundle rb)
 	{
+		log.debug("LOGGER: Entered ini");
 		lblError.setVisible(false);
+		File varTmpData = new File("db/company.db");
+		if (varTmpData.exists() == false) {
+			log.debug("LOGGER: File doesnt exist");
+			boolean var = setup();
+			if(var == false){
+				log.debug("LOGGER: setup faild");
+				Platform.exit();
+				System.exit(0);
+			}
+		}
 	}
 	
 	/**
@@ -61,7 +73,12 @@ public class LoginController implements Initializable {
 			else if(loginCheck == 1 || loginCheck == 0){
 				log.debug("LOGGER: Login is equal to 1 or 0");
 				lblError.setVisible(false);
-				loginstage.close();
+				loginstage.hide();
+				if (program.getUser().getAccountType() == 1) {
+					bOwnerWindow();
+				} else {
+					cUserWindow();
+				}
 			}
 			else{
 				log.debug("LOGGER: Login returning a value different from -2, 1 or 0");
@@ -74,6 +91,9 @@ public class LoginController implements Initializable {
 			Platform.exit();
 			System.exit(0);
 		}
+		txtUserLogin.setText("");
+		txtPassLogin.setText("");
+		loginstage.show();
 		
 	}
 	
@@ -99,6 +119,78 @@ public class LoginController implements Initializable {
             log.warn(ioe.getMessage());
             log.debug("LOGGER: Creation Fail");
         }
+	}
+	
+	private boolean bOwnerWindow(){
+		try {
+			Stage secondaryStage = new Stage();
+			secondaryStage.getIcons().add(new Image("images/ic_collections_bookmark_black_48dp_2x.png"));
+			Parent root = FXMLLoader.load(getClass().getResource("businessLayout.fxml"));
+			secondaryStage.setTitle("Business Application");
+			secondaryStage.setMinWidth(800);
+			secondaryStage.setMinHeight(650);
+			secondaryStage.setMaxWidth(1000);
+			secondaryStage.setMaxHeight(850);
+			secondaryStage.setScene(new Scene(root));
+			secondaryStage.initModality(Modality.APPLICATION_MODAL);
+			secondaryStage.showAndWait();
+			if (program.getUser() != null) {
+				return true;
+			}
+		} catch (IOException ioe) {
+			log.warn(ioe.getMessage());
+		}
+		log.debug("false");
+		return false;
+	}
+	
+	private boolean cUserWindow(){
+		try {
+			Stage secondaryStage = new Stage();
+			secondaryStage.getIcons().add(new Image("images/ic_collections_bookmark_black_48dp_2x.png"));
+			Parent root = FXMLLoader.load(getClass().getResource("customerLayout.fxml"));
+			secondaryStage.setTitle("Customer Application");
+			secondaryStage.setMinWidth(800);
+			secondaryStage.setMinHeight(650);
+			secondaryStage.setMaxWidth(1000);
+			secondaryStage.setMaxHeight(850);
+			secondaryStage.setScene(new Scene(root));
+			secondaryStage.initModality(Modality.APPLICATION_MODAL);
+			secondaryStage.showAndWait();
+			if (program.getUser() != null) {
+				return true;
+			}
+		} catch (IOException ioe) {
+			log.warn(ioe.getMessage());
+		}
+		log.debug("false");
+		return false;
+	}
+	/**
+	 * Launches the setup window
+	 * @return
+	 */
+	@FXML
+	public boolean setup() {
+		log.debug("Setup Started");
+		try {
+			Stage secondaryStage = new Stage();
+			secondaryStage.getIcons().add(new Image("images/ic_collections_bookmark_black_48dp_2x.png"));
+			Parent root = FXMLLoader.load(getClass().getResource("setupLayout.fxml"));
+			secondaryStage.setTitle("Setup");
+			secondaryStage.setResizable(false);
+			secondaryStage.setScene(new Scene(root));
+			secondaryStage.initModality(Modality.APPLICATION_MODAL);
+			secondaryStage.showAndWait();
+			File varTmpData = new File("db/program.db");
+			if (varTmpData.exists() == false) {
+				log.debug("false");
+				return false;
+			}
+		} catch (IOException ioe) {
+			log.warn(ioe.getMessage());
+		}
+		return true;
 	}
 	
 

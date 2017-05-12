@@ -3,8 +3,9 @@ package gui;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.ResourceBundle;
+
+import org.apache.log4j.Logger;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -15,24 +16,35 @@ import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 import javafx.util.Callback;
 import program.BusinessMenu;
+import program.BusinessOwner;
+import program.Controller;
 import program.Database;
 import program.DatabaseConnection;
+import program.Register;
 import program.Service;
 
 public class SetupController implements Initializable {
-	
+	public final static Logger log = Logger.getLogger(SetupController.class);
+	private final Controller program = new Controller();
+	private final  DatabaseConnection connection = new DatabaseConnection();
+	private static BusinessOwner business = new BusinessOwner();
+	public final Register regpro = new Register();
 	/*
 	 * Oder of panes stkpWelcome > stkpDetails > stkpTimeSlot > (Setup Finishes and database is created) > stkpSelectColor
 	 */
 	@FXML
-	StackPane stkpWelcome, stkpDetails, stkpTimeSlot, stkpSelectColor;
+	AnchorPane root;
 	
 	@FXML
-	TextField txtFNam, txtLNam, txtBNam, txtBPho;
+	StackPane stkpWelcome, stkpDetails, stkpTimeSlot, stkpLogin, stkpSelectColor;
+	
+	@FXML
+	TextField txtFNam, txtLNam, txtBNam, txtBPho, txtUserNam, txtPass, txtConPass;
 	
 	@FXML
 	TextArea txtaBAdre;
@@ -68,14 +80,103 @@ public class SetupController implements Initializable {
 		
 		if(stkpDetails.isVisible())
 		{
+			if (program.checkInputToContainInvalidChar(txtFNam.getText().toString())) {
+				program.messageBox("ERROR", "Error", "First Name field is empty or contains an invalid character", "");
+				return;
+			}
+			if (program.checkInputToContainInvalidChar(txtLNam.getText().toString())) {
+				program.messageBox("ERROR", "Error", "Last Name field is empty or contains an invalid character", "");
+				return;
+			}
+			if (program.checkInputToContainInvalidChar(txtBNam.getText().toString())) {
+				program.messageBox("ERROR", "Error", "Business Name field is empty or contains an invalid character", "");
+				return;
+			}
+			if(txtBPho.getText().length() != 10)
+	        {
+	        	program.messageBox("ERROR", "Error", "Invalid Phone Number", "");
+	            return;
+	        }
+			if(program.changeInputIntoValidInt(txtBPho.getText().toString()) == -1)
+	        {
+	        	program.messageBox("ERROR", "Error", "Invalid Phone Number", "");
+	            return;
+	        }
+			if(txtaBAdre.getText().length() ==0){
+				program.messageBox("ERROR", "Error", "Address field is empty or contains an invalid character", "");
+				return;
+			}
+			business.setFName(txtFNam.getText());
+			business.setLName(txtLNam.getText());
+			business.setBusiness(txtBNam.getText());
+			business.setPhone(txtBPho.getText());
+			business.setAddress(txtaBAdre.getText());
+
 			stkpTimeSlot.setVisible(true);
 			stkpDetails.setVisible(false);
+			return;
 		}
 		if(stkpTimeSlot.isVisible())
 		{
-			stkpSelectColor.setVisible(true);
+			if (cmbMFOpen.getSelectionModel().getSelectedItem() == null) {
+				program.messageBox("ERROR", "Error", "Opening Hours Has Not Been Chosen", "Please select a time");
+				return;
+			}
+			if (cmbMFClose.getSelectionModel().getSelectedItem() == null) {
+				program.messageBox("ERROR", "Error", "Closing Hours Has Not Been Chosen", "Please select a time");
+				return;
+			}
+			if (cmbSSOpen.getSelectionModel().getSelectedItem() == null) {
+				program.messageBox("ERROR", "Error", "Opening Hours Has Not Been Chosen", "Please select a time");
+				return;
+			}
+			if (cmbSSClose.getSelectionModel().getSelectedItem() == null) {
+				program.messageBox("ERROR", "Error", "Closing Hours Has Not Been Chosen", "Please select a time");
+				return;
+			}
+			
+			business.setWeekdayStart(program.strToTime(cmbMFOpen.getSelectionModel().getSelectedItem()));
+			business.setWeekdayEnd(program.strToTime(cmbMFClose.getSelectionModel().getSelectedItem()));
+			business.setWeekendStart(program.strToTime(cmbSSOpen.getSelectionModel().getSelectedItem()));
+			business.setWeekendEnd(program.strToTime(cmbSSClose.getSelectionModel().getSelectedItem()));
+			if(business.getWeekdayStart().after(business.getWeekdayEnd()))
+			{
+				program.messageBox("ERROR", "Error", "Invalid choice. Open hours later than closing hours", "");
+				return;
+			}
+			if(business.getWeekendStart().after(business.getWeekendEnd()))
+			{
+				program.messageBox("ERROR", "Error", "Invalid choice. Open hours later than closing hours", "");
+				return;
+			}
+			stkpLogin.setVisible(true);
 			stkpTimeSlot.setVisible(false);
+			return;
+		}
+		if(stkpLogin.isVisible())
+		{
+	        if (program.checkInputToContainInvalidChar(txtUserNam.getText().toString())) {
+	            program.messageBox("ERROR", "Error", "Invalid Username", "");
+	            return;
+	        }
+	        if(!regpro.checkPassword(txtPass.getText())){
+	        	program.messageBox("ERROR", "Error", "Invalid Password", "Password must be longer then 6 characters and contain Uppercase, lowercase and number characters");
+	            return;
+	        }
+	        if(!txtPass.getText().toString().equals(txtConPass.getText().toString()))
+	        {
+	        	log.debug("LOGGER: Password:"+txtPass.getText());
+	        	log.debug("LOGGER: Conf Password:"+txtConPass.getText());
+	        	program.messageBox("ERROR", "Error", "Passwords Do No Match", "");
+	            return;
+	        }
+	        business.setUsern(txtUserNam.getText());
+	        business.setPass(txtPass.getText());
+			stkpSelectColor.setVisible(true);
+			stkpLogin.setVisible(false);
+			createDB();
 			createBO();
+			return;
 		}
 	}
 	/**
@@ -84,17 +185,28 @@ public class SetupController implements Initializable {
 	 */
 	@FXML
 	public void back(){
-		stkpTimeSlot.setVisible(false);
-		stkpDetails.setVisible(true);
+		if(stkpTimeSlot.isVisible()){
+			stkpTimeSlot.setVisible(false);
+			stkpDetails.setVisible(true);
+			return;
+		}
+		if(stkpLogin.isVisible()){
+			stkpTimeSlot.setVisible(true);
+			stkpLogin.setVisible(false);
+		}
+		
 	}
 	
 	/**
 	 * 
-	 * @author [Programmer]
+	 * @author Bryan
 	 */
 	@FXML
-	public void createBO(){
-		//TODO
+	public void createBO() {
+		// TODO
+		connection.addUser(business.getUsername(), business.getPassword(), 1);
+		business.setID(connection.getUser(business.getUsername()).getID());
+		connection.createBusiness(business);
 	}
 	
 	/**
@@ -291,6 +403,13 @@ public class SetupController implements Initializable {
 				}
 			});
 		}
+	}
+	
+	@FXML
+	public void chgCol(){
+		log.debug("LOGGER Change color");
+		root.setStyle("-fx-base1: #42f4b0; -fx-base3: Black;");
+		//root.setStyle("-fx-base3: Black;");
 	}
 	
 	

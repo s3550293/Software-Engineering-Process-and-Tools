@@ -1,15 +1,26 @@
+*{
+
+}
+
 .root{
     -fx-focus-color: transparent;
     -fx-faint-focus-color: transparent;
+    /*buttons*/
+    -fx-base1: #446CB3; /*Button Color*/
+    -fx-base2: black; /*buttons*/
+    -fx-base3: White; /*Button Text*/
+    /*LABELS*/
+    -fx-base4: #EDEDED; /*Selected text*/
 }
 
+
 .background {
-    -fx-background-color: derive(#EDEDED,20%);
+    -fx-background-color: derive(-fx-base4,20%);
 }
 
 /*TABBED PANES*/
 .tab-pane .tab-header-area .tab-header-background{
-    -fx-background-color: derive(#EDEDED,20%);
+    -fx-background-color: derive(-fx-base4,20%);
 }
 .tab {
     -fx-focus-color: transparent;
@@ -17,27 +28,27 @@
 }
 .tab-pane .tab
 {
-    -fx-background-color: derive(#EDEDED,-20%);
+    -fx-background-color: derive(-fx-base4,-20%);
 
 }
 .tab .tab-label {
     -fx-alignment: CENTER;
-    -fx-text-fill: black;
+    -fx-text-fill: -fx-base2;
     -fx-font-size: 14px;
 }
 .tab-pane .tab:selected .tab-label {
     -fx-alignment: CENTER;
-    -fx-text-fill: white;
+    -fx-text-fill: -fx-base3;
     -fx-font-size: 14px;
 }
 .tab-pane .tab:selected
 {
   -fx-background-color:
         -fx-shadow-highlight-color,
-        linear-gradient(to bottom, derive(#446CB3,-90%) 0%, derive(#446CB3,-60%) 100%),
-        linear-gradient(to bottom, derive(#446CB3,-60%) 0%, derive(#446CB3,-35%) 50%, derive(#446CB3,-30%) 98%, derive(#446CB3,-50%) 100%),
+        linear-gradient(to bottom, derive(-fx-base1,-90%) 0%, derive(-fx-base1,-60%) 100%),
+        linear-gradient(to bottom, derive(-fx-base1,-60%) 0%, derive(-fx-base1,-35%) 50%, derive(-fx-base1,-30%) 98%, derive(-fx-base1,-50%) 100%),
         linear-gradient(to right, rgba(0,0,0,0.2) 0%, rgba(0,0,0,0) 40%, rgba(0,0,0,0) 190%, rgba(0,0,0,0.3) 200%);
-    -fx-text-fill: white;
+    -fx-text-fill: -fx-base3;
 }
 
 
@@ -52,7 +63,7 @@
 .label-button {
     -fx-font-size: 11pt;
     -fx-font-family: "Segoe UI", Helvetica, Arial, sans-serif;
-    -fx-text-fill: #d8d8d8;
+    -fx-text-fill: -fx-base4;
     -fx-opacity: 1;
 }
 
@@ -100,15 +111,15 @@
 /*LIST VIEW*/
 .list-view .list-cell{
     -fx-font-size: 15px;
-    -fx-text-fill: black;
+    -fx-text-fill: -fx-base2;
 }
 .list-view .list-cell:filled:selected:focused, .list-cell:filled:selected {
   -fx-background-color:
         -fx-shadow-highlight-color,
-        linear-gradient(to bottom, derive(#446CB3,-90%) 0%, derive(#446CB3,-60%) 100%),
-        linear-gradient(to bottom, derive(#446CB3,-60%) 0%, derive(#446CB3,-35%) 50%, derive(#446CB3,-30%) 98%, derive(#446CB3,-50%) 100%),
+        linear-gradient(to bottom, derive(-fx-base1,-90%) 0%, derive(-fx-base1,-60%) 100%),
+        linear-gradient(to bottom, derive(-fx-base1,-60%) 0%, derive(-fx-base1,-35%) 50%, derive(-fx-base1,-30%) 98%, derive(-fx-base1,-50%) 100%),
         linear-gradient(to right, rgba(0,0,0,0.2) 0%, rgba(0,0,0,0) 40%, rgba(0,0,0,0) 190%, rgba(0,0,0,0.3) 200%);
-    -fx-text-fill: White;
+    -fx-text-fill: -fx-base3;
 }
 
 .list-view .list-cell:even { /* <=== changed to even */
@@ -119,8 +130,8 @@
 }
 
 .list-view .list-cell:filled:hover {
-    -fx-background-color: #446CB3;
-    -fx-text-fill: #EDEDED;
+    -fx-background-color: -fx-base1;
+    -fx-text-fill: -fx-base4;
 }
 
 
@@ -141,7 +152,7 @@
 }
 
 .menu .left-container {
-    -fx-background-color: black;
+    -fx-background-color: -fx-base2;
 }
 
 /*Text Feild*/
@@ -158,24 +169,24 @@
  */
 .button {
     -fx-background-radius: 1;
-    -fx-background-color: #446CB3;
+    -fx-background-color: -fx-base1;
     -fx-font-family: "Segoe UI", Helvetica, Arial, sans-serif;
     -fx-font-size: 11pt;
-    -fx-text-fill: #d8d8d8;
+    -fx-text-fill: -fx-base3;
     -fx-background-insets: 0 0 0 0, 0, 1, 2;
 }
 
 .button:hover {
-    -fx-background-color: #446CB3;
+    -fx-background-color: -fx-base1;
 }
 
 .button:pressed, .button:default:hover:pressed {
   -fx-background-color:
         -fx-shadow-highlight-color,
-        linear-gradient(to bottom, derive(#446CB3,-90%) 0%, derive(#446CB3,-60%) 100%),
-        linear-gradient(to bottom, derive(#446CB3,-60%) 0%, derive(#446CB3,-35%) 50%, derive(#446CB3,-30%) 98%, derive(#446CB3,-50%) 100%),
+        linear-gradient(to bottom, derive(-fx-base1,-90%) 0%, derive(-fx-base1,-60%) 100%),
+        linear-gradient(to bottom, derive(-fx-base1,-60%) 0%, derive(-fx-base1,-35%) 50%, derive(-fx-base1,-30%) 98%, derive(-fx-base1,-50%) 100%),
         linear-gradient(to right, rgba(0,0,0,0.2) 0%, rgba(0,0,0,0) 40%, rgba(0,0,0,0) 190%, rgba(0,0,0,0.3) 200%);
-    -fx-text-fill: #EDEDED;
+    -fx-text-fill: -fx-base3;
 }
 
 .button:disabled, .button:default:disabled {
@@ -221,21 +232,21 @@
   -fx-background-radius: 0;
   -fx-background-color:
         -fx-shadow-highlight-color,
-        linear-gradient(to bottom, derive(#446CB3,-90%) 0%, derive(#446CB3,-60%) 100%),
-        linear-gradient(to bottom, derive(#446CB3,-60%) 0%, derive(#446CB3,-35%) 50%, derive(#446CB3,-30%) 98%, derive(#446CB3,-50%) 100%),
+        linear-gradient(to bottom, derive(-fx-base1,-90%) 0%, derive(-fx-base1,-60%) 100%),
+        linear-gradient(to bottom, derive(-fx-base1,-60%) 0%, derive(-fx-base1,-35%) 50%, derive(-fx-base1,-30%) 98%, derive(-fx-base1,-50%) 100%),
         linear-gradient(to right, rgba(0,0,0,0.2) 0%, rgba(0,0,0,0) 40%, rgba(0,0,0,0) 190%, rgba(0,0,0,0.3) 200%);
     -fx-background-insets: 0 0 0 0, 0, 0, 0;
   -fx-font-family: "Segoe UI", Helvetica, Arial, sans-serif;
   -fx-font-size: 11pt;
-  -fx-text-fill: White;
+  -fx-text-fill: -fx-base3;
   -fx-background-radius: 0px, 0px, 0px, 0px;
 }
 .toggle-button-cust{
   -fx-background-radius: 1;
-  -fx-background-color: #446CB3;
+  -fx-background-color: -fx-base1;
   -fx-font-family: "Segoe UI", Helvetica, Arial, sans-serif;
   -fx-font-size: 11pt;
-  -fx-text-fill: White;
+  -fx-text-fill: -fx-base3;
   -fx-background-insets: 0 0 0 0, 0, 1, 2;
 }
 
@@ -244,23 +255,23 @@
 
 /*COMBOBOX*/
 .combo-box {
-    -fx-background-color: -fx-shadow-highlight-color, -fx-outer-border, -fx-inner-border, white;
+    -fx-background-color: -fx-shadow-highlight-color, -fx-outer-border, -fx-inner-border, -fx-base3;
     -fx-background-insets: 0 0 -1 0, 0, 1, 2;
     -fx-background-radius: 3px, 3px, 2px, 1px;
 }
 .combo-box:selected {
-    -fx-text-fill: black;
+    -fx-text-fill: -fx-base2;
 }
 
 .combo-box .list-view .list-cell:hover{
-    -fx-text-fill: White;
-    -fx-background-color: #446CB3;
+    -fx-text-fill: -fx-base3;
+    -fx-background-color: -fx-base1;
 }
 .combo-box .cell:selected {
-  -fx-background-color: -fx-shadow-highlight-color, -fx-outer-border, -fx-inner-border, white;
+  -fx-background-color: -fx-shadow-highlight-color, -fx-outer-border, -fx-inner-border, -fx-base3;
   -fx-background-insets: 0 0 -1 0, 0, 1, 2;
   -fx-background-radius: 3px, 3px, 2px, 1px;
-  -fx-text-fill: black;
+  -fx-text-fill: -fx-base2;
 }
 .combo-box .cell:even {
     -fx-background-color: #EDEDED;
@@ -269,8 +280,8 @@
     -fx-background-color: #EDEDED;
 }
 .combo-box .cell:filled:selected:focused , .cell:filled:selected{
-  -fx-background-color: -fx-shadow-highlight-color, -fx-outer-border, -fx-inner-border, white;
+  -fx-background-color: -fx-shadow-highlight-color, -fx-outer-border, -fx-inner-border, -fx-base3;
   -fx-background-insets: 0 0 -1 0, 0, 1, 2;
   -fx-background-radius: 3px, 3px, 2px, 1px;
-  -fx-text-fill: black;
+  -fx-text-fill: -fx-base2;
 }

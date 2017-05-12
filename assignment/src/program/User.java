@@ -62,7 +62,10 @@ public class User
 	public String getFName(){return _fname;}
 	public String getLName(){return _lname;}
 	public String getPhone(){return _phone;}
+	public void setID(int id){_id = id;}
 	public void setFName(String fname){_fname = fname;}
 	public void setLName(String lname){_lname = lname;}
 	public void setPhone(String phone){_phone = phone;}
+	public void setUsern(String uname){_username = uname;}
+	public void setPass(String pass){_password = pass;}
 }

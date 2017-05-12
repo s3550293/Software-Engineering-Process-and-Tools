@@ -24,21 +24,10 @@ public class BusinessOwner extends User {
 		_weekendEnd = weekendEnd;
 	}
 
-	public BusinessOwner(String business, String fname, String lname, String phone, String address, Date weekdayStart,
-			Date weekdayEnd, Date weekendStart, Date weekendEnd) {
-		super(fname, lname, phone);
-		_business = business;
-		_address = address;
-		_weekdayStart = weekdayStart;
-		_weekdayEnd = weekdayEnd;
-		_weekendStart = weekendStart;
-		_weekendEnd = weekendEnd;
-	}
-
 	public int getID() {
 		return _id;
 	}
-
+	
 	public String getBusiness() {
 		return _business;
 	}
@@ -72,11 +61,11 @@ public class BusinessOwner extends User {
 	}
 
 	public void setWeekendStart(Date weekendS) {
-		_weekdayStart = weekendS;
+		_weekendStart = weekendS;
 	}
 
-	public void setWeekdendEnd(Date weekendE) {
-		_weekdayStart = weekendE;
+	public void setWeekendEnd(Date weekendE) {
+		_weekendEnd = weekendE;
 	}
 
 	public void setBusiness(String business) {

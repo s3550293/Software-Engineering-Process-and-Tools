@@ -30,14 +30,15 @@ public class BusinessMenu
 				 */
 				public String[] splitTimeIntoThreeBlocks(String startTime, String endTime)
 				{
+					int MINIMUM_OPEN_TIME = 60; //means that the business must be open for at least 60 minutes a day
 					//A-a represents startTime, B-b represents endTime
 					String[] times = {"","","",""};
 					//Getting substring hours
 					String A = startTime.substring(0,2);
 					String B = endTime.substring(0,2);
 					//Getting substring minutes
-					String a = startTime.substring(2);
-					String b = endTime.substring(2);
+					String a = startTime.substring(3);
+					String b = endTime.substring(3);
 					//converting strings into integers
 					int AA = Integer.parseInt(A);
 					int BB = Integer.parseInt(B);
@@ -49,6 +50,12 @@ public class BusinessMenu
 					//getting total minutes
 					int aaa = AAA + aa;
 					int bbb = BBB + bb;
+					//Error checking
+					if((bbb - aaa < MINIMUM_OPEN_TIME)||(aaa > 1380 || bbb > 1440))
+					{
+						log.warn("endTime, startTime are invalid\n");
+						return times;
+					}
 					//Getting time minutes between startTime aaa and endTime bbb
 					int timeDifference = bbb - aaa;
 					//getting 1 third of time difference
@@ -75,7 +82,7 @@ public class BusinessMenu
 					minutes = middayLateTime%60;
 					formattedMinutes = String.format("%02d", minutes);
 					//Assigning time for middayLateTime
-					times[1] = formattedHours+":"+ formattedMinutes;
+					times[2] = formattedHours+":"+ formattedMinutes;
 					times[3] = endTime;
 					return times;
 				}

@@ -13,79 +13,21 @@ public class BusinessMenu
 	private Controller controller = new Controller();
 	DatabaseConnection connect = new DatabaseConnection();
 	public BusinessMenu(){log.setLevel(Level.WARN);}
-	public String early = "08:00"; //Start Time for day
-	public String earlyMidDay = "12:00"; //Early Midday
-	public String lateMidDay = "16:00"; //Late midday
-	public String late = "20:00"; // End Time for day
+	//Monday to Friday
+	public String MFearly = "08:00"; //Start Time for day
+	public String MFearlyMidDay = "12:00"; //Early Midday
+	public String MFlateMidDay = "16:00"; //Late midday
+	public String MFlate = "20:00"; // End Time for day
+	//Sunday to Saturday
+	public String SSearly = "08:00"; //Start Time for day
+	public String SSearlyMidDay = "12:00"; //Early Midday
+	public String SSlateMidDay = "16:00"; //Late midday
+	public String SSlate = "20:00"; // End Time for day
 	
 	/**
 	 * @author Luke Mason
 	 * Used to check information to add a new employee to database
 	 */
-				/**
-				 * Gets a start time and end time and splits the time between them into 3 blocks which are bounded by 4 different times.
-				 * @param startTime - HH:MM
-				 * @param endTime - HH:MM
-				 * @return
-				 */
-				public String[] splitTimeIntoThreeBlocks(String startTime, String endTime)
-				{
-					int MINIMUM_OPEN_TIME = 60; //means that the business must be open for at least 60 minutes a day
-					//A-a represents startTime, B-b represents endTime
-					String[] times = {"","","",""};
-					//Getting substring hours
-					String A = startTime.substring(0,2);
-					String B = endTime.substring(0,2);
-					//Getting substring minutes
-					String a = startTime.substring(3);
-					String b = endTime.substring(3);
-					//converting strings into integers
-					int AA = Integer.parseInt(A);
-					int BB = Integer.parseInt(B);
-					int aa = Integer.parseInt(a);
-					int bb = Integer.parseInt(b);
-					//getting minutes from hours
-					int AAA = AA * 60;
-					int BBB = BB * 60;
-					//getting total minutes
-					int aaa = AAA + aa;
-					int bbb = BBB + bb;
-					//Error checking
-					if((bbb - aaa < MINIMUM_OPEN_TIME)||(aaa > 1380 || bbb > 1440))
-					{
-						log.warn("endTime, startTime are invalid\n");
-						return times;
-					}
-					//Getting time minutes between startTime aaa and endTime bbb
-					int timeDifference = bbb - aaa;
-					//getting 1 third of time difference
-					int thirdOfTime = timeDifference/3;
-					//Assigning times
-					times[0] = startTime;
-					//converting minutes into HH:MM
-					int middayEarlyTime = aaa + thirdOfTime;
-					int middayLateTime = middayEarlyTime + thirdOfTime;
-					int hours;
-					int minutes;
-					String formattedHours;
-					String formattedMinutes;
-					//Formatting numbers to two digitse.g 02 04 06 10 12 etc	
-					hours = middayEarlyTime/60;
-					formattedHours = String.format("%02d", hours);
-					minutes = middayEarlyTime%60;
-					formattedMinutes = String.format("%02d", minutes);
-					//Assigning time for middayEarlyTime
-					times[1] = formattedHours+":"+formattedMinutes;
-					//Formatting numbers to two digitse.g 02 04 06 10 12 etc
-					hours = middayLateTime/60;
-					formattedHours = String.format("%02d", hours);
-					minutes = middayLateTime%60;
-					formattedMinutes = String.format("%02d", minutes);
-					//Assigning time for middayLateTime
-					times[2] = formattedHours+":"+ formattedMinutes;
-					times[3] = endTime;
-					return times;
-				}
 			
 				/**
 				 * Convert string to Double
@@ -333,12 +275,36 @@ public class BusinessMenu
 				 * @param checkTimes
 				 * @return array of 2 String's objects; Start Time and End Times
 				 */
-				public String[] getStartEndTimes(int checkTimes)
+				public String[] getStartEndTimes(int checkTimes, int dayBlock)
 				{
 					log.info("IN getStartEndTimes\n");
 					String[] array = new String[2];
 					array[0] = "";//Start Time
 					array[1] = "";//End Time
+					String early = "";
+					String earlyMidDay = "";
+					String lateMidDay = "";
+					String late = "";
+					//0 = weekdays, 1 = weekend
+					if(dayBlock == 0)
+					{
+						early = MFearly; //Start Time for day
+						earlyMidDay = MFearlyMidDay; //Early Midday
+						lateMidDay = MFlateMidDay; //Late midday
+						late = MFlate; // End Time for day
+						//Sunday to Saturday
+					}
+					else if(dayBlock == 1)
+					{
+						early = SSearly; //Start Time for day
+						earlyMidDay = SSearlyMidDay; //Early Midday
+						lateMidDay = SSlateMidDay; //Late midday
+						late = SSlate; // End Time for day
+					}
+					else
+					{
+						return array;
+					}
 					switch(checkTimes)
 					{
 						case 0:
@@ -391,7 +357,14 @@ public class BusinessMenu
 					// -Day- is not used but is there if needed
 					String[] array = new String[2];
 					int check = getWorkTimes(morning, afternoon, evening);
-					array = getStartEndTimes(check);
+					if(dayOfWeek != 1 && dayOfWeek != 7)
+					{
+						array = getStartEndTimes(check,0);
+					}
+					else
+					{
+						array = getStartEndTimes(check,1);
+					}
 					if(check == -1)
 					{
 						log.info("OUT addDayWorkingTime");
@@ -419,9 +392,34 @@ public class BusinessMenu
 				 * @return an integer representing a combination of morning,afternoon and evening, 
 				 * 			-1 if time block is invalid
 				 */
-				public int getTimeBlock(String startTime, String endTime)
+				public int getTimeBlock(String startTime, String endTime, int dayBlock)
 				{
 					log.info("IN getTimeBlock");
+					String early = "";
+					String earlyMidDay = "";
+					String lateMidDay = "";
+					String late = "";
+					//0 = weekdays, 1 = weekend
+					if(dayBlock == 0)
+					{
+						early = MFearly; //Start Time for day
+						earlyMidDay = MFearlyMidDay; //Early Midday
+						lateMidDay = MFlateMidDay; //Late midday
+						late = MFlate; // End Time for day
+						//Sunday to Saturday
+					}
+					else if(dayBlock == 1)
+					{
+						early = SSearly; //Start Time for day
+						earlyMidDay = SSearlyMidDay; //Early Midday
+						lateMidDay = SSlateMidDay; //Late midday
+						late = SSlate; // End Time for day
+					}
+					else
+					{
+						log.info("OUT getTimeBlock");
+						return -1;
+					}
 						if(startTime.equals(early) && endTime.equals(late))
 						{
 							log.info("OUT getTimeBlock");

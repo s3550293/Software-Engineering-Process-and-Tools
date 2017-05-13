@@ -3,6 +3,7 @@ package gui;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.ResourceBundle;
 
 import org.apache.log4j.Logger;
@@ -11,8 +12,6 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.Node;
-import javafx.scene.Scene;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
@@ -36,6 +35,7 @@ public class SetupController implements Initializable {
 	private final  DatabaseConnection connection = new DatabaseConnection();
 	private static BusinessOwner business = new BusinessOwner();
 	public final Register regpro = new Register();
+	public final BusinessMenu bMenu = new BusinessMenu();
 	/*
 	 * Oder of panes stkpWelcome > stkpDetails > stkpTimeSlot > (Setup Finishes and database is created) > stkpSelectColor
 	 */
@@ -62,6 +62,155 @@ public class SetupController implements Initializable {
 		dispSSClose();
 		//createDB();
 		//ini();
+	}
+	//Date business.getWeekdayStart() ,Date business.getWeekdayEnd(), Date business.getWeekendStart() ,Date business.getWeekendEnd()
+	public void assignOpenClosingTimesToGlobal(Date weekdayStart ,Date weekdayEnd, Date weekendStart ,Date weekendEnd)
+	{
+		//Change Dates to Strings
+		String MFOpen = program.timeToStr(weekdayStart);
+		String MFClose = program.timeToStr(weekdayEnd);
+		String SSOpen = program.timeToStr(weekendStart);
+		String SSClose = program.timeToStr(weekendEnd);
+		//assign times for weekends and weekdays
+		assignOpenClosingTimesToWeekDays(MFOpen, MFClose);
+		assignOpenClosingTimesToWeekEnds(SSOpen, SSClose);
+	}
+	public void assignOpenClosingTimesToWeekDays(String MFOpen,String MFClose)
+	{
+		String startTime = "";
+		String endTime = "";
+		if(MFOpen.length() < 5)
+		{
+			//Getting substring hours
+			String A = MFOpen.substring(0,2);
+			//Getting substring minutes
+			String a = MFOpen.substring(3);
+			//converting strings into integers
+			int hours = Integer.parseInt(A);
+			int minutes = Integer.parseInt(a);
+			String formattedHours = String.format("%02d", hours);
+			String formattedMinutes = String.format("%02d", minutes);
+			startTime = formattedHours+":"+formattedMinutes;
+		}
+		if(MFClose.length() < 5)
+		{
+			//Getting substring hours
+			String B = MFClose.substring(0,2);
+			//Getting substring minutes
+			String b = MFClose.substring(3);
+			//converting strings into integers
+			int hours = Integer.parseInt(B);
+			int minutes = Integer.parseInt(b);
+			String formattedHours = String.format("%02d", hours);
+			String formattedMinutes = String.format("%02d", minutes);
+			endTime = formattedHours+":"+formattedMinutes;
+		}
+		String[] times = splitTimeIntoThreeBlocks(startTime, endTime);
+		bMenu.MFearly = times[0];
+		bMenu.MFearlyMidDay = times[1];
+		bMenu.MFlateMidDay = times[2];
+		bMenu.MFlate = times[3];
+	}
+	public void assignOpenClosingTimesToWeekEnds(String SSOpen,String SSClose)
+	{
+		String startTime = "";
+		String endTime = "";
+		if(SSOpen.length() < 5)
+		{
+			//Getting substring hours
+			String A = SSOpen.substring(0,2);
+			//Getting substring minutes
+			String a = SSOpen.substring(3);
+			//converting strings into integers
+			int hours = Integer.parseInt(A);
+			int minutes = Integer.parseInt(a);
+			String formattedHours = String.format("%02d", hours);
+			String formattedMinutes = String.format("%02d", minutes);
+			startTime = formattedHours+":"+formattedMinutes;
+		}
+		if(SSClose.length() < 5)
+		{
+			//Getting substring hours
+			String B = SSClose.substring(0,2);
+			//Getting substring minutes
+			String b = SSClose.substring(3);
+			//converting strings into integers
+			int hours = Integer.parseInt(B);
+			int minutes = Integer.parseInt(b);
+			String formattedHours = String.format("%02d", hours);
+			String formattedMinutes = String.format("%02d", minutes);
+			endTime = formattedHours+":"+formattedMinutes;
+		}
+		String[] times = splitTimeIntoThreeBlocks(startTime, endTime);
+		bMenu.SSearly = times[0];
+		bMenu.SSearlyMidDay = times[1];
+		bMenu.SSlateMidDay = times[2];
+		bMenu.SSlate = times[3];
+	}
+	
+	/**
+	 * Gets a start time and end time and splits the time between them into 3 blocks which are bounded by 4 different times.
+	 * @param startTime - HH:MM
+	 * @param endTime - HH:MM
+	 * @return
+	 */
+	public String[] splitTimeIntoThreeBlocks(String startTime, String endTime)
+	{
+		int MINIMUM_OPEN_TIME = 60; //means that the business must be open for at least 60 minutes a day
+		//A-a represents startTime, B-b represents endTime
+		String[] times = {"","","",""};
+		//Getting substring hours
+		String A = startTime.substring(0,2);
+		String B = endTime.substring(0,2);
+		//Getting substring minutes
+		String a = startTime.substring(3);
+		String b = endTime.substring(3);
+		//converting strings into integers
+		int AA = Integer.parseInt(A);
+		int BB = Integer.parseInt(B);
+		int aa = Integer.parseInt(a);
+		int bb = Integer.parseInt(b);
+		//getting minutes from hours
+		int AAA = AA * 60;
+		int BBB = BB * 60;
+		//getting total minutes
+		int aaa = AAA + aa;
+		int bbb = BBB + bb;
+		//Error checking
+		if((bbb - aaa < MINIMUM_OPEN_TIME)||(aaa > 1380 || bbb > 1440))
+		{
+			log.warn("endTime, startTime are invalid\n");
+			return times;
+		}
+		//Getting time minutes between startTime aaa and endTime bbb
+		int timeDifference = bbb - aaa;
+		//getting 1 third of time difference
+		int thirdOfTime = timeDifference/3;
+		//Assigning times
+		times[0] = startTime;
+		//converting minutes into HH:MM
+		int middayEarlyTime = aaa + thirdOfTime;
+		int middayLateTime = middayEarlyTime + thirdOfTime;
+		int hours;
+		int minutes;
+		String formattedHours;
+		String formattedMinutes;
+		//Formatting numbers to two digitse.g 02 04 06 10 12 etc	
+		hours = middayEarlyTime/60;
+		minutes = middayEarlyTime%60;
+		formattedHours = String.format("%02d", hours);
+		formattedMinutes = String.format("%02d", minutes);
+		//Assigning time for middayEarlyTime
+		times[1] = formattedHours+":"+formattedMinutes;
+		//Formatting numbers to two digitse.g 02 04 06 10 12 etc
+		hours = middayLateTime/60;
+		minutes = middayLateTime%60;
+		formattedHours = String.format("%02d", hours);
+		formattedMinutes = String.format("%02d", minutes);
+		//Assigning time for middayLateTime
+		times[2] = formattedHours+":"+ formattedMinutes;
+		times[3] = endTime;
+		return times;
 	}
 	/**
 	 * Moves the user to the starting view
@@ -209,6 +358,7 @@ public class SetupController implements Initializable {
 		connection.addUser(business.getUsername(), business.getPassword(), 1);
 		business.setID(connection.getUser(business.getUsername()).getID());
 		connection.createBusiness(business);
+		ini();
 	}
 	
 	/**

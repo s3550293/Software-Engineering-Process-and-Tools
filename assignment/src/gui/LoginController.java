@@ -29,7 +29,7 @@ public class LoginController implements Initializable {
 	private Login loginFuction = new Login();
 	private Controller program = new Controller();
 	private int loginCount = 0;
-	
+	UserFactory userFactory = new UserFactory();
 	@FXML
 	TextField txtUserLogin;
 	@FXML
@@ -71,14 +71,18 @@ public class LoginController implements Initializable {
 				loginCount += 1;
 				log.debug("LOGGER: login count - "+loginCount);
 			}
-			else if(loginCheck == 1 || loginCheck == 0){
+			else if(loginCheck == 1 || loginCheck == 0 || loginCheck == 2){
 				log.debug("LOGGER: Login is equal to 1 or 0");
 				lblError.setVisible(false);
 				loginstage.hide();
 				if (program.getUser().getAccountType() == 1) {
-					bOwnerWindow();
-				} else {
-					cUserWindow();
+					IUser businessowner = userFactory.getUser("BusinessOwner");
+					businessowner.getUserWindow();
+				} else if(program.getUser().getAccountType() == 0) {
+					IUser customer = userFactory.getUser("Customer");
+					customer.getUserWindow();
+				} else if(program.getUser().getAccountType() == 2){
+					rootWindow();
 				}
 			}
 			else{
@@ -122,6 +126,7 @@ public class LoginController implements Initializable {
         }
 	}
 	
+	/*
 	private boolean bOwnerWindow(){
 		try {
 			Stage secondaryStage = new Stage();
@@ -143,8 +148,9 @@ public class LoginController implements Initializable {
 		}
 		log.debug("false");
 		return false;
-	}
+	}*/
 	
+	/*
 	private boolean cUserWindow(){
 		try {
 			Stage secondaryStage = new Stage();
@@ -166,7 +172,7 @@ public class LoginController implements Initializable {
 		}
 		log.debug("false");
 		return false;
-	}
+	}*/
 	/**
 	 * Launches the setup window
 	 * @return

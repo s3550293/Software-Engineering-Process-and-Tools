@@ -590,6 +590,7 @@ public class SetupController implements Initializable {
 		connect.addUser("admin","Monday10!",1);
 		connect.addUser("William", "Apples22", 0);
 		connect.addUser("Hannah", "Apples22", 0);
+		connect.addUser("root", "Root123", 2);
 		
 		connect.addEmployee("Luke Charles",25);
 		connect.addEmployee("David Smith",26.6);

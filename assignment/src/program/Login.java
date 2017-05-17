@@ -38,10 +38,15 @@ public class Login
 						program.setUser(connect.getUser(userName));
 						log.debug("LOGGER: User - "+connect.getUser(userName).getFullName());
 						return 1;
-					}else{
+					}else if(connect.getUser(userName).getAccountType() == 0){
 						program.setUser(connect.getUser(userName));
 						log.debug("LOGGER: User - "+connect.getUser(userName).getFullName());
 						return 0;
+					}
+					else if(connect.getUser(userName).getAccountType() == 2){
+						program.setUser(connect.getUser(userName));
+						log.debug("LOGGER: User - "+connect.getUser(userName).getFullName());
+						return 2;
 					}
 				}
 				else

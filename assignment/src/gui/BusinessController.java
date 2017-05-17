@@ -50,7 +50,7 @@ import program.EmployeeWorkingTime;
 import program.Service;
 import program.User;
 
-public class BusinessController  implements Initializable  {
+public class BusinessController  implements Initializable, IUser  {
 	private static Logger log = Logger.getLogger(BusinessController.class);
 	private static Controller program = new Controller();
 	private DatabaseConnection connection = new DatabaseConnection();
@@ -1205,7 +1205,6 @@ public class BusinessController  implements Initializable  {
 	 * 
 	 * @author Joseph Garner
 	 */
-	
 	@FXML
 	public void createBooking() {
 		/*
@@ -1247,4 +1246,30 @@ public class BusinessController  implements Initializable  {
 			}
 		});
 	}
+	
+	@Override
+	public boolean getUserWindow(){
+		try {
+			Stage secondaryStage = new Stage();
+			secondaryStage.getIcons().add(new Image("images/ic_collections_bookmark_black_48dp_2x.png"));
+			Parent root = FXMLLoader.load(getClass().getResource("businessLayout.fxml"));
+			secondaryStage.setTitle("Business Application");
+			secondaryStage.setMinWidth(800);
+			secondaryStage.setMinHeight(650);
+			secondaryStage.setMaxWidth(1000);
+			secondaryStage.setMaxHeight(850);
+			secondaryStage.setScene(new Scene(root));
+			secondaryStage.initModality(Modality.APPLICATION_MODAL);
+			secondaryStage.showAndWait();
+			if (program.getUser() != null) {
+				return true;
+			}
+		} catch (IOException ioe) {
+			log.warn(ioe.getMessage());
+		}
+		log.debug("false");
+		return false;
+	}
+	
+	
 }

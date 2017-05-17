@@ -67,7 +67,9 @@ public class Database
 		 "userID integer PRIMARY KEY AUTOINCREMENT,"
 				+ "username VARCHAR(30) NOT NULL," 
 				+ "password VARCHAR(30) NOT NULL,"
-				+ "accountType integer NOT NULL);";
+				+ "accountType integer NOT NULL,"
+				+ "businessID integer,"
+				+ "FOREIGN KEY(businessID) REFERENCES business(businessID));";
 		String queryUserDetails = "CREATE TABLE IF NOT EXISTS CLIENTDETAILS (" 
 				+ "id integer NOT NULL,"
 				+ "FName VARCHAR(30) NOT NULL,"

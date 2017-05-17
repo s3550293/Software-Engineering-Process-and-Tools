@@ -36,6 +36,7 @@ public class SetupController implements Initializable {
 	private static BusinessOwner business = new BusinessOwner();
 	public final Register regpro = new Register();
 	public final BusinessMenu bMenu = new BusinessMenu();
+	public String databaseName = "company.db";
 	/*
 	 * Oder of panes stkpWelcome > stkpDetails > stkpTimeSlot > (Setup Finishes and database is created) > stkpSelectColor
 	 */
@@ -63,7 +64,20 @@ public class SetupController implements Initializable {
 		//createDB();
 		//ini();
 	}
-	//Date business.getWeekdayStart() ,Date business.getWeekdayEnd(), Date business.getWeekendStart() ,Date business.getWeekendEnd()
+	
+	public void assignDatabaseName()
+	{
+		databaseName = ""+business.getID();
+	}
+	
+	/**
+	 * Assigning 
+	 * @author Luke Mason
+	 * @param weekdayStart
+	 * @param weekdayEnd
+	 * @param weekendStart
+	 * @param weekendEnd
+	 */
 	public void assignOpenClosingTimesToGlobal(Date weekdayStart ,Date weekdayEnd, Date weekendStart ,Date weekendEnd)
 	{
 		//Change Dates to Strings
@@ -566,8 +580,8 @@ public class SetupController implements Initializable {
 	
 	
 	private void createDB(){
-		Database db = new Database("company.db");
-		db.createTable("company.db");
+		Database db = new Database(databaseName);
+		db.createTable(databaseName);
 	}
 	private void ini()
     {

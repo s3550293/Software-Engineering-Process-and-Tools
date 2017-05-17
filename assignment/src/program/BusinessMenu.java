@@ -28,7 +28,15 @@ public class BusinessMenu
 	 * @author Luke Mason
 	 * Used to check information to add a new employee to database
 	 */
-			
+				
+	/**
+	 * Changes the worktime labels to the worktime blocks when selecting work times for an employee
+	 */
+	public void changeWorkTimeLabelsToTimes()
+	{
+		//TODO
+	}
+	
 				/**
 				 * Convert string to Double
 				 * @param employeePayRate

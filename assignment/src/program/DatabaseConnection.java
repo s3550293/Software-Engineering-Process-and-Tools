@@ -56,12 +56,13 @@ public class DatabaseConnection
 	{
 		log.info("IN addUser\n");
 		/*
-		 * account type boolean 1 for business owner 0 for user
+		 * account type boolean 1 for business owner, 0 for user
 		 */
 		String query = "INSERT INTO USERS(username, password, accountType) " + "VALUES('"+username+"','"+password+"','"+accountType+"')";
 		executeQuery(query, "User Added\n");
 		log.info("OUT addUser\n");
 	}
+	
 	/**
 	 * Adds User to database
 	 * @param username

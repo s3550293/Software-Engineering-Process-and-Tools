@@ -45,7 +45,7 @@ public class ServiceAddController {
 			program.messageBox("ERROR", "Price Invalid", "Price Invalid","Price entered is not a valid amount\nReason: Price is not 0 - 1000");
 			return;
 		}
-		Service service = new Service(txtSerNam.getText(), duration, price);
+		Service service = new Service(txtSerNam.getText(), duration, price);//add BusinessID
 		connect.addSerice(service);
 		program.messageBox("SUCCESS", "Service Added!", "Service Added!","Service has been added");	
 		stage.close();

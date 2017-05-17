@@ -273,7 +273,7 @@ public class SetupController implements Initializable {
 			}
 			business.setFName(txtFNam.getText());
 			business.setLName(txtLNam.getText());
-			business.setBusiness(txtBNam.getText());
+			business.setBusiness(txtBNam.getText());//add businessID
 			business.setPhone(txtBPho.getText());
 			business.setAddress(txtaBAdre.getText());
 

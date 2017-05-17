@@ -8,9 +8,10 @@ public class Booking {
 	private int bookingID, cusID, employeeID, serviceID, staffID;
 	private Date date, startTime, endTime;
 	private String status;
+	private int businessID;
 	
 	public Booking(){}
-	public Booking(int bookingID, int cusID, int empID, Date date, Date startTime, Date endTime, int serviceID, String status)
+	public Booking(int bookingID, int cusID, int empID, Date date, Date startTime, Date endTime, int serviceID, String status,int businessID)
 	{
 		this.bookingID = bookingID;
 		this.employeeID = empID;
@@ -20,8 +21,9 @@ public class Booking {
 		this.endTime = endTime;
 		this.serviceID = serviceID;
 		this.status = status;
+		this.businessID = businessID;
 	}
-	public Booking(int cusID,int empID, Date date, Date startTime, Date endTime, int serviceID, String status)
+	public Booking(int cusID,int empID, Date date, Date startTime, Date endTime, int serviceID, String status,int businessID)
 	{
 		this.cusID = cusID;
 		this.employeeID = empID;
@@ -30,8 +32,12 @@ public class Booking {
 		this.endTime = endTime;
 		this.serviceID = serviceID;
 		this.status = status;
+		this.businessID = businessID;
 	}
-
+	public int getBusinessID()
+	{
+		return businessID;
+	}
 	public int getEmployeeID()
 	{
 		return employeeID;

@@ -78,18 +78,24 @@ public class Database
 				+ "Phone VARCHAR(30) NOT NULL,"
 				+ "DOB VARCHAR(30) NOT NULL,"
 				+ "Gender VARCHAR(30) NOT NULL,"
-				+ "FOREIGN KEY(id) REFERENCES USERS(userID));";
+				+ "FOREIGN KEY(id) REFERENCES USERS(userID),"
+				+ "businessID integer,"
+				+ "FOREIGN KEY(businessID) REFERENCES business(businessID));";
 		String queryEmployees = "CREATE TABLE IF NOT EXISTS EMPLOYEES ("
 				+ "employeeID integer PRIMARY KEY AUTOINCREMENT," 
 				+ "name VARCHAR(40) NOT NULL,"
-				+ "payRate DOUBLE NOT NULL);";
+				+ "payRate DOUBLE NOT NULL,"
+				+ "businessID integer,"
+				+ "FOREIGN KEY(businessID) REFERENCES business(businessID));";
 		String queryEmployeesWorkingTimes = "CREATE TABLE IF NOT EXISTS EMPLOYEES_WORKING_TIMES ("
 				+ "id integer PRIMARY KEY AUTOINCREMENT," 
 				+ "employeeID integer NOT NULL,"
 				+ "dayOfWeek integer NOT NULL," 
 				+ "startTime VARCHAR(20) NOT NULL," 
 				+ "endTime VARCHAR(20) NOT NULL,"
-				+ "FOREIGN KEY(employeeID) REFERENCES EMPLOYEES(employeeID));";
+				+ "businessID integer,"
+				+ "FOREIGN KEY(employeeID) REFERENCES EMPLOYEES(employeeID),"
+				+ "FOREIGN KEY(businessID) REFERENCES business(businessID));";
 		String queryBookings = "CREATE TABLE IF NOT EXISTS BOOKINGS (" 
 				+ "id integer PRIMARY KEY AUTOINCREMENT,"
 				+ "userID integer NOT NULL,"
@@ -99,6 +105,8 @@ public class Database
 				+ "endTime VARCHAR(20) NOT NULL," 
 				+ "serviceID integer NOT NULL," 
 				+ "status VARCHAR(20),"
+				+ "businessID integer,"
+				+ "FOREIGN KEY(businessID) REFERENCES business(businessID),"
 				+ "FOREIGN KEY (userID) REFERENCES USERS(userID),"
 				+ "FOREIGN KEY (employeeID) REFERENCES EMPLOYEES(employeeID),"
 				+ "FOREIGN KEY (serviceID) REFERENCES SERVICES(id));";
@@ -106,24 +114,28 @@ public class Database
 				+ "id integer PRIMARY KEY AUTOINCREMENT,"
 				+ "service VARCHAR(40) NOT NULL,"
 				+ "length integer NOT NULL,"
-				+ "cost double NOT NULL);";
+				+ "cost double NOT NULL,"
+				+ "businessID integer,"
+				+ "FOREIGN KEY(businessID) REFERENCES business(businessID));";
 		String queryBookingServiceLink = "CREATE TABLE IF NOT EXISTS BSLINK (" 
 				+ "bookingID integer NOT NULL,"
 				+ "serviceID integer NOT NULL," 
 				+ "FOREIGN KEY(bookingID) REFERENCES BOOKINGS(id),"
 				+ "FOREIGN KEY(serviceID) REFERENCES SERVICES(id));";
+		String queryBusinessOwner = "CREATE TABLE IF NOT EXISTS BUSINESS_OWNER (" 
+				+ "ID integer NOT NULL,"
+				+ "fName VARCHAR(30),"
+				+ "lName VARCHAR(30),"
+				+ "Phone VARCHAR(30),"
+				+ "address VARCHAR(30),"
+				+ "weekdayStart VARCHAR(20),"
+				+ "weekdayEnd VARCHAR(20)," 
+				+ "weekendStart VARCHAR(20),"
+				+ "weekendEnd VARCHAR(20)"
+				+ "FOREIGN KEY(ID) REFERENCES USERS(userID));";
 		String queryBusiness = "CREATE TABLE IF NOT EXISTS BUSINESS (" 
-				+ "id integer NOT NULL,"
-				+ "bName VARCHAR(30) NOT NULL,"
-				+ "fName VARCHAR(30) NOT NULL,"
-				+ "lName VARCHAR(30) NOT NULL,"
-				+ "Phone VARCHAR(30) NOT NULL,"
-				+ "address VARCHAR(30) NOT NULL,"
-				+ "weekdayStart VARCHAR(20) NOT NULL,"
-				+ "weekdayEnd VARCHAR(20) NOT NULL," 
-				+ "weekendStart VARCHAR(20) NOT NULL,"
-				+ "weekendEnd VARCHAR(20) NOT NULL,"
-				+ "FOREIGN KEY(id) REFERENCES USERS(userID));";
+				+"businessID interger PRIMARY KEY AUTOINCREMENT,"
+				+"businessName VARCHAR(40));";
 		/*
 		 * Attempting to connect to the database so tables can be created
 		 */
@@ -154,6 +166,11 @@ public class Database
 			
 			smt.executeUpdate(queryBookingServiceLink);
 			log.debug("Table 'BS LINK' added");
+			
+			//Creating Table 'BUSINESS OWNER'
+			smt.executeUpdate(queryBusinessOwner);
+			log.debug("Table 'BUSINESS OWNER' added");
+			
 			//Creating Table 'BUSINESS'
 			smt.executeUpdate(queryBusiness);
 			log.debug("Table 'BUSINESS' added");
@@ -196,57 +213,122 @@ public class Database
 		 * 
 		 * creating tables for users and user details to be remembered later
 		 */
-		String queryUser = "CREATE TABLE IF NOT EXISTS users (" + "userID integer PRIMARY KEY AUTOINCREMENT,"
-				+ "username text NOT NULL," + "password text NOT NULL," + "accountType integer NOT NULL);";
-		String queryUserDetails = "CREATE TABLE IF NOT EXISTS clientdetails (" + "id integer NOT NULL,"
-				+ "username text NOT NULL," + "Address text NOT NULL," + "Phone number boolean NOT NULL,"
-				+ "FOREGIN KEY(id) REFERNECES users(userID));";
-		String queryEmployees = "CREATE TABLE IF NOT EXISTS EMPLOYEES ("
-				+ "employeeID integer PRIMARY KEY AUTOINCREMENT," + "name VARCHAR(40) NOT NULL,"
-				+ "payRate integer NOT NULL);";
-
-		String queryEmployeesWorkingTimes = "CREATE TABLE IF NOT EXISTS EMPLOYEES_WORKING_TIMES ("
-				+ "employeeID INT NOT NULL," + "dayOfWeek integer NOT NULL," + "startTime VARCHAR(12) NOT NULL,"
-				+ "endTime VARCHAR(12) NOT NULL," + "FOREIGN KEY(employeeID) REFERENCES employees(employeeID));";
-		String queryBookings = "CREATE TABLE IF NOT EXISTS BOOKINGS (" + "id integer PRIMARY KEY AUTOINCREMENT,"
-				+ "userID integer NOT NULL," + "date text NOT NULL," + "startTime text NOT NULL,"
-				+ "endTime text NOT NULL," + "desc text," + "FOREIGN KEY (userID) REFERENCES users(userID));";
-		String queryBusiness = "CREATE TABLE IF NOT EXISTS BUSINESS (" + "id integer PRIMARY KEY AUTOINCREMENT,"
-				+ "bName VARCHAR(30) NOT NULL,"+ "fName VARCHAR(30) NOT NULL,"+ "lName VARCHAR(30) NOT NULL,"
-				+ "Phone VARCHAR(30) NOT NULL,"+ "address VARCHAR(30) NOT NULL,"+ "weekdayStart VARCHAR(20) NOT NULL,"
-				+ "weekdayEnd VARCHAR(20) NOT NULL," + "weekendStart VARCHAR(20) NOT NULL,"+ "weekendEnd VARCHAR(20) NOT NULL,";
-
+		String queryUser = "CREATE TABLE IF NOT EXISTS USERS (" + 
+				 "userID integer PRIMARY KEY AUTOINCREMENT,"
+						+ "username VARCHAR(30) NOT NULL," 
+						+ "password VARCHAR(30) NOT NULL,"
+						+ "accountType integer NOT NULL,"
+						+ "businessID integer,"
+						+ "FOREIGN KEY(businessID) REFERENCES business(businessID));";
+				String queryUserDetails = "CREATE TABLE IF NOT EXISTS CLIENTDETAILS (" 
+						+ "id integer NOT NULL,"
+						+ "FName VARCHAR(30) NOT NULL,"
+						+ "LName VARCHAR(30) NOT NULL," 
+						+ "Email VARCHAR(30) NOT NULL," 
+						+ "Phone VARCHAR(30) NOT NULL,"
+						+ "DOB VARCHAR(30) NOT NULL,"
+						+ "Gender VARCHAR(30) NOT NULL,"
+						+ "FOREIGN KEY(id) REFERENCES USERS(userID),"
+						+ "businessID integer,"
+						+ "FOREIGN KEY(businessID) REFERENCES business(businessID));";
+				String queryEmployees = "CREATE TABLE IF NOT EXISTS EMPLOYEES ("
+						+ "employeeID integer PRIMARY KEY AUTOINCREMENT," 
+						+ "name VARCHAR(40) NOT NULL,"
+						+ "payRate DOUBLE NOT NULL,"
+						+ "businessID integer,"
+						+ "FOREIGN KEY(businessID) REFERENCES business(businessID));";
+				String queryEmployeesWorkingTimes = "CREATE TABLE IF NOT EXISTS EMPLOYEES_WORKING_TIMES ("
+						+ "id integer PRIMARY KEY AUTOINCREMENT," 
+						+ "employeeID integer NOT NULL,"
+						+ "dayOfWeek integer NOT NULL," 
+						+ "startTime VARCHAR(20) NOT NULL," 
+						+ "endTime VARCHAR(20) NOT NULL,"
+						+ "businessID integer,"
+						+ "FOREIGN KEY(employeeID) REFERENCES EMPLOYEES(employeeID),"
+						+ "FOREIGN KEY(businessID) REFERENCES business(businessID));";
+				String queryBookings = "CREATE TABLE IF NOT EXISTS BOOKINGS (" 
+						+ "id integer PRIMARY KEY AUTOINCREMENT,"
+						+ "userID integer NOT NULL,"
+						+ "employeeID integer NOT NULL," 
+						+ "date VARCHAR(20) NOT NULL," 
+						+ "startTime VARCHAR(20) NOT NULL,"
+						+ "endTime VARCHAR(20) NOT NULL," 
+						+ "serviceID integer NOT NULL," 
+						+ "status VARCHAR(20),"
+						+ "businessID integer,"
+						+ "FOREIGN KEY(businessID) REFERENCES business(businessID),"
+						+ "FOREIGN KEY (userID) REFERENCES USERS(userID),"
+						+ "FOREIGN KEY (employeeID) REFERENCES EMPLOYEES(employeeID),"
+						+ "FOREIGN KEY (serviceID) REFERENCES SERVICES(id));";
+				String queryServices = "CREATE TABLE IF NOT EXISTS SERVICES (" 
+						+ "id integer PRIMARY KEY AUTOINCREMENT,"
+						+ "service VARCHAR(40) NOT NULL,"
+						+ "length integer NOT NULL,"
+						+ "cost double NOT NULL,"
+						+ "businessID integer,"
+						+ "FOREIGN KEY(businessID) REFERENCES business(businessID));";
+				String queryBookingServiceLink = "CREATE TABLE IF NOT EXISTS BSLINK (" 
+						+ "bookingID integer NOT NULL,"
+						+ "serviceID integer NOT NULL," 
+						+ "FOREIGN KEY(bookingID) REFERENCES BOOKINGS(id),"
+						+ "FOREIGN KEY(serviceID) REFERENCES SERVICES(id));";
+				String queryBusinessOwner = "CREATE TABLE IF NOT EXISTS BUSINESS (" 
+						+ "businessID integer PRIMARY KEY AUTOINCREMENT,"
+						+ "fName VARCHAR(30),"
+						+ "lName VARCHAR(30),"
+						+ "Phone VARCHAR(30),"
+						+ "address VARCHAR(30),"
+						+ "weekdayStart VARCHAR(20),"
+						+ "weekdayEnd VARCHAR(20)," 
+						+ "weekendStart VARCHAR(20),"
+						+ "weekendEnd VARCHAR(20),"
+						+ "FOREIGN KEY(ID) REFERENCES USERS(userID));";
+				String queryBusiness = "CREATE TABLE IF NOT EXISTS BUSINESS (" 
+						+"businessID interger PRIMARY KEY AUTOINCREMENT,"
+						+"businessName VARCHAR(40));";
 		/*
 		 * Attempting to connect to the database so tables can be created
 		 */
 		try (Connection connect = DriverManager.getConnection(url); Statement smt = connect.createStatement())
 		{
-			// Creating Table 'USERS'
+			//Creating Table 'USERS'
 			smt.executeUpdate(queryUser);
-			System.out.println("Table 'Users' added");
-
-			// Creating Table 'USERS_DETAILS'
-			smt.executeUpdate(queryUserDetails);
-			System.out.println("Table 'User Details added");
-
-			// Creating Table 'EMPLOYEES'
-			smt.executeUpdate(queryEmployees);
-			System.out.println("Table 'EMPLOYEES' added");
-
-			// Creating Table 'EMPLOYEES_WORKING_TIMES'
-			smt.executeUpdate(queryEmployeesWorkingTimes);
-			System.out.println("Table 'EMPLOYEES_WORKING_TIMES' added");
-
-			// Creating Table 'BOOKINGS'
-			smt.executeUpdate(queryBookings);
-			System.out.println("Table 'BOOKINGS' added");
+			log.debug("Table 'Users' added");
 			
-			// Creating Table 'BUSINESS'
+			//Creating Table 'USERS_DETAILS'
+			smt.executeUpdate(queryUserDetails);
+			log.debug("Table 'User Details' added");
+			
+			//Creating Table 'EMPLOYEES'
+			smt.executeUpdate(queryEmployees);
+			log.debug("Table 'EMPLOYEES' added");
+			
+			//Creating Table 'EMPLOYEES_WORKING_TIMES'
+			smt.executeUpdate(queryEmployeesWorkingTimes);
+			log.debug("Table 'EMPLOYEES_WORKING_TIMES' added");
+			
+			//Creating Table 'BOOKINGS'
+			smt.executeUpdate(queryBookings);
+			log.debug("Table 'BOOKINGS' added");
+			
+			smt.executeUpdate(queryServices);
+			log.debug("Table 'SERVICES' added");
+			
+			smt.executeUpdate(queryBookingServiceLink);
+			log.debug("Table 'BS LINK' added");
+			
+			//Creating Table 'BUSINESS OWNER'
+			smt.executeUpdate(queryBusinessOwner);
+			log.debug("Table 'BUSINESS OWNER' added");
+			
+			//Creating Table 'BUSINESS'
 			smt.executeUpdate(queryBusiness);
-			System.out.println("Table 'BUSINESS' added");
+			log.debug("Table 'BUSINESS' added");
 		} catch (SQLException sqle)
 		{
-			System.out.println("Adding Table: " + sqle.getMessage());
+			// System.out.println("ERROR: couldn't add table:
+			// "+sqle.getMessage());
+			log.warn("ERROR: couldn't add table: " + sqle.getMessage());
 		}
 	}
 }

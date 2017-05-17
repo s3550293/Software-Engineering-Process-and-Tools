@@ -3,7 +3,6 @@ package program;
 import java.util.Date;
 
 public class BusinessOwner extends User {
-	private String _business;
 	private String _address;
 	private Date _weekdayStart;
 	private Date _weekdayEnd;
@@ -13,10 +12,9 @@ public class BusinessOwner extends User {
 	public BusinessOwner() {
 	}
 
-	public BusinessOwner(int id, String business, String fname, String lname, String phone, String address,
-			Date weekdayStart, Date weekdayEnd, Date weekendStart, Date weekendEnd) {
-		super(id, fname, lname, phone);
-		_business = business;
+	public BusinessOwner(int ID, String fname, String lname, String phone, String address,
+			Date weekdayStart, Date weekdayEnd, Date weekendStart, Date weekendEnd, int businessID) {
+		super(ID, fname, lname, phone, businessID);
 		_address = address;
 		_weekdayStart = weekdayStart;
 		_weekdayEnd = weekdayEnd;
@@ -28,10 +26,6 @@ public class BusinessOwner extends User {
 		return _id;
 	}
 	
-	public String getBusiness() {
-		return _business;
-	}
-
 	public String getAddress() {
 		return _address;
 	}
@@ -66,10 +60,6 @@ public class BusinessOwner extends User {
 
 	public void setWeekendEnd(Date weekendE) {
 		_weekendEnd = weekendE;
-	}
-
-	public void setBusiness(String business) {
-		_business = business;
 	}
 
 	public void setAddress(String address) {

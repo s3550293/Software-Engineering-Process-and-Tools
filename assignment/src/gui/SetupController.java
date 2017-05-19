@@ -583,27 +583,30 @@ public class SetupController implements Initializable {
     {
 		DatabaseConnection connect = new DatabaseConnection();
 		BusinessMenu bMenu = new BusinessMenu();
-		connect.addUser("admin","Monday10!",1);
-		connect.addUser("William", "Apples22", 0);
-		connect.addUser("Hannah", "Apples22", 0);
-		connect.addUser("root", "Root123", 2);
 		
-		connect.addEmployee("Luke Charles",25);
-		connect.addEmployee("David Smith",26.6);
-		connect.addEmployee("Will Turner",15);
-		connect.addEmployee("Rob Pointer",14);
-		connect.addEmployee("Adam Mason",12);
-		connect.addEmployee("David Chang",17);
-		connect.addEmployee("Joseph Tun",17);
-		connect.addEmployee("Casey Pointer",17);
-		connect.addEmployee("Danyon Glenk",10);
-		connect.addEmployee("Justin Lui",24);
-		connect.addEmployee("Jan Misso",15.7);
-		connect.addEmployee("Harry Nancarrow",19);
-		connect.addEmployee("Tom Gates",18.54);
-		connect.addEmployee("Emma Snelling",16.3);
-		connect.addEmployee("Laura Rite",15.2);
-		connect.addEmployee("Harry Potter",18);
+		connect.addUser("admin","Monday10!",1,2); // Business Owner attached to Business 2		
+		connect.addUser("root", "Root123", 2,1); //Super user attached to business 1
+		connect.addUser("William", "Apples22", 0,2); // customer attached to Business 2
+		connect.addUser("Hannah", "Apples22", 0,2); // customer attached to Business 2
+		connect.addUserDetails(connect.getUser("William",2).getID(), "William", "Porter", "will@mail.com", "0452368593", "01/01/2002", "Male",2);
+		connect.addUserDetails(connect.getUser("Hannah",2).getID(), "Hannah", "Hawlking", "hannah@mail.com", "0452136859", "20/04/1995", "Famale",2);
+		
+		connect.addEmployee("Luke Charles",25,2);
+		connect.addEmployee("David Smith",26.6,2);
+		connect.addEmployee("Will Turner",15,2);
+		connect.addEmployee("Rob Pointer",14,2);
+		connect.addEmployee("Adam Mason",12,3);
+		connect.addEmployee("David Chang",17,3);
+		connect.addEmployee("Joseph Tun",17,4);
+		connect.addEmployee("Casey Pointer",17,5);
+		connect.addEmployee("Danyon Glenk",10,5);
+		connect.addEmployee("Justin Lui",24,5);
+		connect.addEmployee("Jan Misso",15.7,6);
+		connect.addEmployee("Harry Nancarrow",19,6);
+		connect.addEmployee("Tom Gates",18.54,7);
+		connect.addEmployee("Emma Snelling",16.3,7);
+		connect.addEmployee("Laura Rite",15.2,8);
+		connect.addEmployee("Harry Potter",18,8);
 		
 		bMenu.addDayWorkingTime(1,1,true,true,false);
 		bMenu.addDayWorkingTime(1,2,true,true,false);
@@ -684,28 +687,33 @@ public class SetupController implements Initializable {
 		bMenu.addDayWorkingTime(16,4,false,true,false);
 		bMenu.addDayWorkingTime(16,6,false,true,true);
 		
-		connect.addUserDetails(2, "William", "Porter", "will@mail.com", "0452368593", "01/01/2002", "Male");
-		connect.addUserDetails(3, "Hannah", "Hawlking", "hannah@mail.com", "0452136859", "20/04/1995", "Famale");
+		
 
-		connect.addSerice(new Service("Trim",30,25,2));
-		connect.addSerice(new Service("Wash",45,30,2));
-		connect.addSerice(new Service("Cut and Style",90,60,2));
+		connect.addService(new Service("Trim",30,25,2));
+		connect.addService(new Service("Wash",45,30,2));
+		connect.addService(new Service("Cut and Style",90,60,2));
 		
-		connect.addBooking(2,1, "21/04/2017", "10:00", "10:40", 1,"active");
-		connect.addBooking(2,2, "22/04/2017", "11:00", "11:59", 2,"canceled");
-		connect.addBooking(2,1, "23/04/2017", "10:00", "10:40", 3,"canceled");
-		connect.addBooking(2,2, "24/04/2017", "11:00", "11:59", 2,"canceled");
-		connect.addBooking(2,3, "25/04/2017", "8:00", "8:40", 2, "active");
-		connect.addBooking(2,2, "26/04/2017", "8:00", "8:40", 2, "canceled");
-		connect.addBooking(2,3, "27/04/2017", "10:00", "10:40", 1,"active");
-		connect.addBooking(2,2, "28/04/2017", "11:00", "11:59", 1,"active");
-		connect.addBooking(2,3, "29/04/2017", "8:00", "8:40", 1, "canceled");
+		connect.addBooking(2,1, "21/04/2017", "10:00", "10:40", 1,"active",2);
+		connect.addBooking(2,2, "22/04/2017", "11:00", "11:59", 2,"canceled",2);
+		connect.addBooking(2,1, "23/04/2017", "10:00", "10:40", 3,"canceled",2);
+		connect.addBooking(2,2, "24/04/2017", "11:00", "11:59", 2,"canceled",2);
+		connect.addBooking(2,3, "25/04/2017", "8:00", "8:40", 2, "active",2);
+		connect.addBooking(2,2, "26/04/2017", "8:00", "8:40", 2, "canceled",2);
+		connect.addBooking(2,1, "21/04/2017", "10:00", "10:40", 1,"active",3);
+		connect.addBooking(2,2, "22/04/2017", "11:00", "11:59", 2,"canceled",3);
+		connect.addBooking(2,1, "23/04/2017", "10:00", "10:40", 3,"canceled",3);
+		connect.addBooking(2,2, "24/04/2017", "11:00", "11:59", 2,"canceled",3);
+		connect.addBooking(2,3, "25/04/2017", "8:00", "8:40", 2, "active",3);
+		connect.addBooking(2,2, "26/04/2017", "8:00", "8:40", 2, "canceled",3);
+		connect.addBooking(2,3, "27/04/2017", "10:00", "10:40", 1,"active",4);
+		connect.addBooking(2,2, "28/04/2017", "11:00", "11:59", 1,"active",4);
+		connect.addBooking(2,3, "29/04/2017", "8:00", "8:40", 1, "canceled",5);
 		
-		connect.addBooking(2,1, "24/05/2017", "8:00", "8:40", 2, "active");
-		connect.addBooking(3,1, "16/07/2017", "10:00", "10:40", 3,"active");
-		connect.addBooking(3,2, "14/05/2017", "11:00", "11:59", 1,"active");
-		connect.addBooking(3,1, "4/05/2017", "10:00", "10:40", 2,"active");
-		connect.addBooking(3,2, "6/05/2017", "11:00", "11:59", 3,"active");
+		connect.addBooking(2,1, "24/05/2017", "8:00", "8:40", 2, "active",5);
+		connect.addBooking(3,1, "16/07/2017", "10:00", "10:40", 3,"active",6);
+		connect.addBooking(3,2, "14/05/2017", "11:00", "11:59", 1,"active",7);
+		connect.addBooking(3,1, "4/05/2017", "10:00", "10:40", 2,"active",8);
+		connect.addBooking(3,2, "6/05/2017", "11:00", "11:59", 3,"active",8);
 		
 
 

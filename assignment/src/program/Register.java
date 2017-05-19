@@ -13,8 +13,8 @@ public class Register
 	
 	public void registerUser(String fname, String lname, String username, String email, String mobilenumber, String dob, String gender, String password)
 	{
-		connect.addUser(username, password, 0);
-		connect.addUserDetails(connect.getUser(username).getID(),fname,lname, email, mobilenumber, dob, gender);	
+		connect.addUser(username, password, 0,2);
+		connect.addUserDetails(connect.getUser(username,2).getID(),fname,lname, email, mobilenumber, dob, gender,2);	
 	}
 	
 	/**
@@ -22,10 +22,10 @@ public class Register
 	 * Checks if the username is equal to one already in the database
 	 * @return true if username already taken, else false
 	 */
-	public boolean checkTakenUsername(String username)
+	public boolean checkTakenUsername(String username, int businessID)
 	{
 		boolean output = true;
-		if(!username.equalsIgnoreCase(connect.getUser(username).getUsername()))
+		if(!username.equalsIgnoreCase(connect.getUser(username,businessID).getUsername()))
 		{
 			output = false;
 		}

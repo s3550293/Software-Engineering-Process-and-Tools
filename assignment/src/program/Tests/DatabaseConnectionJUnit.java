@@ -37,33 +37,7 @@ public class DatabaseConnectionJUnit {
         }
         return connect;
 	}
-	/*
-	 * OutDated Code
-	public int countEmployeesInArray(Employee[] employees)
-	{
-		int counter = 0;
-		for (int i = 0; i < employees.length; i ++)
-		{
-		    if (employees[i] != null)
-		    {
-		        counter ++;
-		    }
-		}
-		return counter;
-	}
-	public int countWorkTimesInArray(EmployeeWorkingTime[] employeeWorkingTime)
-	{
-		int counter = 0;
-		for (int i = 0; i < employeeWorkingTime.length; i ++)
-		{
-		    if (employeeWorkingTime[i] != null)
-		    {
-		        counter ++;
-		    }
-		}
-		return counter;
-	}
-	*/
+	
 	DatabaseConnection connect = new DatabaseConnection();
 	
 	@Before
@@ -87,15 +61,15 @@ public class DatabaseConnectionJUnit {
 		//Creates ALL TABLES
 		Database db = new Database("company.db");
 		db.createTable("company.db");
-		connect.addEmployee("Luke Mason", 1000);//Creating a set of employees
-		connect.addEmployee("Luke Boi", 24.57);
-		connect.addEmployee("Mason Smith", 24.57);
-		connect.addEmployee("Jane Smith", 24.57);
-		connect.addEmployeeWorkingTime(1,1,"06:30","20:00");//Assigning employee Luke with 2 working times
-		connect.addEmployeeWorkingTime(1,4,"12:35","20:00");
-		connect.addBooking(1,1, "03/12/2017", "10:30", "11:59",0, "active");
-		connect.addBooking(2,1, "02/03/2017", "11:30", "12:30",0, "active");
-		connect.addBooking(3,1, "03/12/2017", "12:00", "14:00",0, "active");
+		connect.addEmployee("Luke Mason", 1000,2);//Creating a set of employees
+		connect.addEmployee("Luke Boi", 24.57,2);
+		connect.addEmployee("Mason Smith", 24.57,2);
+		connect.addEmployee("Jane Smith", 24.57,2);
+		connect.addEmployeeWorkingTime(1,1,"06:30","20:00",2);//Assigning employee Luke with 2 working times
+		connect.addEmployeeWorkingTime(1,4,"12:35","20:00",2);
+		connect.addBooking(1,1, "03/12/2017", "10:30", "11:59",0, "active",2);
+		connect.addBooking(2,1, "02/03/2017", "11:30", "12:30",0, "active",2);
+		connect.addBooking(3,1, "03/12/2017", "12:00", "14:00",0, "active",2);
 	}
 	@Test
 	public void testTestEmployeeAttributesLuke1()
@@ -143,19 +117,19 @@ public class DatabaseConnectionJUnit {
 	public void testGetEmployees1()
 	{
 		System.out.println("\n\nGetEmployees\n------------------------------------------------------------------------");
-		ArrayList<Employee> employees = connect.getEmployees("Smith");
+		ArrayList<Employee> employees = connect.getEmployees("Smith",2);
 		assertTrue(employees.size() == 2);
 	}
 	@Test
 	public void testGetEmployees2()
 	{
-		ArrayList<Employee> employees = connect.getEmployees("Mason");
+		ArrayList<Employee> employees = connect.getEmployees("Mason",2);
 		assertTrue(employees.size() == 2);
 	}
 	@Test
 	public void testGetEmployees3()
 	{
-		ArrayList<Employee> employees = connect.getEmployees("Mason");
+		ArrayList<Employee> employees = connect.getEmployees("Mason",2);
 		Employee emp = new Employee();
 		for(Employee e: employees)
 		{
@@ -167,7 +141,7 @@ public class DatabaseConnectionJUnit {
 	@Test
 	public void testGetEmployees4()
 	{
-		ArrayList<Employee> employees = connect.getEmployees("Mason");
+		ArrayList<Employee> employees = connect.getEmployees("Mason",2);
 		Employee emp = new Employee();
 		for(Employee e: employees)
 		{
@@ -179,7 +153,7 @@ public class DatabaseConnectionJUnit {
 	@Test
 	public void testGetEmployees5()
 	{
-		ArrayList<Employee> employees = connect.getEmployees("Mason");
+		ArrayList<Employee> employees = connect.getEmployees("Mason",2);
 		Employee emp = new Employee();
 		for(Employee e: employees)
 		{
@@ -191,7 +165,7 @@ public class DatabaseConnectionJUnit {
 	@Test
 	public void testGetEmployees6()
 	{
-		ArrayList<Employee> employees = connect.getEmployees("Mason");
+		ArrayList<Employee> employees = connect.getEmployees("Mason",2);
 		Employee emp = new Employee();
 		for(Employee e: employees)
 		{
@@ -203,14 +177,14 @@ public class DatabaseConnectionJUnit {
 	@Test
 	public void testGetEmployees7()
 	{
-		ArrayList<Employee> employees = connect.getEmployees("Steven Holger");
+		ArrayList<Employee> employees = connect.getEmployees("Steven Holger",2);
 		assertTrue(employees.size() == 0);
 	}
 	
 	@Test
 	public void testGetEmployeeWorkingTimes1()
 	{	
-		ArrayList<Employee> employees = connect.getEmployees("Luke");
+		ArrayList<Employee> employees = connect.getEmployees("Luke",2);
 		Employee emp = new Employee();
 		for(Employee e: employees)
 		{
@@ -323,7 +297,7 @@ public class DatabaseConnectionJUnit {
 	public void testAddBookingToDatabase_CustomerID()
 	{	
 		ArrayList<Booking> bookingLists = new ArrayList<Booking>();
-		bookingLists = connect.getAllBooking();
+		bookingLists = connect.getAllBooking(2);
 		
 		assertEquals(bookingLists.get(0).getCustomerId(),1);
 		assertEquals(bookingLists.get(1).getCustomerId(),2);
@@ -334,7 +308,7 @@ public class DatabaseConnectionJUnit {
 	public void testAddBookingToDatabase_Date()
 	{
 		ArrayList<Booking> bookingLists = new ArrayList<Booking>();
-		bookingLists = connect.getAllBooking();
+		bookingLists = connect.getAllBooking(2);
 		
 		assertEquals(controller.dateToStr(bookingLists.get(0).getDate()),"03/12/2017");
 		assertEquals(controller.dateToStr(bookingLists.get(1).getDate()),"02/03/2017");
@@ -345,7 +319,7 @@ public class DatabaseConnectionJUnit {
 	public void testAddBookingToDatabase_StartTimeAndEndTime()
 	{
 		ArrayList<Booking> bookingLists = new ArrayList<Booking>();
-		bookingLists = connect.getAllBooking();
+		bookingLists = connect.getAllBooking(2);
 
 		assertEquals(controller.timeToStr(bookingLists.get(0).getStartTime()),"10:30");
 		assertEquals(controller.timeToStr(bookingLists.get(0).getEndTime()),"11:59");
@@ -359,7 +333,7 @@ public class DatabaseConnectionJUnit {
 	public void testAddBookingToDatabase_Status()
 	{
 		ArrayList<Booking> bookingLists = new ArrayList<Booking>();
-		bookingLists = connect.getAllBooking();
+		bookingLists = connect.getAllBooking(2);
 		System.out.println(bookingLists.get(0).getStatus());
 		System.out.println(bookingLists.get(1).getStatus());
 		System.out.println(bookingLists.get(2).getStatus());
@@ -375,7 +349,7 @@ public class DatabaseConnectionJUnit {
 		assertTrue(connect.cancelBooking(1));
 		assertTrue(connect.cancelBooking(3));
 		
-		books = connect.getAllBooking();
+		books = connect.getAllBooking(2);
 		System.out.print("THIS ONE!~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
 		System.out.println(books.get(0).getStatus());
 		System.out.println(books.get(1).getStatus());
@@ -392,7 +366,11 @@ public class DatabaseConnectionJUnit {
 		assertFalse(connect.cancelBooking(0));
 		assertFalse(connect.cancelBooking(9999));
 	}
-	
+	@Test
+	public void testCreateBusiness()
+	{
+		connect.createBusiness("YOYOYO");
+	}
 	@After
 	public void tearDown()
 	{
@@ -404,7 +382,7 @@ public class DatabaseConnectionJUnit {
 			System.out.println("Dropped Employees Table");
 			inject.executeUpdate("DROP TABLE EMPLOYEES_WORKING_TIMES");
 			System.out.println("Dropped 'Working Times' Table");
-			inject.executeUpdate("DROP TABLE IF EXISTS BOOKINGS");
+			inject.executeUpdate("DROP TABLE BOOKINGS IF EXISTS BOOKINGS");
 			System.out.println("Dropped 'Bookings' Table");
 		}
 		catch(SQLException sqle)

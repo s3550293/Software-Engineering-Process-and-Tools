@@ -25,7 +25,7 @@ public class RegisterJunit
 	@Before
 	public void setup()
 	{
-		connect.addUser("TestUser", "123456", 0);
+		connect.addUser("TestUser", "123456", 0,2);
 	}
 	@Test
 	public void testPass1()
@@ -66,25 +66,25 @@ public class RegisterJunit
 	public void testUname1()
 	{
 		log.debug("Uname Test 1");
-		assertTrue(reg.checkTakenUsername("TestUser"));
+		assertTrue(reg.checkTakenUsername("TestUser",2));
 	}
 	
 	@Test
 	public void testUname2()
 	{
 		log.debug("Uname Test 2");
-		assertTrue(reg.checkTakenUsername("testuser"));
+		assertTrue(reg.checkTakenUsername("testuser",2));
 	}
 
 	@Test
 	public void testUname3()
 	{
 		log.debug("Uname Test 3");
-		assertFalse(reg.checkTakenUsername("Charlie21"));
+		assertFalse(reg.checkTakenUsername("Charlie21",2));
 	}
 	@After
 	public void teardown()
 	{
-		connect.dropUser("TestUser");
+		connect.dropUser("TestUser",2);
 	}
 }

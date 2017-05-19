@@ -132,7 +132,7 @@ public class RegisterController implements Initializable {
 	 * @author Joseph Garner
 	 */
 	@FXML
-	public void register() {
+	public void register(int businessID) {
 		//TODO
 		String date = null;
 		log.debug("LOGGER: entered createUser function");
@@ -144,7 +144,7 @@ public class RegisterController implements Initializable {
             program.messageBox("ERROR", "Error", "Last Name field is empty or contains an invalid character", "");
             return;
         }
-        if (regProgram.checkTakenUsername(txtRegUsername.getText().toString())) {
+        if (regProgram.checkTakenUsername(txtRegUsername.getText().toString(),businessID)) {
             program.messageBox("ERROR", "Error", "Invalid Username", "");
             return;
         }

@@ -68,6 +68,7 @@ public class User
 	public void setFName(String fname){_fname = fname;}
 	public void setLName(String lname){_lname = lname;}
 	public void setPhone(String phone){_phone = phone;}
+	public void setBusinessID(int id) {businessID = id;}
 	public void setUsern(String uname){_username = uname;}
 	public void setPass(String pass){_password = pass;}
 }

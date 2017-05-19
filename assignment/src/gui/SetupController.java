@@ -21,6 +21,7 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 import javafx.util.Callback;
+import program.Business;
 import program.BusinessMenu;
 import program.BusinessOwner;
 import program.Controller;
@@ -33,7 +34,8 @@ public class SetupController implements Initializable {
 	public final static Logger log = Logger.getLogger(SetupController.class);
 	private final Controller program = new Controller();
 	private final  DatabaseConnection connection = new DatabaseConnection();
-	private static BusinessOwner business = new BusinessOwner();
+	private static Business business = new Business();
+	private static BusinessOwner businessOwner = new BusinessOwner();
 	public final Register regpro = new Register();
 	public final BusinessMenu bMenu = new BusinessMenu();
 	public String databaseName = "company.db";
@@ -67,7 +69,7 @@ public class SetupController implements Initializable {
 	
 	public void assignDatabaseName()
 	{
-		databaseName = ""+business.getID();
+		databaseName = ""+business.getBusinessId();
 	}
 	
 	/**
@@ -253,10 +255,10 @@ public class SetupController implements Initializable {
 				program.messageBox("ERROR", "Error", "Last Name field is empty or contains an invalid character", "");
 				return;
 			}
-			if (program.checkInputToContainInvalidChar(txtBNam.getText().toString())) {
+			/*if (program.checkInputToContainInvalidChar(txtBNam.getText().toString())) {
 				program.messageBox("ERROR", "Error", "Business Name field is empty or contains an invalid character", "");
 				return;
-			}
+			}*/
 			if(txtBPho.getText().length() != 10)
 	        {
 	        	program.messageBox("ERROR", "Error", "Invalid Phone Number", "");
@@ -271,11 +273,10 @@ public class SetupController implements Initializable {
 				program.messageBox("ERROR", "Error", "Address field is empty or contains an invalid character", "");
 				return;
 			}
-			business.setFName(txtFNam.getText());
-			business.setLName(txtLNam.getText());
-			business.setBusiness(txtBNam.getText());//add businessID
-			business.setPhone(txtBPho.getText());
-			business.setAddress(txtaBAdre.getText());
+			businessOwner.setFName(txtFNam.getText());
+			businessOwner.setLName(txtLNam.getText());
+			businessOwner.setPhone(txtBPho.getText());
+			businessOwner.setAddress(txtaBAdre.getText());
 
 			stkpTimeSlot.setVisible(true);
 			stkpDetails.setVisible(false);
@@ -300,16 +301,16 @@ public class SetupController implements Initializable {
 				return;
 			}
 			
-			business.setWeekdayStart(program.strToTime(cmbMFOpen.getSelectionModel().getSelectedItem()));
-			business.setWeekdayEnd(program.strToTime(cmbMFClose.getSelectionModel().getSelectedItem()));
-			business.setWeekendStart(program.strToTime(cmbSSOpen.getSelectionModel().getSelectedItem()));
-			business.setWeekendEnd(program.strToTime(cmbSSClose.getSelectionModel().getSelectedItem()));
-			if(business.getWeekdayStart().after(business.getWeekdayEnd()))
+			businessOwner.setWeekdayStart(program.strToTime(cmbMFOpen.getSelectionModel().getSelectedItem()));
+			businessOwner.setWeekdayEnd(program.strToTime(cmbMFClose.getSelectionModel().getSelectedItem()));
+			businessOwner.setWeekendStart(program.strToTime(cmbSSOpen.getSelectionModel().getSelectedItem()));
+			businessOwner.setWeekendEnd(program.strToTime(cmbSSClose.getSelectionModel().getSelectedItem()));
+			if(businessOwner.getWeekdayStart().after(businessOwner.getWeekdayEnd()))
 			{
 				program.messageBox("ERROR", "Error", "Invalid choice. Open hours later than closing hours", "");
 				return;
 			}
-			if(business.getWeekendStart().after(business.getWeekendEnd()))
+			if(businessOwner.getWeekendStart().after(businessOwner.getWeekendEnd()))
 			{
 				program.messageBox("ERROR", "Error", "Invalid choice. Open hours later than closing hours", "");
 				return;
@@ -318,7 +319,7 @@ public class SetupController implements Initializable {
 			stkpTimeSlot.setVisible(false);
 			return;
 		}
-		if(stkpLogin.isVisible())
+		/*if(stkpLogin.isVisible())
 		{
 	        if (program.checkInputToContainInvalidChar(txtUserNam.getText().toString())) {
 	            program.messageBox("ERROR", "Error", "Invalid Username", "");
@@ -335,15 +336,16 @@ public class SetupController implements Initializable {
 	        	program.messageBox("ERROR", "Error", "Passwords Do No Match", "");
 	            return;
 	        }
-	        business.setUsern(txtUserNam.getText());
-	        business.setPass(txtPass.getText());
+	        businessOwner.setUsern(txtUserNam.getText());
+	        businessOwner.setPass(txtPass.getText());
 			stkpSelectColor.setVisible(true);
 			stkpLogin.setVisible(false);
 			createDB();
 			createBO();
 			return;
-		}
+		}*/
 	}
+
 	/**
 	 * Moves the user to the next view
 	 * @author Joseph Garner
@@ -363,15 +365,12 @@ public class SetupController implements Initializable {
 	}
 	
 	/**
-	 * 
-	 * @author Bryan
+	 * Creates a business then initialises
+	 * @author Luke Mason
 	 */
 	@FXML
-	public void createBO() {
-		// TODO
-		connection.addUser(business.getUsername(), business.getPassword(), 1);
-		business.setID(connection.getUser(business.getUsername()).getID());
-		connection.createBusiness(business);
+	public void createBusiness(String businessName) {
+		connection.createBusiness(businessName);
 		ini();
 	}
 	
@@ -691,9 +690,9 @@ public class SetupController implements Initializable {
 		connect.addUserDetails(2, "William", "Porter", "will@mail.com", "0452368593", "01/01/2002", "Male");
 		connect.addUserDetails(3, "Hannah", "Hawlking", "hannah@mail.com", "0452136859", "20/04/1995", "Famale");
 
-		connect.addSerice(new Service("Trim",30,25));
-		connect.addSerice(new Service("Wash",45,30));
-		connect.addSerice(new Service("Cut and Style",90,60));
+		connect.addSerice(new Service("Trim",30,25,2));
+		connect.addSerice(new Service("Wash",45,30,2));
+		connect.addSerice(new Service("Cut and Style",90,60,2));
 		
 		connect.addBooking(2,1, "21/04/2017", "10:00", "10:40", 1,"active");
 		connect.addBooking(2,2, "22/04/2017", "11:00", "11:59", 2,"canceled");

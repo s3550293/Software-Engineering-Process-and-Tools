@@ -20,13 +20,11 @@ public class BookingJunit {
 		
 		//Add in details
 
-		book1 = new Booking(1, 12,1, con.strToDate("01/01/2018"), con.strToTime("13:00"),
-				con.strToTime("14:00"), 0,"active");
+		book1 = new Booking(1, 12,1, con.strToDate("01/01/2018"), con.strToTime("13:00"),con.strToTime("14:00"), 0,"active",2);
 
 		
 
-		book2 = new Booking(2, 23,1, con.strToDate("10/10/2017"), con.strToTime("08:00"),
-				con.strToTime("10:00"), 0,"active");
+		book2 = new Booking(2, 23,1, con.strToDate("10/10/2017"), con.strToTime("08:00"),con.strToTime("10:00"), 0,"active",2);
 
 		
 	}

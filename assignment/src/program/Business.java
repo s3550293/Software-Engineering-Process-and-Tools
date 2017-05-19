@@ -3,7 +3,7 @@ package program;
 public class Business {
 	private String businessName;
 	private int id;
-	
+	public Business(){}
 	public Business(int id, String businessName)
 	{
 		this.id = id;

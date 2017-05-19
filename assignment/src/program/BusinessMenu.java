@@ -73,12 +73,12 @@ public class BusinessMenu
 				 * @param employeeLName
 				 * @param employeePayRate
 				 */
-				public void addEmployee(String employeeFName,String employeeLName,double employeePayRate)
+				public void addEmployee(String employeeFName,String employeeLName,double employeePayRate, int businessID)
 				{
 					log.info("IN addEmployee-bMenu\n");
 					DatabaseConnection connect = new DatabaseConnection();
 					String employeeName = employeeFName + " " + employeeLName;//concatenating first and last name into name
-					connect.addEmployee(employeeName, employeePayRate);//adding employee
+					connect.addEmployee(employeeName, employeePayRate,businessID);//adding employee
 					log.info("OUT addEmployee-bMenu\n");
 				}
 				
@@ -86,11 +86,11 @@ public class BusinessMenu
 				 * Gets the last employeeID in the database
 				 * @return an id number of the last employee
 				 */
-				public int getLastEmployeeId()
+				public int getLastEmployeeId(int businessID)
 				{
 					log.info("IN getLastEmployeeId\n");
 					log.debug("getting id from last employee");
-					ArrayList<Employee> employees = connect.getEmployees("");//adding working times to employee just made
+					ArrayList<Employee> employees = connect.getEmployees("",businessID);//adding working times to employee just made
 					//This is for if more than one employee has the same name as searched
 					int id = -1;
 					Employee lastEmp = new Employee();
@@ -388,7 +388,8 @@ public class BusinessMenu
 						log.info("OUT addDayWorkingTime");
 						return false;//day 0 does not exist, day 8 does not exist
 					}
-					connect.addEmployeeWorkingTime(employeeID, dayOfWeek, array[0], array[1]);
+					Employee emp = connect.getEmployee(employeeID);
+					connect.addEmployeeWorkingTime(employeeID, dayOfWeek, array[0], array[1],emp.getBusinessID());
 					log.info("OUT addDayWorkingTime");
 					return true;
 				}

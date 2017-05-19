@@ -360,7 +360,7 @@ public class Controller
 	 * @param endTime
 	 * @return List of Available Employee's object
 	 */
-	public List<Employee> getAvailableEmployeesForSpecifiedTime(String date, String startTime, String endTime)
+	public List<Employee> getAvailableEmployeesForSpecifiedTime(String date, String startTime, String endTime, int businessID)
 	{
 		int day = dateToDay(date);
 		DatabaseConnection connect = new DatabaseConnection();
@@ -369,8 +369,8 @@ public class Controller
 		ArrayList<EmployeeWorkingTime> workTimesOnDay;
 		ArrayList<Booking> bookingsOnDate;
 		ArrayList<Employee> employeesNotAvailable = new ArrayList<>();
-		workTimesOnDay = connect.getWorkTimesOnDay(day);
-		bookingsOnDate = connect.getActiveBookingsOnDate(date);
+		workTimesOnDay = connect.getWorkTimesOnDay(day, businessID);
+		bookingsOnDate = connect.getActiveBookingsOnDate(date, businessID);
 		Date date2 = strToDate(date);
 		Date startTime2 = strToTime(startTime);
 		log.debug("Booking Start Time = "+startTime2+"\n");

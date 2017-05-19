@@ -119,8 +119,8 @@ public class CustomerController  implements Initializable, IUser{
 			}
 		});
 		loadDaySelect();
-		listTogTDini();
-		listTogTSini();
+		listTogTDini(businessID);//idk how to get businessID, however the businessID comes from the business Selected when they click login, soooo yeah
+		listTogTSini(businessID);//idk how to get businessID, however the businessID comes from the business Selected when they click login, soooo yeah
 	}
 	
 	@FXML
@@ -224,8 +224,8 @@ public class CustomerController  implements Initializable, IUser{
 	 * @author Joseph Garner
 	 */
 	@FXML
-	public void loadallServices(String input) {
-		ArrayList<Service> serviceArray = new ArrayList<>(connection.getAllServices(input));
+	public void loadallServices(int businessID) {
+		ArrayList<Service> serviceArray = new ArrayList<>(connection.getAllServices(businessID));
 		ObservableList<Service> serviceList = FXCollections.observableList(serviceArray);
 		log.debug("LOGGER: List length:" + serviceArray.size());
 		if (serviceList != null) {
@@ -258,11 +258,11 @@ public class CustomerController  implements Initializable, IUser{
 	 * 
 	 * @author Luke
 	 */
-	private void loadpreferedEmp(String startTime, String endTime) {
+	private void loadpreferedEmp(String startTime, String endTime, int businessID) {
 		// TODO
 		List<Employee> emArray;
 		log.debug("LOGGER: date selected - " + lblCustBookingDate.getText());
-		emArray = program.getAvailableEmployeesForSpecifiedTime(lblCustBookingDate.getText(), startTime, endTime);
+		emArray = program.getAvailableEmployeesForSpecifiedTime(lblCustBookingDate.getText(), startTime, endTime, businessID);
 		log.debug("LOGGER: Array Length - " + emArray.size());
 		ObservableList<Employee> emList = FXCollections.observableList(emArray);
 		if (emList != null) {
@@ -323,7 +323,7 @@ public class CustomerController  implements Initializable, IUser{
 	 * Check and display booking time during booking
 	 * Disable toggle button, after booking
 	 */
-	private void checkBookingTime() {
+	private void checkBookingTime(int businessID) {
 		togbtnTimeSlot1.setDisable(false);
 		togbtnTimeSlot2.setDisable(false);
 		togbtnTimeSlot3.setDisable(false);
@@ -352,7 +352,7 @@ public class CustomerController  implements Initializable, IUser{
 		if (newBook.getDate() != null) {
 			Date stD = null;
 			Date enD = null;
-			List<Booking> bookings = new ArrayList<Booking>(connection.getAllBooking());
+			List<Booking> bookings = new ArrayList<Booking>(connection.getAllBooking(businessID));
 			for (Booking b : bookings) {
 				stD = b.getStartTime();
 				enD = b.getEndTime();
@@ -644,7 +644,7 @@ public class CustomerController  implements Initializable, IUser{
 	 * @author [Programmer]
 	 */
 	@FXML
-	public void nextView() {
+	public void nextView(int businessID) {
 		if (listviewBookingServices.getSelectionModel().getSelectedItem() == null) {
 			program.messageBox("ERROR", "Error", "A Service Has Not Been Chosen", "Please select a service");
 			return;
@@ -664,7 +664,7 @@ public class CustomerController  implements Initializable, IUser{
 			newBook.setService(service.getID());
 			lblCustBookingDate.setText(program.dateToStr(cmbDayBooking.getSelectionModel().getSelectedItem()));
 			newBook.setDate(cmbDayBooking.getSelectionModel().getSelectedItem());
-			checkBookingTime();
+			checkBookingTime(businessID);
 			return;
 		}
 		if (timeGroup.getSelectedToggle() == null) {
@@ -807,7 +807,7 @@ public class CustomerController  implements Initializable, IUser{
 	
 	
 	
-	private void listTogTSini(){
+	private void listTogTSini(int businessID){
 		togbtnMorn.setSelected(true);
 		togbtnTimeSlot1.setToggleGroup(timeGroup);
 		togbtnTimeSlot2.setToggleGroup(timeGroup);
@@ -826,34 +826,34 @@ public class CustomerController  implements Initializable, IUser{
 				log.debug("LOGGER: Time Slot Start - " + togbtnTimeSlot1.getText());
 				log.debug("LOGGER: Time Slot End - " + program.timeToStr(newBook.getEndTime()));
 				if (togbtnTimeSlot1.isSelected()) {
-					loadpreferedEmp(togbtnTimeSlot1.getText(), program.timeToStr(newBook.getEndTime()));
+					loadpreferedEmp(togbtnTimeSlot1.getText(), program.timeToStr(newBook.getEndTime()),businessID);
 				}
 				if (togbtnTimeSlot2.isSelected()) {
-					loadpreferedEmp(togbtnTimeSlot2.getText(), program.timeToStr(newBook.getEndTime()));
+					loadpreferedEmp(togbtnTimeSlot2.getText(), program.timeToStr(newBook.getEndTime()),businessID);
 				}
 				if (togbtnTimeSlot3.isSelected()) {
-					loadpreferedEmp(togbtnTimeSlot3.getText(), program.timeToStr(newBook.getEndTime()));
+					loadpreferedEmp(togbtnTimeSlot3.getText(), program.timeToStr(newBook.getEndTime()),businessID);
 				}
 				if (togbtnTimeSlot4.isSelected()) {
-					loadpreferedEmp(togbtnTimeSlot4.getText(), program.timeToStr(newBook.getEndTime()));
+					loadpreferedEmp(togbtnTimeSlot4.getText(), program.timeToStr(newBook.getEndTime()),businessID);
 				}
 				if (togbtnTimeSlot5.isSelected()) {
-					loadpreferedEmp(togbtnTimeSlot5.getText(), program.timeToStr(newBook.getEndTime()));
+					loadpreferedEmp(togbtnTimeSlot5.getText(), program.timeToStr(newBook.getEndTime()),businessID);
 				}
 				if (togbtnTimeSlot6.isSelected()) {
-					loadpreferedEmp(togbtnTimeSlot6.getText(), program.timeToStr(newBook.getEndTime()));
+					loadpreferedEmp(togbtnTimeSlot6.getText(), program.timeToStr(newBook.getEndTime()),businessID);
 				}
 				if (togbtnTimeSlot7.isSelected()) {
-					loadpreferedEmp(togbtnTimeSlot7.getText(), program.timeToStr(newBook.getEndTime()));
+					loadpreferedEmp(togbtnTimeSlot7.getText(), program.timeToStr(newBook.getEndTime()),businessID);
 				}
 				if (togbtnTimeSlot8.isSelected()) {
-					loadpreferedEmp(togbtnTimeSlot8.getText(), program.timeToStr(newBook.getEndTime()));
+					loadpreferedEmp(togbtnTimeSlot8.getText(), program.timeToStr(newBook.getEndTime()),businessID);
 				}
 			}
 		});
 	}
 	
-	private void listTogTDini(){
+	private void listTogTDini(int businessID){
 		togbtnMorn.setToggleGroup(timeODayGroup);
 		togbtnAft.setToggleGroup(timeODayGroup);
 		togbtnEven.setToggleGroup(timeODayGroup);
@@ -874,7 +874,7 @@ public class CustomerController  implements Initializable, IUser{
 					date.set(Calendar.HOUR_OF_DAY, 8);
 					date.set(Calendar.MINUTE, 0);
 					diplayBookingTime(date);
-					checkBookingTime();
+					checkBookingTime(businessID);
 				} else if (togbtnAft.isSelected()) {
 					togbtnMorn.setSelected(false);
 					togbtnEven.setSelected(false);
@@ -884,7 +884,7 @@ public class CustomerController  implements Initializable, IUser{
 					date.set(Calendar.MINUTE, 00);
 					log.debug("LOGGER: date - " + date.get(Calendar.HOUR_OF_DAY));
 					diplayBookingTime(date);
-					checkBookingTime();
+					checkBookingTime(businessID);
 				} else {
 					togbtnMorn.setSelected(false);
 					togbtnAft.setSelected(false);
@@ -894,7 +894,7 @@ public class CustomerController  implements Initializable, IUser{
 					date.set(Calendar.MINUTE, 0);
 					log.debug("LOGGER: date - " + date.get(Calendar.HOUR_OF_DAY));
 					diplayBookingTime(date);
-					checkBookingTime();
+					checkBookingTime(businessID);
 				}
 			}
 		});
@@ -947,6 +947,7 @@ public class CustomerController  implements Initializable, IUser{
 		log.debug("false");
 		return false;
 	}
+
 	
 	
 

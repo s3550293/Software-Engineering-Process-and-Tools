@@ -1,5 +1,8 @@
 package gui;
 
+import java.net.URL;
+import java.util.ResourceBundle;
+
 /*
 enum UserType{
 	superUser,
@@ -11,6 +14,8 @@ enum UserType{
 public interface IUser {
 	
 	public boolean getUserWindow();
+
+
 
 	//To Add
 	

@@ -47,7 +47,7 @@ public class ServiceAddController {
 			return;
 		}
 		Service service = new Service(txtSerNam.getText(), duration, price, business.getBusinessId());
-		connect.addSerice(service);
+		connect.addService(service);
 		program.messageBox("SUCCESS", "Service Added!", "Service Added!","Service has been added");	
 		stage.close();
 	}

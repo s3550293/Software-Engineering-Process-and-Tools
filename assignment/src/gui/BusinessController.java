@@ -146,11 +146,12 @@ public class BusinessController  implements Initializable, IUser  {
 	 */
 	@Override
 	public void initialize(URL url, ResourceBundle rb) {
+
 		setColor();
 		loadDaySelect();
-		loadallServices("");
+		loadallServices(businessID);
 			rbCurrentBook.setSelected(true);
-			loadListViewEmp("");
+			loadListViewEmp("", businessID);
 			listviewEmployees.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<Employee>() {
 				@Override
 				public void changed(ObservableValue<? extends Employee> observable, Employee oldValue,
@@ -163,8 +164,8 @@ public class BusinessController  implements Initializable, IUser  {
 					}
 				}
 			});
-			loadListViewBook();
-			loadallCustomers();
+			loadListViewBook(businessID);
+			loadallCustomers(businessID);
 			listviewManServices.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<Service>() {
 				@Override
 				public void changed(ObservableValue<? extends Service> observable, Service oldValue, Service newValue) {
@@ -193,14 +194,14 @@ public class BusinessController  implements Initializable, IUser  {
 			cmbBookingDay.valueProperty().addListener(new ChangeListener<Date>() {
 				@Override
 				public void changed(ObservableValue ov, Date t, Date t1) {
-					loadListViewBook();
+					loadListViewBook(businessID);
 				}
 			});
 
 			bookingViewGroup.selectedToggleProperty().addListener(new ChangeListener<Toggle>() {
 				public void changed(ObservableValue<? extends Toggle> ov, Toggle old_toggle, Toggle new_toggle) {
 					loadDaySelect();
-					loadListViewBook();
+					loadListViewBook(businessID);
 				}
 			});
 			listLVBookini();
@@ -213,8 +214,8 @@ public class BusinessController  implements Initializable, IUser  {
 	 * 
 	 * @author Joseph Garner
 	 */
-	private void loadListViewEmp(String name) {
-		ArrayList<Employee> empArray = new ArrayList<>(connection.getEmployees(name));
+	private void loadListViewEmp(String name, int businessID) {
+		ArrayList<Employee> empArray = new ArrayList<>(connection.getEmployees(name,businessID));
 		ObservableList<Employee> empList = FXCollections.observableList(empArray);
 		log.debug("LOGGER: List length:" + empArray.size());
 		if (empList != null) {
@@ -315,13 +316,13 @@ public class BusinessController  implements Initializable, IUser  {
 	 * 
 	 * @author Joseph Garner
 	 */
-	private void loadListViewBook() {
+	private void loadListViewBook(int businessID) {
 		if (cmbBookingDay.getSelectionModel().getSelectedItem() != null) {
 			listviewBookings.getItems().clear();
 			Calendar cal = Calendar.getInstance();
 			Date now = null;
 			SimpleDateFormat dateView = new SimpleDateFormat("dd/MM/yyyy");
-			ArrayList<Booking> bookArray = new ArrayList<>(connection.getAllBooking());
+			ArrayList<Booking> bookArray = new ArrayList<>(connection.getAllBooking(businessID));
 			ArrayList<Booking> bookArrayView = new ArrayList<>();
 			for (Booking b : bookArray) {
 				cal.setTime(b.getDate());
@@ -368,10 +369,10 @@ public class BusinessController  implements Initializable, IUser  {
 	 * 
 	 * @author Joseph Garner
 	 */
-	public void loadAllBookings() {
+	public void loadAllBookings(int businessID) {
 		if (cmbBookingDay.getSelectionModel().getSelectedItem() != null) {
 			listviewBookings.getItems().clear();
-			ArrayList<Booking> bookArray = new ArrayList<>(connection.getAllBooking());
+			ArrayList<Booking> bookArray = new ArrayList<>(connection.getAllBooking(businessID));
 			ObservableList<Booking> bookList = FXCollections.observableList(bookArray);
 			log.debug("LOGGER: List length:" + bookArray.size());
 			if (bookList != null) {
@@ -408,9 +409,9 @@ public class BusinessController  implements Initializable, IUser  {
 	 * @author Joseph Garner
 	 */
 	@FXML
-	public void loadallServices(String input) {
+	public void loadallServices(int businessID) {
 		listviewManServices.getItems().clear();
-		ArrayList<Service> serviceArray = new ArrayList<>(connection.getAllServices(input));
+		ArrayList<Service> serviceArray = new ArrayList<>(connection.getAllServices(businessID));
 		ObservableList<Service> serviceList = FXCollections.observableList(serviceArray);
 		log.debug("LOGGER: List length:" + serviceArray.size());
 		if (serviceList != null) {
@@ -443,9 +444,9 @@ public class BusinessController  implements Initializable, IUser  {
 	 * @author Joseph Garner
 	 */
 	@FXML
-	public void loadallCustomers() {
+	public void loadallCustomers(int businessID) {
 		listviewCustomers.getItems().clear();
-		ArrayList<Customer> serviceArray = new ArrayList<>(connection.getAllCustomer());
+		ArrayList<Customer> serviceArray = new ArrayList<>(connection.getAllCustomer(businessID));
 		ObservableList<Customer> serviceList = FXCollections.observableList(serviceArray);
 		log.debug("LOGGER: List length:" + serviceArray.size());
 		if (serviceList != null) {
@@ -507,20 +508,20 @@ public class BusinessController  implements Initializable, IUser  {
 	 * @author Joseph Garner
 	 */
 	@FXML
-	public void viewAllBookings() {
+	public void viewAllBookings(int businessID) {
 		if (chbkViewAllBook.isSelected()) {
 			cmbBookingDay.setDisable(true);
 			rbPastBook.setDisable(true);
 			rbPastBook.setSelected(false);
 			rbCurrentBook.setDisable(true);
 			rbCurrentBook.setSelected(false);
-			loadAllBookings();
+			loadAllBookings(businessID);
 		} else {
 			cmbBookingDay.setDisable(false);
 			rbPastBook.setDisable(false);
 			rbCurrentBook.setDisable(false);
 			rbCurrentBook.setSelected(true);
-			loadListViewBook();
+			loadListViewBook(businessID);
 		}
 	}
 
@@ -530,13 +531,13 @@ public class BusinessController  implements Initializable, IUser  {
 	 * @author Joseph Garner
 	 */
 	@FXML
-	public void searchBookings() {
+	public void searchBookings(int businessID) {
 		log.debug("LOGGER: Entered searchBookings function");
 		listviewBookings.getItems().clear();
 		Calendar cal = Calendar.getInstance();
 		Date now = null;
 		SimpleDateFormat dateView = new SimpleDateFormat("dd/MM/yyyy");
-		ArrayList<Booking> bookArray = new ArrayList<>(connection.getAllBooking());
+		ArrayList<Booking> bookArray = new ArrayList<>(connection.getAllBooking(businessID));
 		ArrayList<Booking> bookArrayView = new ArrayList<>();
 		String fname = null;
 		String lname = null;
@@ -594,7 +595,7 @@ public class BusinessController  implements Initializable, IUser  {
 	 * @author Luke Mason
 	 */
 	@FXML
-	public void cancelBooking() {
+	public void cancelBooking(int businessID) {
 		log.debug("LOGGER: Entered cancelBooking function");
 		if (listviewBookings.getSelectionModel().getSelectedIndex() < 0) {
 			program.messageBox("WARN", "oops", "A Booking has not been Selected",
@@ -620,7 +621,7 @@ public class BusinessController  implements Initializable, IUser  {
 			return;
 		}
 		listviewBookings.getSelectionModel().clearSelection();
-		loadListViewBook();
+		loadListViewBook(businessID);
 	}
 
 	/**
@@ -629,10 +630,10 @@ public class BusinessController  implements Initializable, IUser  {
 	 * @author Joseph Garner
 	 */
 	@FXML
-	public void refreshBookingView() {
+	public void refreshBookingView(int businessID) {
 		log.debug("LOGGER: Entered refreshBookingView function");
 		txtSearchBookings.setText("");
-		loadListViewBook();
+		loadListViewBook(businessID);
 	}
 
 	/**
@@ -690,7 +691,7 @@ public class BusinessController  implements Initializable, IUser  {
 	 * @author Luke Mason
 	 */
 	@FXML
-	public void createEmp() {
+	public void createEmp(int businessID) {
 		BusinessMenu bMenu = new BusinessMenu();
 		boolean firstName = !program.checkInputToContainInvalidChar(txtaddEmpFirstName.getText());
 		log.debug("First Name = " + firstName + "\n");
@@ -731,8 +732,8 @@ public class BusinessController  implements Initializable, IUser  {
 					return;
 				}
 				if (globalEmployeeOption == 0) {
-					bMenu.addEmployee(txtaddEmpFirstName.getText(), txtAddEmpLastName.getText(), payRate);
-					int id = bMenu.getLastEmployeeId();
+					bMenu.addEmployee(txtaddEmpFirstName.getText(), txtAddEmpLastName.getText(), payRate,businessID);
+					int id = bMenu.getLastEmployeeId(businessID);
 					bMenu.addWorkingTimes(id, btnSunMorning.isSelected(), btnSunAfternoon.isSelected(),
 							btnSunEvening.isSelected(), btnMonMorning.isSelected(), btnMonAfternoon.isSelected(),
 							btnMonEvening.isSelected(), btnTueMorning.isSelected(), btnTueAfternoon.isSelected(),
@@ -765,7 +766,7 @@ public class BusinessController  implements Initializable, IUser  {
 				}
 			} else {
 				if (globalEmployeeOption == 0) {
-					bMenu.addEmployee(txtaddEmpFirstName.getText(), txtAddEmpLastName.getText(), payRate);
+					bMenu.addEmployee(txtaddEmpFirstName.getText(), txtAddEmpLastName.getText(), payRate,businessID);
 					program.messageBox("SUCCESS", "SUCCESS", "New Employee Added", txtaddEmpFirstName.getText() + " "
 							+ txtAddEmpLastName.getText() + " with $" + payRate + "/h was Added!");
 				} else {
@@ -790,7 +791,7 @@ public class BusinessController  implements Initializable, IUser  {
 				}
 			}
 		}
-		refreshEmployeeView();
+		refreshEmployeeView(businessID);
 		cancelAddNewEmp();
 	}
 
@@ -842,9 +843,9 @@ public class BusinessController  implements Initializable, IUser  {
 	 */
 	@FXML
 
-	public void refreshEmployeeView() {
+	public void refreshEmployeeView(int businessID) {
 		txtSearchEmployee.setText("");
-		loadListViewEmp("");
+		loadListViewEmp("",businessID);
 		lblEmployeeID.setText("");
 		lblEmployeeName.setText("");
 		lblEmployeePayrate.setText("");
@@ -858,9 +859,9 @@ public class BusinessController  implements Initializable, IUser  {
 	 */
 	@FXML
 
-	public void searchEmployee() {
+	public void searchEmployee(int businessID) {
 		String name = txtSearchEmployee.getText();
-		loadListViewEmp(name);
+		loadListViewEmp(name,businessID);
 	}
 
 	/**
@@ -1020,7 +1021,7 @@ public class BusinessController  implements Initializable, IUser  {
 	 * @author Luke Mason
 	 */
 	@FXML
-	public void deleteEmployee() {
+	public void deleteEmployee(int businessID) {
 		log.debug("LOGGER: Entered deleteEmployee function");
 		if (listviewEmployees.getSelectionModel().getSelectedIndex() < 0) {
 			program.messageBox("WARN", "oops", "An Employee has not been Selected",
@@ -1042,7 +1043,7 @@ public class BusinessController  implements Initializable, IUser  {
 			feedback.setTitle("Delete Employee");
 			feedback.setHeaderText("Employee has been deleted");
 			feedback.showAndWait();
-			refreshEmployeeView();
+			refreshEmployeeView(businessID);
 
 		} else {
 			return;
@@ -1059,8 +1060,8 @@ public class BusinessController  implements Initializable, IUser  {
 	 * @author Joseph Garner
 	 */
 	@FXML
-	public void searchServices() {
-		loadListViewEmp(txtSearchService.getText());
+	public void searchServices(int businessID) {
+		loadListViewEmp(txtSearchService.getText(),businessID);
 	}
 
 	/**
@@ -1069,7 +1070,7 @@ public class BusinessController  implements Initializable, IUser  {
 	 * @author Joseph Garner
 	 */
 	@FXML
-	public void addService() {
+	public void addService(int businessID) {
 		try {
 			Stage secondaryStage = new Stage();
 			secondaryStage.getIcons().add(new Image("images/ic_collections_bookmark_black_48dp_2x.png"));
@@ -1084,7 +1085,7 @@ public class BusinessController  implements Initializable, IUser  {
 			log.warn(ioe.getMessage());
 		}
 		log.debug("false");
-		loadallServices("");
+		loadallServices(businessID);
 
 	}
 
@@ -1094,7 +1095,7 @@ public class BusinessController  implements Initializable, IUser  {
 	 * @author Luke Mason
 	 */
 	@FXML
-	public void deleteService() {
+	public void deleteService(int businessID) {
 		log.debug("LOGGER: Entered deleteService function");
 		if (listviewManServices.getSelectionModel().getSelectedIndex() < 0) {
 			program.messageBox("WARN", "oops", "An Service has not been Selected",
@@ -1120,7 +1121,7 @@ public class BusinessController  implements Initializable, IUser  {
 			lblManServiceName.setText("");
 			lblManServicePrice.setText("");
 			lblServiceDura.setText("");
-			refreshService();
+			refreshService(businessID);
 		} else {
 			return;
 		}
@@ -1132,8 +1133,8 @@ public class BusinessController  implements Initializable, IUser  {
 	 * @author Luke Mason
 	 */
 	@FXML
-	public void refreshService() {
-		loadallServices("");
+	public void refreshService(int businessID) {
+		loadallServices(businessID);
 	}
 	
 	/**
@@ -1153,9 +1154,9 @@ public class BusinessController  implements Initializable, IUser  {
 	 * @author Joseph Garner
 	 */
 	@FXML
-	public void searchCustomers() {
+	public void searchCustomers(int businessID) {
 		listviewCustomers.getItems().clear();
-		ArrayList<Customer> customerArray = new ArrayList<>(connection.getAllCustomer());
+		ArrayList<Customer> customerArray = new ArrayList<>(connection.getAllCustomer(businessID));
 		ArrayList<Customer> customerArrayView = new ArrayList<>();
 		String fname = null;
 		String lname = null;
@@ -1270,6 +1271,9 @@ public class BusinessController  implements Initializable, IUser  {
 		log.debug("false");
 		return false;
 	}
+
+
+
 	
 	
 }

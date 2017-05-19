@@ -46,10 +46,10 @@ public class SetupController implements Initializable {
 	AnchorPane root;
 	
 	@FXML
-	StackPane stkpWelcome, stkpDetails, stkpTimeSlot, stkpLogin, stkpSelectColor;
+	StackPane stkpWelcome, stkpDetails, stkpTimeSlot, stkpSelectColor;
 	
 	@FXML
-	TextField txtFNam, txtLNam, txtBNam, txtBPho, txtUserNam, txtPass, txtConPass;
+	TextField txtFNam, txtLNam, txtBNam, txtBPho;
 	
 	@FXML
 	TextArea txtaBAdre;
@@ -91,6 +91,7 @@ public class SetupController implements Initializable {
 		assignOpenClosingTimesToWeekDays(MFOpen, MFClose);
 		assignOpenClosingTimesToWeekEnds(SSOpen, SSClose);
 	}
+	
 	public void assignOpenClosingTimesToWeekDays(String MFOpen,String MFClose)
 	{
 		String startTime = "";
@@ -315,8 +316,9 @@ public class SetupController implements Initializable {
 				program.messageBox("ERROR", "Error", "Invalid choice. Open hours later than closing hours", "");
 				return;
 			}
-			stkpLogin.setVisible(true);
 			stkpTimeSlot.setVisible(false);
+			stkpSelectColor.setVisible(true);
+			createDB();
 			return;
 		}
 		/*if(stkpLogin.isVisible())
@@ -357,11 +359,6 @@ public class SetupController implements Initializable {
 			stkpDetails.setVisible(true);
 			return;
 		}
-		if(stkpLogin.isVisible()){
-			stkpTimeSlot.setVisible(true);
-			stkpLogin.setVisible(false);
-		}
-		
 	}
 	
 	/**

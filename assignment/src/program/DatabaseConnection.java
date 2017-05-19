@@ -92,6 +92,7 @@ public class DatabaseConnection
 		String _username = "null";
 		String _password = "null";
 		int _accountType = 0;
+		int businessID = -1;
 		String query = "SELECT * FROM users WHERE userID = ?";
 		//Creates a null user to return, this can be used to validate user at login
 		User databaseUser = null;
@@ -106,8 +107,9 @@ public class DatabaseConnection
 				_username = output.getString(2);
 				_password = output.getString(3);
 				_accountType = output.getInt(4);
+				businessID = output.getInt(5);
 			}
-			databaseUser = new User(_id ,_username, _password, _accountType);
+			databaseUser = new User(_id ,_username, _password, _accountType, businessID);
 			output.close();
 		}
 		catch(SQLException sqle)
@@ -131,6 +133,7 @@ public class DatabaseConnection
 		String _username = "null";
 		String _password = "null";
 		int _accountType = 0;
+		int businessID = -1;
 		String query = "SELECT * FROM users WHERE username like ?";
 		//Creates a null user to return, this can be used to validate user at login
 		User databaseUser = null;
@@ -145,8 +148,9 @@ public class DatabaseConnection
 				_username = output.getString(2);
 				_password = output.getString(3);
 				_accountType = output.getInt(4);
+				businessID = output.getInt(5);
 			}
-			databaseUser = new User(_id ,_username, _password, _accountType);
+			databaseUser = new User(_id ,_username, _password, _accountType, businessID);
 			output.close();
 		}
 		catch(SQLException sqle)
@@ -174,6 +178,7 @@ public class DatabaseConnection
 		String _DOB = "null";
 		String _Gender = "null";
 		String query = "SELECT * FROM CLIENTDETAILS WHERE id = ?";
+		int businessID = -1;
 		//Creates a null user to return, this can be used to validate user at login
 		Customer databaseCustomer = null;
 		try (Connection connect = this.connect(); PreparedStatement  inject  = connect.prepareStatement(query))
@@ -190,8 +195,9 @@ public class DatabaseConnection
 				_Phone = output.getString(5);
 				_DOB = output.getString(6);
 				_Gender = output.getString(7);
+				businessID = output.getInt(8);
 			}
-			databaseCustomer = new Customer(_id ,_FName, _LName, _Phone, _DOB, _Gender, _Email);
+			databaseCustomer = new Customer(_id ,_FName, _LName, _Phone, _DOB, _Gender, _Email, businessID);
 			output.close();
 		}
 		catch(SQLException sqle)
@@ -219,6 +225,7 @@ public class DatabaseConnection
 		String _DOB = "null";
 		String _Gender = "null";
 		String query = "SELECT * FROM CLIENTDETAILS";
+		int businessID = -1;
 		//Creates a null user to return, this can be used to validate user at login
 		try (Connection connect = this.connect(); PreparedStatement  inject  = connect.prepareStatement(query))
 		{
@@ -233,7 +240,8 @@ public class DatabaseConnection
 				_Phone = output.getString(5);
 				_DOB = output.getString(6);
 				_Gender = output.getString(7);
-				customers.add(new Customer(_id ,_FName, _LName, _Phone, _DOB, _Gender, _Email));
+				businessID = output.getInt(8);
+				customers.add(new Customer(_id ,_FName, _LName, _Phone, _DOB, _Gender, _Email, businessID));
 			}
 			output.close();
 		}
@@ -257,6 +265,7 @@ public class DatabaseConnection
 		ArrayList<Employee> databaseEmployee = new ArrayList<Employee>();
 		int id = 0;
 		double payRate = 0;
+		int businessID = -1;
 		String query = "SELECT * FROM EMPLOYEES WHERE name like ? "; 
 
 		try (Connection connect = this.connect(); PreparedStatement  inject  = connect.prepareStatement(query))
@@ -269,7 +278,8 @@ public class DatabaseConnection
 				id = output.getInt(1);
 				name = output.getString(2);
 				payRate = output.getDouble(3);
-				databaseEmployee.add(new Employee(id ,name, payRate));
+				businessID = output.getInt(4);
+				databaseEmployee.add(new Employee(id ,name, payRate, businessID));
 			}
 			output.close();
 		}
@@ -294,6 +304,7 @@ public class DatabaseConnection
 		int id = 0;
 		String name = "";
 		double payRate = 0;
+		int businessID = -1;
 		String query = "SELECT * FROM EMPLOYEES WHERE employeeID like ? "; 
 
 		try (Connection connect = this.connect(); PreparedStatement  inject  = connect.prepareStatement(query))
@@ -306,8 +317,9 @@ public class DatabaseConnection
 				id = output.getInt(1);
 				name = output.getString(2);
 				payRate = output.getDouble(3);
+				businessID = output.getInt(4);
 			}
-			databaseEmployee = new Employee(id ,name, payRate);
+			databaseEmployee = new Employee(id ,name, payRate, businessID);
 			output.close();
 		}
 		catch(SQLException sqle)
@@ -372,6 +384,7 @@ public class DatabaseConnection
 		int empID = 0;
 		int dayOfWeek = 0;
 		Date startTime, endTime;
+		int businessID = -1;
 		String query = "SELECT * FROM EMPLOYEES_WORKING_TIMES WHERE employeeID = ?"; 
 
 		try (Connection connect = this.connect(); PreparedStatement  inject  = connect.prepareStatement(query))
@@ -387,7 +400,8 @@ public class DatabaseConnection
 				dayOfWeek = output.getInt(3);
 				startTime = controller.strToTime(output.getString(4));
 				endTime = controller.strToTime(output.getString(5));
-				databaseWorkingTime.add(new EmployeeWorkingTime(id,empID,dayOfWeek,startTime,endTime));				
+				businessID = output.getInt(6);
+				databaseWorkingTime.add(new EmployeeWorkingTime(id,empID,dayOfWeek,startTime,endTime, businessID));				
 			}
 			output.close();
 		}
@@ -709,6 +723,7 @@ public class DatabaseConnection
 		int empID = 0;
 		int dayOfWeek = 0;
 		Date startTime, endTime;
+		int businessID = -1;
 		String query = "SELECT * FROM EMPLOYEES_WORKING_TIMES;"; 
 
 		try (Connection connect = this.connect(); PreparedStatement  inject  = connect.prepareStatement(query))
@@ -723,7 +738,8 @@ public class DatabaseConnection
 				dayOfWeek = output.getInt(3);
 				startTime = controller.strToTime(output.getString(4));
 				endTime = controller.strToTime(output.getString(5));
-				databaseWorkingTime.add(new EmployeeWorkingTime(id,empID,dayOfWeek,startTime,endTime));				
+				businessID = output.getInt(6);
+				databaseWorkingTime.add(new EmployeeWorkingTime(id,empID,dayOfWeek,startTime,endTime, businessID));				
 			}
 			output.close();
 		}
@@ -827,6 +843,7 @@ public class DatabaseConnection
 		String _service = "null";
 		int length = 0;
 		double cost = 0;
+		int businessID = -1;
 		ArrayList<Service> services = new ArrayList<Service>();
 		String query = "SELECT * FROM Services WHERE service like ?;"; 
 		try (Connection connect = this.connect(); PreparedStatement  inject  = connect.prepareStatement(query))
@@ -839,7 +856,8 @@ public class DatabaseConnection
 				_service = output.getString(2);
 				length = output.getInt(3);
 				cost = output.getDouble(4);
-				services.add(new Service(id, _service, length, cost));
+				businessID = output.getInt(5);
+				services.add(new Service(id, _service, length, cost, businessID));
 			}
 			output.close();
 		}
@@ -863,6 +881,7 @@ public class DatabaseConnection
 		String _service = "null";
 		int length = 0;
 		double cost = 0;
+		int businessID = -1;
 		String query = "SELECT * FROM SERVICES WHERE id = ?"; 
 
 		try (Connection connect = this.connect(); PreparedStatement  inject  = connect.prepareStatement(query))
@@ -877,7 +896,8 @@ public class DatabaseConnection
 				_service = output.getString(2);
 				length = output.getInt(3);
 				cost = output.getDouble(4);
-				service = new Service(_id, _service, length, cost);			
+				businessID = output.getInt(5);
+				service = new Service(_id, _service, length, cost, businessID);			
 			}
 			output.close();
 		}
@@ -901,6 +921,7 @@ public class DatabaseConnection
 		String _service = "null";
 		int length = 0;
 		double cost = 0;
+		int businessID = -1;
 		String query = "SELECT * FROM SERVICES WHERE service like ?"; 
 
 		try (Connection connect = this.connect(); PreparedStatement  inject  = connect.prepareStatement(query))
@@ -915,7 +936,8 @@ public class DatabaseConnection
 				_service = output.getString(2);
 				length = output.getInt(3);
 				cost = output.getDouble(4);
-				service = new Service(id, _service, length, cost);			
+				businessID = output.getInt(5);
+				service = new Service(id, _service, length, cost, businessID);			
 			}
 			output.close();
 		}
@@ -1004,6 +1026,7 @@ public class DatabaseConnection
 		int busID = 0;
 		String bName,fName,lName,phone,address;
 		Date weekDayStart,weekDayEnd,weekendStart,weekendEnd;
+		int businessID = -1;
 		String query = "SELECT * FROM BUSINESS"; 
 
 		try (Connection connect = this.connect(); PreparedStatement  inject  = connect.prepareStatement(query))
@@ -1021,7 +1044,8 @@ public class DatabaseConnection
 				weekDayEnd = controller.strToTime(output.getString(8));
 				weekendStart = controller.strToTime(output.getString(9));
 				weekendEnd = controller.strToTime(output.getString(10));
-				databaseBusiness.add(new BusinessOwner(busID,bName,fName,lName, phone, address,weekDayStart,weekDayEnd,weekendStart,weekendEnd));				
+				businessID = output.getInt(11);
+				databaseBusiness.add(new BusinessOwner(busID,fName,lName, phone, address,weekDayStart,weekDayEnd,weekendStart,weekendEnd, businessID));				
 			}
 			output.close();
 		}
@@ -1045,7 +1069,7 @@ public class DatabaseConnection
 		int bID = 0;
 		String bName,fName,lName,phone,address;
 		Date weekDayStart,weekDayEnd,weekendStart,weekendEnd;
-		
+		int businessID = -1;
 		String query = "SELECT * FROM BUSINESS WHERE id = ?"; 
 
 		try (Connection connect = this.connect(); PreparedStatement  inject  = connect.prepareStatement(query))
@@ -1066,7 +1090,8 @@ public class DatabaseConnection
 				weekDayEnd = controller.strToTime(output.getString(8));
 				weekendStart = controller.strToTime(output.getString(9));
 				weekendEnd = controller.strToTime(output.getString(10));
-				getBusiness= new BusinessOwner(bID,bName,fName,lName, phone, address,weekDayStart,weekDayEnd,weekendStart,weekendEnd);	
+				businessID = output.getInt(11);
+				getBusiness= new BusinessOwner(bID,fName,lName, phone, address,weekDayStart,weekDayEnd,weekendStart,weekendEnd, businessID);	
 			}
 			output.close();
 		}
@@ -1084,14 +1109,14 @@ public class DatabaseConnection
 	 * @return 
 	 * @author Bryan
 	 */	
-	public void createBusiness(BusinessOwner business){
+	public void createBusiness(String businessName){
 		log.info("IN addBusinessToDatabase\n");
 		//BusinessID is made in the database
-		String query = "INSERT INTO BUSINESS (id,bName,fName,lName,phone,address,weekdayStart,weekdayEnd,weekendStart,weekendEnd)" + "VALUES("+business.getID()+",'" + business.getBusiness() + "','" + business.getFName() + "','" + business.getLName() + "','" + business.getPhone() + "','" + business.getAddress() + "','" + controller.timeToStr(business.getWeekdayStart()) + "','" +controller.timeToStr(business.getWeekdayEnd()) + "','" + controller.timeToStr(business.getWeekendStart()) + "','" +controller.timeToStr(business.getWeekendEnd())+"');";
+		String query = "INSERT INTO BUSINESS (bName)" + "VALUES("+businessName+");";
 		try(Connection connect = this.connect(); Statement inject = connect.createStatement())
 		{
 			inject.executeUpdate(query);
-			log.info("Business Added - Business Name: "+business.getBusiness()+" weekdayStart: "+business.getWeekdayStart()+" weekdayEnd: "+business.getWeekdayEnd()+" weekendStart: "+business.getWeekendStart() +" weekendEnd: "+business.getWeekendEnd()+"\n");
+			log.info("Business Added - Business Name: "+businessName+"\n");
 		}
 		catch(SQLException sqle)
 		{

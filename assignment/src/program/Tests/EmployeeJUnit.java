@@ -15,10 +15,10 @@ public class EmployeeJUnit
 	@Before
 	public void setup()
 	{
-		employee = new Employee(0, "lukey", 14.56);
-		employee2 = new Employee(1, "lukey2", 124);
-		employee3 = new Employee(2, "lukey3", 345);
-		employee4 = new Employee(3, "lukey4", 16);
+		employee = new Employee(0, "lukey", 14.56,2);
+		employee2 = new Employee(1, "lukey2", 124,2);
+		employee3 = new Employee(2, "lukey3", 345,2);
+		employee4 = new Employee(3, "lukey4", 16,2);
 	}
 	@Test
 	public void testGetId()

@@ -3,25 +3,37 @@ package gui;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.ResourceBundle;
 
 import org.apache.log4j.Logger;
 
 import javafx.application.Platform;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
+import javafx.scene.control.ListCell;
+import javafx.scene.control.ListView;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import javafx.util.Callback;
+import program.Business;
 import program.Controller;
+import program.Employee;
 import program.Login;
+import program.Service;
 
 
 public class LoginController implements Initializable {
@@ -38,6 +50,8 @@ public class LoginController implements Initializable {
 	Button btnLogin, btnRegister;
 	@FXML
 	Label lblError;
+	@FXML
+	ComboBox<Business> cmbBusiness;
 	
 	@Override
 	public void initialize(URL url, ResourceBundle rb)
@@ -53,6 +67,43 @@ public class LoginController implements Initializable {
 				Platform.exit();
 				System.exit(0);
 			}
+		}
+		popcmb();
+		cmbBusiness.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<Business>() {
+			@Override
+			public void changed(ObservableValue<? extends Business> observable, Business oldValue, Business newValue) {
+				if (newValue != null) {
+					//TODO
+				}
+			}
+		});
+	}
+	
+	private void popcmb(){
+		ArrayList<Business> arr = new ArrayList<>(/*TODO*/);
+		ObservableList<Business> list = FXCollections.observableList(arr);
+		if (list != null) {
+			cmbBusiness.setItems(list);
+			cmbBusiness.setCellFactory(new Callback<ListView<Business>, ListCell<Business>>() {
+				@Override
+				public ListCell<Business> call(ListView<Business> p) {
+
+					ListCell<Business> cell = new ListCell<Business>() {
+						@Override
+						protected void updateItem(Business t, boolean bln) {
+							super.updateItem(t, bln);
+							if (t != null) {
+								setText(t.getBusinessName());
+							} else {
+								cmbBusiness.setPlaceholder(new Label("No Businesses"));
+							}
+						}
+					};
+					return cell;
+				}
+			});
+		} else {
+			log.warn("Unable to load Employees");
 		}
 	}
 	
@@ -126,7 +177,6 @@ public class LoginController implements Initializable {
         }
 	}
 	
-	/*
 	private boolean bOwnerWindow(){
 		try {
 			Stage secondaryStage = new Stage();
@@ -148,9 +198,8 @@ public class LoginController implements Initializable {
 		}
 		log.debug("false");
 		return false;
-	}*/
+	}
 	
-	/*
 	private boolean cUserWindow(){
 		try {
 			Stage secondaryStage = new Stage();
@@ -172,7 +221,9 @@ public class LoginController implements Initializable {
 		}
 		log.debug("false");
 		return false;
-	}*/
+	}
+	
+	
 	/**
 	 * Launches the setup window
 	 * @return

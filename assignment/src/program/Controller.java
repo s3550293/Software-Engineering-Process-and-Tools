@@ -482,4 +482,21 @@ public class Controller
 		date = strToTime(cal.get(Calendar.HOUR_OF_DAY)+":"+cal.get(Calendar.MINUTE));
 		return date;
 	}
+	
+	/**
+	 * Sets the GUI color
+	 * @return
+	 */
+	  public String setColor(){
+		  DatabaseConnection c = new DatabaseConnection();
+	        int val = _user.getID();
+	        log.trace("ID "+val);
+	        String[] arr = c.getColor(1);
+	        String ret = "";
+	        for(int i=0;i<arr.length;i++){
+	            log.debug(arr[i]);
+	            ret += "-fx-base"+i+": "+arr[i]+"; ";
+	        }
+	        return ret;
+	    }
 }

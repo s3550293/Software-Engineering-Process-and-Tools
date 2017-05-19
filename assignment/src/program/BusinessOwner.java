@@ -4,6 +4,7 @@ import java.util.Date;
 
 public class BusinessOwner extends User {
 	private String _address;
+	private int _color;
 	private Date _weekdayStart;
 	private Date _weekdayEnd;
 	private Date _weekendStart;
@@ -65,4 +66,7 @@ public class BusinessOwner extends User {
 	public void setAddress(String address) {
 		_address = address;
 	}
+	
+	public void color(int c){_color = c;}
+	public int color(){return _color;}
 }

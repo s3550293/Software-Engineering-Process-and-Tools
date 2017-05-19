@@ -35,6 +35,7 @@ import javafx.scene.control.ToggleButton;
 import javafx.scene.control.ToggleGroup;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.image.Image;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.stage.Modality;
@@ -50,7 +51,7 @@ import program.EmployeeWorkingTime;
 import program.Service;
 import program.User;
 
-public class BusinessController  implements Initializable, IUser  {
+public class BusinessController implements Initializable, IUser  {
 	private static Logger log = Logger.getLogger(BusinessController.class);
 	private static Controller program = new Controller();
 	private DatabaseConnection connection = new DatabaseConnection();
@@ -64,6 +65,9 @@ public class BusinessController  implements Initializable, IUser  {
 	 * Business Owner
 	 **************/
 
+	@FXML
+	AnchorPane root;
+	
 	@FXML
 	ToggleGroup bookingViewGroup = new ToggleGroup();
 
@@ -1135,13 +1139,6 @@ public class BusinessController  implements Initializable, IUser  {
 	public void refreshService() {
 		loadallServices("");
 	}
-	
-	/**
-	 * @author Joseph Garner
-	 */
-	private void setColor(){
-		//TODO
-	}
 
 	/**************
 	 * BMENU CUSTOMERS
@@ -1207,6 +1204,16 @@ public class BusinessController  implements Initializable, IUser  {
 	 */
 	@FXML
 	public void createBooking() {
+		if (listviewCustomers.getSelectionModel().getSelectedItem() == null) {
+			program.messageBox("ERROR", "Error", "A Customer Has Not Been Chosen", "Please select a customer");
+			return;
+		}
+		_user = program.getUser();
+		program.setUser(connection.getUser(listviewCustomers.getSelectionModel().getSelectedItem().getID()));
+		log.debug("LOGGER: Selected user ID - " + listviewCustomers.getSelectionModel().getSelectedItem().getID());
+		log.debug("LOGGER: set user - " + program.getUser());
+		getUserWindow();
+		program.setUser(_user);
 		/*
 		if (listviewCustomers.getSelectionModel().getSelectedItem() == null) {
 			program.messageBox("ERROR", "Error", "A Customer Has Not Been Chosen", "Please select a customer");
@@ -1252,7 +1259,7 @@ public class BusinessController  implements Initializable, IUser  {
 		try {
 			Stage secondaryStage = new Stage();
 			secondaryStage.getIcons().add(new Image("images/ic_collections_bookmark_black_48dp_2x.png"));
-			Parent root = FXMLLoader.load(getClass().getResource("businessLayout.fxml"));
+			Parent root = FXMLLoader.load(getClass().getResource("customerLayout.fxml"));
 			secondaryStage.setTitle("Business Application");
 			secondaryStage.setMinWidth(800);
 			secondaryStage.setMinHeight(650);
@@ -1269,6 +1276,27 @@ public class BusinessController  implements Initializable, IUser  {
 		}
 		log.debug("false");
 		return false;
+	}
+	
+	@FXML
+	public void showCustom(){
+		try {
+			Stage secondaryStage = new Stage();
+			secondaryStage.getIcons().add(new Image("images/ic_collections_bookmark_black_48dp_2x.png"));
+			Parent roots = FXMLLoader.load(getClass().getResource("mizeLayout.fxml"));
+			secondaryStage.setTitle("Business Application");
+			secondaryStage.setResizable(false);
+			secondaryStage.setScene(new Scene(roots));
+			secondaryStage.initModality(Modality.APPLICATION_MODAL);
+			secondaryStage.showAndWait();
+		} catch (IOException ioe) {
+			log.warn(ioe.getMessage());
+		}
+	}
+	
+	
+	private void setColor(){
+		root.setStyle(program.setColor());
 	}
 	
 	

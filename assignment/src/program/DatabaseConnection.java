@@ -1121,4 +1121,30 @@ public class DatabaseConnection
 		
 	}
 	
+	/**
+	 * 
+	 * @param id
+	 * @return
+	 */
+	public String[] getColor(int id){
+        String query = "SELECT * FROM COLOR WHERE ID = ?";
+        String[] val = new String[4];
+        try (Connection connect = this.connect(); PreparedStatement inject  = connect.prepareStatement(query))
+        {
+            inject.setInt(1,id);
+            ResultSet o = inject.executeQuery();
+            log.debug(o.getInt(1));
+            val[0] = o.getString(2);
+            val[1] = o.getString(3);
+            val[2] = o.getString(4);
+            val[2] = o.getString(5);
+
+        }
+        catch(SQLException sqle)
+        {
+            log.fatal(sqle.getMessage());
+        }
+        return val;
+    }
+	
 }

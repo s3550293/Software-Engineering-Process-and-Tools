@@ -478,6 +478,7 @@ public class DatabaseConnection
 		Date date, startTime, endTime;
 		String desc;
 		int service;
+		int bID;
 		String query = "SELECT * FROM BOOKINGS WHERE userID = ? "; 
 
 		try (Connection connect = this.connect(); PreparedStatement  inject  = connect.prepareStatement(query))
@@ -496,7 +497,8 @@ public class DatabaseConnection
 				endTime = controller.strToTime(output.getString(6));
 				service = output.getInt(7);
 				desc=output.getString(8);
-				databaseBookingTime.add(new Booking(bookingID,cusID,empID,date,startTime,endTime,service,desc));				
+				bID = output.getInt(9);
+				databaseBookingTime.add(new Booking(bookingID,cusID,empID,date,startTime,endTime,service,desc,bID));				
 			}
 			output.close();
 		}
@@ -523,6 +525,7 @@ public class DatabaseConnection
 		Date date, startTime, endTime;
 		String desc;
 		int service;
+		int bID;
 		String query = "SELECT * FROM BOOKINGS"; 
 
 		try (Connection connect = this.connect(); PreparedStatement  inject  = connect.prepareStatement(query))
@@ -541,7 +544,8 @@ public class DatabaseConnection
 				endTime = controller.strToTime(output.getString(6));
 				service = output.getInt(7);
 				desc=output.getString(8);
-				databaseBookingTime.add(new Booking(bookingID,cusID,empID,date,startTime,endTime,service,desc));				
+				bID = output.getInt(9);
+				databaseBookingTime.add(new Booking(bookingID,cusID,empID,date,startTime,endTime,service,desc,bID));				
 			}
 			output.close();
 		}
@@ -568,6 +572,7 @@ public class DatabaseConnection
 		Date date, startTime, endTime;
 		int service;
 		String desc;
+		int bID;
 		String query = "SELECT * FROM BOOKINGS WHERE id = ?"; 
 
 		try (Connection connect = this.connect(); PreparedStatement  inject  = connect.prepareStatement(query))
@@ -586,7 +591,8 @@ public class DatabaseConnection
 				endTime = controller.strToTime(output.getString(6));
 				service = output.getInt(7);
 				desc=output.getString(8);
-				getBooking = new Booking(bookingID,cusID,empID,date,startTime,endTime,service,desc);				
+				bID = output.getInt(9);
+				getBooking = new Booking(bookingID,cusID,empID,date,startTime,endTime,service,desc,bID);				
 			}
 			output.close();
 		}

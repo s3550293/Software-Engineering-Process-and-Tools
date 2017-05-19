@@ -131,11 +131,27 @@ public class Database
 				+ "weekdayStart VARCHAR(20),"
 				+ "weekdayEnd VARCHAR(20)," 
 				+ "weekendStart VARCHAR(20),"
-				+ "weekendEnd VARCHAR(20)"
-				+ "FOREIGN KEY(ID) REFERENCES USERS(userID));";
+				+ "weekendEnd VARCHAR(20),"
+				+ "color integer,"
+				+ "image blob;"
+				+ "FOREIGN KEY(ID) REFERENCES USERS(userID),"
+				+ "FOREIGN KEY(color) REFERENCES COLOR(ID));";
 		String queryBusiness = "CREATE TABLE IF NOT EXISTS BUSINESS (" 
 				+"businessID interger PRIMARY KEY AUTOINCREMENT,"
 				+"businessName VARCHAR(40));";
+		String queryColor = "CREATE TABLE IF NOT EXISTS COLOR ("
+				+ "ID integer PRIMARY KEY AUTOINCREMENT,"
+				+ "base1 varchar(10),"
+				+ "base2 varchar(10),"
+				+ "base3 varchar(10),"
+				+ "base4 varchar(10))"; 
+		
+		String queryUserRoot = "INSERT INTO USERS(username, password, accountType) " + "VALUES('root','Monday10!',2)";
+		
+		String colorset1 = "INSERT INTO USERS(base1, base2, base3, base4) "+"VALUES('#446CB3','black','White','#EDEDED)";
+		String colorset2 = "INSERT INTO USERS(base1, base2, base3, base4) "+"VALUES('#800080','black','White','#EDEDED)";
+		String colorset3 = "INSERT INTO USERS(base1, base2, base3, base4) "+"VALUES('#008B45','black','White','#EDEDED)";
+		String colorset4 = "INSERT INTO USERS(base1, base2, base3, base4) "+"VALUES('#FF7F24','black','White','#EDEDED)";
 		/*
 		 * Attempting to connect to the database so tables can be created
 		 */
@@ -174,6 +190,26 @@ public class Database
 			//Creating Table 'BUSINESS'
 			smt.executeUpdate(queryBusiness);
 			log.debug("Table 'BUSINESS' added");
+			
+			smt.executeUpdate(queryColor);
+			log.debug("Table 'Color' added");
+			
+			smt.executeUpdate(queryUserRoot);
+			log.debug("root user added");
+			
+			smt.executeUpdate(colorset1);
+			log.debug("Color set 1 added");
+			
+			smt.executeUpdate(colorset2);
+			log.debug("Color set 2 added");
+			
+			smt.executeUpdate(colorset3);
+			log.debug("Color set 3 added");
+			
+			smt.executeUpdate(colorset4);
+			log.debug("Color set 4 added");
+			
+			
 		} catch (SQLException sqle)
 		{
 			// System.out.println("ERROR: couldn't add table:

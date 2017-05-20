@@ -17,7 +17,7 @@ public class LoginJUnit {
 
 	private static Logger log = Logger.getLogger(LoginJUnit.class);
 	Login ln = new Login();
-	Database data = new Database("Test.db");
+	//Database data = new Database("Test.db");
 	DatabaseConnection connect = new DatabaseConnection();
 	
 	
@@ -28,8 +28,12 @@ public class LoginJUnit {
         BasicConfigurator.configure();
 		// add a new customer
 		connect.addUser("c1", "cccc", 0,2);
+		connect.addUser("c1", "cccc", 0,3);
 		// add a new business owner
 		connect.addUser("b1", "bbbb", 1,2);
+		connect.addUser("b1", "bbbb", 1,3);
+		// add a new superuser/admin
+		connect.addUser("a1", "aaaa", 2,2);
 	}
 
 	/*

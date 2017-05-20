@@ -19,6 +19,7 @@ public class Login
 	 * @param pass
 	 * @return 0 for valid Customer
 	 * 		   1 for valid Business Owner
+	 * 		   2 for valid Superuser/Admin
 	 *        -1 for nonexistent user
 	 *        -2 for incorrect password
 	 *        -3 for empty user name or password

@@ -8,6 +8,7 @@ import java.util.ResourceBundle;
 
 import org.apache.log4j.Logger;
 
+import gui.IInterface.IUser;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -29,7 +30,7 @@ import javafx.util.Callback;
 import program.BusinessOwner;
 import program.Controller;
 
-public class RootController implements Initializable {
+public class RootController implements Initializable, IUser {
 	
 	private static Logger log = Logger.getLogger(RootController.class);
 	private final Controller program = new Controller();
@@ -137,7 +138,28 @@ public class RootController implements Initializable {
 		log.debug("false");
 	}
 	
-	
+	public boolean getUserWindow(){
+		try {
+			Stage secondaryStage = new Stage();
+			secondaryStage.getIcons().add(new Image("images/ic_collections_bookmark_black_48dp_2x.png"));
+			Parent root = FXMLLoader.load(getClass().getResource("rootLayout.fxml"));
+			secondaryStage.setTitle("Customer Application");
+			secondaryStage.setMinWidth(800);
+			secondaryStage.setMinHeight(650);
+			secondaryStage.setMaxWidth(1000);
+			secondaryStage.setMaxHeight(850);
+			secondaryStage.setScene(new Scene(root));
+			secondaryStage.initModality(Modality.APPLICATION_MODAL);
+			secondaryStage.showAndWait();
+			if (program.getUser() != null) {
+				return true;
+			}
+		} catch (IOException ioe) {
+			log.warn(ioe.getMessage());
+		}
+		log.debug("false");
+		return false;
+	}
 	
 	
 }

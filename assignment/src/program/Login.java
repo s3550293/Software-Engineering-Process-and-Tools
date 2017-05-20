@@ -24,11 +24,10 @@ public class Login
 	 *        -2 for incorrect password
 	 *        -3 for empty user name or password
 	 */
-	public int logInProcess(String userName,int businessID, String pass){
+	public int logInProcess(String userName, String pass){
 		boolean passCheck = false;
 		DatabaseConnection connect = new DatabaseConnection();
 		User user = connect.getUser(userName);
-		Business b = connect.getBusiness(businessID);
 		if(userName.equals(user.getUsername()))
 		{
 			while(passCheck==false)
@@ -38,18 +37,16 @@ public class Login
 					passCheck=true;
 					if(user.getAccountType() == 1){
 						program.setUser(user);
-						program.business(b);
-						log.debug("LOGGER: User - "+connect.getUser(userName, businessID).getFullName());
+						log.debug("LOGGER: User - "+connect.getUser(userName).getFullName());
 						return 1;
 					}if(connect.getUser(userName).getAccountType() == 0){
 						program.setUser(user);
-						program.business(b);
-						log.debug("LOGGER: User - "+connect.getUser(userName, businessID).getFullName());
+						log.debug("LOGGER: User - "+connect.getUser(userName).getFullName());
 						return 0;
 					}
 					if(connect.getUser(userName).getAccountType() == 2){
 						program.setUser(user);
-						log.debug("LOGGER: User - "+connect.getUser(userName, businessID).getFullName());
+						log.debug("LOGGER: User - "+connect.getUser(userName).getFullName());
 						return 2;
 					}
 				}

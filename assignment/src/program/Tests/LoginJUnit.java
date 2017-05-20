@@ -43,6 +43,7 @@ public class LoginJUnit {
 	 * -3 : Empty user name or password
 	 */
 
+	/*
 	@Test
 	public void testNonExistingUser(){
 		log.debug("user does not exist"); 
@@ -84,6 +85,7 @@ public class LoginJUnit {
 		log.debug("Both username and password are empty");
 		assertEquals((-3),(ln.logInProcess("",2, "")));
 	}
+	*/
 	
 	@After
 	public void after()

@@ -58,7 +58,7 @@ public class DatabaseConnection
 		/*
 		 * account type boolean 1 for business owner, 0 for user
 		 */
-		String query = "INSERT INTO USERS(username, password, accountType, businessID) " + "VALUES('"+username+"','"+password+"','"+accountType+","+businessID+")";
+		String query = "INSERT INTO USERS(username, password, accountType, businessID) " + "VALUES('"+username+"','"+password+"',"+accountType+","+businessID+")";
 		executeQuery(query, "User Added\n");
 		log.info("OUT addUser\n");
 	}
@@ -69,13 +69,13 @@ public class DatabaseConnection
 	 * @param password
 	 * @param accountType
 	 */
-	public void addUserDetails(int id, String fname, String lname, String email, String phone, String dob, String gender, int businessID)
+	public void addUserDetails(int id, String fname, String lname, String email, String phone, String dob, String gender)
 	{
 		log.info("IN addUserDetails\n");
 		/*
 		 * account type boolean 1 for business owner 0 for user
 		 */
-		String query = "INSERT INTO CLIENTDETAILS(id, FName, LName, Email, Phone, DOB, Gender) " + "VALUES("+id+",'"+fname+"','"+lname+"','"+email+"','"+phone+"','"+dob+"','"+gender+","+businessID+")";
+		String query = "INSERT INTO CLIENTDETAILS(id, FName, LName, Email, Phone, DOB, Gender) " + "VALUES("+id+",'"+fname+"','"+lname+"','"+email+"','"+phone+"','"+dob+"','"+gender+"')";
 		executeQuery(query, "User Added\n");
 		log.info("OUT addUserDetails\n");
 	}
@@ -350,7 +350,7 @@ public class DatabaseConnection
 	public void addEmployeeWorkingTime(int empID, int dayOfWeek, String startTime, String endTime, int businessID)
 	{
 		log.info("IN addEmployeeWorkingTimeToDatabase\n");
-		String query = "INSERT INTO EMPLOYEES_WORKING_TIMES(employeeID, dayOfWeek, startTime, endTime) " + "VALUES ("+ empID +","+ dayOfWeek +",'"+ startTime +"','"+ endTime +"',"+businessID+");";
+		String query = "INSERT INTO EMPLOYEES_WORKING_TIMES(employeeID, dayOfWeek, startTime, endTime, businessID) " + "VALUES ("+ empID +","+ dayOfWeek +",'"+ startTime +"','"+ endTime +"',"+businessID+");";
 		executeQuery(query, "Work Time Added - EmpID " + empID+ " Day Of Week: "+dayOfWeek+" Start Time: "+startTime+" End Time: "+endTime+"\n");
 		log.info("OUT addEmployeeWorkingTimeToDatabase\n");
 	}
@@ -468,7 +468,7 @@ public class DatabaseConnection
 	{
 		log.info("IN addBookingToDatabase\n");
 		//bookingID is made in the database
-		String query = "INSERT INTO BOOKINGS (userID,employeeID,date,startTime,endTime, serviceID,status)" + "VALUES(" + userId + ","+empID+",'" + date + "','" + startTime + "','" + endTime + "',"+service+",'" + status + "',"+businessID+");";
+		String query = "INSERT INTO BOOKINGS (userID,employeeID,date,startTime,endTime, serviceID,status, businessID)" + "VALUES(" + userId + ","+empID+",'" + date + "','" + startTime + "','" + endTime + "',"+service+",'" + status + "',"+businessID+");";
 		executeQuery(query, "Booking Added - User ID: "+userId+" Date: "+date+" Start Time: "+startTime+" End Time: "+endTime+" ServiceNmb: "+service+" Status: "+status+"\n");
 		log.info("OUT addBookingToDatabase\n");
 	}
@@ -808,7 +808,7 @@ public class DatabaseConnection
 	 */
 	public void addService(Service service)
 	{
-		String query = "INSERT INTO SERVICES(service, length, cost) " + "VALUES('"+service.getName()+"',"+service.getLengthMin()+","+service.getPrice()+","+service.getBusinessID()+")";
+		String query = "INSERT INTO SERVICES(service, length, cost, businessID) " + "VALUES('"+service.getName()+"',"+service.getLengthMin()+","+service.getPrice()+","+service.getBusinessID()+")";
 		executeQuery(query, "Service Added\n");
 	}
 	
@@ -1106,7 +1106,7 @@ public class DatabaseConnection
 	public void createBusiness(String businessName){
 		log.info("IN addBusinessToDatabase\n");
 		//BusinessID is made in the database
-		String query = "INSERT INTO BUSINESS (bName)" + "VALUES("+businessName+");";
+		String query = "INSERT INTO BUSINESS (businessName)" + "VALUES('"+businessName+"');";
 		try(Connection connect = this.connect(); Statement inject = connect.createStatement())
 		{
 			inject.executeUpdate(query);

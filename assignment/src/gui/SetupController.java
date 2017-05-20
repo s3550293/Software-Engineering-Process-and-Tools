@@ -581,16 +581,18 @@ public class SetupController implements Initializable {
 	}
 	
 	
-	private void ini()
+	public void ini()
     {
 		DatabaseConnection connect = new DatabaseConnection();
 		BusinessMenu bMenu = new BusinessMenu();
 			
+		connect.createBusiness("SuperUser");
+		connect.createBusiness("YarraVille Clinic");
 		connect.addUser("root", "Root123", 2,1); //Super user attached to business 1
 		connect.addUser("William", "Apples22", 0,2); // customer attached to Business 2
 		connect.addUser("Hannah", "Apples22", 0,2); // customer attached to Business 2
-		connect.addUserDetails(connect.getUser("William",2).getID(), "William", "Porter", "will@mail.com", "0452368593", "01/01/2002", "Male",2);
-		connect.addUserDetails(connect.getUser("Hannah",2).getID(), "Hannah", "Hawlking", "hannah@mail.com", "0452136859", "20/04/1995", "Famale",2);
+		connect.addUserDetails(connect.getUser("William",2).getID(), "William", "Porter", "will@mail.com", "0452368593", "01/01/2002", "Male");
+		connect.addUserDetails(connect.getUser("Hannah",2).getID(), "Hannah", "Hawlking", "hannah@mail.com", "0452136859", "20/04/1995", "Famale");
 		
 		connect.addEmployee("Luke Charles",25,2);
 		connect.addEmployee("David Smith",26.6,2);

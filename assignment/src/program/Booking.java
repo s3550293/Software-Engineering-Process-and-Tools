@@ -5,7 +5,7 @@ import java.util.Date;
 
 
 public class Booking {
-	private int bookingID, cusID, employeeID, serviceID, staffID;
+	private int bookingID, cusID, employeeID, serviceID;
 	private Date date, startTime, endTime;
 	private String status;
 	private int businessID;
@@ -69,10 +69,6 @@ public class Booking {
 	public int getService()
 	{
 		return serviceID;
-	}
-	public int getEmployee()
-	{
-		return staffID;
 	}
 	public void setCus(int cus)
 	{

@@ -5,7 +5,6 @@ import org.apache.log4j.Logger;
 import javafx.fxml.FXML;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
-import program.Business;
 import program.Controller;
 import program.DatabaseConnection;
 import program.Service;
@@ -21,7 +20,7 @@ public class ServiceAddController {
 	 * @author [Luke Mason]
 	 */
 	@FXML
-	public void addService(Business business)
+	public void addService()
 	{
 		Controller program = new Controller();
 		DatabaseConnection connect = new DatabaseConnection();
@@ -46,7 +45,7 @@ public class ServiceAddController {
 			program.messageBox("ERROR", "Price Invalid", "Price Invalid","Price entered is not a valid amount\nReason: Price is not 0 - 1000");
 			return;
 		}
-		Service service = new Service(txtSerNam.getText(), duration, price, business.getBusinessId());
+		Service service = new Service(txtSerNam.getText(), duration, price, program.business().getBusinessId());
 		connect.addService(service);
 		program.messageBox("SUCCESS", "Service Added!", "Service Added!","Service has been added");	
 		stage.close();

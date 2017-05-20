@@ -5,7 +5,6 @@ import java.sql.DatabaseMetaData;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.util.Date;
 
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
@@ -20,7 +19,7 @@ public class Database
 	 */
 	public Database(String filename)
 	{
-		log.setLevel(Level.WARN);
+		log.setLevel(Level.DEBUG);
 		createNewDatabase(filename);
 	}
 
@@ -63,13 +62,16 @@ public class Database
 		 * 
 		 * creating tables for users and user details to be remembered later
 		 */
+		String queryBusiness = "CREATE TABLE IF NOT EXISTS BUSINESS (" 
+				+"businessID integer PRIMARY KEY AUTOINCREMENT,"
+				+"businessName VARCHAR(40));";
 		String queryUser = "CREATE TABLE IF NOT EXISTS USERS (" + 
 		 "userID integer PRIMARY KEY AUTOINCREMENT,"
 				+ "username VARCHAR(30) NOT NULL," 
 				+ "password VARCHAR(30) NOT NULL,"
 				+ "accountType integer NOT NULL,"
 				+ "businessID integer,"
-				+ "FOREIGN KEY(businessID) REFERENCES business(businessID));";
+				+ "FOREIGN KEY(businessID) REFERENCES BUSINESS(businessID));";
 		String queryUserDetails = "CREATE TABLE IF NOT EXISTS CLIENTDETAILS (" 
 				+ "id integer NOT NULL,"
 				+ "FName VARCHAR(30) NOT NULL,"
@@ -78,13 +80,13 @@ public class Database
 				+ "Phone VARCHAR(30) NOT NULL,"
 				+ "DOB VARCHAR(30) NOT NULL,"
 				+ "Gender VARCHAR(30) NOT NULL,"
-				+ "FOREIGN KEY(id) REFERENCES USERS(userID)";
+				+ "FOREIGN KEY(id) REFERENCES USERS(userID));";
 		String queryEmployees = "CREATE TABLE IF NOT EXISTS EMPLOYEES ("
 				+ "employeeID integer PRIMARY KEY AUTOINCREMENT," 
 				+ "name VARCHAR(40) NOT NULL,"
 				+ "payRate DOUBLE NOT NULL,"
 				+ "businessID integer,"
-				+ "FOREIGN KEY(businessID) REFERENCES business(businessID));";
+				+ "FOREIGN KEY(businessID) REFERENCES BUSINESS(businessID));";
 		String queryEmployeesWorkingTimes = "CREATE TABLE IF NOT EXISTS EMPLOYEES_WORKING_TIMES ("
 				+ "id integer PRIMARY KEY AUTOINCREMENT," 
 				+ "employeeID integer NOT NULL,"
@@ -93,7 +95,7 @@ public class Database
 				+ "endTime VARCHAR(20) NOT NULL,"
 				+ "businessID integer,"
 				+ "FOREIGN KEY(employeeID) REFERENCES EMPLOYEES(employeeID),"
-				+ "FOREIGN KEY(businessID) REFERENCES business(businessID));";
+				+ "FOREIGN KEY(businessID) REFERENCES BUSINESS(businessID));";
 		String queryBookings = "CREATE TABLE IF NOT EXISTS BOOKINGS (" 
 				+ "id integer PRIMARY KEY AUTOINCREMENT,"
 				+ "userID integer NOT NULL,"
@@ -131,30 +133,31 @@ public class Database
 				+ "weekendStart VARCHAR(20),"
 				+ "weekendEnd VARCHAR(20),"
 				+ "color integer,"
-				+ "image blob;"
+				+ "image blob,"
 				+ "FOREIGN KEY(ID) REFERENCES USERS(userID),"
 				+ "FOREIGN KEY(color) REFERENCES COLOR(ID));";
-		String queryBusiness = "CREATE TABLE IF NOT EXISTS BUSINESS (" 
-				+"businessID interger PRIMARY KEY AUTOINCREMENT,"
-				+"businessName VARCHAR(40));";
 		String queryColor = "CREATE TABLE IF NOT EXISTS COLOR ("
 				+ "ID integer PRIMARY KEY AUTOINCREMENT,"
 				+ "base1 varchar(10),"
 				+ "base2 varchar(10),"
 				+ "base3 varchar(10),"
-				+ "base4 varchar(10))"; 
+				+ "base4 varchar(10));"; 
 		
-		String queryUserRoot = "INSERT INTO USERS(username, password, accountType) " + "VALUES('root','Monday10!',2)";
+		String queryUserRoot = "INSERT INTO USERS(username, password, accountType,businessID) " + "VALUES('root','Monday10!',2,0)";
 		
-		String colorset1 = "INSERT INTO USERS(base1, base2, base3, base4) "+"VALUES('#446CB3','black','White','#EDEDED)";
-		String colorset2 = "INSERT INTO USERS(base1, base2, base3, base4) "+"VALUES('#800080','black','White','#EDEDED)";
-		String colorset3 = "INSERT INTO USERS(base1, base2, base3, base4) "+"VALUES('#008B45','black','White','#EDEDED)";
-		String colorset4 = "INSERT INTO USERS(base1, base2, base3, base4) "+"VALUES('#FF7F24','black','White','#EDEDED)";
+		String colorset1 = "INSERT INTO COLOR(base1, base2, base3, base4) "+"VALUES('#446CB3','black','White','#EDEDED')";
+		String colorset2 = "INSERT INTO COLOR(base1, base2, base3, base4) "+"VALUES('#800080','black','White','#EDEDED')";
+		String colorset3 = "INSERT INTO COLOR(base1, base2, base3, base4) "+"VALUES('#008B45','black','White','#EDEDED')";
+		String colorset4 = "INSERT INTO COLOR(base1, base2, base3, base4) "+"VALUES('#FF7F24','black','White','#EDEDED')";
 		/*
 		 * Attempting to connect to the database so tables can be created
 		 */
 		try (Connection connect = DriverManager.getConnection(url); Statement smt = connect.createStatement())
 		{
+			//Creating Table 'BUSINESS'
+			smt.executeUpdate(queryBusiness);
+			log.debug("Table 'BUSINESS' added");
+			
 			//Creating Table 'USERS'
 			smt.executeUpdate(queryUser);
 			log.debug("Table 'Users' added");
@@ -185,9 +188,6 @@ public class Database
 			smt.executeUpdate(queryBusinessOwner);
 			log.debug("Table 'BUSINESS OWNER' added");
 			
-			//Creating Table 'BUSINESS'
-			smt.executeUpdate(queryBusiness);
-			log.debug("Table 'BUSINESS' added");
 			
 			smt.executeUpdate(queryColor);
 			log.debug("Table 'Color' added");
@@ -215,6 +215,13 @@ public class Database
 			log.warn("ERROR: couldn't add table: " + sqle.getMessage());
 		}
 	}
+	
+	
+	
+	
+	/*****************************************************************
+	 * TESTING
+	 */
 
 	/**
 	 * used to add testing data at the start

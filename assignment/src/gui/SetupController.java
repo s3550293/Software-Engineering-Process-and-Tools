@@ -70,8 +70,6 @@ public class SetupController implements Initializable {
 		dispMFClose();
 		dispSSOpen();
 		dispSSClose();
-		//createDB();
-		//ini();
 	}
 	
 	public void assignDatabaseName()
@@ -325,7 +323,6 @@ public class SetupController implements Initializable {
 			}
 			stkpTimeSlot.setVisible(false);
 			stkpSelectColor.setVisible(true);
-			createDB();
 			return;
 		}
 		/*if(stkpLogin.isVisible())
@@ -405,6 +402,8 @@ public class SetupController implements Initializable {
 		}
 		return val;
 	}
+	
+	
 	private void dispMFOpen(){
 		ObservableList<String> tl = FXCollections.observableList(timeArr());
 		if(tl != null)
@@ -582,16 +581,11 @@ public class SetupController implements Initializable {
 	}
 	
 	
-	private void createDB(){
-		Database db = new Database(databaseName);
-		db.createTable(databaseName);
-	}
 	private void ini()
     {
 		DatabaseConnection connect = new DatabaseConnection();
 		BusinessMenu bMenu = new BusinessMenu();
-		
-		connect.addUser("admin","Monday10!",1,2); // Business Owner attached to Business 2		
+			
 		connect.addUser("root", "Root123", 2,1); //Super user attached to business 1
 		connect.addUser("William", "Apples22", 0,2); // customer attached to Business 2
 		connect.addUser("Hannah", "Apples22", 0,2); // customer attached to Business 2

@@ -972,7 +972,6 @@ public class DatabaseConnection
 	public void createBooking(Booking book){
 		log.info("IN addBookingToDatabase\n");
 		//bookingID is made in the database
-		log.debug("LOGGER: emp ID  booking- "+ book.getEmployee());
 		String query = "INSERT INTO BOOKINGS (userID,employeeID,date,startTime,endTime, serviceID,status)" + "VALUES(" + book.getCustomerId() + ","+book.getEmployeeID()+",'" + controller.dateToStr(book.getDate()) + "','" + controller.timeToStr(book.getStartTime()) + "','" + controller.timeToStr(book.getEndTime()) + "',"+book.getService()+",'" + book.getStatus() + "');";
 		try(Connection connect = this.connect(); Statement inject = connect.createStatement())
 		{
@@ -1119,6 +1118,28 @@ public class DatabaseConnection
 		}
 		log.info("OUT addBusinessToDatabase\n");
 		
+	}
+	
+	public ArrayList<Business> getBusiness(){
+		ArrayList<Business> bis = new ArrayList<>();
+		String query = "SELECT * FROM BUSINESS"; 
+		int id;
+		String name;
+		try (Connection connect = this.connect(); PreparedStatement  inject  = connect.prepareStatement(query)){
+			
+			ResultSet o = inject.executeQuery();
+			while (o.next())
+			{
+				id = o.getInt(1);
+				name = o.getString(2);
+				bis.add(new Business(id, name));
+			}
+			
+		}catch(SQLException sqle)
+		{
+			log.warn(sqle.getMessage());
+		}
+		return bis;
 	}
 	
 	/**

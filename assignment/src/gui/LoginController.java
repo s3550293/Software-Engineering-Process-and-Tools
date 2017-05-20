@@ -8,7 +8,6 @@ import java.util.ResourceBundle;
 
 import org.apache.log4j.Logger;
 
-import gui.IInterface.ISetup;
 import gui.IInterface.IUser;
 import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
@@ -33,15 +32,16 @@ import javafx.stage.Stage;
 import javafx.util.Callback;
 import program.Business;
 import program.Controller;
-import program.Employee;
+import program.Database;
+import program.DatabaseConnection;
 import program.Login;
-import program.Service;
 
 
 public class LoginController implements Initializable {
 	public static Logger log = Logger.getLogger(LoginController.class);
 	private Login loginFuction = new Login();
 	private Controller program = new Controller();
+	private DatabaseConnection con = new DatabaseConnection();
 	private int loginCount = 0;
 	UserFactory userFactory = new UserFactory();
 	@FXML
@@ -58,18 +58,15 @@ public class LoginController implements Initializable {
 	@Override
 	public void initialize(URL url, ResourceBundle rb)
 	{
+		String file = "company.db";
 		log.debug("LOGGER: Entered ini");
 		lblError.setVisible(false);
 		File varTmpData = new File("db/company.db");
 		if (varTmpData.exists() == false) {
-			log.debug("LOGGER: File doesnt exist");
-			ISetup setup = userFactory.getSetup("SetUp");
-			boolean var = setup.getSetup();;
-			if(var == false){
-				log.debug("LOGGER: setup faild");
-				Platform.exit();
-				System.exit(0);
-			}
+			Database data = new Database(file);
+			data.createNewDatabase(file);
+			data.createTable(file);
+			
 		}
 		popcmb();
 		cmbBusiness.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<Business>() {
@@ -83,7 +80,7 @@ public class LoginController implements Initializable {
 	}
 	
 	private void popcmb(){
-		ArrayList<Business> arr = new ArrayList<>(/*TODO*/);
+		ArrayList<Business> arr = new ArrayList<>(con.getBusiness());
 		ObservableList<Business> list = FXCollections.observableList(arr);
 		if (list != null) {
 			cmbBusiness.setItems(list);
@@ -116,9 +113,9 @@ public class LoginController implements Initializable {
 	 * @author Joseph Garner
 	 */
 	@FXML
-	public void loginAction(int businessID) {
+	public void loginAction() {
 		Stage loginstage = (Stage) btnLogin.getScene().getWindow();
-		int loginCheck = loginFuction.logInProcess(txtUserLogin.getText(),businessID, txtPassLogin.getText());
+		int loginCheck = loginFuction.logInProcess(txtUserLogin.getText(),program.business().getBusinessId(), txtPassLogin.getText());
 		if(loginCount < 10){
 			if(loginCheck == -2){
 				lblError.setVisible(true);

@@ -12,6 +12,7 @@ import java.util.ResourceBundle;
 
 import org.apache.log4j.Logger;
 
+import gui.IInterface.IUser;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
@@ -54,7 +55,10 @@ public class CustomerController  implements Initializable, IUser{
 	private static Booking newBook = new Booking();
 	
 	@FXML
-	Button btnBookAppointment, btnConfirmBooking, btnNext, btnLogoutCustomer, btnBack, btnCancelAppoitment,
+	ListView<Booking> listBookings;
+	
+	@FXML
+	Button btnConfirmBooking, btnNext, btnLogoutCustomer, btnBack, btnCancelAppoitment,
 			btnRToOwnMen;
 
 	@FXML
@@ -91,6 +95,10 @@ public class CustomerController  implements Initializable, IUser{
 	
 	@Override
 	public void initialize(URL url, ResourceBundle rb) {
+		if(program.bmb == true){
+			btnRToOwnMen.setVisible(true);
+		}
+		popListBook();
 		lblCustomerName.setText(connection.getCustomer(program.getUser().getID()).getFullName());
 		cmbDayBooking.valueProperty().addListener(new ChangeListener<Date>() {
 			@Override
@@ -119,8 +127,35 @@ public class CustomerController  implements Initializable, IUser{
 			}
 		});
 		loadDaySelect();
-		//listTogTDini(businessID);//idk how to get businessID, however the businessID comes from the business Selected when they click login, soooo yeah
-		//listTogTSini(businessID);//idk how to get businessID, however the businessID comes from the business Selected when they click login, soooo yeah
+		listTogTDini(program.business().getBusinessId());
+		listTogTSini(program.business().getBusinessId());
+	}
+	
+	private void popListBook(){
+		ArrayList<Booking> arr = new ArrayList<>(connection.getBooking(program.getUser().getID()));
+		ObservableList<Booking> list = FXCollections.observableList(arr);
+		log.debug("LOGGER: List length:" + list.size());
+		if (list != null) {
+			listBookings.setItems(list);
+			listBookings.setCellFactory(new Callback<ListView<Booking>, ListCell<Booking>>() {
+				@Override
+				public ListCell<Booking> call(ListView<Booking> p) {
+
+					ListCell<Booking> cell = new ListCell<Booking>() {
+						@Override
+						protected void updateItem(Booking t, boolean bln) {
+							super.updateItem(t, bln);
+							if (t != null) {
+								log.debug("LOGGER: added:" + t.getBookingID());
+								setText("ID: "+t.getBookingID()+"\n"
+										+ connection.getEmployee(t.getEmployeeID()).getName()+" //TODO");
+							}
+						}
+					};
+					return cell;
+				}
+			});
+		}
 	}
 	
 	@FXML
@@ -224,8 +259,8 @@ public class CustomerController  implements Initializable, IUser{
 	 * @author Joseph Garner
 	 */
 	@FXML
-	public void loadallServices(int businessID) {
-		ArrayList<Service> serviceArray = new ArrayList<>(connection.getAllServices(businessID));
+	public void loadallServices() {
+		ArrayList<Service> serviceArray = new ArrayList<>(connection.getAllServices(program.business().getBusinessId()));
 		ObservableList<Service> serviceList = FXCollections.observableList(serviceArray);
 		log.debug("LOGGER: List length:" + serviceArray.size());
 		if (serviceList != null) {
@@ -259,7 +294,6 @@ public class CustomerController  implements Initializable, IUser{
 	 * @author Luke
 	 */
 	private void loadpreferedEmp(String startTime, String endTime, int businessID) {
-		// TODO
 		List<Employee> emArray;
 		log.debug("LOGGER: date selected - " + lblCustBookingDate.getText());
 		emArray = program.getAvailableEmployeesForSpecifiedTime(lblCustBookingDate.getText(), startTime, endTime, businessID);
@@ -644,7 +678,7 @@ public class CustomerController  implements Initializable, IUser{
 	 * @author [Programmer]
 	 */
 	@FXML
-	public void nextView(int businessID) {
+	public void nextView() {
 		if (listviewBookingServices.getSelectionModel().getSelectedItem() == null) {
 			program.messageBox("ERROR", "Error", "A Service Has Not Been Chosen", "Please select a service");
 			return;
@@ -664,7 +698,7 @@ public class CustomerController  implements Initializable, IUser{
 			newBook.setService(service.getID());
 			lblCustBookingDate.setText(program.dateToStr(cmbDayBooking.getSelectionModel().getSelectedItem()));
 			newBook.setDate(cmbDayBooking.getSelectionModel().getSelectedItem());
-			checkBookingTime(businessID);
+			checkBookingTime(program.business().getBusinessId());
 			return;
 		}
 		if (timeGroup.getSelectedToggle() == null) {
@@ -684,7 +718,6 @@ public class CustomerController  implements Initializable, IUser{
 			newBook.setEndTime(date);
 			newBook.setEmployee(cmbPreferEmp.getSelectionModel().getSelectedItem().getId());
 			log.debug("LOGGER: emp ID - " + cmbPreferEmp.getSelectionModel().getSelectedItem().getId());
-			log.debug("LOGGER: emp ID  booking- " + newBook.getEmployee());
 			lblBookConSer.setText(service.getName());
 			lblBookConDur.setText(Integer.toString(service.getLengthMin()) + "min");
 			lblBookConPri.setText("$" + Double.toString(service.getPrice()));
@@ -749,11 +782,9 @@ public class CustomerController  implements Initializable, IUser{
 		alert.setTitle("Book Appointment");
 		alert.setHeaderText("Confirm Apointment");
 		alert.setContentText("Are you sure?");
-		log.debug("LOGGER: emp ID  booking- " + newBook.getEmployee());
 		Optional<ButtonType> result = alert.showAndWait();
 		if (result.get() == ButtonType.OK) {
 			newBook.setStatus("active");
-			log.debug("LOGGER: emp ID  booking- " + newBook.getEmployee());
 			connection.createBooking(newBook);
 			Alert feedback = new Alert(AlertType.INFORMATION);
 			feedback.setTitle("Book Appointment");
@@ -797,12 +828,8 @@ public class CustomerController  implements Initializable, IUser{
 	
 	@FXML
 	public void returnOwnMen() {
-		/*
-		btnRToOwnMen.setDisable(true);
-		stkBusiness.setVisible(true);
-		stkCustomer.setVisible(false);
-		btnRToOwnMen.setDisable(true);
-		*/
+		Stage sc = (Stage) btnRToOwnMen.getScene().getWindow();
+		sc.close();
 	}
 	
 	

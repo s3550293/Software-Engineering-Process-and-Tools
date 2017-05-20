@@ -137,13 +137,14 @@ public class RootController implements Initializable, IUser {
 		}
 		log.debug("false");
 	}
-	
-	public boolean getUserWindow(){
+
+	@Override
+	public boolean getUserWindow() {
 		try {
 			Stage secondaryStage = new Stage();
 			secondaryStage.getIcons().add(new Image("images/ic_collections_bookmark_black_48dp_2x.png"));
 			Parent root = FXMLLoader.load(getClass().getResource("rootLayout.fxml"));
-			secondaryStage.setTitle("Customer Application");
+			secondaryStage.setTitle("Business Application");
 			secondaryStage.setMinWidth(800);
 			secondaryStage.setMinHeight(650);
 			secondaryStage.setMaxWidth(1000);

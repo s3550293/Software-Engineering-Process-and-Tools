@@ -20,12 +20,20 @@ public class Controller
 {
 	private static Logger log = Logger.getLogger(Controller.class);
 	public Controller(){ log.setLevel(Level.DEBUG);}
+	
 	private static User _user = null;
 	public User getUser(){return _user;}
 	public void setUser(User user){_user = user;}
+	
+	public boolean bmb = false;
+	
 	private static Booking _booking = null;
 	public Booking getBooking(){return _booking;}
 	Scanner kb = new Scanner(System.in);
+	
+	private static Business bis = new Business(0,"null");
+	public void business(Business b){bis = b;}
+	public Business business(){return bis;}
 
 	/**
 	 * @author Luke Mason

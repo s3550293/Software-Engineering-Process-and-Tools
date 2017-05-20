@@ -11,6 +11,7 @@ import java.util.ResourceBundle;
 
 import org.apache.log4j.Logger;
 
+import gui.IInterface.IUser;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
@@ -132,7 +133,7 @@ public class RegisterController implements Initializable {
 	 * @author Joseph Garner
 	 */
 	@FXML
-	public void register(int businessID) {
+	public void register() {
 		//TODO
 		String date = null;
 		log.debug("LOGGER: entered createUser function");
@@ -144,7 +145,7 @@ public class RegisterController implements Initializable {
             program.messageBox("ERROR", "Error", "Last Name field is empty or contains an invalid character", "");
             return;
         }
-        if (regProgram.checkTakenUsername(txtRegUsername.getText().toString(),businessID)) {
+        if (regProgram.checkTakenUsername(txtRegUsername.getText().toString(),program.business().getBusinessId())) {
             program.messageBox("ERROR", "Error", "Invalid Username", "");
             return;
         }
@@ -197,5 +198,6 @@ public class RegisterController implements Initializable {
         program.messageBox("INFO", "User Added", "User Added", "You have successfully created an account");
         cancel();
 	}
+
 
 }

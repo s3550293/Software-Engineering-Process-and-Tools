@@ -27,25 +27,28 @@ public class Login
 	public int logInProcess(String userName,int businessID, String pass){
 		boolean passCheck = false;
 		DatabaseConnection connect = new DatabaseConnection();
-	
-		if(userName.equals(connect.getUser(userName, businessID).getUsername()))
+		User user = connect.getUser(userName);
+		Business b = connect.getBusiness(businessID);
+		if(userName.equals(user.getUsername()))
 		{
 			while(passCheck==false)
 			{
-				if(pass.equals(connect.getUser(userName, businessID).getPassword()))
+				if(pass.equals(user.getPassword()))
 				{
 					passCheck=true;
-					if(connect.getUser(userName, businessID).getAccountType() == 1){
-						program.setUser(connect.getUser(userName, businessID));
+					if(user.getAccountType() == 1){
+						program.setUser(user);
+						program.business(b);
 						log.debug("LOGGER: User - "+connect.getUser(userName, businessID).getFullName());
 						return 1;
-					}else if(connect.getUser(userName, businessID).getAccountType() == 0){
-						program.setUser(connect.getUser(userName, businessID));
+					}if(connect.getUser(userName).getAccountType() == 0){
+						program.setUser(user);
+						program.business(b);
 						log.debug("LOGGER: User - "+connect.getUser(userName, businessID).getFullName());
 						return 0;
 					}
-					else if(connect.getUser(userName, businessID).getAccountType() == 2){
-						program.setUser(connect.getUser(userName, businessID));
+					if(connect.getUser(userName).getAccountType() == 2){
+						program.setUser(user);
 						log.debug("LOGGER: User - "+connect.getUser(userName, businessID).getFullName());
 						return 2;
 					}

@@ -31,10 +31,12 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.util.Callback;
 import program.Business;
+import program.BusinessMenu;
 import program.Controller;
 import program.Database;
 import program.DatabaseConnection;
 import program.Login;
+import program.Service;
 
 
 public class LoginController implements Initializable {
@@ -67,7 +69,7 @@ public class LoginController implements Initializable {
 			Database data = new Database(file);
 			data.createNewDatabase(file);
 			data.createTable(file);
-			setup.ini();
+			ini();
 		}
 		popcmb();
 		cmbBusiness.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<Business>() {
@@ -80,8 +82,12 @@ public class LoginController implements Initializable {
 		});
 	}
 	
+	private Business cmbVal(){
+		return cmbBusiness.getSelectionModel().getSelectedItem();
+	}
+	
 	private void popcmb(){
-		ArrayList<Business> arr = new ArrayList<>(con.getBusiness());
+		ArrayList<Business> arr = new ArrayList<>(con.getAllBusiness());
 		ObservableList<Business> list = FXCollections.observableList(arr);
 		if (list != null) {
 			cmbBusiness.setItems(list);
@@ -103,6 +109,18 @@ public class LoginController implements Initializable {
 					return cell;
 				}
 			});
+			cmbBusiness.setButtonCell(new ListCell<Business>() {
+				@Override
+				protected void updateItem(Business t, boolean bln) {
+					super.updateItem(t, bln);
+					if (t != null) {
+						setText(t.getBusinessName());
+					} else {
+						setText(null);
+					}
+
+				}
+			});
 		} else {
 			log.warn("Unable to load Employees");
 		}
@@ -115,8 +133,13 @@ public class LoginController implements Initializable {
 	 */
 	@FXML
 	public void loginAction() {
+        if (cmbBusiness.getSelectionModel().getSelectedItem() == null) {
+        	program.messageBox("ERROR", "Error", "Please select a business", "");
+            return;
+        }
+		log.debug("LOGGER: " +txtUserLogin.getText() + cmbVal().getBusinessId()+ txtPassLogin.getText());
 		Stage loginstage = (Stage) btnLogin.getScene().getWindow();
-		int loginCheck = loginFuction.logInProcess(txtUserLogin.getText(),program.business().getBusinessId(), txtPassLogin.getText());
+		int loginCheck = loginFuction.logInProcess(txtUserLogin.getText(),cmbVal().getBusinessId(), txtPassLogin.getText());
 		if(loginCount < 10){
 			if(loginCheck == -2){
 				lblError.setVisible(true);
@@ -151,6 +174,7 @@ public class LoginController implements Initializable {
 		}
 		txtUserLogin.setText("");
 		txtPassLogin.setText("");
+		cmbBusiness.getSelectionModel().clearSelection();
 		loginstage.show();
 		
 	}
@@ -178,104 +202,145 @@ public class LoginController implements Initializable {
             log.debug("LOGGER: Creation Fail");
         }
 	}
-	/*
-	private boolean bOwnerWindow(){
-		try {
-			Stage secondaryStage = new Stage();
-			secondaryStage.getIcons().add(new Image("images/ic_collections_bookmark_black_48dp_2x.png"));
-			Parent root = FXMLLoader.load(getClass().getResource("businessLayout.fxml"));
-			secondaryStage.setTitle("Business Application");
-			secondaryStage.setMinWidth(800);
-			secondaryStage.setMinHeight(650);
-			secondaryStage.setMaxWidth(1000);
-			secondaryStage.setMaxHeight(850);
-			secondaryStage.setScene(new Scene(root));
-			secondaryStage.initModality(Modality.APPLICATION_MODAL);
-			secondaryStage.showAndWait();
-			if (program.getUser() != null) {
-				return true;
-			}
-		} catch (IOException ioe) {
-			log.warn(ioe.getMessage());
-		}
-		log.debug("false");
-		return false;
-	}
 	
-	private boolean cUserWindow(){
-		try {
-			Stage secondaryStage = new Stage();
-			secondaryStage.getIcons().add(new Image("images/ic_collections_bookmark_black_48dp_2x.png"));
-			Parent root = FXMLLoader.load(getClass().getResource("customerLayout.fxml"));
-			secondaryStage.setTitle("Customer Application");
-			secondaryStage.setMinWidth(800);
-			secondaryStage.setMinHeight(650);
-			secondaryStage.setMaxWidth(1000);
-			secondaryStage.setMaxHeight(850);
-			secondaryStage.setScene(new Scene(root));
-			secondaryStage.initModality(Modality.APPLICATION_MODAL);
-			secondaryStage.showAndWait();
-			if (program.getUser() != null) {
-				return true;
-			}
-		} catch (IOException ioe) {
-			log.warn(ioe.getMessage());
-		}
-		log.debug("false");
-		return false;
-	}*/
+	public void ini()
+    {
+		DatabaseConnection connect = new DatabaseConnection();
+		BusinessMenu bMenu = new BusinessMenu();
+			
+		connect.createBusiness("SuperUser");
+		connect.createBusiness("YarraVille Clinic");
+		connect.addUser("William", "Apples22", 0,2); // customer attached to Business 2
+		connect.addUser("Hannah", "Apples22", 0,2); // customer attached to Business 2
+		connect.addUserDetails(2, "William", "Porter", "will@mail.com", "0452368593", "01/01/2002", "Male");
+		connect.addUserDetails(3, "Hannah", "Hawlking", "hannah@mail.com", "0452136859", "20/04/1995", "Famale");
+		
+		connect.addEmployee("Luke Charles",25,2);
+		connect.addEmployee("David Smith",26.6,2);
+		connect.addEmployee("Will Turner",15,2);
+		connect.addEmployee("Rob Pointer",14,2);
+		connect.addEmployee("Adam Mason",12,3);
+		connect.addEmployee("David Chang",17,3);
+		connect.addEmployee("Joseph Tun",17,4);
+		connect.addEmployee("Casey Pointer",17,5);
+		connect.addEmployee("Danyon Glenk",10,5);
+		connect.addEmployee("Justin Lui",24,5);
+		connect.addEmployee("Jan Misso",15.7,6);
+		connect.addEmployee("Harry Nancarrow",19,6);
+		connect.addEmployee("Tom Gates",18.54,7);
+		connect.addEmployee("Emma Snelling",16.3,7);
+		connect.addEmployee("Laura Rite",15.2,8);
+		connect.addEmployee("Harry Potter",18,8);
+		
+		bMenu.addDayWorkingTime(1,1,true,true,false);
+		bMenu.addDayWorkingTime(1,2,true,true,false);
+		bMenu.addDayWorkingTime(1,3,true,false,false);
+		bMenu.addDayWorkingTime(1,4,true,false,false);
+		bMenu.addDayWorkingTime(1,5,true,false,false);
+		bMenu.addDayWorkingTime(1,6,false,true,true);
+		bMenu.addDayWorkingTime(1,7,true,true,false);
+		
+		bMenu.addDayWorkingTime(2,1,true,true,false);
+		bMenu.addDayWorkingTime(2,2,true,true,false);
+		bMenu.addDayWorkingTime(2,3,true,false,false);
+		bMenu.addDayWorkingTime(2,4,true,false,false);
+		bMenu.addDayWorkingTime(2,5,true,false,false);
+		bMenu.addDayWorkingTime(2,6,false,true,true);
+		bMenu.addDayWorkingTime(2,7,true,true,false);
+		
+		bMenu.addDayWorkingTime(3,1,true,true,false);
+		bMenu.addDayWorkingTime(3,2,true,true,false);
+		bMenu.addDayWorkingTime(3,3,true,false,false);
+		bMenu.addDayWorkingTime(3,4,true,false,false);
+		bMenu.addDayWorkingTime(3,5,true,false,false);
+		bMenu.addDayWorkingTime(3,6,false,true,true);
+		bMenu.addDayWorkingTime(3,7,true,true,false);
+		
+		bMenu.addDayWorkingTime(4,5,false,true,false);
+		bMenu.addDayWorkingTime(4,6,false,true,true);
+		
+		bMenu.addDayWorkingTime(5,1,true,true,false);
+		bMenu.addDayWorkingTime(5,7,true,true,true);
+		
+		bMenu.addDayWorkingTime(6,1,true,true,false);
+		bMenu.addDayWorkingTime(6,2,true,true,false);
+		bMenu.addDayWorkingTime(6,3,true,false,false);
+		bMenu.addDayWorkingTime(6,4,true,false,false);
+		bMenu.addDayWorkingTime(6,5,true,false,false);
+		bMenu.addDayWorkingTime(6,6,false,true,true);
+		bMenu.addDayWorkingTime(6,7,true,true,false);
+		
+		bMenu.addDayWorkingTime(7,1,true,true,false);
+		bMenu.addDayWorkingTime(7,6,true,true,true);
+		
+		bMenu.addDayWorkingTime(8,5,false,true,false);
+		bMenu.addDayWorkingTime(8,6,false,true,true);
+		
+		bMenu.addDayWorkingTime(9,4,true,true,false);
+		bMenu.addDayWorkingTime(9,6,true,true,true);
+		
+		bMenu.addDayWorkingTime(10,3,false,true,false);
+		bMenu.addDayWorkingTime(10,4,false,true,true);
+		
+		bMenu.addDayWorkingTime(11,1,true,true,false);
+		bMenu.addDayWorkingTime(11,2,true,true,false);
+		bMenu.addDayWorkingTime(11,3,true,true,false);
+		bMenu.addDayWorkingTime(11,4,true,false,false);
+		bMenu.addDayWorkingTime(11,5,true,false,false);
+		bMenu.addDayWorkingTime(11,6,true,false,false);
+		bMenu.addDayWorkingTime(11,7,false,true,true);
+		
+		
+		bMenu.addDayWorkingTime(12,2,false,true,false);
+		bMenu.addDayWorkingTime(12,4,false,true,true);
+		
+		bMenu.addDayWorkingTime(13,5,true,true,false);
+		bMenu.addDayWorkingTime(13,7,true,true,true);
+		
+		bMenu.addDayWorkingTime(14,1,true,true,false);
+		bMenu.addDayWorkingTime(14,2,true,true,false);
+		bMenu.addDayWorkingTime(14,3,true,false,false);
+		bMenu.addDayWorkingTime(14,4,true,false,false);
+		bMenu.addDayWorkingTime(14,5,true,false,false);
+		bMenu.addDayWorkingTime(14,6,false,true,true);
+		bMenu.addDayWorkingTime(14,7,true,true,false);
+		
+		bMenu.addDayWorkingTime(15,1,true,true,false);
+		bMenu.addDayWorkingTime(15,7,true,true,true);
+		
+		bMenu.addDayWorkingTime(16,4,false,true,false);
+		bMenu.addDayWorkingTime(16,6,false,true,true);
+		
+		
+
+		connect.addService(new Service("Trim",30,25,2));
+		connect.addService(new Service("Wash",45,30,2));
+		connect.addService(new Service("Cut and Style",90,60,2));
+		
+		connect.addBooking(2,1, "21/04/2017", "10:00", "10:40", 1,"active",2);
+		connect.addBooking(2,2, "22/04/2017", "11:00", "11:59", 2,"canceled",2);
+		connect.addBooking(2,1, "23/04/2017", "10:00", "10:40", 3,"canceled",2);
+		connect.addBooking(2,2, "24/04/2017", "11:00", "11:59", 2,"canceled",2);
+		connect.addBooking(2,3, "25/04/2017", "8:00", "8:40", 2, "active",2);
+		connect.addBooking(2,2, "26/04/2017", "8:00", "8:40", 2, "canceled",2);
+		connect.addBooking(2,1, "21/04/2017", "10:00", "10:40", 1,"active",3);
+		connect.addBooking(2,2, "22/04/2017", "11:00", "11:59", 2,"canceled",3);
+		connect.addBooking(2,1, "23/04/2017", "10:00", "10:40", 3,"canceled",3);
+		connect.addBooking(2,2, "24/04/2017", "11:00", "11:59", 2,"canceled",3);
+		connect.addBooking(2,3, "25/04/2017", "8:00", "8:40", 2, "active",3);
+		connect.addBooking(2,2, "26/04/2017", "8:00", "8:40", 2, "canceled",3);
+		connect.addBooking(2,3, "27/04/2017", "10:00", "10:40", 1,"active",4);
+		connect.addBooking(2,2, "28/04/2017", "11:00", "11:59", 1,"active",4);
+		connect.addBooking(2,3, "29/04/2017", "8:00", "8:40", 1, "canceled",5);
+		
+		connect.addBooking(2,1, "24/05/2017", "8:00", "8:40", 2, "active",5);
+		connect.addBooking(3,1, "16/07/2017", "10:00", "10:40", 3,"active",6);
+		connect.addBooking(3,2, "14/05/2017", "11:00", "11:59", 1,"active",7);
+		connect.addBooking(3,1, "4/05/2017", "10:00", "10:40", 2,"active",8);
+		connect.addBooking(3,2, "6/05/2017", "11:00", "11:59", 3,"active",8);
 	
-	/**
-	 * Launches the setup window
-	 * @return
-	 */
-	@FXML
-	public boolean setup() {
-		log.debug("Setup Started");
-		try {
-			Stage secondaryStage = new Stage();
-			secondaryStage.getIcons().add(new Image("images/ic_collections_bookmark_black_48dp_2x.png"));
-			Parent root = FXMLLoader.load(getClass().getResource("setupLayout.fxml"));
-			secondaryStage.setTitle("Setup");
-			secondaryStage.setResizable(false);
-			secondaryStage.setScene(new Scene(root));
-			secondaryStage.initModality(Modality.APPLICATION_MODAL);
-			secondaryStage.showAndWait();
-			File varTmpData = new File("db/program.db");
-			if (varTmpData.exists() == false) {
-				log.debug("false");
-				return false;
-			}
-		} catch (IOException ioe) {
-			log.warn(ioe.getMessage());
-		}
-		return true;
-	}
-	
-	/*
-	
-	public boolean rootWindow(){
-		try {
-			Stage secondaryStage = new Stage();
-			secondaryStage.getIcons().add(new Image("images/ic_collections_bookmark_black_48dp_2x.png"));
-			Parent root = FXMLLoader.load(getClass().getResource("rootLayout.fxml"));
-			secondaryStage.setTitle("Customer Application");
-			secondaryStage.setMinWidth(800);
-			secondaryStage.setMinHeight(650);
-			secondaryStage.setMaxWidth(1000);
-			secondaryStage.setMaxHeight(850);
-			secondaryStage.setScene(new Scene(root));
-			secondaryStage.initModality(Modality.APPLICATION_MODAL);
-			secondaryStage.showAndWait();
-			if (program.getUser() != null) {
-				return true;
-			}
-		} catch (IOException ioe) {
-			log.warn(ioe.getMessage());
-		}
-		log.debug("false");
-		return false;
-	}*/
+		//connect.cancelBooking(2);
+    }
 	
 
 }

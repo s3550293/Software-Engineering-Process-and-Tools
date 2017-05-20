@@ -9,7 +9,6 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import program.Database;
 import program.DatabaseConnection;
 import program.Login;
 

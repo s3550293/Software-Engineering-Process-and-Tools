@@ -80,6 +80,8 @@ public class Database
 				+ "Phone VARCHAR(30) NOT NULL,"
 				+ "DOB VARCHAR(30) NOT NULL,"
 				+ "Gender VARCHAR(30) NOT NULL,"
+				+ "businessID integer,"
+				+ "FOREIGN KEY(businessID) REFERENCES BUSINESS(businessID),"
 				+ "FOREIGN KEY(id) REFERENCES USERS(userID));";
 		String queryEmployees = "CREATE TABLE IF NOT EXISTS EMPLOYEES ("
 				+ "employeeID integer PRIMARY KEY AUTOINCREMENT," 

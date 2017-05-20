@@ -51,7 +51,6 @@ import org.apache.log4j.Logger;
 public class MainController implements Initializable {
 	
 	private static Controller program = new Controller();
-	private DatabaseConnection connection = new DatabaseConnection();
 	private static Logger log = Logger.getLogger(MainController.class);
 	@Override
 	public void initialize(URL arg0, ResourceBundle arg1) {

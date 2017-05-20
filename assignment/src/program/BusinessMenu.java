@@ -9,7 +9,6 @@ import org.apache.log4j.Logger;
 public class BusinessMenu
 {
 	private static Logger log = Logger.getLogger(BusinessMenu.class);
-	private boolean flag = true;
 	private Controller controller = new Controller();
 	DatabaseConnection connect = new DatabaseConnection();
 	public BusinessMenu(){log.setLevel(Level.WARN);}

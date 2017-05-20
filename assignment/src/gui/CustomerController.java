@@ -10,6 +10,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.ResourceBundle;
 
+import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 
 import gui.IInterface.IUser;
@@ -46,13 +47,15 @@ import program.Service;
 
 public class CustomerController  implements Initializable, IUser{
 
-	private static Logger log = Logger.getLogger(MainController.class);
+	private static Logger log = Logger.getLogger(CustomerController.class);
 	private static Controller program = new Controller();
 	private DatabaseConnection connection = new DatabaseConnection();
 	private Employee employee = null;
 	private Booking booking = null;
 	int globalEmployeeOption = 0;
 	private static Booking newBook = new Booking();
+	
+	public CustomerController(){log.setLevel(Level.DEBUG);}
 	
 	@FXML
 	ListView<Booking> listBookings;

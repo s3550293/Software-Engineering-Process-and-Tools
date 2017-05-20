@@ -29,7 +29,7 @@ public class DatabaseConnection
 {
 	private static Logger log = Logger.getLogger(DatabaseConnection.class);
 	private Controller controller = new Controller();
-	public DatabaseConnection(){log.setLevel(Level.WARN);}
+	public DatabaseConnection(){log.setLevel(Level.DEBUG);}
 	private Connection connect()
 	{
 		/*
@@ -129,27 +129,53 @@ public class DatabaseConnection
 	public User getUser(String username, int businessID)
 	{
 		log.info("IN getUser\n");
+		
+		String query = "SELECT * FROM users WHERE username like '"+username+"' AND businessID = "+businessID;
+		//Creates a null user to return, this can be used to validate user at login
+		User databaseUser = null;
+		databaseUser= userlogin(query);
+		log.info("OUT getUser\n");
+		return databaseUser;
+	}
+	
+	/**
+	 * Gets where the user name keyword matches another users name
+	 * @param username
+	 * @return User Object
+	 */
+	public User getUser(String username)
+	{
+		log.info("IN getUser\n");
+		
+		String query = "SELECT * FROM users WHERE username like '"+username+"'";
+		//Creates a null user to return, this can be used to validate user at login
+		User databaseUser = null;
+		databaseUser= userlogin(query);
+		log.info("OUT getUser\n");
+		return databaseUser;
+	}
+	
+	private User  userlogin(String query){
 		int _id = 0;
 		String _username = "null";
 		String _password = "null";
 		int _accountType = 0;
-		String query = "SELECT * FROM users WHERE username like ? AND businessID = ?";
-		//Creates a null user to return, this can be used to validate user at login
+		int _businessID = 0;
 		User databaseUser = null;
 		try (Connection connect = this.connect(); PreparedStatement  inject  = connect.prepareStatement(query))
 		{
 			//Sets '?' to user name in the query
 			//crates a user from the found information
-			inject.setString(1,"%" + username + "%");
-			inject.setInt(2,businessID);
 			ResultSet output = inject.executeQuery();
 			while (output.next()){
 				_id = output.getInt(1);
 				_username = output.getString(2);
 				_password = output.getString(3);
 				_accountType = output.getInt(4);
+				_businessID = output.getInt(5);
+				
 			}
-			databaseUser = new User(_id ,_username, _password, _accountType, businessID);
+			databaseUser = new User(_id ,_username, _password, _accountType, _businessID);
 			output.close();
 		}
 		catch(SQLException sqle)
@@ -157,7 +183,6 @@ public class DatabaseConnection
 			//System.out.println("Getting User: "+sqle.getMessage());
 			log.warn(sqle.getMessage());
 		}
-		log.info("OUT getUser\n");
 		return databaseUser;
 	}
 	
@@ -1013,7 +1038,7 @@ public class DatabaseConnection
 	 * @param 
 	 * @return ArrayList <Business> Objects
 	 */
-	public ArrayList<BusinessOwner> getAllBusiness()
+	public ArrayList<BusinessOwner> getAllBusinessOwner()
 	{
 		log.info("IN getAllBusiness\n");
 		ArrayList<BusinessOwner> databaseBusiness = new ArrayList<BusinessOwner>();
@@ -1120,7 +1145,7 @@ public class DatabaseConnection
 		
 	}
 	
-	public ArrayList<Business> getBusiness(){
+	public ArrayList<Business> getAllBusiness(){
 		ArrayList<Business> bis = new ArrayList<>();
 		String query = "SELECT * FROM BUSINESS"; 
 		int id;
@@ -1141,6 +1166,28 @@ public class DatabaseConnection
 		}
 		return bis;
 	}
+	
+	public Business getBusiness(int i){
+		Business bis = null;
+		String query = "SELECT * FROM BUSINESS WHERE businessID = "+i; 
+		int id;
+		String name;
+		try (Connection connect = this.connect(); PreparedStatement  inject  = connect.prepareStatement(query)){
+			
+			ResultSet o = inject.executeQuery();
+			while (o.next())
+			{
+				id = o.getInt(1);
+				name = o.getString(2);
+				bis = new Business(id, name);
+			}
+			
+		}catch(SQLException sqle)
+		{
+			log.warn(sqle.getMessage());
+		}
+		return bis;
+	} 
 	
 	/**
 	 * 

@@ -11,7 +11,6 @@ import java.util.ResourceBundle;
 
 import org.apache.log4j.Logger;
 
-import gui.IInterface.ISetup;
 import gui.IInterface.IUser;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;

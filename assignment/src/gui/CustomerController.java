@@ -119,8 +119,8 @@ public class CustomerController  implements Initializable, IUser{
 			}
 		});
 		loadDaySelect();
-		listTogTDini(businessID);//idk how to get businessID, however the businessID comes from the business Selected when they click login, soooo yeah
-		listTogTSini(businessID);//idk how to get businessID, however the businessID comes from the business Selected when they click login, soooo yeah
+		//listTogTDini(businessID);//idk how to get businessID, however the businessID comes from the business Selected when they click login, soooo yeah
+		//listTogTSini(businessID);//idk how to get businessID, however the businessID comes from the business Selected when they click login, soooo yeah
 	}
 	
 	@FXML
@@ -924,7 +924,7 @@ public class CustomerController  implements Initializable, IUser{
 		}
 	}
 
-	@Override
+	//@Override
 	public boolean getUserWindow() {
 		try {
 			Stage secondaryStage = new Stage();

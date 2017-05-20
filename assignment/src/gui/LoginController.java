@@ -8,6 +8,8 @@ import java.util.ResourceBundle;
 
 import org.apache.log4j.Logger;
 
+import gui.IInterface.ISetup;
+import gui.IInterface.IUser;
 import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -61,7 +63,8 @@ public class LoginController implements Initializable {
 		File varTmpData = new File("db/company.db");
 		if (varTmpData.exists() == false) {
 			log.debug("LOGGER: File doesnt exist");
-			boolean var = setup();
+			ISetup setup = userFactory.getSetup("SetUp");
+			boolean var = setup.getSetup();;
 			if(var == false){
 				log.debug("LOGGER: setup faild");
 				Platform.exit();
@@ -133,7 +136,8 @@ public class LoginController implements Initializable {
 					IUser customer = userFactory.getUser("Customer");
 					customer.getUserWindow();
 				} else if(program.getUser().getAccountType() == 2){
-					rootWindow();
+					IUser admin = userFactory.getUser("SuperUser");
+					admin.getUserWindow();
 				}
 			}
 			else{
@@ -176,7 +180,7 @@ public class LoginController implements Initializable {
             log.debug("LOGGER: Creation Fail");
         }
 	}
-	
+	/*
 	private boolean bOwnerWindow(){
 		try {
 			Stage secondaryStage = new Stage();
@@ -221,8 +225,7 @@ public class LoginController implements Initializable {
 		}
 		log.debug("false");
 		return false;
-	}
-	
+	}*/
 	
 	/**
 	 * Launches the setup window
@@ -251,6 +254,8 @@ public class LoginController implements Initializable {
 		return true;
 	}
 	
+	/*
+	
 	public boolean rootWindow(){
 		try {
 			Stage secondaryStage = new Stage();
@@ -272,7 +277,7 @@ public class LoginController implements Initializable {
 		}
 		log.debug("false");
 		return false;
-	}
+	}*/
 	
 
 }

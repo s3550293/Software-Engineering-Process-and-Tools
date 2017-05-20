@@ -153,9 +153,9 @@ public class BusinessController implements Initializable, IUser  {
 
 		setColor();
 		loadDaySelect();
-		loadallServices(businessID);
+		//loadallServices(businessID);
 			rbCurrentBook.setSelected(true);
-			loadListViewEmp("", businessID);
+			//loadListViewEmp("", businessID);
 			listviewEmployees.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<Employee>() {
 				@Override
 				public void changed(ObservableValue<? extends Employee> observable, Employee oldValue,
@@ -168,8 +168,8 @@ public class BusinessController implements Initializable, IUser  {
 					}
 				}
 			});
-			loadListViewBook(businessID);
-			loadallCustomers(businessID);
+			//loadListViewBook(businessID);
+			//loadallCustomers(businessID);
 			listviewManServices.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<Service>() {
 				@Override
 				public void changed(ObservableValue<? extends Service> observable, Service oldValue, Service newValue) {
@@ -198,21 +198,19 @@ public class BusinessController implements Initializable, IUser  {
 			cmbBookingDay.valueProperty().addListener(new ChangeListener<Date>() {
 				@Override
 				public void changed(ObservableValue ov, Date t, Date t1) {
-					loadListViewBook(businessID);
+					//loadListViewBook(businessID);
 				}
 			});
 
 			bookingViewGroup.selectedToggleProperty().addListener(new ChangeListener<Toggle>() {
 				public void changed(ObservableValue<? extends Toggle> ov, Toggle old_toggle, Toggle new_toggle) {
 					loadDaySelect();
-					loadListViewBook(businessID);
+					//loadListViewBook(businessID);
 				}
 			});
 			listLVBookini();
 		}
 
-	
-	
 	/**
 	 * Returns User to login
 	 * 
@@ -1255,7 +1253,7 @@ public class BusinessController implements Initializable, IUser  {
 		});
 	}
 	
-	@Override
+	//@Override
 	public boolean getUserWindow(){
 		try {
 			Stage secondaryStage = new Stage();

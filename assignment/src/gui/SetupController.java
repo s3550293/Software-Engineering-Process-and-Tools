@@ -1,5 +1,7 @@
 package gui;
 
+import java.io.File;
+import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -11,14 +13,19 @@ import org.apache.log4j.Logger;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
+import javafx.scene.image.Image;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.StackPane;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.util.Callback;
 import program.Business;
@@ -714,10 +721,31 @@ public class SetupController implements Initializable {
 		connect.addBooking(3,2, "14/05/2017", "11:00", "11:59", 1,"active",7);
 		connect.addBooking(3,1, "4/05/2017", "10:00", "10:40", 2,"active",8);
 		connect.addBooking(3,2, "6/05/2017", "11:00", "11:59", 3,"active",8);
-		
-
-
-		
+	
 		//connect.cancelBooking(2);
     }
+	
+	public boolean getSetup() {
+		log.debug("Setup Started");
+		try {
+			Stage secondaryStage = new Stage();
+			secondaryStage.getIcons().add(new Image("images/ic_collections_bookmark_black_48dp_2x.png"));
+			Parent root = FXMLLoader.load(getClass().getResource("setupLayout.fxml"));
+			secondaryStage.setTitle("Setup");
+			secondaryStage.setResizable(false);
+			secondaryStage.setScene(new Scene(root));
+			secondaryStage.initModality(Modality.APPLICATION_MODAL);
+			secondaryStage.showAndWait();
+			File varTmpData = new File("db/program.db");
+			if (varTmpData.exists() == false) {
+				log.debug("false");
+				return false;
+			}
+		} catch (IOException ioe) {
+			log.warn(ioe.getMessage());
+		}
+		return true;
+	}
+	
+	
 }

@@ -42,6 +42,7 @@ public class LoginController implements Initializable {
 	private Login loginFuction = new Login();
 	private Controller program = new Controller();
 	private DatabaseConnection con = new DatabaseConnection();
+	private SetupController setup = new SetupController();
 	private int loginCount = 0;
 	UserFactory userFactory = new UserFactory();
 	@FXML
@@ -66,7 +67,7 @@ public class LoginController implements Initializable {
 			Database data = new Database(file);
 			data.createNewDatabase(file);
 			data.createTable(file);
-			
+			setup.ini();
 		}
 		popcmb();
 		cmbBusiness.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<Business>() {

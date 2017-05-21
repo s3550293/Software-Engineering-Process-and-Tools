@@ -40,7 +40,7 @@ import program.Service;
 public class SetupController implements Initializable, ISetup {
 	public final static Logger log = Logger.getLogger(SetupController.class);
 	private final Controller program = new Controller();
-	Business business = program.business();
+	private Business business = program.business();
 	private static BusinessOwner businessOwner = new BusinessOwner();
 	public final Register regpro = new Register();
 	public final BusinessMenu bMenu = new BusinessMenu();

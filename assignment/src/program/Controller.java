@@ -497,9 +497,10 @@ public class Controller
 	 */
 	  public String setColor(){
 		  DatabaseConnection c = new DatabaseConnection();
-	        int val = _user.getID();
+	        int val = bis.getBusinessId();
+	        int color = c.getOneBusiness(val).color();
 	        log.trace("ID "+val);
-	        String[] arr = c.getColor(1);
+	        String[] arr = c.getColor(color);
 	        String ret = "";
 	        for(int i=0;i<arr.length;i++){
 	            log.debug(arr[i]);

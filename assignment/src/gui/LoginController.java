@@ -213,7 +213,7 @@ public class LoginController implements Initializable {
 		DatabaseConnection connect = new DatabaseConnection();
 		BusinessMenu bMenu = new BusinessMenu();
 			
-		connect.createBusiness("YarraVille Clinic");
+		connect.createBusiness(1,"YarraVille Clinic");
 		connect.addUser("William", "Apples22", 0,1); // customer attached to Business 2
 		connect.addUser("Hannah", "Apples22", 0,1); // customer attached to Business 2
 		connect.addUserDetails(2, "William", "Porter", "will@mail.com", "0452368593", "01/01/2002", "Male");

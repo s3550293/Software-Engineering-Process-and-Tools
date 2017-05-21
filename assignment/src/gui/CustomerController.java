@@ -108,7 +108,7 @@ public class CustomerController  implements Initializable, IUser{
 		if(program.bmb == true){
 			btnRToOwnMen.setVisible(true);
 		}
-		if(connection.getOneBusiness(program.getUser().getBusinessID()).color() > 0){
+		if(connection.getOneBusiness(program.getUser().getBusinessID()).color() >= 1){
 			setCI();
 		}
 		popListBook();
@@ -403,8 +403,30 @@ public class CustomerController  implements Initializable, IUser{
 		ArrayList<String> arr = new ArrayList<>();
 		Calendar open = Calendar.getInstance();
 		Calendar close = Calendar.getInstance();
-		open.setTime(connection.getOneBusiness(program.business().getBusinessId()).getWeekdayStart());
-		
+		if(open.get(Calendar.DAY_OF_WEEK) == 1 || open.get(Calendar.DAY_OF_WEEK) == 7){
+			open.setTime(connection.getOneBusiness(program.business().getBusinessId()).getWeekendStart());
+			close.setTime(connection.getOneBusiness(program.business().getBusinessId()).getWeekendEnd());
+		}
+		else{
+			open.setTime(connection.getOneBusiness(program.business().getBusinessId()).getWeekdayStart());
+			close.setTime(connection.getOneBusiness(program.business().getBusinessId()).getWeekdayEnd());
+		}
+		Date dstart =  open.getTime();
+		Date dclose =  close.getTime();
+		String[] times = program.splitTimeIntoThreeBlocks(program.timeToStr(dstart), program.timeToStr(dclose));
+		if(slot == 1){
+			open.setTime(program.strToDate(times[1]));
+			close.setTime(program.strToDate(times[2]));
+		}
+		else if(slot == 2){
+			open.setTime(program.strToDate(times[2]));
+			close.setTime(program.strToDate(times[3]));
+		}
+		else if(slot == 3){
+			open.setTime(program.strToDate(times[3]));
+			close.setTime(program.strToDate(times[4]));
+		}
+		//while()
 		return arr;
 	}
 

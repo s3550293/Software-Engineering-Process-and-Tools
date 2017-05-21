@@ -159,7 +159,7 @@ public class BusinessController implements Initializable, IUser  {
 			ISetup setup = userFactory.getSetup("SetUp");
 			setup.getSetup();
 		}
-		if(connection.getOneBusiness(BO.getID()).color() > 0){
+		if(connection.getOneBusiness(program.getUser().getBusinessID()).color() >= 1){
 			setCI();
 		}
 		System.out.println("BO IS NOOOOOT  NULL");

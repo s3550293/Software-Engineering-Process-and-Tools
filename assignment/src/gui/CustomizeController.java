@@ -62,7 +62,7 @@ public class CustomizeController  implements Initializable {
 	public void confirm(){
 		if(fa!=null){
 			fa.renameTo(new File(System.getProperty("user.home")+"/resourcing/"+fa.getName()));
-			con.addImage(System.getProperty("user.home")+"/resourcing/"+fa.getName(), program.getUser().getID());
+			con.addImage(System.getProperty("user.home")+"/resourcing/"+fa.getName(), program.getUser().getBusinessID());
 		}	
 		Stage st = (Stage) root.getScene().getWindow();
 		st.close();
@@ -85,7 +85,7 @@ public class CustomizeController  implements Initializable {
 	
 	@FXML
 	public void blue(){
-		int id = program.business().getBusinessId();
+		int id = program.getUser().getBusinessID();
 		DatabaseConnection con = new DatabaseConnection();
 		con.updateBO(id, 1);
 		root.setStyle(program.setColor());
@@ -93,7 +93,7 @@ public class CustomizeController  implements Initializable {
 	
 	@FXML
 	public void purp(){
-		int id = program.business().getBusinessId();
+		int id = program.getUser().getBusinessID();
 		DatabaseConnection con = new DatabaseConnection();
 		con.updateBO(id, 2);
 		root.setStyle(program.setColor());
@@ -101,7 +101,7 @@ public class CustomizeController  implements Initializable {
 	
 	@FXML
 	public void green(){
-		int id = program.business().getBusinessId();
+		int id = program.getUser().getBusinessID();
 		DatabaseConnection con = new DatabaseConnection();
 		con.updateBO(id, 3);
 		root.setStyle(program.setColor());
@@ -109,7 +109,7 @@ public class CustomizeController  implements Initializable {
 	
 	@FXML
 	public void ong(){
-		int id = program.business().getBusinessId();
+		int id = program.getUser().getBusinessID();
 		DatabaseConnection con = new DatabaseConnection();
 		con.updateBO(id, 4);
 		root.setStyle(program.setColor());

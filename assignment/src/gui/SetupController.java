@@ -24,8 +24,10 @@ import javafx.scene.control.ListView;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.StackPane;
+import javafx.stage.FileChooser;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.util.Callback;
@@ -35,18 +37,22 @@ import program.BusinessOwner;
 import program.Controller;
 import program.DatabaseConnection;
 import program.Register;
-import program.Service;
 
 public class SetupController implements Initializable, ISetup {
 	public final static Logger log = Logger.getLogger(SetupController.class);
 	private final Controller program = new Controller();
-	private Business business = program.business();
+	Business business = program.business();
+	private DatabaseConnection connection = new DatabaseConnection();
 	private static BusinessOwner businessOwner = new BusinessOwner();
 	public final Register regpro = new Register();
 	public final BusinessMenu bMenu = new BusinessMenu();
+	private File fa = null;
 	/*
 	 * Oder of panes stkpWelcome > stkpDetails > stkpTimeSlot > (Setup Finishes and database is created) > stkpSelectColor
 	 */
+	@FXML
+	ImageView imgView;
+	
 	@FXML
 	AnchorPane root;
 	
@@ -297,6 +303,10 @@ public class SetupController implements Initializable, ISetup {
 	public void openRun(){
 		Stage setSt = (Stage) cmbMFOpen.getScene().getWindow();
 		setSt.close();
+		if(fa!=null){
+			fa.renameTo(new File(System.getProperty("user.home")+"/resourcing/"+fa.getName()));
+			connection.addImage(System.getProperty("user.home")+"/resourcing/"+fa.getName(), program.getUser().getBusinessID());
+		}	
 	}
 	
 	private ArrayList<String> timeArr(){
@@ -516,6 +526,55 @@ public class SetupController implements Initializable, ISetup {
 		}
 		return true;
 	}
+	
+	@FXML
+	public void addImage(){
+		Stage stage = new Stage();
+        FileChooser fileChooser = new FileChooser();
+        FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter("PNG files (*.png)", "*.png");
+        fileChooser.getExtensionFilters().add(extFilter);
+        try{
+        	fa = fileChooser.showOpenDialog(stage);
+        	Image image = new Image(fa.getPath());
+            imgView.setImage(image);
+        }
+        catch(Exception e){
+        	log.debug(e.getMessage());
+        }
+	}
+	
+	@FXML
+	public void blue(){
+		int id = program.getUser().getBusinessID();
+		DatabaseConnection con = new DatabaseConnection();
+		con.updateBO(id, 1);
+		root.setStyle(program.setColor());
+	}
+	
+	@FXML
+	public void purp(){
+		int id = program.getUser().getBusinessID();
+		DatabaseConnection con = new DatabaseConnection();
+		con.updateBO(id, 2);
+		root.setStyle(program.setColor());
+	}
+	
+	@FXML
+	public void green(){
+		int id = program.getUser().getBusinessID();
+		DatabaseConnection con = new DatabaseConnection();
+		con.updateBO(id, 3);
+		root.setStyle(program.setColor());
+	}
+	
+	@FXML
+	public void ong(){
+		int id = program.getUser().getBusinessID();
+		DatabaseConnection con = new DatabaseConnection();
+		con.updateBO(id, 4);
+		root.setStyle(program.setColor());
+	}
+	
 	
 	
 }

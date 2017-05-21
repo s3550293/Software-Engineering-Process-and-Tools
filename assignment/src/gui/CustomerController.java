@@ -65,6 +65,9 @@ public class CustomerController  implements Initializable, IUser{
 	ListView<Booking> listBookings;
 	
 	@FXML
+	ListView<String> listviewTimeSlot;
+	
+	@FXML
 	Button btnConfirmBooking, btnNext, btnLogoutCustomer, btnBack, btnCancelAppoitment,
 			btnRToOwnMen;
 
@@ -137,8 +140,8 @@ public class CustomerController  implements Initializable, IUser{
 			}
 		});
 		loadDaySelect();
-		listTogTDini(program.business().getBusinessId());
-		listTogTSini(program.business().getBusinessId());
+		//listTogTDini(program.business().getBusinessId());
+		//listTogTSini(program.business().getBusinessId());
 	}
 	
 	@Override
@@ -164,7 +167,8 @@ public class CustomerController  implements Initializable, IUser{
 							if (t != null) {
 								log.debug("LOGGER: added:" + t.getBookingID());
 								setText("ID: "+t.getBookingID()+"\n"
-										+ connection.getEmployee(t.getEmployeeID()).getName()+" //TODO");
+										+ connection.getEmployee(t.getEmployeeID()).getName()+", "
+												+ ""+program.timeToStr(t.getStartTime())+", "+program.dateToStr(t.getDate())+", "+connection.getService(t.getService()).getName());
 							}
 						}
 					};
@@ -368,36 +372,47 @@ public class CustomerController  implements Initializable, IUser{
 			stkpnBookingMenu.setVisible(true);
 		}
 	}
+	
+	private void popTime(){
+		ArrayList<String> arr = new ArrayList<>();
+		ObservableList<String> list = FXCollections.observableList(arr);
+		log.debug("LOGGER: List length:" + arr.size());
+		if (list != null) {
+			listviewTimeSlot.setItems(list);
+			listviewTimeSlot.setCellFactory(new Callback<ListView<String>, ListCell<String>>() {
+				@Override
+				public ListCell<String> call(ListView<String> p) {
+
+					ListCell<String> cell = new ListCell<String>() {
+						@Override
+						protected void updateItem(String t, boolean bln) {
+							super.updateItem(t, bln);
+							if (t != null) {
+								log.debug("LOGGER: added:" );
+								setText("");
+							}
+						}
+					};
+					return cell;
+				}
+			});
+		}
+	}
+	
+	private ArrayList<String> getTimes(int slot){
+		ArrayList<String> arr = new ArrayList<>();
+		Calendar open = Calendar.getInstance();
+		Calendar close = Calendar.getInstance();
+		open.setTime(connection.getOneBusiness(program.business().getBusinessId()).getWeekdayStart());
+		
+		return arr;
+	}
 
 	/**
 	 * Check and display booking time during booking
 	 * Disable toggle button, after booking
 	 */
 	private void checkBookingTime(int businessID) {
-		togbtnTimeSlot1.setDisable(false);
-		togbtnTimeSlot2.setDisable(false);
-		togbtnTimeSlot3.setDisable(false);
-		togbtnTimeSlot4.setDisable(false);
-		togbtnTimeSlot5.setDisable(false);
-		togbtnTimeSlot6.setDisable(false);
-		togbtnTimeSlot7.setDisable(false);
-		togbtnTimeSlot8.setDisable(false);
-		lblAvail1.setText("Available");
-		lblAvail1.setStyle("-fx-text-fill: #008b00;");
-		lblAvail2.setText("Available");
-		lblAvail2.setStyle("-fx-text-fill: #008b00;");
-		lblAvail3.setText("Available");
-		lblAvail3.setStyle("-fx-text-fill: #008b00;");
-		lblAvail4.setText("Available");
-		lblAvail4.setStyle("-fx-text-fill: #008b00;");
-		lblAvail5.setText("Available");
-		lblAvail5.setStyle("-fx-text-fill: #008b00;");
-		lblAvail6.setText("Available");
-		lblAvail6.setStyle("-fx-text-fill: #008b00;");
-		lblAvail7.setText("Available");
-		lblAvail7.setStyle("-fx-text-fill: #008b00;");
-		lblAvail8.setText("Available");
-		lblAvail8.setStyle("-fx-text-fill: #008b00;");
 
 		if (newBook.getDate() != null) {
 			Date stD = null;
@@ -413,7 +428,7 @@ public class CustomerController  implements Initializable, IUser{
 						if (togbtnMorn.isSelected()) {
 							checkStartTimeTogglesOnBooking(stD);
 							
-							checkEndTimeForEachBookingSessionAndDisableToggleIfOverlapping(true, enD, "", 
+							checkoverLap(true, enD, "", 
 									"8:31", togbtnTimeSlot2.getText(), "9:01", togbtnTimeSlot3.getText(), 
 									"9:31", togbtnTimeSlot4.getText(), "10:01", togbtnTimeSlot5.getText(),
 									"10:31", togbtnTimeSlot6.getText(), "11:01", togbtnTimeSlot7.getText(), 
@@ -422,7 +437,7 @@ public class CustomerController  implements Initializable, IUser{
 							log.debug("LOGGER: Button 8 date - " + program.strToTime(togbtnTimeSlot8.getText()));
 						} else if (togbtnAft.isSelected()) {
 							checkStartTimeTogglesOnBooking(stD);
-							checkEndTimeForEachBookingSessionAndDisableToggleIfOverlapping(true, enD, togbtnTimeSlot1.getText(), 
+							checkoverLap(true, enD, togbtnTimeSlot1.getText(), 
 									"12:31", togbtnTimeSlot2.getText(), "13:01", togbtnTimeSlot3.getText(), 
 									"13:31", togbtnTimeSlot4.getText(), "14:01", togbtnTimeSlot5.getText(),
 									"14:31", togbtnTimeSlot6.getText(), "15:01", togbtnTimeSlot7.getText(), 
@@ -430,7 +445,7 @@ public class CustomerController  implements Initializable, IUser{
 							
 						} else if (togbtnEven.isSelected()) {
 							checkStartTimeTogglesOnBooking(stD);
-							checkEndTimeForEachBookingSessionAndDisableToggleIfOverlapping(true, enD, togbtnTimeSlot1.getText(), 
+							checkoverLap(true, enD, togbtnTimeSlot1.getText(), 
 									"16:31", togbtnTimeSlot2.getText(), "17:01", togbtnTimeSlot3.getText(), 
 									"17:31", togbtnTimeSlot4.getText(), "18:01", togbtnTimeSlot5.getText(),
 									"18:31", togbtnTimeSlot6.getText(), "19:01", togbtnTimeSlot7.getText(), 
@@ -463,7 +478,7 @@ public class CustomerController  implements Initializable, IUser{
 	 * @param timeslot8B
 	 * @param timeslot8
 	 */
-	public void checkEndTimeForEachBookingSessionAndDisableToggleIfOverlapping
+	public void checkoverLap
 			(Boolean mornshift, Date enD, String timeslot1,
 			String timeslot2B, String timeslot2, String timeslot3B, String timeslot3, 
 			String timeslot4B, String timeslot4, String timeslot5B, String timeslot5, 
@@ -895,7 +910,6 @@ public class CustomerController  implements Initializable, IUser{
 			}
 		});
 	}
-	
 	private void listTogTDini(int businessID){
 		togbtnMorn.setToggleGroup(timeODayGroup);
 		togbtnAft.setToggleGroup(timeODayGroup);

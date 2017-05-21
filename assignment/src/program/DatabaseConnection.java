@@ -70,16 +70,6 @@ public class DatabaseConnection
 		executeQuery(query, "User Added\n");
 		log.info("OUT addUser\n");
 	}
-	public void addUser(String username, String password, int accountType)
-	{
-		log.info("IN addUser\n");
-		/*
-		 * account type boolean 1 for business owner, 0 for user
-		 */
-		String query = "INSERT INTO USERS(username, password, accountType) " + "VALUES('"+username+"','"+password+"',"+accountType+")";
-		executeQuery(query, "User Added\n");
-		log.info("OUT addUser\n");
-	}
 	
 	/**
 	 * Adds User to database
@@ -150,23 +140,6 @@ public class DatabaseConnection
 		log.info("IN getUser\n");
 		
 		String query = "SELECT * FROM users WHERE username like '"+username+"' AND businessID = "+businessID;
-		//Creates a null user to return, this can be used to validate user at login
-		User databaseUser = null;
-		databaseUser= userlogin(query);
-		log.info("OUT getUser\n");
-		return databaseUser;
-	}
-	
-	/**
-	 * Gets where the user name keyword matches another users name
-	 * @param username
-	 * @return User Object
-	 */
-	public User getUser(String username)
-	{
-		log.info("IN getUser\n");
-		
-		String query = "SELECT * FROM users WHERE username like '"+username+"'";
 		//Creates a null user to return, this can be used to validate user at login
 		User databaseUser = null;
 		databaseUser= userlogin(query);
@@ -1146,21 +1119,44 @@ public class DatabaseConnection
 	 * @return 
 	 * @author Bryan
 	 */	
-	public void createBusiness(int id,String businessName){
+	public void createBusiness(String businessName2){
 		log.info("IN addBusinessToDatabase\n");
 		//BusinessID is made in the database
-		String query = "INSERT INTO BUSINESS (businessID ,businessName)" + "VALUES("+id+",'"+businessName+"');";
+		String query = "INSERT INTO BUSINESS (businessName)" + "VALUES('"+businessName2+"');";
 		try(Connection connect = this.connect(); Statement inject = connect.createStatement())
 		{
 			inject.executeUpdate(query);
-			log.info("Business Added - Business Name: "+businessName+"\n");
+			log.info("Business Added - Business Name: "+businessName2+"\n");
 		}
 		catch(SQLException sqle)
 		{
 			log.warn(sqle.getMessage());
 		}
-		log.info("OUT addBusinessToDatabase\n");
-		
+		log.info("OUT addBusinessToDatabase\n");	
+	}
+	
+	public Business getBusiness(String businessName)
+	{
+		Business business = null;
+		String query = "SELECT * FROM BUSINESS WHERE businessName = ?";
+		try (Connection connect = this.connect(); PreparedStatement  inject  = connect.prepareStatement(query))
+		{
+			inject.setString(1, businessName);
+			ResultSet output = inject.executeQuery();
+			while (output.next())
+			{
+				int businessID = output.getInt(1);
+				businessName= output.getString(2);
+				business= new Business(businessID,businessName);				
+			}
+			output.close();
+		}
+		catch(SQLException sqle)
+		{
+			log.info("GetBusiness screwed up in database connection\n");
+			log.warn(sqle.getMessage());
+		}
+		return business;
 	}
 	
 	public ArrayList<Business> getAllBusiness(){

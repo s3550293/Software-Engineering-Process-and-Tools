@@ -11,6 +11,7 @@ public class User
 	protected String _username, _password;
 	protected int _accountType;
 	protected int _businessID;
+	protected String fullName;
 	public User(int id, String username, String password, int accountType,int businessID)
 	{
 		_id = id;
@@ -33,6 +34,7 @@ public class User
 		_lname = lname;
 		_phone = phone;
 		_businessID = businessID;
+		fullName = _fname+" "+_lname;
 	}
 	public User(int id, String fname, String lname, String phone)
 	{
@@ -40,6 +42,7 @@ public class User
 		_fname = fname;
 		_lname = lname;
 		_phone = phone;
+		fullName = _fname+" "+_lname;
 	}
 	public User(String fname, String lname, String phone,int businessID)
 	{
@@ -47,12 +50,14 @@ public class User
 		_lname = lname;
 		_phone = phone;
 		_businessID = businessID;
+		fullName = _fname+" "+_lname;
 	}
 	public User(String fname, String lname, String phone)
 	{
 		_fname = fname;
 		_lname = lname;
 		_phone = phone;
+		fullName = _fname+" "+_lname;
 	}
 	public User(){}
 	
@@ -76,7 +81,7 @@ public class User
 	{
 		return _password;
 	}
-	public String getFullName(){return _fname+" "+_lname;}
+	public String getFullName(){return fullName;}
 	public String getFName(){return _fname;}
 	public String getLName(){return _lname;}
 	public String getPhone(){return _phone;}

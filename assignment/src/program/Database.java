@@ -63,7 +63,7 @@ public class Database
 		 * creating tables for users and user details to be remembered later
 		 */
 		String queryBusiness = "CREATE TABLE IF NOT EXISTS BUSINESS (" 
-				+"businessID integer PRIMARY KEY,"
+				+"businessID integer PRIMARY KEY AUTOINCREMENT,"
 				+"businessName VARCHAR(40));";
 		String queryUser = "CREATE TABLE IF NOT EXISTS USERS (" + 
 		 "userID integer PRIMARY KEY AUTOINCREMENT,"

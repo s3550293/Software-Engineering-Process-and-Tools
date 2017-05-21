@@ -133,13 +133,8 @@ public class LoginController implements Initializable {
 	 */
 	@FXML
 	public void loginAction() {
-        if (cmbBusiness.getSelectionModel().getSelectedItem() == null) {
-        	program.messageBox("ERROR", "Error", "Please select a business", "");
-            return;
-        }
-		log.debug("LOGGER: " +txtUserLogin.getText() + cmbVal().getBusinessId()+ txtPassLogin.getText());
 		Stage loginstage = (Stage) btnLogin.getScene().getWindow();
-		int loginCheck = loginFuction.logInProcess(txtUserLogin.getText(),cmbVal().getBusinessId(), txtPassLogin.getText());
+		int loginCheck = loginFuction.logInProcess(txtUserLogin.getText(), txtPassLogin.getText());
 		if(loginCount < 10){
 			if(loginCheck == -2){
 				lblError.setVisible(true);
@@ -151,9 +146,19 @@ public class LoginController implements Initializable {
 				lblError.setVisible(false);
 				loginstage.hide();
 				if (program.getUser().getAccountType() == 1) {
+					if (cmbBusiness.getSelectionModel().getSelectedItem() == null) {
+			            program.messageBox("ERROR", "Error", "Please Select a business", "");
+			            return;
+			        }
+					program.business(cmbVal());
 					IUser businessowner = userFactory.getUser("BusinessOwner");
 					businessowner.getUserWindow();
 				} else if(program.getUser().getAccountType() == 0) {
+					if (cmbBusiness.getSelectionModel().getSelectedItem() == null) {
+			            program.messageBox("ERROR", "Error", "Please Select a business", "");
+			            return;
+			        }
+					program.business(cmbVal());
 					IUser customer = userFactory.getUser("Customer");
 					customer.getUserWindow();
 				} else if(program.getUser().getAccountType() == 2){
@@ -208,7 +213,7 @@ public class LoginController implements Initializable {
 		DatabaseConnection connect = new DatabaseConnection();
 		BusinessMenu bMenu = new BusinessMenu();
 			
-		connect.createBusiness("YarraVille Clinic");
+		connect.createBusiness(1,"YarraVille Clinic");
 		connect.addUser("William", "Apples22", 0,1); // customer attached to Business 2
 		connect.addUser("Hannah", "Apples22", 0,1); // customer attached to Business 2
 		connect.addUserDetails(2, "William", "Porter", "will@mail.com", "0452368593", "01/01/2002", "Male");

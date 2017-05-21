@@ -1,23 +1,24 @@
 package gui;
 
+
 import javafx.fxml.FXML;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
+import program.DatabaseConnection;
 
 public class AddBOController {
 	
 	@FXML
-	TextField  txtFristName, txtLName, txtUsername;
+	TextField  txtBName, txtUsername;
 	
 	@FXML
 	PasswordField passPassword, passConf;
 	
 	@FXML
 	public void cancel(){
-		Stage stage= (Stage) txtFristName.getScene().getWindow();
-		txtFristName.setText("");
-		txtLName.setText("");
+		Stage stage= (Stage) txtBName.getScene().getWindow();
+		txtBName.setText("");
 		txtUsername.setText("");
 		passPassword.setText("");
 		passConf.setText("");
@@ -26,7 +27,10 @@ public class AddBOController {
 	
 	@FXML
 	public void create(){
-		//TODO
+		DatabaseConnection con = new DatabaseConnection();
+		con.addUser(txtUsername.getText(),passPassword.getText(), 1);
+		int id = con.getUser(txtUsername.getText()).getID();
+		con.createBusiness(id, txtBName.getText());
 	}
 
 }

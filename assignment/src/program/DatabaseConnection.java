@@ -62,6 +62,16 @@ public class DatabaseConnection
 		executeQuery(query, "User Added\n");
 		log.info("OUT addUser\n");
 	}
+	public void addUser(String username, String password, int accountType)
+	{
+		log.info("IN addUser\n");
+		/*
+		 * account type boolean 1 for business owner, 0 for user
+		 */
+		String query = "INSERT INTO USERS(username, password, accountType) " + "VALUES('"+username+"','"+password+"',"+accountType+")";
+		executeQuery(query, "User Added\n");
+		log.info("OUT addUser\n");
+	}
 	
 	/**
 	 * Adds User to database
@@ -1043,28 +1053,28 @@ public class DatabaseConnection
 		log.info("IN getAllBusiness\n");
 		ArrayList<BusinessOwner> databaseBusiness = new ArrayList<BusinessOwner>();
 		int busID = 0;
-		String bName,fName,lName,phone,address;
+		String fName,lName,phone,address;
 		Date weekDayStart,weekDayEnd,weekendStart,weekendEnd;
-		int businessID = -1;
-		String query = "SELECT * FROM BUSINESSOWNER"; 
-
+		String query = "SELECT * FROM BUSINESS_OWNER"; 
+		int color = 1;
 		try (Connection connect = this.connect(); PreparedStatement  inject  = connect.prepareStatement(query))
 		{
 			ResultSet output = inject.executeQuery();
 			while (output.next())
 			{
 				busID = output.getInt(1);
-				bName = output.getString(2);
-				fName= output.getString(3);
-				lName= output.getString(4);
-				phone= output.getString(5);
-				address= output.getString(6);
-				weekDayStart = controller.strToTime(output.getString(7));
-				weekDayEnd = controller.strToTime(output.getString(8));
-				weekendStart = controller.strToTime(output.getString(9));
-				weekendEnd = controller.strToTime(output.getString(10));
-				businessID = output.getInt(11);
-				databaseBusiness.add(new BusinessOwner(busID,fName,lName, phone, address,weekDayStart,weekDayEnd,weekendStart,weekendEnd, businessID));				
+				fName= output.getString(2);
+				lName= output.getString(3);
+				phone= output.getString(4);
+				address= output.getString(5);
+				weekDayStart = controller.strToTime(output.getString(6));
+				weekDayEnd = controller.strToTime(output.getString(7));
+				weekendStart = controller.strToTime(output.getString(8));
+				weekendEnd = controller.strToTime(output.getString(9));
+				color = output.getInt(10);
+				BusinessOwner getBusiness= new BusinessOwner(busID,fName,lName, phone, address,weekDayStart,weekDayEnd,weekendStart,weekendEnd);	
+				getBusiness.color(color);
+				databaseBusiness.add(getBusiness);				
 			}
 			output.close();
 		}
@@ -1086,11 +1096,10 @@ public class DatabaseConnection
 		log.info("IN getOneBusiness\n");
 		BusinessOwner getBusiness = null;
 		int bID = 0;
-		String bName,fName,lName,phone,address;
+		String fName,lName,phone,address;
 		Date weekDayStart,weekDayEnd,weekendStart,weekendEnd;
-		int businessID = -1;
-		String query = "SELECT * FROM BUSINESSOWNER WHERE id = ?"; 
-
+		String query = "SELECT * FROM BUSINESS_OWNER WHERE id = ?"; 
+		int color = 1;
 		try (Connection connect = this.connect(); PreparedStatement  inject  = connect.prepareStatement(query))
 		{
 			//Sets '?' to user name in the query
@@ -1100,17 +1109,17 @@ public class DatabaseConnection
 			while (output.next())
 			{
 				bID = output.getInt(1);
-				bName = output.getString(2);
-				fName= output.getString(3);
-				lName= output.getString(4);
-				phone= output.getString(5);
-				address= output.getString(6);
-				weekDayStart = controller.strToTime(output.getString(7));
-				weekDayEnd = controller.strToTime(output.getString(8));
-				weekendStart = controller.strToTime(output.getString(9));
-				weekendEnd = controller.strToTime(output.getString(10));
-				businessID = output.getInt(11);
-				getBusiness= new BusinessOwner(bID,fName,lName, phone, address,weekDayStart,weekDayEnd,weekendStart,weekendEnd, businessID);	
+				fName= output.getString(2);
+				lName= output.getString(3);
+				phone= output.getString(4);
+				address= output.getString(5);
+				weekDayStart = controller.strToTime(output.getString(6));
+				weekDayEnd = controller.strToTime(output.getString(7));
+				weekendStart = controller.strToTime(output.getString(8));
+				weekendEnd = controller.strToTime(output.getString(9));
+				color = output.getInt(10);
+				getBusiness= new BusinessOwner(bID,fName,lName, phone, address,weekDayStart,weekDayEnd,weekendStart,weekendEnd);
+				getBusiness.color(color);
 			}
 			output.close();
 		}
@@ -1128,10 +1137,10 @@ public class DatabaseConnection
 	 * @return 
 	 * @author Bryan
 	 */	
-	public void createBusiness(String businessName){
+	public void createBusiness(int id,String businessName){
 		log.info("IN addBusinessToDatabase\n");
 		//BusinessID is made in the database
-		String query = "INSERT INTO BUSINESS (businessName)" + "VALUES('"+businessName+"');";
+		String query = "INSERT INTO BUSINESS (businessID ,businessName)" + "VALUES("+id+",'"+businessName+"');";
 		try(Connection connect = this.connect(); Statement inject = connect.createStatement())
 		{
 			inject.executeUpdate(query);

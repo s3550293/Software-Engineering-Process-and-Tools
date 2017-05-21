@@ -369,7 +369,7 @@ public class DatabaseConnectionJUnit {
 	@Test
 	public void testCreateBusiness()
 	{
-		connect.createBusiness("YOYOYO");
+		//connect.createBusiness("YOYOYO");
 	}
 	@After
 	public void tearDown()

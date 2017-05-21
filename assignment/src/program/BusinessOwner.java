@@ -14,8 +14,18 @@ public class BusinessOwner extends User {
 	}
 
 	public BusinessOwner(int ID, String fname, String lname, String phone, String address,
-			Date weekdayStart, Date weekdayEnd, Date weekendStart, Date weekendEnd, int businessID) {
-		super(ID, fname, lname, phone, businessID);
+			Date weekdayStart, Date weekdayEnd, Date weekendStart, Date weekendEnd) {
+		super(ID, fname, lname, phone);
+		_address = address;
+		_weekdayStart = weekdayStart;
+		_weekdayEnd = weekdayEnd;
+		_weekendStart = weekendStart;
+		_weekendEnd = weekendEnd;
+	}
+	
+	public BusinessOwner(String fname, String lname, String phone, String address,
+			Date weekdayStart, Date weekdayEnd, Date weekendStart, Date weekendEnd) {
+		super(fname, lname, phone);
 		_address = address;
 		_weekdayStart = weekdayStart;
 		_weekdayEnd = weekdayEnd;

@@ -5,7 +5,6 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.ResourceBundle;
 
 import org.apache.log4j.Logger;
@@ -42,10 +41,11 @@ public class SetupController implements Initializable, ISetup {
 	public final static Logger log = Logger.getLogger(SetupController.class);
 	private final Controller program = new Controller();
 	Business business = program.business();
+	//BusinessMenu bMenu = program.businessMenu();
+	//public final BusinessMenu bMenu = program.bMenu;
 	private DatabaseConnection connection = new DatabaseConnection();
 	private static BusinessOwner businessOwner = new BusinessOwner();
 	public final Register regpro = new Register();
-	public final BusinessMenu bMenu = new BusinessMenu();
 	private File fa = null;
 	/*
 	 * Oder of panes stkpWelcome > stkpDetails > stkpTimeSlot > (Setup Finishes and database is created) > stkpSelectColor
@@ -79,27 +79,29 @@ public class SetupController implements Initializable, ISetup {
 	/**
 	 * Assigning the Business opening and closing hours for the business
 	 * @author Luke Mason
-	 * @param weekdayStart
-	 * @param weekdayEnd
-	 * @param weekendStart
-	 * @param weekendEnd
+	 * @param wds
+	 * @param wde
+	 * @param wes
+	 * @param wee
 	 */
-	public int assignOpenClosingTimesToGlobal(Date weekdayStart ,Date weekdayEnd, Date weekendStart ,Date weekendEnd)
+	public int assignOpenClosingTimesToGlobal(String wds ,String wde, String wes ,String wee)
 	{
 		//Change Dates to Strings
-		String MFOpen = program.timeToStr(weekdayStart);
-		String MFClose = program.timeToStr(weekdayEnd);
-		String SSOpen = program.timeToStr(weekendStart);
-		String SSClose = program.timeToStr(weekendEnd);
+		String MFOpen = wds;
+		String MFClose = wde;
+		String SSOpen = wes;
+		String SSClose = wee;
 		//assign times for weekends and weekdays
 		int a = assignOpenClosingTimesToWeekDays(MFOpen, MFClose);
 		if(a == 0)
 		{
+			program.messageBox("ERROR", "Invalid Times", "Invalid Times", "Business Must be open for at least 1 hour");
 			return 0;
 		}
 		int b = assignOpenClosingTimesToWeekEnds(SSOpen, SSClose);
 		if(b == 0)
 		{
+			program.messageBox("ERROR", "Invalid Times", "Invalid Times", "Business Must be open for at least 1 hour");
 			return 0;
 		}
 		return 1;
@@ -112,10 +114,10 @@ public class SetupController implements Initializable, ISetup {
 		{
 			return 0;
 		}
-		bMenu.MFearly = times[0];
-		bMenu.MFearlyMidDay = times[1];
-		bMenu.MFlateMidDay = times[2];
-		bMenu.MFlate = times[3];
+		BusinessMenu.MFearly = times[0];
+		BusinessMenu.MFearlyMidDay = times[1];
+		BusinessMenu.MFlateMidDay = times[2];
+		BusinessMenu.MFlate = times[3];
 		return 1;
 	}
 	public int assignOpenClosingTimesToWeekEnds(String SSOpen,String SSClose)
@@ -125,10 +127,10 @@ public class SetupController implements Initializable, ISetup {
 		{
 			return 0;
 		}
-		bMenu.SSearly = times[0];
-		bMenu.SSearlyMidDay = times[1];
-		bMenu.SSlateMidDay = times[2];
-		bMenu.SSlate = times[3];
+		BusinessMenu.SSearly = times[0];
+		BusinessMenu.SSearlyMidDay = times[1];
+		BusinessMenu.SSlateMidDay = times[2];
+		BusinessMenu.SSlate = times[3];
 		return 1;
 	}
 	
@@ -244,7 +246,8 @@ public class SetupController implements Initializable, ISetup {
 			System.out.println("Address = "+address);
 
 			//Add to the database the new information
-			int check = assignOpenClosingTimesToGlobal(businessOwner.getWeekdayStart(),businessOwner.getWeekdayEnd(),businessOwner.getWeekendStart(),businessOwner.getWeekendEnd());
+
+			int check = assignOpenClosingTimesToGlobal(wds,wde,wes,wee);
 			if(check == 0)
 			{
 				return;

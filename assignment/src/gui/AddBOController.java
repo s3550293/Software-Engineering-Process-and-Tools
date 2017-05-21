@@ -37,16 +37,17 @@ public class AddBOController {
 			program.messageBox("ERROR", "Error", "Username is invalid", "");
 			return;
 		}
-		Business business = con.getBusiness(txtBName.getText());
+		Business business = con.getBusiness(txtBName.getText().toUpperCase());
 		if(business != null)
 		{
 			program.messageBox("ERROR", "Error", "Business Name is already Taken", "");
 			return;
 		}
-		con.createBusiness(txtBName.getText()); // Creating the business FIRST		
-		business = con.getBusiness(txtBName.getText());
+		con.createBusiness(txtBName.getText().toUpperCase()); // Creating the business FIRST		
+		business = con.getBusiness(txtBName.getText().toUpperCase());
 		int businessID = business.getBusinessId();	
 		con.addUser(txtUsername.getText(),passPassword.getText(), 1,businessID); //Creating the BO SECOND
+		program.messageBox("SUCCESS", "Success", "Business '"+txtBName.getText().toUpperCase()+"' Created", "Username = "+txtUsername.getText()+" \nPassword = "+passPassword.getText());
 		stage.close();//CLOSE WINDOW
 	}
 

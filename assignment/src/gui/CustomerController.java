@@ -41,6 +41,7 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.util.Callback;
 import program.Booking;
+import program.BusinessOwner;
 import program.Controller;
 import program.DatabaseConnection;
 import program.Employee;
@@ -55,7 +56,7 @@ public class CustomerController  implements Initializable, IUser{
 	private Booking booking = null;
 	int globalEmployeeOption = 0;
 	private static Booking newBook = new Booking();
-	
+	SetupController setupC = new SetupController();
 	public CustomerController(){log.setLevel(Level.DEBUG);}
 	
 	@FXML
@@ -110,6 +111,19 @@ public class CustomerController  implements Initializable, IUser{
 		}
 		if(connection.getOneBusiness(program.getUser().getBusinessID()).color() >= 1){
 			setCI();
+		}
+		BusinessOwner BO = connection.getOneBusiness(program.business().getBusinessId());
+		if(BO == null)
+		{
+			return;
+		}
+		if(BO != null)
+		{
+			String wds = program.timeToStr(BO.getWeekdayStart());
+			String wde = program.timeToStr(BO.getWeekdayEnd());
+			String wes = program.timeToStr(BO.getWeekendStart());
+			String wee = program.timeToStr(BO.getWeekendEnd());
+			setupC.assignOpenClosingTimesToGlobal(wds, wde, wes, wee);
 		}
 		popListBook();
 		lblCustomerName.setText(connection.getCustomer(program.getUser().getID()).getFullName());

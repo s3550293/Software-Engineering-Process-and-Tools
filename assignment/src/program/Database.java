@@ -136,7 +136,7 @@ public class Database
 				+ "weekendEnd VARCHAR(20),"
 				+ "color integer,"
 				+ "image text,"
-				+ "FOREIGN KEY(ID) REFERENCES USERS(userID),"
+				+ "FOREIGN KEY(ID) REFERENCES BUSINESS(businessID),"
 				+ "FOREIGN KEY(color) REFERENCES COLOR(ID));";
 		String queryColor = "CREATE TABLE IF NOT EXISTS COLOR ("
 				+ "ID integer PRIMARY KEY AUTOINCREMENT,"

@@ -113,7 +113,7 @@ public class RootController implements Initializable, IUser {
 	
 	@FXML
 	public void refresh(){
-		//TODO
+		loadListView();
 	}
 	
 	@FXML

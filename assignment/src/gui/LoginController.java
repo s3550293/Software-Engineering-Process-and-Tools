@@ -148,19 +148,21 @@ public class LoginController implements Initializable {
 				if (program.getUser().getAccountType() == 1) {
 					if (cmbBusiness.getSelectionModel().getSelectedItem() == null) {
 			            program.messageBox("ERROR", "Error", "Please Select a business", "");
-			            break;
 			        }
-					program.business(cmbVal());
-					IUser businessowner = userFactory.getUser("BusinessOwner");
-					businessowner.getUserWindow();
+					else{
+						program.business(cmbVal());
+						IUser businessowner = userFactory.getUser("BusinessOwner");
+						businessowner.getUserWindow();
+					}
 				} else if(program.getUser().getAccountType() == 0) {
 					if (cmbBusiness.getSelectionModel().getSelectedItem() == null) {
 			            program.messageBox("ERROR", "Error", "Please Select a business", "");
-			            break;
 			        }
-					program.business(cmbVal());
-					IUser customer = userFactory.getUser("Customer");
-					customer.getUserWindow();
+					else{
+						program.business(cmbVal());
+						IUser customer = userFactory.getUser("Customer");
+						customer.getUserWindow();
+					}
 				} else if(program.getUser().getAccountType() == 2){
 					IUser admin = userFactory.getUser("SuperUser");
 					admin.getUserWindow();

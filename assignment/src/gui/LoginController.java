@@ -213,6 +213,7 @@ public class LoginController implements Initializable {
 		connect.addUser("Hannah", "Apples22", 0,1); // customer attached to Business 2
 		connect.addUserDetails(2, "William", "Porter", "will@mail.com", "0452368593", "01/01/2002", "Male");
 		connect.addUserDetails(3, "Hannah", "Hawlking", "hannah@mail.com", "0452136859", "20/04/1995", "Famale");
+		connect.addUser("BusinessOwner","Password!",1,1);
 		
 		connect.addEmployee("Luke Charles",25,1);
 		connect.addEmployee("David Smith",26.6,1);
@@ -316,27 +317,27 @@ public class LoginController implements Initializable {
 		connect.addService(new Service("Wash",45,30,2));
 		connect.addService(new Service("Cut and Style",90,60,2));
 		
-		connect.addBooking(2,1, "21/04/2017", "10:00", "10:40", 1,"active",2);
-		connect.addBooking(2,2, "22/04/2017", "11:00", "11:59", 2,"canceled",2);
-		connect.addBooking(2,1, "23/04/2017", "10:00", "10:40", 3,"canceled",2);
-		connect.addBooking(2,2, "24/04/2017", "11:00", "11:59", 2,"canceled",2);
-		connect.addBooking(2,3, "25/04/2017", "8:00", "8:40", 2, "active",2);
-		connect.addBooking(2,2, "26/04/2017", "8:00", "8:40", 2, "canceled",2);
-		connect.addBooking(2,1, "21/04/2017", "10:00", "10:40", 1,"active",3);
-		connect.addBooking(2,2, "22/04/2017", "11:00", "11:59", 2,"canceled",3);
-		connect.addBooking(2,1, "23/04/2017", "10:00", "10:40", 3,"canceled",3);
-		connect.addBooking(2,2, "24/04/2017", "11:00", "11:59", 2,"canceled",3);
-		connect.addBooking(2,3, "25/04/2017", "8:00", "8:40", 2, "active",3);
-		connect.addBooking(2,2, "26/04/2017", "8:00", "8:40", 2, "canceled",3);
-		connect.addBooking(2,3, "27/04/2017", "10:00", "10:40", 1,"active",4);
-		connect.addBooking(2,2, "28/04/2017", "11:00", "11:59", 1,"active",4);
-		connect.addBooking(2,3, "29/04/2017", "8:00", "8:40", 1, "canceled",5);
+		connect.addBooking(2,1, "21/04/2017", "10:00", "10:40", 1,"active",1);
+		connect.addBooking(2,2, "22/04/2017", "11:00", "11:59", 2,"canceled",1);
+		connect.addBooking(2,1, "23/04/2017", "10:00", "10:40", 3,"canceled",1);
+		connect.addBooking(2,2, "24/04/2017", "11:00", "11:59", 2,"canceled",1);
+		connect.addBooking(2,2, "25/04/2017", "8:00", "8:40", 2, "active",1);
+		connect.addBooking(2,2, "26/04/2017", "8:00", "8:40", 2, "canceled",1);
+		connect.addBooking(2,1, "21/04/2017", "10:00", "10:40", 1,"active",1);
+		connect.addBooking(2,2, "22/04/2017", "11:00", "11:59", 2,"canceled",1);
+		connect.addBooking(2,1, "23/04/2017", "10:00", "10:40", 3,"canceled",1);
+		connect.addBooking(2,2, "24/04/2017", "11:00", "11:59", 2,"canceled",1);
+		connect.addBooking(2,1, "25/04/2017", "8:00", "8:40", 2, "active",1);
+		connect.addBooking(2,2, "26/04/2017", "8:00", "8:40", 2, "canceled",1);
+		connect.addBooking(2,2, "27/04/2017", "10:00", "10:40", 1,"active",1);
+		connect.addBooking(2,2, "28/04/2017", "11:00", "11:59", 1,"active",1);
+		connect.addBooking(2,1, "29/04/2017", "8:00", "8:40", 1, "canceled",1);
 		
-		connect.addBooking(2,1, "24/05/2017", "8:00", "8:40", 2, "active",5);
-		connect.addBooking(3,1, "16/07/2017", "10:00", "10:40", 3,"active",6);
-		connect.addBooking(3,2, "14/05/2017", "11:00", "11:59", 1,"active",7);
-		connect.addBooking(3,1, "4/05/2017", "10:00", "10:40", 2,"active",8);
-		connect.addBooking(3,2, "6/05/2017", "11:00", "11:59", 3,"active",8);
+		connect.addBooking(3,3, "24/05/2017", "8:00", "8:40", 2, "active",2);
+		connect.addBooking(3,3, "16/07/2017", "10:00", "10:40", 3,"active",2);
+		connect.addBooking(3,3, "14/05/2017", "11:00", "11:59", 1,"active",2);
+		connect.addBooking(3,3, "4/05/2017", "10:00", "10:40", 2,"active",2);
+		connect.addBooking(3,3, "6/05/2017", "11:00", "11:59", 3,"active",2);
 	
 		//connect.cancelBooking(2);
     }

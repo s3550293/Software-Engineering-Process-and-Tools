@@ -33,6 +33,10 @@ public class Register
 		{
 			System.out.println("Username Taken please enter another username");
 		}
+		if(username.equals("root"))
+		{
+			output = false;
+		}
 		return output;
 	}
 	

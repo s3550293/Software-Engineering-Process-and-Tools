@@ -10,6 +10,7 @@ public interface IInterface {
 		public void initialize(URL url, ResourceBundle rb);
 		public boolean getUserWindow();
 		public void logout();
+		public void setCI();
 	}
 	
 	public interface ISetup{

@@ -44,7 +44,6 @@ public class LoginController implements Initializable {
 	private Login loginFuction = new Login();
 	private Controller program = new Controller();
 	private DatabaseConnection con = new DatabaseConnection();
-	private SetupController setup = new SetupController();
 	private int loginCount = 0;
 	UserFactory userFactory = new UserFactory();
 	@FXML
@@ -148,19 +147,21 @@ public class LoginController implements Initializable {
 				if (program.getUser().getAccountType() == 1) {
 					if (cmbBusiness.getSelectionModel().getSelectedItem() == null) {
 			            program.messageBox("ERROR", "Error", "Please Select a business", "");
-			            return;
 			        }
-					program.business(cmbVal());
-					IUser businessowner = userFactory.getUser("BusinessOwner");
-					businessowner.getUserWindow();
+					else{
+						program.business(cmbVal());
+						IUser businessowner = userFactory.getUser("BusinessOwner");
+						businessowner.getUserWindow();
+					}
 				} else if(program.getUser().getAccountType() == 0) {
 					if (cmbBusiness.getSelectionModel().getSelectedItem() == null) {
 			            program.messageBox("ERROR", "Error", "Please Select a business", "");
-			            return;
 			        }
-					program.business(cmbVal());
-					IUser customer = userFactory.getUser("Customer");
-					customer.getUserWindow();
+					else{
+						program.business(cmbVal());
+						IUser customer = userFactory.getUser("Customer");
+						customer.getUserWindow();
+					}
 				} else if(program.getUser().getAccountType() == 2){
 					IUser admin = userFactory.getUser("SuperUser");
 					admin.getUserWindow();

@@ -1198,6 +1198,14 @@ public class DatabaseConnection
 		return bis;
 	} 
 	
+	public void updateBO(int id, int color)
+	{
+		log.info("IN updateEmployeePayRate\n");
+		String query = "UPDATE BUSINESS_OWNER SET COLOR = '"+color+"' WHERE ID = "+id+";";
+		executeQuery(query, "name for ID " + id + " updated\n");
+		log.info("OUT Updated Color\n");
+	}
+	
 	/**
 	 * 
 	 * @param id
@@ -1223,5 +1231,13 @@ public class DatabaseConnection
         }
         return val;
     }
+	
+	public void userBO(int id, int bid)
+	{
+		log.info("IN Update UBO\n");
+		String query = "UPDATE USERS SET businessID = '"+bid+"' WHERE userID = "+id+";";
+		executeQuery(query, "name for ID " + id + " updated\n");
+		log.info("OUT Updated User\n");
+	}
 	
 }

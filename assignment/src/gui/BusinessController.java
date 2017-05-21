@@ -160,9 +160,6 @@ public class BusinessController implements Initializable, IUser  {
 			ISetup setup = userFactory.getSetup("SetUp");
 			setup.getSetup();
 		}
-		if(connection.getOneBusiness(program.getUser().getBusinessID()).color() >= 1){
-			setCI();
-		}
 		if(BO != null)
 		{
 			String wds = program.timeToStr(BO.getWeekdayStart());
@@ -170,6 +167,13 @@ public class BusinessController implements Initializable, IUser  {
 			String wes = program.timeToStr(BO.getWeekendStart());
 			String wee = program.timeToStr(BO.getWeekendEnd());
 			setupC.assignOpenClosingTimesToGlobal(wds, wde, wes, wee);
+		}
+		else{
+			Stage stage= (Stage) btnRefershServices.getScene().getWindow();
+			stage.close();
+		}
+		if(connection.getOneBusiness(program.getUser().getBusinessID()).color() >= 1){
+			setCI();
 		}
 		initialiseWorkTimeBusinessMenu();
 		

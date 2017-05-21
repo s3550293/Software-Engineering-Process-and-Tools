@@ -25,39 +25,40 @@ public class Login
 	 *        -3 for empty user name or password
 	 */
 	public int logInProcess(String userName, String pass,int businessID){
-		boolean passCheck = false;
 		DatabaseConnection connect = new DatabaseConnection();
 		User user = connect.getUser(userName);
 		if(userName.equals(user.getUsername()))
 		{
-			while(passCheck==false)
+			if(pass.equals(user.getPassword()))
 			{
-				if(pass.equals(user.getPassword()))
+				if(user.getAccountType() == 2){
+					program.setUser(user);
+					log.debug("LOGGER: User - "+connect.getUser(userName).getFullName());
+					return 0;
+				} 
+				if(businessID == user.getBusinessID())
 				{
-					if(businessID == user.getBusinessID())
-					{
-						passCheck=true;
-						if(user.getAccountType() == 1){
-							program.setUser(user);
-							log.debug("LOGGER: User - "+connect.getUser(userName).getFullName());
-							return 1;
-						}if(connect.getUser(userName).getAccountType() == 0){
-							program.setUser(user);
-							log.debug("LOGGER: User - "+connect.getUser(userName).getFullName());
-							return 0;
-						}
-						if(connect.getUser(userName).getAccountType() == 2){
-							program.setUser(user);
-							log.debug("LOGGER: User - "+connect.getUser(userName).getFullName());
-							return 2;
-						}
+					if(user.getAccountType() == 1){
+						program.setUser(user);
+						log.debug("LOGGER: User - "+connect.getUser(userName).getFullName());
+						return 1;
+					}
+					else if(user.getAccountType() == 0){
+						program.setUser(user);
+						log.debug("LOGGER: User - "+connect.getUser(userName).getFullName());
+						return 2;
 					}
 				}
 				else
 				{
-					log.debug("Incorrect Password");
+					log.debug("Incorrect UserName or Password");
 					return -2;
 				}
+			}
+			else
+			{
+				log.debug("Incorrect Username or Password");
+				return -2;
 			}
 		}
 		else if (userName.isEmpty() || pass.isEmpty()){
@@ -65,7 +66,7 @@ public class Login
 			return -3;
 		}
 		else{
-			log.debug("Username does not exist!");
+			log.debug("Incorrect Username or Password");
 		}
 		return -1;
 	}

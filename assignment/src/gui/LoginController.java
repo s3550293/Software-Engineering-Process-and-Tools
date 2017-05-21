@@ -133,7 +133,8 @@ public class LoginController implements Initializable {
 	@FXML
 	public void loginAction() {
 		Stage loginstage = (Stage) btnLogin.getScene().getWindow();
-		int loginCheck = loginFuction.logInProcess(txtUserLogin.getText(), txtPassLogin.getText(),cmbVal().getBusinessId());
+		
+		int loginCheck = loginFuction.logInProcess(txtUserLogin.getText(), txtPassLogin.getText());
 		if(loginCount < 10){
 			if(loginCheck == -2){
 				lblError.setVisible(true);
@@ -148,7 +149,8 @@ public class LoginController implements Initializable {
 					if (cmbBusiness.getSelectionModel().getSelectedItem() == null) {
 			            program.messageBox("ERROR", "Error", "Please Select a business", "");
 			        }
-					else{
+					else if(program.getUser().getBusinessID() == cmbVal().getBusinessId())
+					{
 						program.business(cmbVal());
 						IUser businessowner = userFactory.getUser("BusinessOwner");
 						businessowner.getUserWindow();
@@ -157,7 +159,8 @@ public class LoginController implements Initializable {
 					if (cmbBusiness.getSelectionModel().getSelectedItem() == null) {
 			            program.messageBox("ERROR", "Error", "Please Select a business", "");
 			        }
-					else{
+					else
+					{
 						program.business(cmbVal());
 						IUser customer = userFactory.getUser("Customer");
 						customer.getUserWindow();

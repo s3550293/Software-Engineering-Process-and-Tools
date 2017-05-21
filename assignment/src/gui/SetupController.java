@@ -44,7 +44,6 @@ public class SetupController implements Initializable, ISetup {
 	private static BusinessOwner businessOwner = new BusinessOwner();
 	public final Register regpro = new Register();
 	public final BusinessMenu bMenu = new BusinessMenu();
-	public String databaseName = "company.db";
 	/*
 	 * Oder of panes stkpWelcome > stkpDetails > stkpTimeSlot > (Setup Finishes and database is created) > stkpSelectColor
 	 */
@@ -71,11 +70,6 @@ public class SetupController implements Initializable, ISetup {
 		dispSSClose();
 	}
 	
-	public void assignDatabaseName()
-	{
-		databaseName = ""+business.getBusinessId();
-	}
-	
 	/**
 	 * Assigning the Business opening and closing hours for the business
 	 * @author Luke Mason
@@ -91,6 +85,10 @@ public class SetupController implements Initializable, ISetup {
 		String MFClose = program.timeToStr(weekdayEnd);
 		String SSOpen = program.timeToStr(weekendStart);
 		String SSClose = program.timeToStr(weekendEnd);
+		System.out.println(MFOpen);
+		System.out.println(MFClose);
+		System.out.println(SSOpen);
+		System.out.println(SSClose);
 		//assign times for weekends and weekdays
 		assignOpenClosingTimesToWeekDays(MFOpen, MFClose);
 		assignOpenClosingTimesToWeekEnds(SSOpen, SSClose);
@@ -98,35 +96,7 @@ public class SetupController implements Initializable, ISetup {
 	
 	public void assignOpenClosingTimesToWeekDays(String MFOpen,String MFClose)
 	{
-		String startTime = "";
-		String endTime = "";
-		if(MFOpen.length() < 5)
-		{
-			//Getting substring hours
-			String A = MFOpen.substring(0,2);
-			//Getting substring minutes
-			String a = MFOpen.substring(3);
-			//converting strings into integers
-			int hours = Integer.parseInt(A);
-			int minutes = Integer.parseInt(a);
-			String formattedHours = String.format("%02d", hours);
-			String formattedMinutes = String.format("%02d", minutes);
-			startTime = formattedHours+":"+formattedMinutes;
-		}
-		if(MFClose.length() < 5)
-		{
-			//Getting substring hours
-			String B = MFClose.substring(0,2);
-			//Getting substring minutes
-			String b = MFClose.substring(3);
-			//converting strings into integers
-			int hours = Integer.parseInt(B);
-			int minutes = Integer.parseInt(b);
-			String formattedHours = String.format("%02d", hours);
-			String formattedMinutes = String.format("%02d", minutes);
-			endTime = formattedHours+":"+formattedMinutes;
-		}
-		String[] times = splitTimeIntoThreeBlocks(startTime, endTime);
+		String[] times = splitTimeIntoThreeBlocks(MFOpen, MFClose);
 		bMenu.MFearly = times[0];
 		bMenu.MFearlyMidDay = times[1];
 		bMenu.MFlateMidDay = times[2];
@@ -134,35 +104,7 @@ public class SetupController implements Initializable, ISetup {
 	}
 	public void assignOpenClosingTimesToWeekEnds(String SSOpen,String SSClose)
 	{
-		String startTime = "";
-		String endTime = "";
-		if(SSOpen.length() < 5)
-		{
-			//Getting substring hours
-			String A = SSOpen.substring(0,2);
-			//Getting substring minutes
-			String a = SSOpen.substring(3);
-			//converting strings into integers
-			int hours = Integer.parseInt(A);
-			int minutes = Integer.parseInt(a);
-			String formattedHours = String.format("%02d", hours);
-			String formattedMinutes = String.format("%02d", minutes);
-			startTime = formattedHours+":"+formattedMinutes;
-		}
-		if(SSClose.length() < 5)
-		{
-			//Getting substring hours
-			String B = SSClose.substring(0,2);
-			//Getting substring minutes
-			String b = SSClose.substring(3);
-			//converting strings into integers
-			int hours = Integer.parseInt(B);
-			int minutes = Integer.parseInt(b);
-			String formattedHours = String.format("%02d", hours);
-			String formattedMinutes = String.format("%02d", minutes);
-			endTime = formattedHours+":"+formattedMinutes;
-		}
-		String[] times = splitTimeIntoThreeBlocks(startTime, endTime);
+		String[] times = splitTimeIntoThreeBlocks(SSOpen, SSClose);
 		bMenu.SSearly = times[0];
 		bMenu.SSearlyMidDay = times[1];
 		bMenu.SSlateMidDay = times[2];
@@ -326,12 +268,22 @@ public class SetupController implements Initializable, ISetup {
 			String wde = program.timeToStr(businessOwner.getWeekdayEnd());
 			String wes = program.timeToStr(businessOwner.getWeekendStart());
 			String wee = program.timeToStr(businessOwner.getWeekendEnd());
-			int id = businessOwner.getID();
+			int id = business.getBusinessId();
 			String fName = businessOwner.getFName();
 			String lName = businessOwner.getLName();
 			String phone = businessOwner.getPhone();
 			String address = businessOwner.getAddress();
 			
+			System.out.println("WDS = "+wds);
+			System.out.println("WDE = "+wde);
+			System.out.println("WES = "+wes);
+			System.out.println("WEE = "+wee);
+			System.out.println("ID = "+id);
+			System.out.println("firstName = "+fName);
+			System.out.println("lastName = "+lName);
+			System.out.println("Phone = "+phone);
+			System.out.println("Address = "+address);
+
 			connect.addBusinessOwner(id, fName, lName, phone, address, wds, wde, wes, wee);
 			//Add to the database the new information
 			assignOpenClosingTimesToGlobal(businessOwner.getWeekdayStart(),businessOwner.getWeekdayEnd(),businessOwner.getWeekendStart(),businessOwner.getWeekendEnd());

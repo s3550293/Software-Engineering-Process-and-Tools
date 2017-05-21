@@ -5,9 +5,17 @@ import static org.junit.Assert.assertEquals;
 import org.junit.Test;
 
 import gui.SetupController;
+import program.BusinessMenu;
 
 public class SetupControllerJUnit {
 	SetupController setupC = new SetupController();
+	BusinessMenu bMenu = new BusinessMenu();
+	@Test
+	public void assignOpenClosingTimesToWeekDays1()
+	{
+		setupC.assignOpenClosingTimesToWeekDays("6:30","7:30");
+		setupC.assignOpenClosingTimesToWeekDays("06:30","07:30");
+	}
 	@Test
 	public void splitTimeIntoThreeBlocks1()
 	{

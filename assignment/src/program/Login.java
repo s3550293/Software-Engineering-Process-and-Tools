@@ -24,7 +24,7 @@ public class Login
 	 *        -2 for incorrect password
 	 *        -3 for empty user name or password
 	 */
-	public int logInProcess(String userName, String pass,int businessID){
+	public int logInProcess(String userName, String pass){
 		DatabaseConnection connect = new DatabaseConnection();
 		User user = connect.getUser(userName);
 		if(userName.equals(user.getUsername()))
@@ -34,25 +34,17 @@ public class Login
 				if(user.getAccountType() == 2){
 					program.setUser(user);
 					log.debug("LOGGER: User 2 - "+connect.getUser(userName).getUsername());
-					return 0;
-				} 
-				if(businessID == user.getBusinessID())
-				{
-					if(user.getAccountType() == 1){
-						program.setUser(user);
-						log.debug("LOGGER: User 1 - "+connect.getUser(userName).getUsername());
-						return 1;
-					}
-					else if(user.getAccountType() == 0){
-						program.setUser(user);
-						log.debug("LOGGER: User 0 - "+connect.getUser(userName).getFullName());
-						return 2;
-					}
+					return 2;
+				} 			
+				else if(user.getAccountType() == 1){
+					program.setUser(user);
+					log.debug("LOGGER: User 1 - "+connect.getUser(userName).getUsername());
+					return 1;
 				}
-				else
-				{
-					log.debug("Incorrect UserName or Password");
-					return -2;
+				else if(user.getAccountType() == 0){
+					program.setUser(user);
+					log.debug("LOGGER: User 0 - "+connect.getUser(userName).getFullName());
+					return 0;
 				}
 			}
 			else

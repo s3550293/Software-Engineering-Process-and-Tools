@@ -11,7 +11,7 @@
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.RowConstraints?>
 
-<AnchorPane fx:id="root" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="350.0" prefWidth="600.0" stylesheets="@Theme.css" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.CustomizeController" >
+<AnchorPane fx:id="root" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="350.0" prefWidth="600.0" stylesheets="@Theme.css" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.CustomizeController">
    <children>
       <BorderPane layoutX="262.0" layoutY="186.0" prefHeight="200.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <top>
@@ -38,7 +38,7 @@
                      <children>
                         <FlowPane alignment="CENTER" prefHeight="156.0" prefWidth="267.0">
                            <children>
-                              <Button fx:id="btnUpload" mnemonicParsing="false" text="Upload Image" />
+                              <Button fx:id="btnUpload" mnemonicParsing="false" onAction="#addImage" text="Upload Image" />
                            </children>
                         </FlowPane>
                         <FlowPane alignment="CENTER" prefHeight="156.0" prefWidth="341.0" GridPane.columnIndex="1">

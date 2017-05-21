@@ -45,6 +45,7 @@ import javafx.stage.Stage;
 import javafx.util.Callback;
 import program.Booking;
 import program.BusinessMenu;
+import program.BusinessOwner;
 import program.Controller;
 import program.Customer;
 import program.DatabaseConnection;
@@ -61,6 +62,7 @@ public class BusinessController implements Initializable, IUser  {
 	private Booking booking = null;
 	int globalEmployeeOption = 0;
 	UserFactory userFactory = new UserFactory();
+	SetupController setupC = new SetupController();
 
 	public BusinessController() {}
 
@@ -152,17 +154,25 @@ public class BusinessController implements Initializable, IUser  {
 	 */
 	@Override
 	public void initialize(URL url, ResourceBundle rb) {
-		User BO = connection.getOneBusiness(program.business().getBusinessId());
+		BusinessOwner BO = connection.getOneBusiness(program.business().getBusinessId());
 		if(BO == null)
 		{
-			System.out.println("BO IS NULL - RUNNING SETUP");
 			ISetup setup = userFactory.getSetup("SetUp");
 			setup.getSetup();
 		}
 		if(connection.getOneBusiness(program.getUser().getBusinessID()).color() >= 1){
 			setCI();
 		}
-		System.out.println("BO IS NOOOOOT  NULL");
+		if(BO != null)
+		{
+			String wds = program.timeToStr(BO.getWeekdayStart());
+			String wde = program.timeToStr(BO.getWeekdayEnd());
+			String wes = program.timeToStr(BO.getWeekendStart());
+			String wee = program.timeToStr(BO.getWeekendEnd());
+			setupC.assignOpenClosingTimesToGlobal(wds, wde, wes, wee);
+		}
+		initialiseWorkTimeBusinessMenu();
+		
 		loadDaySelect();
 		loadallServices();
 			rbCurrentBook.setSelected(true);
@@ -222,6 +232,54 @@ public class BusinessController implements Initializable, IUser  {
 			listLVBookini();
 		}
 
+	public void initialiseWorkTimeBusinessMenu()
+	{
+		String MFearly = BusinessMenu.MFearly; //Start Time for day
+		String MFearlyMidDay = BusinessMenu.MFearlyMidDay; //Early Midday
+		String MFlateMidDay = BusinessMenu.MFlateMidDay; //Late midday
+		String MFlate = BusinessMenu.MFlate; // End Time for day
+		String SSearly = BusinessMenu.SSearly; //Start Time for day
+		String SSearlyMidDay = BusinessMenu.SSearlyMidDay; //Early Midday
+		String SSlateMidDay = BusinessMenu.SSlateMidDay; //Late midday
+		String SSlate = BusinessMenu.SSlate; // End Time for day
+		
+		String sSMorning = SSearly+" - "+SSearlyMidDay;
+		String sSAfternoon = SSearlyMidDay+" - "+SSlateMidDay;
+		String sSEvening = SSlateMidDay+" - "+SSlate;
+		
+		String mFMorning = MFearly +" - "+MFearlyMidDay;
+		String mFAfternoon = MFearlyMidDay +" - "+MFlateMidDay;
+		String mFEvening = MFlateMidDay +" - "+MFlate;
+		
+		btnSunMorning.setText(sSMorning);
+		btnSunAfternoon.setText(sSAfternoon);
+		btnSunEvening.setText(sSEvening);
+		
+		btnSatMorning.setText(sSMorning);
+		btnSatAfternoon.setText(sSAfternoon);
+		btnSatEvening.setText(sSEvening);
+		
+		btnMonMorning.setText(mFMorning); 
+		btnMonAfternoon.setText(mFAfternoon);
+		btnMonEvening.setText(mFEvening); 
+		
+		btnTueMorning.setText(mFMorning);
+		btnTueAfternoon.setText(mFAfternoon);
+		btnTueEvening.setText(mFEvening);
+		
+		btnWedMorning.setText(mFMorning);
+		btnWedAfternoon.setText(mFAfternoon);
+		btnWedEvening.setText(mFEvening);
+		
+		btnThurMorning.setText(mFMorning);
+		btnThurAfternoon.setText(mFAfternoon);
+		btnThurEvening.setText(mFEvening);
+		
+		btnFriMorning.setText(mFMorning);
+		btnFriAfternoon.setText(mFAfternoon);
+		btnFriEvening.setText(mFEvening);
+	}
+	
 	/**
 	 * Returns User to login
 	 * 
@@ -969,26 +1027,32 @@ public class BusinessController implements Initializable, IUser  {
 			btnMorn.setSelected(true);
 			btnAft.setSelected(true);
 			btnEven.setSelected(true);
+			
 		} else if (timeBlock == 2) {
 			btnMorn.setSelected(true);
 			btnAft.setSelected(true);
 			btnEven.setSelected(false);
+			
 		} else if (timeBlock == 3) {
 			btnMorn.setSelected(false);
 			btnAft.setSelected(true);
 			btnEven.setSelected(true);
+			
 		} else if (timeBlock == 4) {
 			btnMorn.setSelected(true);
 			btnAft.setSelected(false);
 			btnEven.setSelected(false);
+			
 		} else if (timeBlock == 5) {
 			btnMorn.setSelected(false);
 			btnAft.setSelected(true);
 			btnEven.setSelected(false);
+			
 		} else if (timeBlock == 6) {
 			btnMorn.setSelected(false);
 			btnAft.setSelected(false);
 			btnEven.setSelected(true);
+			
 		}
 	}
 	

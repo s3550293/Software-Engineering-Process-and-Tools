@@ -5,6 +5,8 @@ import java.util.ArrayList;
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 
+import gui.SetupController;
+
 
 public class BusinessMenu
 {
@@ -13,15 +15,15 @@ public class BusinessMenu
 	DatabaseConnection connect = new DatabaseConnection();
 	public BusinessMenu(){log.setLevel(Level.WARN);}
 	//Monday to Friday
-	public String MFearly = "08:00"; //Start Time for day
-	public String MFearlyMidDay = "12:00"; //Early Midday
-	public String MFlateMidDay = "16:00"; //Late midday
-	public String MFlate = "20:00"; // End Time for day
+	public static String MFearly = "08:00"; //Start Time for day
+	public static String MFearlyMidDay = "12:00"; //Early Midday
+	public static String MFlateMidDay = "16:00"; //Late midday
+	public static String MFlate = "20:00"; // End Time for day
 	//Sunday to Saturday
-	public String SSearly = "08:00"; //Start Time for day
-	public String SSearlyMidDay = "12:00"; //Early Midday
-	public String SSlateMidDay = "16:00"; //Late midday
-	public String SSlate = "20:00"; // End Time for day
+	public static String SSearly = "08:00"; //Start Time for day
+	public static String SSearlyMidDay = "12:00"; //Early Midday
+	public static String SSlateMidDay = "16:00"; //Late midday
+	public static String SSlate = "20:00"; // End Time for day
 	
 	/**
 	 * @author Luke Mason
@@ -361,6 +363,22 @@ public class BusinessMenu
 				public boolean addDayWorkingTime(int employeeID,int dayOfWeek,boolean morning, boolean afternoon, boolean evening)
 				{
 					log.info("IN addDayWorkingTime");
+					Employee emp = connect.getEmployee(employeeID);
+					int businessID = emp.getBusinessID();
+					BusinessOwner BO = connect.getOneBusiness(businessID);
+					if(BO == null)
+					{
+						return false;
+					}
+					if(BO != null)
+					{
+						String wds = controller.timeToStr(BO.getWeekdayStart());
+						String wde = controller.timeToStr(BO.getWeekdayEnd());
+						String wes = controller.timeToStr(BO.getWeekendStart());
+						String wee = controller.timeToStr(BO.getWeekendEnd());
+						SetupController setupC = new SetupController();
+						setupC.assignOpenClosingTimesToGlobal(wds, wde, wes, wee);
+					}
 					// -Day- is not used but is there if needed
 					String[] array = new String[2];
 					int check = getWorkTimes(morning, afternoon, evening);
@@ -387,7 +405,6 @@ public class BusinessMenu
 						log.info("OUT addDayWorkingTime");
 						return false;//day 0 does not exist, day 8 does not exist
 					}
-					Employee emp = connect.getEmployee(employeeID);
 					connect.addEmployeeWorkingTime(employeeID, dayOfWeek, array[0], array[1],emp.getBusinessID());
 					log.info("OUT addDayWorkingTime");
 					return true;
@@ -410,6 +427,7 @@ public class BusinessMenu
 					//0 = weekdays, 1 = weekend
 					if(dayBlock == 0)
 					{
+						log.debug("Work Time is WeekDay");
 						early = MFearly; //Start Time for day
 						earlyMidDay = MFearlyMidDay; //Early Midday
 						lateMidDay = MFlateMidDay; //Late midday
@@ -418,6 +436,7 @@ public class BusinessMenu
 					}
 					else if(dayBlock == 1)
 					{
+						log.debug("Work Time is WeekEnd");
 						early = SSearly; //Start Time for day
 						earlyMidDay = SSearlyMidDay; //Early Midday
 						lateMidDay = SSlateMidDay; //Late midday

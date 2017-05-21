@@ -37,6 +37,7 @@ import program.Database;
 import program.DatabaseConnection;
 import program.Login;
 import program.Service;
+import program.User;
 
 
 public class LoginController implements Initializable {
@@ -133,53 +134,68 @@ public class LoginController implements Initializable {
 	@FXML
 	public void loginAction() {
 		Stage loginstage = (Stage) btnLogin.getScene().getWindow();
-		
-		int loginCheck = loginFuction.logInProcess(txtUserLogin.getText(), txtPassLogin.getText());
-		if(loginCount < 10){
-			if(loginCheck == -2){
-				lblError.setVisible(true);
-				loginCount += 1;
-				log.debug("LOGGER: login count - "+loginCount);
-			}
-			else if(loginCheck == 1 || loginCheck == 0 || loginCheck == 2){
-				log.debug("LOGGER: Login is equal to 1 or 0");
-				lblError.setVisible(false);
-				loginstage.hide();
-				if (program.getUser().getAccountType() == 1) {
-					if (cmbBusiness.getSelectionModel().getSelectedItem() == null) {
-			            program.messageBox("ERROR", "Error", "Please Select a business", "");
-			        }
-					else if(program.getUser().getBusinessID() == cmbVal().getBusinessId())
-					{
-						program.business(cmbVal());
-						IUser businessowner = userFactory.getUser("BusinessOwner");
-						businessowner.getUserWindow();
-					}
-				} else if(program.getUser().getAccountType() == 0) {
-					if (cmbBusiness.getSelectionModel().getSelectedItem() == null) {
-			            program.messageBox("ERROR", "Error", "Please Select a business", "");
-			        }
-					else
-					{
-						program.business(cmbVal());
-						IUser customer = userFactory.getUser("Customer");
-						customer.getUserWindow();
-					}
-				} else if(program.getUser().getAccountType() == 2){
-					IUser admin = userFactory.getUser("SuperUser");
-					admin.getUserWindow();
-				}
-			}
-			else{
-				log.debug("LOGGER: Login returning a value different from -2, 1 or 0");
-				lblError.setVisible(true);
-				loginCount += 1;
+		int businessID = -1;
+		if(txtUserLogin.getText().equals("root"))
+		{
+			businessID = 0;
+		}
+		else
+		{
+			if (cmbBusiness.getSelectionModel().getSelectedItem() == null) {
+	            program.messageBox("ERROR", "Error", "Please Select a business", "");
+	            businessID = -1;
+	        }
+			else
+			{
+				businessID = cmbVal().getBusinessId();
+				System.out.println("BUSINESS ID = "+businessID);
 			}
 		}
-		else{
-			program.messageBox("WARN", "Login Error", "Maximum login attempts reached", "The maximum login attemps has been reached, the program will now terminate");
-			Platform.exit();
-			System.exit(0);
+		if(businessID != -1)
+		{
+			int loginCheck = loginFuction.logInProcess(txtUserLogin.getText(), txtPassLogin.getText(), businessID);
+			if(loginCount < 10)
+			{
+				if(loginCheck == -2 || loginCheck == -4){
+					lblError.setVisible(true);
+					loginCount += 1;
+					log.debug("LOGGER: login count: "+loginCount);
+				}
+				else if(loginCheck == 1 || loginCheck == 0 || loginCheck == 2){
+					log.debug("LOGGER: Login is equal to 1 or 0 or 2");
+					lblError.setVisible(false);
+					loginstage.hide();
+					if (program.getUser().getAccountType() == 1) 
+					{
+						log.debug("LOGGER: Account Type = 1");
+							IUser businessowner = userFactory.getUser("BusinessOwner");
+							businessowner.getUserWindow();			
+					} 
+					else if(program.getUser().getAccountType() == 0) 
+					{		
+						log.debug("LOGGER: Account Type = 0");
+							IUser customer = userFactory.getUser("Customer");
+							customer.getUserWindow();
+					} 
+					else if(program.getUser().getAccountType() == 2)
+					{
+						log.debug("LOGGER: Account Type = 2");
+						IUser admin = userFactory.getUser("SuperUser");
+						admin.getUserWindow();
+					}
+				}
+				else{
+					log.debug("LOGGER: Login returning a value different from -2, 1 or 0");
+					lblError.setVisible(true);
+					loginCount += 1;
+				}
+			}
+			else
+			{
+				program.messageBox("WARN", "Login Error", "Maximum login attempts reached", "The maximum login attemps has been reached, the program will now terminate");
+				Platform.exit();
+				System.exit(0);
+			}
 		}
 		txtUserLogin.setText("");
 		txtPassLogin.setText("");
@@ -217,17 +233,20 @@ public class LoginController implements Initializable {
 		DatabaseConnection connect = new DatabaseConnection();
 		BusinessMenu bMenu = new BusinessMenu();
 			
-		connect.addUser("heyhey", "S123456789", 1,2);
-		connect.createBusiness(2,"YarraVille Clinic");
-		connect.addUser("William", "Apples22", 0,2); // customer attached to Business 2
-		connect.addUser("Hannah", "Apples22", 0,2); // customer attached to Business 2
+		connect.createBusiness("YarraVille Clinic");
+		Business business = connect.getBusiness("YarraVille Clinic");
+		int businessID = business.getBusinessId();
+		
+		connect.addUser("heyhey", "S123456789", 1,businessID);
+		connect.addUser("William", "Apples22", 0,businessID); // customer attached to Business 2
+		connect.addUser("Hannah", "Apples22", 0,businessID); // customer attached to Business 2
 		connect.addUserDetails(3, "William", "Porter", "will@mail.com", "0452368593", "01/01/2002", "Male");
 		connect.addUserDetails(4, "Hannah", "Hawlking", "hannah@mail.com", "0452136859", "20/04/1995", "Famale");
 		connect.addUser("Test1234", "Apples22", 0,6);
-		connect.addEmployee("Luke Charles",25,2);
-		connect.addEmployee("David Smith",26.6,2);
-		connect.addEmployee("Will Turner",15,2);
-		connect.addEmployee("Rob Pointer",14,2);
+		connect.addEmployee("Luke Charles",25,businessID);
+		connect.addEmployee("David Smith",26.6,businessID);
+		connect.addEmployee("Will Turner",15,businessID);
+		connect.addEmployee("Rob Pointer",14,businessID);
 		connect.addEmployee("Adam Mason",12,3);
 		connect.addEmployee("David Chang",17,3);
 		connect.addEmployee("Joseph Tun",17,4);

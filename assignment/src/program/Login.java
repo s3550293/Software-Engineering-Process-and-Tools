@@ -4,6 +4,8 @@ package program;
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 
+import gui.IInterface.IUser;
+
 public class Login
 {
 	private static Logger log = Logger.getLogger(Login.class);
@@ -24,27 +26,42 @@ public class Login
 	 *        -2 for incorrect password
 	 *        -3 for empty user name or password
 	 */
-	public int logInProcess(String userName, String pass){
+	public int logInProcess(String userName, String pass, int businessID){
 		DatabaseConnection connect = new DatabaseConnection();
-		User user = connect.getUser(userName);
+	
+		User user = connect.getUser(userName,businessID);
+		log.info(userName+"\n");
+		log.info(pass+"\n");
+		log.info(businessID+"\n");	
+		if(user == null)
+		{
+			log.debug("NO USER FOUND WITH THAT INPUT\n");
+			return -4;
+		}
 		if(userName.equals(user.getUsername()))
 		{
 			if(pass.equals(user.getPassword()))
 			{
-				if(user.getAccountType() == 2){
-					program.setUser(user);
-					log.debug("LOGGER: User 2 - "+connect.getUser(userName).getUsername());
-					return 2;
-				} 			
-				else if(user.getAccountType() == 1){
-					program.setUser(user);
-					log.debug("LOGGER: User 1 - "+connect.getUser(userName).getUsername());
-					return 1;
-				}
-				else if(user.getAccountType() == 0){
-					program.setUser(user);
-					log.debug("LOGGER: User 0 - "+connect.getUser(userName).getFullName());
-					return 0;
+				if(businessID == user.getBusinessID())
+				{
+					if(user.getAccountType() == 2){
+						program.setUser(user);
+						program.setBusiness(connect.getBusiness(businessID));
+						log.debug("LOGGER: User 2 - "+connect.getUser(userName,businessID).getUsername());
+						return 2;
+					} 			
+					else if(user.getAccountType() == 1){
+						program.setUser(user);
+						program.setBusiness(connect.getBusiness(businessID));
+						log.debug("LOGGER: User 1 - "+connect.getUser(userName,businessID).getUsername());
+						return 1;
+					}
+					else if(user.getAccountType() == 0){
+						program.setUser(user);
+						program.setBusiness(connect.getBusiness(businessID));
+						log.debug("LOGGER: User 0 - "+connect.getUser(userName,businessID).getUsername());
+						return 0;
+					}
 				}
 			}
 			else

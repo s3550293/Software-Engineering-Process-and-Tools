@@ -31,10 +31,13 @@ public class Controller
 	public Booking getBooking(){return _booking;}
 	Scanner kb = new Scanner(System.in);
 	
-	private static Business bis = new Business(0,"null");
+	private static Business bis = new Business();
 	public void business(Business b){bis = b;}
 	public Business business(){return bis;}
-
+	public void setBusiness(Business business)
+	{
+		bis = business;
+	}
 	/**
 	 * @author Luke Mason
 	 * Checks each letter in the string and see's if the letter is not in the alphabet(lower case) and is not in the alphabet(Upper case)

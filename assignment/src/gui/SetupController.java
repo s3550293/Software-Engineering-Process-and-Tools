@@ -40,7 +40,7 @@ import program.Service;
 public class SetupController implements Initializable, ISetup {
 	public final static Logger log = Logger.getLogger(SetupController.class);
 	private final Controller program = new Controller();
-	private static Business business = new Business();
+	Business business = program.business();
 	private static BusinessOwner businessOwner = new BusinessOwner();
 	public final Register regpro = new Register();
 	public final BusinessMenu bMenu = new BusinessMenu();
@@ -78,37 +78,52 @@ public class SetupController implements Initializable, ISetup {
 	 * @param weekendStart
 	 * @param weekendEnd
 	 */
-	public void assignOpenClosingTimesToGlobal(Date weekdayStart ,Date weekdayEnd, Date weekendStart ,Date weekendEnd)
+	public int assignOpenClosingTimesToGlobal(Date weekdayStart ,Date weekdayEnd, Date weekendStart ,Date weekendEnd)
 	{
 		//Change Dates to Strings
 		String MFOpen = program.timeToStr(weekdayStart);
 		String MFClose = program.timeToStr(weekdayEnd);
 		String SSOpen = program.timeToStr(weekendStart);
 		String SSClose = program.timeToStr(weekendEnd);
-		System.out.println(MFOpen);
-		System.out.println(MFClose);
-		System.out.println(SSOpen);
-		System.out.println(SSClose);
 		//assign times for weekends and weekdays
-		assignOpenClosingTimesToWeekDays(MFOpen, MFClose);
-		assignOpenClosingTimesToWeekEnds(SSOpen, SSClose);
+		int a = assignOpenClosingTimesToWeekDays(MFOpen, MFClose);
+		if(a == 0)
+		{
+			return 0;
+		}
+		int b = assignOpenClosingTimesToWeekEnds(SSOpen, SSClose);
+		if(b == 0)
+		{
+			return 0;
+		}
+		return 1;
 	}
 	
-	public void assignOpenClosingTimesToWeekDays(String MFOpen,String MFClose)
+	public int assignOpenClosingTimesToWeekDays(String MFOpen,String MFClose)
 	{
 		String[] times = splitTimeIntoThreeBlocks(MFOpen, MFClose);
+		if(times[0].equals(""))
+		{
+			return 0;
+		}
 		bMenu.MFearly = times[0];
 		bMenu.MFearlyMidDay = times[1];
 		bMenu.MFlateMidDay = times[2];
 		bMenu.MFlate = times[3];
+		return 1;
 	}
-	public void assignOpenClosingTimesToWeekEnds(String SSOpen,String SSClose)
+	public int assignOpenClosingTimesToWeekEnds(String SSOpen,String SSClose)
 	{
 		String[] times = splitTimeIntoThreeBlocks(SSOpen, SSClose);
+		if(times[0].equals(""))
+		{
+			return 0;
+		}
 		bMenu.SSearly = times[0];
 		bMenu.SSearlyMidDay = times[1];
 		bMenu.SSlateMidDay = times[2];
 		bMenu.SSlate = times[3];
+		return 1;
 	}
 	
 	/**
@@ -143,6 +158,7 @@ public class SetupController implements Initializable, ISetup {
 		if((bbb - aaa < MINIMUM_OPEN_TIME)||(aaa > 1380 || bbb > 1440))
 		{
 			log.warn("endTime, startTime are invalid\n");
+			program.messageBox("ERROR", "Error", "Invalid choice - Business must be open for at least 1 hour", "");
 			return times;
 		}
 		//Getting time minutes between startTime aaa and endTime bbb
@@ -220,6 +236,8 @@ public class SetupController implements Initializable, ISetup {
 				program.messageBox("ERROR", "Error", "Address field is empty or contains an invalid character", "");
 				return;
 			}
+			businessOwner.setBusinessID(business.getBusinessId());
+			log.info("BusinessID = "+business.getBusinessId()+"\n");
 			businessOwner.setFName(txtFNam.getText());
 			businessOwner.setLName(txtLNam.getText());
 			businessOwner.setPhone(txtBPho.getText());
@@ -268,7 +286,7 @@ public class SetupController implements Initializable, ISetup {
 			String wde = program.timeToStr(businessOwner.getWeekdayEnd());
 			String wes = program.timeToStr(businessOwner.getWeekendStart());
 			String wee = program.timeToStr(businessOwner.getWeekendEnd());
-			int id = business.getBusinessId();
+			int id = businessOwner.getBusinessID();
 			String fName = businessOwner.getFName();
 			String lName = businessOwner.getLName();
 			String phone = businessOwner.getPhone();
@@ -284,9 +302,13 @@ public class SetupController implements Initializable, ISetup {
 			System.out.println("Phone = "+phone);
 			System.out.println("Address = "+address);
 
-			connect.addBusinessOwner(id, fName, lName, phone, address, wds, wde, wes, wee);
 			//Add to the database the new information
-			assignOpenClosingTimesToGlobal(businessOwner.getWeekdayStart(),businessOwner.getWeekdayEnd(),businessOwner.getWeekendStart(),businessOwner.getWeekendEnd());
+			int check = assignOpenClosingTimesToGlobal(businessOwner.getWeekdayStart(),businessOwner.getWeekdayEnd(),businessOwner.getWeekendStart(),businessOwner.getWeekendEnd());
+			if(check == 0)
+			{
+				return;
+			}
+			connect.addBusinessOwner(id, fName, lName, phone, address, wds, wde, wes, wee);
 			stkpTimeSlot.setVisible(false);
 			stkpSelectColor.setVisible(true);
 			return;

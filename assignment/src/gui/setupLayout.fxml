@@ -17,7 +17,7 @@
 
 <AnchorPane fx:id="root" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="539.0" stylesheets="@Theme.css" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.SetupController">
    <children>
-      <StackPane fx:id="stkpWelcome" prefHeight="150.0" prefWidth="200.0" visible="false" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+      <StackPane fx:id="stkpWelcome" prefHeight="150.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
             <BorderPane prefHeight="200.0" prefWidth="200.0">
                <bottom>
@@ -300,33 +300,9 @@
             </BorderPane>
          </children>
       </StackPane>
-      <StackPane fx:id="stkpSelectColor" prefHeight="150.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+      <StackPane fx:id="stkpSelectColor" prefHeight="150.0" prefWidth="200.0" visible="false" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
-            <BorderPane prefHeight="200.0" prefWidth="200.0">
-               <bottom>
-                  <GridPane prefHeight="43.0" prefWidth="600.0" BorderPane.alignment="CENTER">
-                     <columnConstraints>
-                        <ColumnConstraints hgrow="SOMETIMES" maxWidth="299.0" minWidth="10.0" prefWidth="299.0" />
-                        <ColumnConstraints hgrow="SOMETIMES" maxWidth="543.0" minWidth="10.0" prefWidth="301.0" />
-                     </columnConstraints>
-                     <rowConstraints>
-                        <RowConstraints minHeight="10.0" vgrow="SOMETIMES" />
-                     </rowConstraints>
-                     <children>
-                        <FlowPane alignment="CENTER_RIGHT" prefHeight="60.0" prefWidth="600.0" GridPane.columnIndex="1">
-                           <children>
-                              <Button mnemonicParsing="false" onAction="#openRun" text="Finish">
-                                 <FlowPane.margin>
-                                    <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
-                                 </FlowPane.margin>
-                              </Button>
-                           </children>
-                        </FlowPane>
-                        <FlowPane alignment="CENTER_LEFT" prefHeight="200.0" prefWidth="200.0" />
-                     </children>
-                  </GridPane>
-               </bottom>
-            </BorderPane>
+            <BorderPane prefHeight="200.0" prefWidth="200.0" />
             <BorderPane prefHeight="200.0" prefWidth="200.0">
                <top>
                   <Label styleClass="label-header" text="Customization" BorderPane.alignment="CENTER" />
@@ -376,7 +352,7 @@
                                     <Label styleClass="label-Subheader" text="UI Color" />
                                  </children>
                               </FlowPane>
-                              <FlowPane alignment="CENTER" prefHeight="67.0" prefWidth="600.0" GridPane.rowIndex="1">
+                              <FlowPane alignment="CENTER" prefHeight="89.0" prefWidth="539.0" GridPane.rowIndex="1">
                                  <children>
                                     <Button fx:id="btnBlue" mnemonicParsing="false" prefWidth="50.0" styleClass="blueB">
                                        <FlowPane.margin>
@@ -405,6 +381,29 @@
                      </children>
                   </GridPane>
                </center>
+               <bottom>
+                  <GridPane prefHeight="43.0" prefWidth="600.0" BorderPane.alignment="CENTER">
+                     <columnConstraints>
+                        <ColumnConstraints hgrow="SOMETIMES" maxWidth="299.0" minWidth="10.0" prefWidth="299.0" />
+                        <ColumnConstraints hgrow="SOMETIMES" maxWidth="543.0" minWidth="10.0" prefWidth="301.0" />
+                     </columnConstraints>
+                     <rowConstraints>
+                        <RowConstraints minHeight="10.0" vgrow="SOMETIMES" />
+                     </rowConstraints>
+                     <children>
+                        <FlowPane alignment="CENTER_RIGHT" prefHeight="60.0" prefWidth="600.0" GridPane.columnIndex="1">
+                           <children>
+                              <Button mnemonicParsing="false" onAction="#openRun" text="Finish">
+                                 <FlowPane.margin>
+                                    <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                                 </FlowPane.margin>
+                              </Button>
+                           </children>
+                        </FlowPane>
+                        <FlowPane alignment="CENTER_LEFT" prefHeight="200.0" prefWidth="200.0" />
+                     </children>
+                  </GridPane>
+               </bottom>
             </BorderPane>
          </children>
       </StackPane>

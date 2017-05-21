@@ -10,6 +10,7 @@ import java.util.ResourceBundle;
 
 import org.apache.log4j.Logger;
 
+import gui.IInterface.ISetup;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -36,7 +37,7 @@ import program.DatabaseConnection;
 import program.Register;
 import program.Service;
 
-public class SetupController implements Initializable {
+public class SetupController implements Initializable, ISetup {
 	public final static Logger log = Logger.getLogger(SetupController.class);
 	private final Controller program = new Controller();
 	private static Business business = new Business();

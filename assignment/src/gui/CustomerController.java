@@ -35,6 +35,7 @@ import javafx.scene.control.ToggleButton;
 import javafx.scene.control.ToggleGroup;
 import javafx.scene.image.Image;
 import javafx.scene.control.Alert.AlertType;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.StackPane;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
@@ -56,6 +57,9 @@ public class CustomerController  implements Initializable, IUser{
 	private static Booking newBook = new Booking();
 	
 	public CustomerController(){log.setLevel(Level.DEBUG);}
+	
+	@FXML
+	AnchorPane root;
 	
 	@FXML
 	ListView<Booking> listBookings;
@@ -101,6 +105,7 @@ public class CustomerController  implements Initializable, IUser{
 		if(program.bmb == true){
 			btnRToOwnMen.setVisible(true);
 		}
+		setCI();
 		popListBook();
 		lblCustomerName.setText(connection.getCustomer(program.getUser().getID()).getFullName());
 		cmbDayBooking.valueProperty().addListener(new ChangeListener<Date>() {
@@ -132,6 +137,12 @@ public class CustomerController  implements Initializable, IUser{
 		loadDaySelect();
 		listTogTDini(program.business().getBusinessId());
 		listTogTSini(program.business().getBusinessId());
+	}
+	
+	@Override
+	public void setCI() {
+		root.setStyle(program.setColor());
+		
 	}
 	
 	private void popListBook(){

@@ -148,7 +148,7 @@ public class LoginController implements Initializable {
 				if (program.getUser().getAccountType() == 1) {
 					if (cmbBusiness.getSelectionModel().getSelectedItem() == null) {
 			            program.messageBox("ERROR", "Error", "Please Select a business", "");
-			            return;
+			            break;
 			        }
 					program.business(cmbVal());
 					IUser businessowner = userFactory.getUser("BusinessOwner");
@@ -156,7 +156,7 @@ public class LoginController implements Initializable {
 				} else if(program.getUser().getAccountType() == 0) {
 					if (cmbBusiness.getSelectionModel().getSelectedItem() == null) {
 			            program.messageBox("ERROR", "Error", "Please Select a business", "");
-			            return;
+			            break;
 			        }
 					program.business(cmbVal());
 					IUser customer = userFactory.getUser("Customer");

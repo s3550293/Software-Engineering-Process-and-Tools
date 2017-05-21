@@ -25,7 +25,7 @@
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.StackPane?>
 
-<AnchorPane fx:id="root" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="650.0" prefWidth="800.0" stylesheets="@Theme.css" xmlns="http://javafx.com/javafx/8.0.121" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.BusinessController">
+<AnchorPane fx:id="root" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="650.0" prefWidth="800.0" stylesheets="@Theme.css" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.BusinessController">
    <children>
    <StackPane layoutX="27.0" prefHeight="150.0" prefWidth="773.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
@@ -38,9 +38,9 @@
                           <MenuItem mnemonicParsing="false" text="Logout" />
                         </items>
                       </Menu>
-                      <Menu mnemonicParsing="false" text="Help">
+                      <Menu mnemonicParsing="false" text="Edit">
                         <items>
-                          <MenuItem mnemonicParsing="false" text="About" />
+                          <MenuItem mnemonicParsing="false" onAction="#showCustom" text="Customise" />
                         </items>
                       </Menu>
                     </menus>

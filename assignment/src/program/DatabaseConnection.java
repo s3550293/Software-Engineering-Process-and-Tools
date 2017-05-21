@@ -1,5 +1,11 @@
 package program;
 
+import java.awt.image.BufferedImage;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.sql.Blob;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -8,6 +14,8 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Date;
+
+import javax.imageio.ImageIO;
 
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
@@ -1219,7 +1227,7 @@ public class DatabaseConnection
             val[0] = o.getString(2);
             val[1] = o.getString(3);
             val[2] = o.getString(4);
-            val[2] = o.getString(5);
+            val[3] = o.getString(5);
 
         }
         catch(SQLException sqle)
@@ -1237,4 +1245,31 @@ public class DatabaseConnection
 		log.info("OUT Updated User\n");
 	}
 	
+	public void addImage(String val, int id){
+		log.info("IN Update UBO\n");
+		String query = "UPDATE BUSINESS_OWNER SET image = '"+val+"' WHERE ID = "+id+";";
+		executeQuery(query, "Image for " + id + " updated\n");
+		log.info("OUT added image User\n");
+	}
+    
+    
+    public String getlogo(int id){
+    	BufferedImage bis = null;
+		String query = "SELECT image FROM BUSINESS_OWNER WHERE ID = "+id; 
+		String val = null;
+		try (Connection connect = this.connect(); PreparedStatement  inject  = connect.prepareStatement(query)){
+			
+			ResultSet o = inject.executeQuery();
+			while (o.next())
+			{
+				val = o.getString(1);
+				
+			}
+			
+		}catch(SQLException sqle)
+		{
+			log.warn(sqle.getMessage());
+		}
+		return val;
+    }
 }

@@ -23,12 +23,10 @@ public class PreLoader extends Preloader{
         this.stage = stage;
         stage.setScene(createPreloaderScene());
         stage.show(); 
-        /*
         File varTmpDir = new File(System.getProperty("user.home")+"/resourcing");
         if(varTmpDir.exists() == false) {
             new File(System.getProperty("user.home")+"/resourcing").mkdir();
         }
-        */
     }
 
     @Override

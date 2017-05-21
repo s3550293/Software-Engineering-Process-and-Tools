@@ -1,6 +1,8 @@
 package gui;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
@@ -27,6 +29,7 @@ import javafx.scene.control.ListView;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.util.Callback;
@@ -47,6 +50,10 @@ public class LoginController implements Initializable {
 	private DatabaseConnection con = new DatabaseConnection();
 	private int loginCount = 0;
 	UserFactory userFactory = new UserFactory();
+	
+	@FXML
+	ImageView imgView;
+	
 	@FXML
 	TextField txtUserLogin;
 	@FXML
@@ -76,7 +83,16 @@ public class LoginController implements Initializable {
 			@Override
 			public void changed(ObservableValue<? extends Business> observable, Business oldValue, Business newValue) {
 				if (newValue != null) {
-					//TODO
+					if(con.getlogo(newValue.getBusinessId())!=null){
+						FileInputStream fis;
+						try {
+							fis = new FileInputStream(con.getlogo(newValue.getBusinessId()));
+							Image image = new Image(fis);
+				            imgView.setImage(image);
+						} catch (FileNotFoundException e) {
+							e.printStackTrace();
+						}
+					}
 				}
 			}
 		});

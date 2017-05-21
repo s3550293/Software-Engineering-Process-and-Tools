@@ -135,7 +135,7 @@ public class Database
 				+ "weekendStart VARCHAR(20),"
 				+ "weekendEnd VARCHAR(20),"
 				+ "color integer,"
-				+ "image blob,"
+				+ "image text,"
 				+ "FOREIGN KEY(ID) REFERENCES USERS(userID),"
 				+ "FOREIGN KEY(color) REFERENCES COLOR(ID));";
 		String queryColor = "CREATE TABLE IF NOT EXISTS COLOR ("

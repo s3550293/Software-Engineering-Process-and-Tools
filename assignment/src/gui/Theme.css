@@ -51,6 +51,37 @@
     -fx-text-fill: -fx-base3;
 }
 
+/*MENU BAR*/
+.menu-bar {
+    -fx-background-color: derive(-fx-base2,18%);
+}
+
+.context-menu {
+    -fx-background-color: derive(-fx-base2,50%);
+}
+
+.menu:hover{
+    -fx-background-color: -fx-base1;
+}
+.menu:focused
+{
+    -fx-background-color: -fx-base1;
+}
+.menu{
+    -fx-selection-bar: -fx-base1;
+}
+
+.menu-item:focused{
+    -fx-background-color: -fx-base1;
+}
+
+.menu-bar .label {
+    -fx-font-size: 14pt;
+    -fx-font-family: "Segoe UI Light";
+    -fx-text-fill: -fx-base4;
+    -fx-opacity: 0.9;
+}
+
 
 
 /*LABELS*/

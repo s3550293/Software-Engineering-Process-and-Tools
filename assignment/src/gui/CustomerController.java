@@ -125,6 +125,10 @@ public class CustomerController  implements Initializable, IUser{
 			String wee = program.timeToStr(BO.getWeekendEnd());
 			setupC.assignOpenClosingTimesToGlobal(wds, wde, wes, wee);
 		}
+		ToggleGroup group = new ToggleGroup();
+		togbtnMorn.setToggleGroup(group);
+		togbtnAft.setToggleGroup(group);
+		togbtnEven.setToggleGroup(group);
 		popListBook();
 		lblCustomerName.setText(connection.getCustomer(program.getUser().getID()).getFullName());
 		cmbDayBooking.valueProperty().addListener(new ChangeListener<Date>() {
@@ -153,7 +157,15 @@ public class CustomerController  implements Initializable, IUser{
 				}
 			}
 		});
+		group.selectedToggleProperty().addListener(new ChangeListener<Toggle>() {
+			public void changed(ObservableValue<? extends Toggle> ov, Toggle old_toggle, Toggle new_toggle) {
+				popTime();
+			}
+		});
+		togbtnMorn.setSelected(true);
 		loadDaySelect();
+		loadallServices();
+		popTime();
 		//listTogTDini(program.business().getBusinessId());
 		//listTogTSini(program.business().getBusinessId());
 	}
@@ -198,7 +210,6 @@ public class CustomerController  implements Initializable, IUser{
 		Calendar date = Calendar.getInstance();
 		ArrayList<Date> dateArray = new ArrayList<>();
 			for (int i = 0; i < 7; i++) {
-				log.debug("LOGGER: Date - " + date);
 				dateArray.add(date.getTime());
 				date.add(Calendar.DAY_OF_MONTH, 1);
 		}
@@ -388,7 +399,7 @@ public class CustomerController  implements Initializable, IUser{
 	}
 	
 	private void popTime(){
-		ArrayList<String> arr = new ArrayList<>();
+		ArrayList<String> arr = new ArrayList<>(checkBookingTime(program.business().getBusinessId()));
 		ObservableList<String> list = FXCollections.observableList(arr);
 		log.debug("LOGGER: List length:" + arr.size());
 		if (list != null) {
@@ -402,8 +413,8 @@ public class CustomerController  implements Initializable, IUser{
 						protected void updateItem(String t, boolean bln) {
 							super.updateItem(t, bln);
 							if (t != null) {
-								log.debug("LOGGER: added:" );
-								setText("");
+								log.debug("LOGGER: added:" +t);
+								setText(t);
 							}
 						}
 					};
@@ -428,19 +439,35 @@ public class CustomerController  implements Initializable, IUser{
 		Date dstart =  open.getTime();
 		Date dclose =  close.getTime();
 		String[] times = program.splitTimeIntoThreeBlocks(program.timeToStr(dstart), program.timeToStr(dclose));
+		log.debug("Start: "+times[0]+" "+times[1]+" "+times[2]+" "+times[3]+" ");
 		if(slot == 1){
-			open.setTime(program.strToDate(times[1]));
-			close.setTime(program.strToDate(times[2]));
+			open.setTime(program.strToTime(times[0]));
+			close.setTime(program.strToTime(times[1]));
+			close.add(Calendar.MINUTE, -10);
 		}
 		else if(slot == 2){
-			open.setTime(program.strToDate(times[2]));
-			close.setTime(program.strToDate(times[3]));
+			open.setTime(program.strToTime(times[1]));
+			open.add(Calendar.MINUTE, -10);
+			close.setTime(program.strToTime(times[2]));
+			close.add(Calendar.MINUTE, -10);
 		}
 		else if(slot == 3){
-			open.setTime(program.strToDate(times[3]));
-			close.setTime(program.strToDate(times[4]));
+			open.setTime(program.strToTime(times[2]));
+			open.add(Calendar.MINUTE, -20);
+			close.setTime(program.strToTime(times[3]));
 		}
-		//while()
+		String str;
+		while(open.compareTo(close) != 1){
+			if(open.get(Calendar.MINUTE) !=0){
+				str = open.get(Calendar.HOUR_OF_DAY) + ":" + open.get(Calendar.MINUTE);
+			}
+			else{
+				str = open.get(Calendar.HOUR_OF_DAY) + ":" + open.get(Calendar.MINUTE) + "0";
+			}
+			arr.add(str);
+			log.debug("BOOKING TIMES: str");
+			open.add(Calendar.MINUTE, 30);
+		}
 		return arr;
 	}
 
@@ -448,50 +475,25 @@ public class CustomerController  implements Initializable, IUser{
 	 * Check and display booking time during booking
 	 * Disable toggle button, after booking
 	 */
-	private void checkBookingTime(int businessID) {
-
-		if (newBook.getDate() != null) {
-			Date stD = null;
-			Date enD = null;
-			List<Booking> bookings = new ArrayList<Booking>(connection.getAllBooking(businessID));
-			for (Booking b : bookings) {
-				stD = b.getStartTime();
-				enD = b.getEndTime();
-				log.debug("LOGGER: start time - " + stD + " end time - " + enD);
-				if (b.getStatus() != "canceled") {
-					if (program.dateToStr(newBook.getDate()).equals(program.dateToStr(b.getDate()))) {
+	private ArrayList<String> checkBookingTime(int businessID) {
+		ArrayList<String> arr = new ArrayList<>();
 						log.debug("LOGGER: Dates Match");
 						if (togbtnMorn.isSelected()) {
-							checkStartTimeTogglesOnBooking(stD);
-							
-							checkoverLap(true, enD, "", 
-									"8:31", togbtnTimeSlot2.getText(), "9:01", togbtnTimeSlot3.getText(), 
-									"9:31", togbtnTimeSlot4.getText(), "10:01", togbtnTimeSlot5.getText(),
-									"10:31", togbtnTimeSlot6.getText(), "11:01", togbtnTimeSlot7.getText(), 
-									"11:31", togbtnTimeSlot8.getText());
-							
-							log.debug("LOGGER: Button 8 date - " + program.strToTime(togbtnTimeSlot8.getText()));
+							arr = getTimes(1);
+							arr = checkStartTimeTogglesOnBooking(arr);
+							arr = checkoverLap(true,arr);
 						} else if (togbtnAft.isSelected()) {
-							checkStartTimeTogglesOnBooking(stD);
-							checkoverLap(true, enD, togbtnTimeSlot1.getText(), 
-									"12:31", togbtnTimeSlot2.getText(), "13:01", togbtnTimeSlot3.getText(), 
-									"13:31", togbtnTimeSlot4.getText(), "14:01", togbtnTimeSlot5.getText(),
-									"14:31", togbtnTimeSlot6.getText(), "15:01", togbtnTimeSlot7.getText(), 
-									"15:31", togbtnTimeSlot8.getText());
+							arr = getTimes(2);
+							arr = checkStartTimeTogglesOnBooking(arr);
+							arr = checkoverLap(true,arr);
 							
 						} else if (togbtnEven.isSelected()) {
-							checkStartTimeTogglesOnBooking(stD);
-							checkoverLap(true, enD, togbtnTimeSlot1.getText(), 
-									"16:31", togbtnTimeSlot2.getText(), "17:01", togbtnTimeSlot3.getText(), 
-									"17:31", togbtnTimeSlot4.getText(), "18:01", togbtnTimeSlot5.getText(),
-									"18:31", togbtnTimeSlot6.getText(), "19:01", togbtnTimeSlot7.getText(), 
-									"19:31", togbtnTimeSlot8.getText());
+							arr = getTimes(3);
+							arr = checkStartTimeTogglesOnBooking(arr);
+							arr = checkoverLap(true, arr);
 						} else {
 						}
-					}
-				}
-			}
-		}
+		return arr;
 	}
 	
 	/**
@@ -514,229 +516,56 @@ public class CustomerController  implements Initializable, IUser{
 	 * @param timeslot8B
 	 * @param timeslot8
 	 */
-	public void checkoverLap
-			(Boolean mornshift, Date enD, String timeslot1,
-			String timeslot2B, String timeslot2, String timeslot3B, String timeslot3, 
-			String timeslot4B, String timeslot4, String timeslot5B, String timeslot5, 
-			String timeslot6B, String timeslot6, String timeslot7B, String timeslot7,
-			String timeslot8B, String timeslot8){
+	public ArrayList<String> checkoverLap(Boolean mornshift, ArrayList<String> arr){
 		
 		/*
 		 *  In morning shift, the first timeslot cannot be disable initially.
 		 *  but in other shifts, the first timeslot may be disable as the booking session is carried over from the previous shift.
 		 */
-		if(!mornshift){
-			if (enD.after(program.strToTime(timeslot1))
-					&& enD.before(program.strToTime(timeslot2B))) {
-				togbtnTimeSlot1.setDisable(true);
-				lblAvail1.setText("Unavailable");
-				lblAvail1.setStyle("-fx-text-fill: #ff0000;");
+		Date enD = null;
+		for(int i=0;i<arr.size();i++){
+			
+				List<Booking> bookings = new ArrayList<Booking>(connection.getAllBooking(program.business().getBusinessId()));
+				for (Booking b : bookings) {
+					if (b.getStatus() != "canceled"){
+						enD = b.getEndTime();
+						if (program.dateToStr(newBook.getDate()).equals(program.dateToStr(b.getDate()))) {
+							if (enD.after(program.strToTime(arr.get(i))) && enD.before(program.strToTime(arr.get(i+1)))) {
+								if(arr.get(i).contains("\n") || arr.get(i).contains("\\n")){
+									arr.set(i, arr.get(i)+"\nUnavailable");
+								}
+							}
+						}
+					}
+				}
+				
 			}
-		}
+		return arr;
 		
-        if (enD.after(program.strToTime(timeslot2))
-				&& enD.before(program.strToTime(timeslot3B))) {
-			togbtnTimeSlot2.setDisable(true);
-			lblAvail2.setText("Unavailable");
-			lblAvail2.setStyle("-fx-text-fill: #ff0000;");
-		}
-		if (enD.after(program.strToTime(timeslot3))
-				&& enD.before(program.strToTime(timeslot4B))) {
-			togbtnTimeSlot3.setDisable(true);
-			lblAvail3.setText("Unavailable");
-			lblAvail3.setStyle("-fx-text-fill: #ff0000;");
-		}
-		if (enD.after(program.strToTime(timeslot4))
-				&& enD.before(program.strToTime(timeslot5B))) {
-			togbtnTimeSlot4.setDisable(true);
-			lblAvail4.setText("Unavailable");
-			lblAvail4.setStyle("-fx-text-fill: #ff0000;");
-		}
-		if (enD.after(program.strToTime(timeslot5))
-				&& enD.before(program.strToTime(timeslot6B))) {
-			togbtnTimeSlot5.setDisable(true);
-			lblAvail5.setText("Unavailable");
-			lblAvail5.setStyle("-fx-text-fill: #ff0000;");
-		}
-		if (enD.after(program.strToTime(timeslot6))
-				&& enD.before(program.strToTime(timeslot7B))) {
-			togbtnTimeSlot6.setDisable(true);
-			lblAvail6.setText("Unavailable");
-			lblAvail6.setStyle("-fx-text-fill: #ff0000;");
-		}
-		if (enD.after(program.strToTime(timeslot7))
-				&& enD.before(program.strToTime(timeslot8B))) {
-			togbtnTimeSlot7.setDisable(true);
-			lblAvail7.setText("Unavailable");
-			lblAvail7.setStyle("-fx-text-fill: #ff0000;");
-		}
-		if (enD.after(program.strToTime(timeslot8))) {
-			togbtnTimeSlot8.setDisable(true);
-			lblAvail8.setText("Unavailable");
-			lblAvail8.setStyle("-fx-text-fill: #ff0000;");
-		}
 	}
 	
 	/**
 	 * Check a specified toggle button for StartTime and disable them after booking
 	 * @param <Date> Start Date
 	 */
-	public void checkStartTimeTogglesOnBooking(Date stD){
-		if (stD.compareTo(program.strToTime(togbtnTimeSlot1.getText())) == 0) {
-			log.debug("LOGGER: Time Matchs 8:00");
-			togbtnTimeSlot1.setDisable(true);
-			lblAvail1.setText("Unavailable");
-			lblAvail1.setStyle("-fx-text-fill: #ff0000;");
-		} else if (stD.equals(program.strToTime(togbtnTimeSlot2.getText()))) {
-			togbtnTimeSlot2.setDisable(true);
-			lblAvail2.setText("Unavailable");
-			lblAvail2.setStyle("-fx-text-fill: #ff0000;");
-		} else if (stD.equals(program.strToTime(togbtnTimeSlot3.getText()))) {
-			togbtnTimeSlot3.setDisable(true);
-			lblAvail3.setText("Unavailable");
-			lblAvail3.setStyle("-fx-text-fill: #ff0000;");
-		} else if (stD.equals(program.strToTime(togbtnTimeSlot4.getText()))) {
-			togbtnTimeSlot4.setDisable(true);
-			lblAvail4.setText("Unavailable");
-			lblAvail4.setStyle("-fx-text-fill: #ff0000;");
-		} else if (stD.equals(program.strToTime(togbtnTimeSlot5.getText()))) {
-			togbtnTimeSlot5.setDisable(true);
-			lblAvail5.setText("Unavailable");
-			lblAvail5.setStyle("-fx-text-fill: #ff0000;");
-		} else if (stD.equals(program.strToTime(togbtnTimeSlot6.getText()))) {
-			togbtnTimeSlot6.setDisable(true);
-			lblAvail6.setText("Unavailable");
-			lblAvail6.setStyle("-fx-text-fill: #ff0000;");
-		} else if (stD.equals(program.strToTime(togbtnTimeSlot7.getText()))) {
-			togbtnTimeSlot7.setDisable(true);
-			lblAvail7.setText("Unavailable");
-			lblAvail7.setStyle("-fx-text-fill: #ff0000;");
-		} else if (stD.equals(program.strToTime(togbtnTimeSlot8.getText()))) {
-			togbtnTimeSlot8.setDisable(true);
-			lblAvail8.setText("Unavailable");
-			lblAvail8.setStyle("-fx-text-fill: #ff0000;");
-		}
-	}
-
-	/**
-	 * Moves the customer forward
-	 * 
-	 * @author Joseph Garner
-	 */
-	private void addBookingTime() {
-		if (togbtnTimeSlot1.isSelected()) {
-			if (togbtnMorn.isSelected()) {
-				newBook.setStartTime(program.strToTime(togbtnTimeSlot1.getText()));
-				return;
-			}
-			if (togbtnAft.isSelected()) {
-				newBook.setStartTime(program.strToTime(togbtnTimeSlot1.getText()));
-				return;
-			}
-			if (togbtnEven.isSelected()) {
-				newBook.setStartTime(program.strToTime(togbtnTimeSlot1.getText()));
-				return;
+	public ArrayList<String> checkStartTimeTogglesOnBooking(ArrayList<String> arr){
+		Date stD = null;
+		for(int i=0;i<arr.size();i++){
+			List<Booking> bookings = new ArrayList<Booking>(connection.getAllBooking(program.business().getBusinessId()));
+			for (Booking b : bookings) {
+				if (b.getStatus() != "canceled"){
+					stD = b.getStartTime();
+					if (program.dateToStr(newBook.getDate()).equals(program.dateToStr(b.getDate()))) {
+						if (stD.equals(program.strToTime(arr.get(i)))) {
+							if(arr.get(i).contains("\n") || arr.get(i).contains("\\n")){
+								arr.set(i, arr.get(i)+"\nUnavailable");
+							}
+						}
+					}
+				}
 			}
 		}
-		if (togbtnTimeSlot2.isSelected()) {
-			if (togbtnMorn.isSelected()) {
-				newBook.setStartTime(program.strToTime(togbtnTimeSlot2.getText()));
-				return;
-			}
-			if (togbtnAft.isSelected()) {
-				newBook.setStartTime(program.strToTime(togbtnTimeSlot2.getText()));
-				return;
-			}
-			if (togbtnEven.isSelected()) {
-				newBook.setStartTime(program.strToTime(togbtnTimeSlot2.getText()));
-				return;
-			}
-		}
-		if (togbtnTimeSlot3.isSelected()) {
-			if (togbtnMorn.isSelected()) {
-				newBook.setStartTime(program.strToTime(togbtnTimeSlot3.getText()));
-				return;
-			}
-			if (togbtnAft.isSelected()) {
-				newBook.setStartTime(program.strToTime(togbtnTimeSlot3.getText()));
-				return;
-			}
-			if (togbtnEven.isSelected()) {
-				newBook.setStartTime(program.strToTime(togbtnTimeSlot3.getText()));
-				return;
-			}
-		}
-		if (togbtnTimeSlot4.isSelected()) {
-			if (togbtnMorn.isSelected()) {
-				newBook.setStartTime(program.strToTime(togbtnTimeSlot4.getText()));
-				return;
-			}
-			if (togbtnAft.isSelected()) {
-				newBook.setStartTime(program.strToTime(togbtnTimeSlot4.getText()));
-				return;
-			}
-			if (togbtnEven.isSelected()) {
-				newBook.setStartTime(program.strToTime(togbtnTimeSlot4.getText()));
-				return;
-			}
-		}
-		if (togbtnTimeSlot5.isSelected()) {
-			if (togbtnMorn.isSelected()) {
-				newBook.setStartTime(program.strToTime(togbtnTimeSlot5.getText()));
-				return;
-			}
-			if (togbtnAft.isSelected()) {
-				newBook.setStartTime(program.strToTime(togbtnTimeSlot5.getText()));
-				return;
-			}
-			if (togbtnEven.isSelected()) {
-				newBook.setStartTime(program.strToTime(togbtnTimeSlot5.getText()));
-				return;
-			}
-		}
-		if (togbtnTimeSlot6.isSelected()) {
-			if (togbtnMorn.isSelected()) {
-				newBook.setStartTime(program.strToTime(togbtnTimeSlot6.getText()));
-				return;
-			}
-			if (togbtnAft.isSelected()) {
-				newBook.setStartTime(program.strToTime(togbtnTimeSlot6.getText()));
-				return;
-			}
-			if (togbtnEven.isSelected()) {
-				newBook.setStartTime(program.strToTime(togbtnTimeSlot6.getText()));
-				return;
-			}
-		}
-		if (togbtnTimeSlot7.isSelected()) {
-			if (togbtnMorn.isSelected()) {
-				newBook.setStartTime(program.strToTime(togbtnTimeSlot7.getText()));
-				return;
-			}
-			if (togbtnAft.isSelected()) {
-				newBook.setStartTime(program.strToTime(togbtnTimeSlot7.getText()));
-				return;
-			}
-			if (togbtnEven.isSelected()) {
-				newBook.setStartTime(program.strToTime(togbtnTimeSlot7.getText()));
-				return;
-			}
-		}
-		if (togbtnTimeSlot8.isSelected()) {
-			if (togbtnMorn.isSelected()) {
-				newBook.setStartTime(program.strToTime(togbtnTimeSlot8.getText()));
-				return;
-			}
-			if (togbtnAft.isSelected()) {
-				newBook.setStartTime(program.strToTime(togbtnTimeSlot8.getText()));
-				return;
-			}
-			if (togbtnEven.isSelected()) {
-				newBook.setStartTime(program.strToTime(togbtnTimeSlot8.getText()));
-				return;
-			}
-		}
-
+		return arr;
 	}
 
 	/**
@@ -765,10 +594,10 @@ public class CustomerController  implements Initializable, IUser{
 			newBook.setService(service.getID());
 			lblCustBookingDate.setText(program.dateToStr(cmbDayBooking.getSelectionModel().getSelectedItem()));
 			newBook.setDate(cmbDayBooking.getSelectionModel().getSelectedItem());
-			checkBookingTime(program.business().getBusinessId());
+			popTime();
 			return;
 		}
-		if (timeGroup.getSelectedToggle() == null) {
+		if (listviewTimeSlot.getSelectionModel().getSelectedItem() == null) {
 			program.messageBox("ERROR", "Error", "A Time Slot Has Not Been Chosen", "Please select a time slot");
 			return;
 		}
@@ -780,7 +609,7 @@ public class CustomerController  implements Initializable, IUser{
 			stkpnTime.setVisible(false);
 			stkpnBookingMenu.setVisible(false);
 			stkpnBookingConfirm.setVisible(true);
-			addBookingTime();
+			newBook.setStartTime(program.strToDate(listviewTimeSlot.getSelectionModel().getSelectedItem()));
 			Date date = program.calEnTime(newBook.getStartTime(), service.getLengthMin());
 			newBook.setEndTime(date);
 			newBook.setEmployee(cmbPreferEmp.getSelectionModel().getSelectedItem().getId());
@@ -792,8 +621,7 @@ public class CustomerController  implements Initializable, IUser{
 			lblBookConSTim.setText(program.timeToStr(newBook.getStartTime()));
 			lblBookConEmp.setText(cmbPreferEmp.getSelectionModel().getSelectedItem().getName());
 			return;
-		} else {
-		}
+		} else {}
 
 	}
 
@@ -913,7 +741,7 @@ public class CustomerController  implements Initializable, IUser{
 		togbtnTimeSlot8.setToggleGroup(timeGroup);
 		timeGroup.selectedToggleProperty().addListener(new ChangeListener<Toggle>() {
 			public void changed(ObservableValue<? extends Toggle> ov, Toggle old_toggle, Toggle new_toggle) {
-				addBookingTime();
+				//addBookingTime();
 				Date date = program.calEnTime(newBook.getStartTime(),
 						connection.getService(newBook.getService()).getLengthMin());
 				newBook.setEndTime(date);

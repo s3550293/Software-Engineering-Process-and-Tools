@@ -1,23 +1,31 @@
 package gui;
 
+import java.net.URL;
+import java.util.ResourceBundle;
+
 import org.apache.log4j.Logger;
 
 import javafx.fxml.FXML;
+import javafx.fxml.Initializable;
 import javafx.scene.control.TextField;
+import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 import program.Controller;
 import program.DatabaseConnection;
 import program.Service;
 
 
-public class ServiceAddController {
+public class ServiceAddController implements Initializable {
 	private static Logger log = Logger.getLogger(MainController.class);
+	@FXML
+	AnchorPane root;
+	
 	@FXML
 	TextField txtSerNam, txtSerDur, txtSerPri;
 	
 	/**
 	 * Creates a new service
-	 * @author [Luke Mason]
+	 * @author Luke Mason
 	 */
 	@FXML
 	public void addService()
@@ -63,6 +71,17 @@ public class ServiceAddController {
 		txtSerDur.setText("");
 		txtSerPri.setText("");
 		stage.close();
+	}
+	
+	public void setCI() {
+		Controller program = new Controller();
+		root.setStyle(program.setColor());
+		
+	}
+
+	@Override
+	public void initialize(URL arg0, ResourceBundle arg1) {
+		 setCI();
 	}
 
 }

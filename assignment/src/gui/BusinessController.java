@@ -153,7 +153,7 @@ public class BusinessController implements Initializable, IUser  {
 	@Override
 	public void initialize(URL url, ResourceBundle rb) {
 
-		setColor();
+		setCI();
 		loadDaySelect();
 		loadallServices();
 			rbCurrentBook.setSelected(true);
@@ -1259,12 +1259,12 @@ public class BusinessController implements Initializable, IUser  {
 		});
 	}
 	
-	//@Override
+	@Override
 	public boolean getUserWindow(){
 		try {
 			Stage secondaryStage = new Stage();
 			secondaryStage.getIcons().add(new Image("images/ic_collections_bookmark_black_48dp_2x.png"));
-			Parent root = FXMLLoader.load(getClass().getResource("customerLayout.fxml"));
+			Parent root = FXMLLoader.load(getClass().getResource("businessLayout.fxml"));
 			secondaryStage.setTitle("Business Application");
 			secondaryStage.setMinWidth(800);
 			secondaryStage.setMinHeight(650);
@@ -1301,10 +1301,11 @@ public class BusinessController implements Initializable, IUser  {
 			log.warn(ioe.getMessage());
 		}
 	}
-	
-	
-	private void setColor(){
+
+	@Override
+	public void setCI() {
 		root.setStyle(program.setColor());
+		
 	}
 	
 	

@@ -84,6 +84,9 @@ public class RootController implements Initializable, IUser {
 		}
 	}
 	
+	@Override
+	public void setCI() {}
+	
 	/**
 	 * Logs the user out
 	 * 

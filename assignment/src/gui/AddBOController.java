@@ -31,6 +31,7 @@ public class AddBOController {
 		con.addUser(txtUsername.getText(),passPassword.getText(), 1);
 		int id = con.getUser(txtUsername.getText()).getID();
 		con.createBusiness(id, txtBName.getText());
+		con.userBO(id, id);
 	}
 
 }

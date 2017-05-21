@@ -133,7 +133,19 @@ public class RootController implements Initializable, IUser {
 	
 	@FXML
 	public void delete(){
-		
+		int id = listviewBO.getSelectionModel().getSelectedItem().getBusinessId();
+		Alert alert = new Alert(AlertType.CONFIRMATION);
+		alert.setTitle("Delete");
+		alert.setHeaderText("Delete Business?");
+		alert.setContentText("Are you sure?");
+
+		Optional<ButtonType> result = alert.showAndWait();
+		if (result.get() == ButtonType.OK) {
+			con.deleteUser(id);
+			refresh();
+		} else {
+			return;
+		}
 	}
 	
 	@FXML

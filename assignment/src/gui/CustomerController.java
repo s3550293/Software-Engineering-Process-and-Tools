@@ -108,7 +108,7 @@ public class CustomerController  implements Initializable, IUser{
 		if(program.bmb == true){
 			btnRToOwnMen.setVisible(true);
 		}
-		if(connection.getOneBusiness(program.getUser().getBusinessID()).color() > 0){
+		if(connection.getOneBusiness(program.getUser().getBusinessID()).color() >= 1){
 			setCI();
 		}
 		popListBook();

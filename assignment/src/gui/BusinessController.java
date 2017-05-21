@@ -159,7 +159,7 @@ public class BusinessController implements Initializable, IUser  {
 			ISetup setup = userFactory.getSetup("SetUp");
 			setup.getSetup();
 		}
-		if(connection.getOneBusiness(BO.getID()).color() > 0){
+		if(connection.getOneBusiness(program.getUser().getBusinessID()).color() >= 1){
 			setCI();
 		}
 		System.out.println("BO IS NOOOOOT  NULL");
@@ -969,26 +969,32 @@ public class BusinessController implements Initializable, IUser  {
 			btnMorn.setSelected(true);
 			btnAft.setSelected(true);
 			btnEven.setSelected(true);
+			
 		} else if (timeBlock == 2) {
 			btnMorn.setSelected(true);
 			btnAft.setSelected(true);
 			btnEven.setSelected(false);
+			
 		} else if (timeBlock == 3) {
 			btnMorn.setSelected(false);
 			btnAft.setSelected(true);
 			btnEven.setSelected(true);
+			
 		} else if (timeBlock == 4) {
 			btnMorn.setSelected(true);
 			btnAft.setSelected(false);
 			btnEven.setSelected(false);
+			
 		} else if (timeBlock == 5) {
 			btnMorn.setSelected(false);
 			btnAft.setSelected(true);
 			btnEven.setSelected(false);
+			
 		} else if (timeBlock == 6) {
 			btnMorn.setSelected(false);
 			btnAft.setSelected(false);
 			btnEven.setSelected(true);
+			
 		}
 	}
 	

@@ -167,8 +167,10 @@ public class LoginController implements Initializable {
 				System.out.println("BUSINESS ID = "+businessID);
 			}
 		}
-		if(businessID != -1)
+		if(businessID == -1)
 		{
+			return;
+		}
 			int loginCheck = loginFuction.logInProcess(txtUserLogin.getText(), txtPassLogin.getText(), businessID);
 			if(loginCount < 10)
 			{
@@ -177,7 +179,8 @@ public class LoginController implements Initializable {
 					loginCount += 1;
 					log.debug("LOGGER: login count: "+loginCount);
 				}
-				else if(loginCheck == 1 || loginCheck == 0 || loginCheck == 2){
+				else if(loginCheck == 1 || loginCheck == 0 || loginCheck == 2)
+				{
 					log.debug("LOGGER: Login is equal to 1 or 0 or 2");
 					lblError.setVisible(false);
 					loginstage.hide();
@@ -212,7 +215,6 @@ public class LoginController implements Initializable {
 				Platform.exit();
 				System.exit(0);
 			}
-		}
 		txtUserLogin.setText("");
 		txtPassLogin.setText("");
 		cmbBusiness.getSelectionModel().clearSelection();

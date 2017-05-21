@@ -11,6 +11,7 @@ import java.util.ResourceBundle;
 
 import org.apache.log4j.Logger;
 
+import gui.IInterface.ISetup;
 import gui.IInterface.IUser;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -155,7 +156,8 @@ public class BusinessController implements Initializable, IUser  {
 		if(BO == null)
 		{
 			System.out.println("BO IS NULL - RUNNING SETUP");
-			userFactory.getSetup("SetUp");
+			ISetup setup = userFactory.getSetup("SetUp");
+			setup.getSetup();
 		}
 		System.out.println("BO IS NOOOOOT  NULL");
 		loadDaySelect();

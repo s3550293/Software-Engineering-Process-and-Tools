@@ -154,8 +154,10 @@ public class BusinessController implements Initializable, IUser  {
 		User BO = connection.getOneBusiness(program.business().getBusinessId());
 		if(BO == null)
 		{
-			//RUN SETUP GUI - Joseph Help me
+			System.out.println("BO IS NULL - RUNNING SETUP");
+			userFactory.getSetup("SetUp");
 		}
+		System.out.println("BO IS NOOOOOT  NULL");
 		loadDaySelect();
 		loadallServices();
 			rbCurrentBook.setSelected(true);

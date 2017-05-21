@@ -33,19 +33,19 @@ public class Login
 			{
 				if(user.getAccountType() == 2){
 					program.setUser(user);
-					log.debug("LOGGER: User - "+connect.getUser(userName).getFullName());
+					log.debug("LOGGER: User 2 - "+connect.getUser(userName).getUsername());
 					return 0;
 				} 
 				if(businessID == user.getBusinessID())
 				{
 					if(user.getAccountType() == 1){
 						program.setUser(user);
-						log.debug("LOGGER: User - "+connect.getUser(userName).getFullName());
+						log.debug("LOGGER: User 1 - "+connect.getUser(userName).getUsername());
 						return 1;
 					}
 					else if(user.getAccountType() == 0){
 						program.setUser(user);
-						log.debug("LOGGER: User - "+connect.getUser(userName).getFullName());
+						log.debug("LOGGER: User 0 - "+connect.getUser(userName).getFullName());
 						return 2;
 					}
 				}

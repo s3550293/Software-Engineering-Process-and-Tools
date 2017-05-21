@@ -228,6 +228,10 @@ public class LoginController implements Initializable {
 	 */
 	@FXML
 	public void registerAction(){
+		if (cmbBusiness.getSelectionModel().getSelectedItem() == null) {
+            program.messageBox("ERROR", "Error", "Please Select a business", "");
+            return;
+        }
 		try {
             Stage secondaryStage = new Stage();
             secondaryStage.getIcons().add(new Image("images/ic_collections_bookmark_black_48dp_2x.png"));

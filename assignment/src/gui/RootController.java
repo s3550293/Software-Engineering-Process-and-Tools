@@ -29,6 +29,7 @@ import javafx.scene.image.Image;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.util.Callback;
+import program.Business;
 import program.BusinessOwner;
 import program.Controller;
 import program.DatabaseConnection;
@@ -41,7 +42,7 @@ public class RootController implements Initializable, IUser {
 	private final DatabaseConnection con = new DatabaseConnection();
 	
 	@FXML
-	ListView<BusinessOwner> listviewBO;
+	ListView<Business> listviewBO;
 	
 	@FXML
 	Button btnRefresh, btnSearch, btnDelete, btnCreate, btnLogout;
@@ -52,18 +53,15 @@ public class RootController implements Initializable, IUser {
 	@Override
 	public void initialize(URL url, ResourceBundle rb){
 		loadListView();
-		/*
-		listviewBO.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<BusinessOwner>() {
+		listviewBO.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<Business>() {
 			@Override
-			public void changed(ObservableValue<? extends BusinessOwner> observable, BusinessOwner oldValue,BusinessOwner newValue) {
+			public void changed(ObservableValue<? extends Business> observable, Business oldValue,Business newValue) {
 				if (newValue != null) {
-					lblID.setText(""+newValue.getID());
-					lblName.setText(con.getBusiness(newValue.getBusinessID()).getBusinessName());
-					lblUsername.setText(con.getUser(newValue.getID()).getUsername());
+					lblID.setText(""+newValue.getBusinessId());
+					lblName.setText(newValue.getBusinessName());
 				}
 			}
 		});
-		*/
 	}
 	
 	/**
@@ -73,21 +71,21 @@ public class RootController implements Initializable, IUser {
 	 */
 	@FXML
 	public void loadListView() {
-		ArrayList<BusinessOwner> arr = new ArrayList<>(con.getAllBusinessOwner());
-		ObservableList<BusinessOwner> list = FXCollections.observableList(arr);
+		ArrayList<Business> arr = new ArrayList<>(con.getAllBusiness());
+		ObservableList<Business> list = FXCollections.observableList(arr);
 		log.debug("LOGGER: List length:" + arr.size());
 		if (list != null) {
 			listviewBO.setItems(list);
-			listviewBO.setCellFactory(new Callback<ListView<BusinessOwner>, ListCell<BusinessOwner>>() {
+			listviewBO.setCellFactory(new Callback<ListView<Business>, ListCell<Business>>() {
 				@Override
-				public ListCell<BusinessOwner> call(ListView<BusinessOwner> p) {
+				public ListCell<Business> call(ListView<Business> p) {
 
-					ListCell<BusinessOwner> cell = new ListCell<BusinessOwner>() {
+					ListCell<Business> cell = new ListCell<Business>() {
 						@Override
-						protected void updateItem(BusinessOwner t, boolean bln) {
+						protected void updateItem(Business t, boolean bln) {
 							super.updateItem(t, bln);
 							if (t != null) {
-								setText(con.getUser(t.getID()).getUsername());
+								setText(t.getBusinessName());
 							} else {
 								listviewBO.setPlaceholder(new Label("No Buisness Owners"));
 							}

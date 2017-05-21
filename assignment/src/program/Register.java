@@ -29,6 +29,10 @@ public class Register
 		{
 			output = false;
 		}
+		else if(!username.equalsIgnoreCase("root"))
+		{
+			output = false;
+		}
 		else
 		{
 			System.out.println("Username Taken please enter another username");

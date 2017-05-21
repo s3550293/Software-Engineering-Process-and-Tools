@@ -134,7 +134,7 @@ public class LoginController implements Initializable {
 	@FXML
 	public void loginAction() {
 		Stage loginstage = (Stage) btnLogin.getScene().getWindow();
-		int loginCheck = loginFuction.logInProcess(txtUserLogin.getText(), txtPassLogin.getText());
+		int loginCheck = loginFuction.logInProcess(txtUserLogin.getText(), txtPassLogin.getText(),cmbVal().getBusinessId());
 		if(loginCount < 10){
 			if(loginCheck == -2){
 				lblError.setVisible(true);

@@ -504,7 +504,7 @@ public class Controller
 	        String ret = "";
 	        for(int i=0;i<arr.length;i++){
 	            log.debug(arr[i]);
-	            ret += "-fx-base"+i+": "+arr[i]+"; ";
+	            ret += "-fx-base"+(i+1)+": "+arr[i]+"; ";
 	        }
 	        return ret;
 	    }

@@ -38,7 +38,7 @@
                           <MenuItem mnemonicParsing="false" text="Logout" />
                         </items>
                       </Menu>
-                      <Menu mnemonicParsing="false" onAction="#showCustom" text="Edit">
+                      <Menu mnemonicParsing="false" text="Edit">
                         <items>
                           <MenuItem mnemonicParsing="false" onAction="#showCustom" text="Customise" />
                         </items>

@@ -24,8 +24,10 @@ import javafx.scene.control.ListView;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.StackPane;
+import javafx.stage.FileChooser;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.util.Callback;
@@ -40,15 +42,20 @@ import program.Service;
 public class SetupController implements Initializable, ISetup {
 	public final static Logger log = Logger.getLogger(SetupController.class);
 	private final Controller program = new Controller();
-	private static Business business = new Business();
+	private Business business = program.business();
+	private final DatabaseConnection connection = new DatabaseConnection();
 	private static BusinessOwner businessOwner = new BusinessOwner();
 	public final Register regpro = new Register();
+	private File fa = null;
 	public final BusinessMenu bMenu = new BusinessMenu();
 	/*
 	 * Oder of panes stkpWelcome > stkpDetails > stkpTimeSlot > (Setup Finishes and database is created) > stkpSelectColor
 	 */
 	@FXML
 	AnchorPane root;
+	
+	@FXML
+	ImageView imgView;
 	
 	@FXML
 	StackPane stkpWelcome, stkpDetails, stkpTimeSlot, stkpSelectColor;
@@ -263,7 +270,6 @@ public class SetupController implements Initializable, ISetup {
 				return;
 			}
 			DatabaseConnection connect = new DatabaseConnection();
-			
 			String wds = program.timeToStr(businessOwner.getWeekdayStart());
 			String wde = program.timeToStr(businessOwner.getWeekdayEnd());
 			String wes = program.timeToStr(businessOwner.getWeekendStart());
@@ -338,6 +344,10 @@ public class SetupController implements Initializable, ISetup {
 	 */
 	@FXML
 	public void openRun(){
+		if(fa!=null){
+			fa.renameTo(new File(System.getProperty("user.home")+"/resourcing/"+fa.getName()));
+			connection.addImage(System.getProperty("user.home")+"/resourcing/"+fa.getName(), program.getUser().getID());
+		}	
 		Stage setSt = (Stage) cmbMFOpen.getScene().getWindow();
 		setSt.close();
 	}
@@ -558,6 +568,52 @@ public class SetupController implements Initializable, ISetup {
 			log.warn(ioe.getMessage());
 		}
 		return true;
+	}
+	
+	@FXML
+	public void addImage(){
+		Stage stage = new Stage();
+        FileChooser fileChooser = new FileChooser();
+        FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter("PNG files (*.png)", "*.png");
+        fileChooser.getExtensionFilters().add(extFilter);
+        try{
+        	fa = fileChooser.showOpenDialog(stage);
+        	Image image = new Image(fa.getPath());
+            imgView.setImage(image);
+        }
+        catch(Exception e){}
+	}
+	
+	@FXML
+	public void blue(){
+		int id = program.business().getBusinessId();
+		DatabaseConnection con = new DatabaseConnection();
+		con.updateBO(id, 1);
+		root.setStyle(program.setColor());
+	}
+	
+	@FXML
+	public void purp(){
+		int id = program.business().getBusinessId();
+		DatabaseConnection con = new DatabaseConnection();
+		con.updateBO(id, 2);
+		root.setStyle(program.setColor());
+	}
+	
+	@FXML
+	public void green(){
+		int id = program.business().getBusinessId();
+		DatabaseConnection con = new DatabaseConnection();
+		con.updateBO(id, 3);
+		root.setStyle(program.setColor());
+	}
+	
+	@FXML
+	public void ong(){
+		int id = program.business().getBusinessId();
+		DatabaseConnection con = new DatabaseConnection();
+		con.updateBO(id, 4);
+		root.setStyle(program.setColor());
 	}
 	
 	

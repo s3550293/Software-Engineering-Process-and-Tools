@@ -143,7 +143,6 @@ public class BusinessController implements Initializable, IUser  {
 
 	private User _user = null;
 
-	private Stage stage = null;
 
 	/**
 	 * initializes the stage
@@ -152,8 +151,7 @@ public class BusinessController implements Initializable, IUser  {
 	 */
 	@Override
 	public void initialize(URL url, ResourceBundle rb) {
-
-		setCI();
+		
 		loadDaySelect();
 		loadallServices();
 			rbCurrentBook.setSelected(true);

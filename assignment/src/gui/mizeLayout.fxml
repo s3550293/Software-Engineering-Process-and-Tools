@@ -64,22 +64,22 @@
                         </FlowPane>
                         <FlowPane alignment="CENTER" prefHeight="67.0" prefWidth="600.0" GridPane.rowIndex="1">
                            <children>
-                              <Button fx:id="btnBlue" mnemonicParsing="false" prefWidth="50.0" styleClass="blueB">
+                              <Button fx:id="btnBlue" mnemonicParsing="false" onAction="#blue" prefWidth="50.0" styleClass="blueB">
                                  <FlowPane.margin>
                                     <Insets left="10.0" right="10.0" />
                                  </FlowPane.margin>
                               </Button>
-                              <Button fx:id="btnPurp" mnemonicParsing="false" prefWidth="50.0" styleClass="purpB">
+                              <Button fx:id="btnPurp" mnemonicParsing="false" onAction="#purp" prefWidth="50.0" styleClass="purpB">
                                  <FlowPane.margin>
                                     <Insets left="10.0" right="10.0" />
                                  </FlowPane.margin>
                               </Button>
-                              <Button fx:id="btnGreen" mnemonicParsing="false" prefWidth="50.0" styleClass="greenB">
+                              <Button fx:id="btnGreen" mnemonicParsing="false" onAction="#green" prefWidth="50.0" styleClass="greenB">
                                  <FlowPane.margin>
                                     <Insets left="10.0" right="10.0" />
                                  </FlowPane.margin>
                               </Button>
-                              <Button fx:id="btnOrng" mnemonicParsing="false" prefWidth="50.0" styleClass="orngB">
+                              <Button fx:id="btnOrng" mnemonicParsing="false" onAction="#ong" prefWidth="50.0" styleClass="orngB">
                                  <FlowPane.margin>
                                     <Insets left="10.0" right="10.0" />
                                  </FlowPane.margin>
@@ -91,6 +91,17 @@
                </children>
             </GridPane>
          </center>
+         <bottom>
+            <FlowPane alignment="CENTER_RIGHT" prefHeight="41.0" prefWidth="600.0" BorderPane.alignment="CENTER">
+               <children>
+                  <Button mnemonicParsing="false" onAction="#confirm" text="Confirm">
+                     <FlowPane.margin>
+                        <Insets right="20.0" />
+                     </FlowPane.margin>
+                  </Button>
+               </children>
+            </FlowPane>
+         </bottom>
       </BorderPane>
    </children>
 </AnchorPane>

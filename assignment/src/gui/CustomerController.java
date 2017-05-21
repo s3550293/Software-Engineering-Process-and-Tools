@@ -105,7 +105,9 @@ public class CustomerController  implements Initializable, IUser{
 		if(program.bmb == true){
 			btnRToOwnMen.setVisible(true);
 		}
-		setCI();
+		if(connection.getOneBusiness(program.getUser().getBusinessID()).color() > 0){
+			setCI();
+		}
 		popListBook();
 		lblCustomerName.setText(connection.getCustomer(program.getUser().getID()).getFullName());
 		cmbDayBooking.valueProperty().addListener(new ChangeListener<Date>() {

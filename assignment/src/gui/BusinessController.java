@@ -159,6 +159,9 @@ public class BusinessController implements Initializable, IUser  {
 			ISetup setup = userFactory.getSetup("SetUp");
 			setup.getSetup();
 		}
+		if(connection.getOneBusiness(BO.getID()).color() > 0){
+			setCI();
+		}
 		System.out.println("BO IS NOOOOOT  NULL");
 		loadDaySelect();
 		loadallServices();
@@ -1306,12 +1309,13 @@ public class BusinessController implements Initializable, IUser  {
 		} catch (IOException ioe) {
 			log.warn(ioe.getMessage());
 		}
+		setCI();
 	}
 
 	@Override
 	public void setCI() {
 		root.setStyle(program.setColor());
-		
+		log.debug(program.setColor());
 	}
 	
 	

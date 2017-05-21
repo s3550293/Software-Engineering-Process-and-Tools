@@ -1231,7 +1231,7 @@ public class DatabaseConnection
             val[0] = o.getString(2);
             val[1] = o.getString(3);
             val[2] = o.getString(4);
-            val[2] = o.getString(5);
+            val[3] = o.getString(5);
 
         }
         catch(SQLException sqle)
@@ -1249,50 +1249,24 @@ public class DatabaseConnection
 		log.info("OUT Updated User\n");
 	}
 	
-	public void addImage(BufferedImage bitmap, int id){
+	public void addImage(String val, int id){
 		log.info("IN Update UBO\n");
-		String query = "UPDATE BUSINESS_OWNER SET image = '"+getBytes(bitmap)+"' WHERE ID = "+id+";";
+		String query = "UPDATE BUSINESS_OWNER SET image = '"+val+"' WHERE ID = "+id+";";
 		executeQuery(query, "Image for " + id + " updated\n");
 		log.info("OUT added image User\n");
 	}
-	
-	public static byte[] getBytes(BufferedImage bitmap) {
-		BufferedImage originalImage = bitmap;
-		ByteArrayOutputStream baos = new ByteArrayOutputStream();
-		try {
-			ImageIO.write(originalImage, "jpg", baos);
-			baos.flush();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-		byte[] imageInByte = baos.toByteArray();
-		return imageInByte;
-    }
-
-    // convert from byte array to bitmap
-    public static BufferedImage getImage(byte[] image) {
-    	InputStream in = new ByteArrayInputStream(image);
-    	BufferedImage bImageFromConvert = null;
-		try {
-			bImageFromConvert = ImageIO.read(in);
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-    	return bImageFromConvert;
-    }
     
     
-    public BufferedImage getlogo(int id){
+    public String getlogo(int id){
     	BufferedImage bis = null;
-		String query = "SELECT image FROM BUSINESS_OWNER WHERE businessID = "+id; 
-		Blob blob = null;
+		String query = "SELECT image FROM BUSINESS_OWNER WHERE ID = "+id; 
+		String val = null;
 		try (Connection connect = this.connect(); PreparedStatement  inject  = connect.prepareStatement(query)){
 			
 			ResultSet o = inject.executeQuery();
 			while (o.next())
 			{
-				blob = o.getBlob(1);
+				val = o.getString(1);
 				
 			}
 			
@@ -1300,16 +1274,6 @@ public class DatabaseConnection
 		{
 			log.warn(sqle.getMessage());
 		}
-		byte[] image = null;
-		try {
-			int blobLength = (int) blob.length();  
-			image = blob.getBytes(1, blobLength);
-			blob.free();
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		bis = getImage(image);
-		return bis;
+		return val;
     }
 }

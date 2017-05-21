@@ -17,6 +17,8 @@ import program.Service;
 
 public class ServiceAddController implements Initializable {
 	private static Logger log = Logger.getLogger(MainController.class);
+	private DatabaseConnection con = new DatabaseConnection();
+	private Controller trol = new Controller();
 	@FXML
 	AnchorPane root;
 	
@@ -30,6 +32,7 @@ public class ServiceAddController implements Initializable {
 	@FXML
 	public void addService()
 	{
+		
 		Controller program = new Controller();
 		DatabaseConnection connect = new DatabaseConnection();
 		Stage stage= (Stage) txtSerNam.getScene().getWindow();
@@ -81,7 +84,9 @@ public class ServiceAddController implements Initializable {
 
 	@Override
 	public void initialize(URL arg0, ResourceBundle arg1) {
-		 setCI();
+		if(con.getOneBusiness(trol.getUser().getBusinessID()).color() > 0){
+			setCI();
+		}
 	}
 
 }

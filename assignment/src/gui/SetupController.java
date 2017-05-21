@@ -319,6 +319,20 @@ public class SetupController implements Initializable {
 				program.messageBox("ERROR", "Error", "Invalid choice. Open hours later than closing hours", "");
 				return;
 			}
+			DatabaseConnection connect = new DatabaseConnection();
+			
+			String wds = program.timeToStr(businessOwner.getWeekdayStart());
+			String wde = program.timeToStr(businessOwner.getWeekdayEnd());
+			String wes = program.timeToStr(businessOwner.getWeekendStart());
+			String wee = program.timeToStr(businessOwner.getWeekendEnd());
+			int id = businessOwner.getID();
+			String fName = businessOwner.getFName();
+			String lName = businessOwner.getLName();
+			String phone = businessOwner.getPhone();
+			String address = businessOwner.getAddress();
+			
+			connect.addBusinessOwner(id, fName, lName, phone, address, wds, wde, wes, wee);
+			//Add to the database the new information
 			assignOpenClosingTimesToGlobal(businessOwner.getWeekdayStart(),businessOwner.getWeekdayEnd(),businessOwner.getWeekendStart(),businessOwner.getWeekendEnd());
 			stkpTimeSlot.setVisible(false);
 			stkpSelectColor.setVisible(true);

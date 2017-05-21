@@ -151,10 +151,10 @@ public class BusinessController implements Initializable, IUser  {
 	 */
 	@Override
 	public void initialize(URL url, ResourceBundle rb) {
-		User BO = connection.getUser(program.business().getBusinessId());
-		if(BO.getFName() == null || BO.getLName() == null || BO.getPhone() == null)
+		User BO = connection.getOneBusiness(program.business().getBusinessId());
+		if(BO == null)
 		{
-			//RUN SETUP GUI
+			//RUN SETUP GUI - Joseph Help me
 		}
 		loadDaySelect();
 		loadallServices();

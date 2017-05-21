@@ -1030,7 +1030,7 @@ public class DatabaseConnection
 	public void addBusinessOwner(int id, String fName,String lName,String phone,String address,String weekdayStart,String weekdayEnd,String weekendStart ,String weekendEnd){
 		log.info("IN addBusinessToDatabase\n");
 		//BusinessID is made in the database
-		String query = "INSERT INTO BUSINESS (ID,fName,lName,phone,address,weekdayStart,weekdayEnd,weekendStart, weekendEnd)" + "VALUES("+id+","+ fName + ","+ lName + ","+ phone + ","+ address + ","+weekdayStart+",'" + weekdayEnd + "','" + weekendStart + "',"+weekendEnd+"');";
+		String query = "INSERT INTO BUSINESS (ID,fName,lName,phone,address,weekdayStart,weekdayEnd,weekendStart, weekendEnd)" + "VALUES("+id+",'"+ fName + "','"+ lName + "','"+ phone + "','"+ address + "','"+weekdayStart+"','" + weekdayEnd + "','" + weekendStart + "',"+weekendEnd+"');";
 		try(Connection connect = this.connect(); Statement inject = connect.createStatement())
 		{
 			inject.executeUpdate(query);

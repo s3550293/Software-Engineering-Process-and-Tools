@@ -24,10 +24,8 @@ import javafx.scene.control.ListView;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.StackPane;
-import javafx.stage.FileChooser;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.util.Callback;
@@ -42,20 +40,15 @@ import program.Service;
 public class SetupController implements Initializable, ISetup {
 	public final static Logger log = Logger.getLogger(SetupController.class);
 	private final Controller program = new Controller();
-	private Business business = program.business();
-	private final DatabaseConnection connection = new DatabaseConnection();
+	Business business = program.business();
 	private static BusinessOwner businessOwner = new BusinessOwner();
 	public final Register regpro = new Register();
-	private File fa = null;
 	public final BusinessMenu bMenu = new BusinessMenu();
 	/*
 	 * Oder of panes stkpWelcome > stkpDetails > stkpTimeSlot > (Setup Finishes and database is created) > stkpSelectColor
 	 */
 	@FXML
 	AnchorPane root;
-	
-	@FXML
-	ImageView imgView;
 	
 	@FXML
 	StackPane stkpWelcome, stkpDetails, stkpTimeSlot, stkpSelectColor;
@@ -85,37 +78,52 @@ public class SetupController implements Initializable, ISetup {
 	 * @param weekendStart
 	 * @param weekendEnd
 	 */
-	public void assignOpenClosingTimesToGlobal(Date weekdayStart ,Date weekdayEnd, Date weekendStart ,Date weekendEnd)
+	public int assignOpenClosingTimesToGlobal(Date weekdayStart ,Date weekdayEnd, Date weekendStart ,Date weekendEnd)
 	{
 		//Change Dates to Strings
 		String MFOpen = program.timeToStr(weekdayStart);
 		String MFClose = program.timeToStr(weekdayEnd);
 		String SSOpen = program.timeToStr(weekendStart);
 		String SSClose = program.timeToStr(weekendEnd);
-		System.out.println(MFOpen);
-		System.out.println(MFClose);
-		System.out.println(SSOpen);
-		System.out.println(SSClose);
 		//assign times for weekends and weekdays
-		assignOpenClosingTimesToWeekDays(MFOpen, MFClose);
-		assignOpenClosingTimesToWeekEnds(SSOpen, SSClose);
+		int a = assignOpenClosingTimesToWeekDays(MFOpen, MFClose);
+		if(a == 0)
+		{
+			return 0;
+		}
+		int b = assignOpenClosingTimesToWeekEnds(SSOpen, SSClose);
+		if(b == 0)
+		{
+			return 0;
+		}
+		return 1;
 	}
 	
-	public void assignOpenClosingTimesToWeekDays(String MFOpen,String MFClose)
+	public int assignOpenClosingTimesToWeekDays(String MFOpen,String MFClose)
 	{
 		String[] times = program.splitTimeIntoThreeBlocks(MFOpen, MFClose);
+		if(times[0].equals(""))
+		{
+			return 0;
+		}
 		bMenu.MFearly = times[0];
 		bMenu.MFearlyMidDay = times[1];
 		bMenu.MFlateMidDay = times[2];
 		bMenu.MFlate = times[3];
+		return 1;
 	}
-	public void assignOpenClosingTimesToWeekEnds(String SSOpen,String SSClose)
+	public int assignOpenClosingTimesToWeekEnds(String SSOpen,String SSClose)
 	{
 		String[] times = program.splitTimeIntoThreeBlocks(SSOpen, SSClose);
+		if(times[0].equals(""))
+		{
+			return 0;
+		}
 		bMenu.SSearly = times[0];
 		bMenu.SSearlyMidDay = times[1];
 		bMenu.SSlateMidDay = times[2];
 		bMenu.SSlate = times[3];
+		return 1;
 	}
 	
 	/**
@@ -163,6 +171,8 @@ public class SetupController implements Initializable, ISetup {
 				program.messageBox("ERROR", "Error", "Address field is empty or contains an invalid character", "");
 				return;
 			}
+			businessOwner.setBusinessID(business.getBusinessId());
+			log.info("BusinessID = "+business.getBusinessId()+"\n");
 			businessOwner.setFName(txtFNam.getText());
 			businessOwner.setLName(txtLNam.getText());
 			businessOwner.setPhone(txtBPho.getText());
@@ -206,11 +216,12 @@ public class SetupController implements Initializable, ISetup {
 				return;
 			}
 			DatabaseConnection connect = new DatabaseConnection();
+			
 			String wds = program.timeToStr(businessOwner.getWeekdayStart());
 			String wde = program.timeToStr(businessOwner.getWeekdayEnd());
 			String wes = program.timeToStr(businessOwner.getWeekendStart());
 			String wee = program.timeToStr(businessOwner.getWeekendEnd());
-			int id = business.getBusinessId();
+			int id = businessOwner.getBusinessID();
 			String fName = businessOwner.getFName();
 			String lName = businessOwner.getLName();
 			String phone = businessOwner.getPhone();
@@ -226,9 +237,13 @@ public class SetupController implements Initializable, ISetup {
 			System.out.println("Phone = "+phone);
 			System.out.println("Address = "+address);
 
-			connect.addBusinessOwner(id, fName, lName, phone, address, wds, wde, wes, wee);
 			//Add to the database the new information
-			assignOpenClosingTimesToGlobal(businessOwner.getWeekdayStart(),businessOwner.getWeekdayEnd(),businessOwner.getWeekendStart(),businessOwner.getWeekendEnd());
+			int check = assignOpenClosingTimesToGlobal(businessOwner.getWeekdayStart(),businessOwner.getWeekdayEnd(),businessOwner.getWeekendStart(),businessOwner.getWeekendEnd());
+			if(check == 0)
+			{
+				return;
+			}
+			connect.addBusinessOwner(id, fName, lName, phone, address, wds, wde, wes, wee);
 			stkpTimeSlot.setVisible(false);
 			stkpSelectColor.setVisible(true);
 			return;
@@ -280,10 +295,6 @@ public class SetupController implements Initializable, ISetup {
 	 */
 	@FXML
 	public void openRun(){
-		if(fa!=null){
-			fa.renameTo(new File(System.getProperty("user.home")+"/resourcing/"+fa.getName()));
-			connection.addImage(System.getProperty("user.home")+"/resourcing/"+fa.getName(), program.getUser().getID());
-		}	
 		Stage setSt = (Stage) cmbMFOpen.getScene().getWindow();
 		setSt.close();
 	}
@@ -504,52 +515,6 @@ public class SetupController implements Initializable, ISetup {
 			log.warn(ioe.getMessage());
 		}
 		return true;
-	}
-	
-	@FXML
-	public void addImage(){
-		Stage stage = new Stage();
-        FileChooser fileChooser = new FileChooser();
-        FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter("PNG files (*.png)", "*.png");
-        fileChooser.getExtensionFilters().add(extFilter);
-        try{
-        	fa = fileChooser.showOpenDialog(stage);
-        	Image image = new Image(fa.getPath());
-            imgView.setImage(image);
-        }
-        catch(Exception e){}
-	}
-	
-	@FXML
-	public void blue(){
-		int id = program.business().getBusinessId();
-		DatabaseConnection con = new DatabaseConnection();
-		con.updateBO(id, 1);
-		root.setStyle(program.setColor());
-	}
-	
-	@FXML
-	public void purp(){
-		int id = program.business().getBusinessId();
-		DatabaseConnection con = new DatabaseConnection();
-		con.updateBO(id, 2);
-		root.setStyle(program.setColor());
-	}
-	
-	@FXML
-	public void green(){
-		int id = program.business().getBusinessId();
-		DatabaseConnection con = new DatabaseConnection();
-		con.updateBO(id, 3);
-		root.setStyle(program.setColor());
-	}
-	
-	@FXML
-	public void ong(){
-		int id = program.business().getBusinessId();
-		DatabaseConnection con = new DatabaseConnection();
-		con.updateBO(id, 4);
-		root.setStyle(program.setColor());
 	}
 	
 	

@@ -87,6 +87,71 @@ public class Controller
 			return -1;
 		}
 	}
+	
+	/**
+	 * Gets a start time and end time and splits the time between them into 3 blocks which are bounded by 4 different times.
+	 * @param startTime - HH:MM
+	 * @param endTime - HH:MM
+	 * @return
+	 */
+	public String[] splitTimeIntoThreeBlocks(String startTime, String endTime)
+	{
+		int MINIMUM_OPEN_TIME = 60; //means that the business must be open for at least 60 minutes a day
+		//A-a represents startTime, B-b represents endTime
+		String[] times = {"","","",""};
+		//Getting substring hours
+		String A = startTime.substring(0,2);
+		String B = endTime.substring(0,2);
+		//Getting substring minutes
+		String a = startTime.substring(3);
+		String b = endTime.substring(3);
+		//converting strings into integers
+		int AA = Integer.parseInt(A);
+		int BB = Integer.parseInt(B);
+		int aa = Integer.parseInt(a);
+		int bb = Integer.parseInt(b);
+		//getting minutes from hours
+		int AAA = AA * 60;
+		int BBB = BB * 60;
+		//getting total minutes
+		int aaa = AAA + aa;
+		int bbb = BBB + bb;
+		//Error checking
+		if((bbb - aaa < MINIMUM_OPEN_TIME)||(aaa > 1380 || bbb > 1440))
+		{
+			log.warn("endTime, startTime are invalid\n");
+			return times;
+		}
+		//Getting time minutes between startTime aaa and endTime bbb
+		int timeDifference = bbb - aaa;
+		//getting 1 third of time difference
+		int thirdOfTime = timeDifference/3;
+		//Assigning times
+		times[0] = startTime;
+		//converting minutes into HH:MM
+		int middayEarlyTime = aaa + thirdOfTime;
+		int middayLateTime = middayEarlyTime + thirdOfTime;
+		int hours;
+		int minutes;
+		String formattedHours;
+		String formattedMinutes;
+		//Formatting numbers to two digitse.g 02 04 06 10 12 etc	
+		hours = middayEarlyTime/60;
+		minutes = middayEarlyTime%60;
+		formattedHours = String.format("%02d", hours);
+		formattedMinutes = String.format("%02d", minutes);
+		//Assigning time for middayEarlyTime
+		times[1] = formattedHours+":"+formattedMinutes;
+		//Formatting numbers to two digitse.g 02 04 06 10 12 etc
+		hours = middayLateTime/60;
+		minutes = middayLateTime%60;
+		formattedHours = String.format("%02d", hours);
+		formattedMinutes = String.format("%02d", minutes);
+		//Assigning time for middayLateTime
+		times[2] = formattedHours+":"+ formattedMinutes;
+		times[3] = endTime;
+		return times;
+	}
 
 	
 	/**

@@ -9,6 +9,8 @@ import java.util.ResourceBundle;
 import org.apache.log4j.Logger;
 
 import gui.IInterface.IUser;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -29,11 +31,14 @@ import javafx.stage.Stage;
 import javafx.util.Callback;
 import program.BusinessOwner;
 import program.Controller;
+import program.DatabaseConnection;
+import program.Service;
 
 public class RootController implements Initializable, IUser {
 	
 	private static Logger log = Logger.getLogger(RootController.class);
 	private final Controller program = new Controller();
+	private final DatabaseConnection con = new DatabaseConnection();
 	
 	@FXML
 	ListView<BusinessOwner> listviewBO;
@@ -47,6 +52,18 @@ public class RootController implements Initializable, IUser {
 	@Override
 	public void initialize(URL url, ResourceBundle rb){
 		loadListView();
+		/*
+		listviewBO.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<BusinessOwner>() {
+			@Override
+			public void changed(ObservableValue<? extends BusinessOwner> observable, BusinessOwner oldValue,BusinessOwner newValue) {
+				if (newValue != null) {
+					lblID.setText(""+newValue.getID());
+					lblName.setText(con.getBusiness(newValue.getBusinessID()).getBusinessName());
+					lblUsername.setText(con.getUser(newValue.getID()).getUsername());
+				}
+			}
+		});
+		*/
 	}
 	
 	/**
@@ -56,7 +73,7 @@ public class RootController implements Initializable, IUser {
 	 */
 	@FXML
 	public void loadListView() {
-		ArrayList<BusinessOwner> arr = new ArrayList<>(/*TODO*/);
+		ArrayList<BusinessOwner> arr = new ArrayList<>(con.getAllBusinessOwner());
 		ObservableList<BusinessOwner> list = FXCollections.observableList(arr);
 		log.debug("LOGGER: List length:" + arr.size());
 		if (list != null) {
@@ -70,7 +87,7 @@ public class RootController implements Initializable, IUser {
 						protected void updateItem(BusinessOwner t, boolean bln) {
 							super.updateItem(t, bln);
 							if (t != null) {
-								setText("");
+								setText(con.getUser(t.getID()).getUsername());
 							} else {
 								listviewBO.setPlaceholder(new Label("No Buisness Owners"));
 							}
@@ -113,7 +130,7 @@ public class RootController implements Initializable, IUser {
 	
 	@FXML
 	public void refresh(){
-		//TODO
+		loadListView();
 	}
 	
 	@FXML

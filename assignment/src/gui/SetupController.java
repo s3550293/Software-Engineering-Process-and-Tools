@@ -76,7 +76,7 @@ public class SetupController implements Initializable {
 	}
 	
 	/**
-	 * Assigning 
+	 * Assigning the Business opening and closing hours for the business
 	 * @author Luke Mason
 	 * @param weekdayStart
 	 * @param weekdayEnd
@@ -319,6 +319,7 @@ public class SetupController implements Initializable {
 				program.messageBox("ERROR", "Error", "Invalid choice. Open hours later than closing hours", "");
 				return;
 			}
+			assignOpenClosingTimesToGlobal(businessOwner.getWeekdayStart(),businessOwner.getWeekdayEnd(),businessOwner.getWeekendStart(),businessOwner.getWeekendEnd());
 			stkpTimeSlot.setVisible(false);
 			stkpSelectColor.setVisible(true);
 			return;

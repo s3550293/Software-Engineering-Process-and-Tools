@@ -434,17 +434,17 @@
                                                                <children>
                                                                   <FlowPane alignment="CENTER" prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1">
                                                                      <children>
-                                                                        <Label text="Morning 8am-12pm" />
+                                                                        <Label text="TimeBlock 1" />
                                                                      </children>
                                                                   </FlowPane>
                                                                   <FlowPane alignment="CENTER" prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="2">
                                                                      <children>
-                                                                        <Label text="Afternoon 12pm-4pm" />
+                                                                        <Label text="TimeBlock 2" />
                                                                      </children>
                                                                   </FlowPane>
                                                                   <FlowPane alignment="CENTER" prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="3">
                                                                      <children>
-                                                                        <Label text="Evening 4pm-8pm" />
+                                                                        <Label text="TimeBlock 3" />
                                                                      </children>
                                                                   </FlowPane>
                                                                   <FlowPane alignment="CENTER" prefHeight="200.0" prefWidth="200.0" GridPane.rowIndex="1">

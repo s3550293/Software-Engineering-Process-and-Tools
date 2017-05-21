@@ -90,6 +90,24 @@ public class DatabaseConnection
 	}
 	
 	/**
+	 * Adds User to database
+	 * @param username
+	 * @param password
+	 * @param accountType
+	 */
+	public void addUserDetails(int id, String fname, String lname, String email, String phone, String dob, String gender, int businessID)
+	{
+		log.info("IN addUserDetails\n");
+		/*
+		 * account type boolean 1 for business owner 0 for user
+		 */
+		User user = getUser(id);
+		String query = "INSERT INTO CLIENTDETAILS(id, FName, LName, Email, Phone, DOB, Gender, businessID) " + "VALUES("+id+",'"+fname+"','"+lname+"','"+email+"','"+phone+"','"+dob+"','"+gender+"',"+businessID+")";
+		executeQuery(query, "User Added\n");
+		log.info("OUT addUserDetails\n");
+	}
+	
+	/**
 	 * Gets where the user name keyword matches another users name
 	 * @param username
 	 * @return User Object
@@ -110,6 +128,47 @@ public class DatabaseConnection
 			//Sets '?' to user name in the query
 			//crates a user from the found information
 			inject.setInt(1,id);
+			ResultSet output = inject.executeQuery();
+			while (output.next()){
+				_id = output.getInt(1);
+				_username = output.getString(2);
+				_password = output.getString(3);
+				_accountType = output.getInt(4);
+				businessID = output.getInt(5);
+			}
+			databaseUser = new User(_id ,_username, _password, _accountType, businessID);
+			output.close();
+		}
+		catch(SQLException sqle)
+		{
+			//System.out.println("Getting User: "+sqle.getMessage());
+			log.warn(sqle.getMessage());
+		}
+		log.info("OUT getUser\n");
+		return databaseUser;
+	}
+	
+	/**
+	 * Gets where the user name keyword matches another users name
+	 * @param username
+	 * @return User Object
+	 */
+	public User getUser(int BID, String val)
+	{
+		log.info("IN getUser\n");
+		int _id = 0;
+		String _username = "null";
+		String _password = "null";
+		int _accountType = 0;
+		int businessID = -1;
+		String query = "SELECT * FROM users WHERE businessID = ?";
+		//Creates a null user to return, this can be used to validate user at login
+		User databaseUser = null;
+		try (Connection connect = this.connect(); PreparedStatement  inject  = connect.prepareStatement(query))
+		{
+			//Sets '?' to user name in the query
+			//crates a user from the found information
+			inject.setInt(1,BID);
 			ResultSet output = inject.executeQuery();
 			while (output.next()){
 				_id = output.getInt(1);
@@ -1011,7 +1070,7 @@ public class DatabaseConnection
 	public void addBusinessOwner(int id, String fName,String lName,String phone,String address,String weekdayStart,String weekdayEnd,String weekendStart ,String weekendEnd){
 		log.info("IN addBusinessToDatabase\n");
 		//BusinessID is made in the database
-		String query = "INSERT INTO BUSINESS_OWNER (ID,fName,lName,phone,address,weekdayStart,weekdayEnd,weekendStart, weekendEnd)" + "VALUES("+id+",'"+ fName + "','"+ lName + "','"+ phone + "','"+ address + "','"+weekdayStart+"','" + weekdayEnd + "','" + weekendStart + "','"+weekendEnd+"', 1);";
+		String query = "INSERT INTO BUSINESS_OWNER (ID,fName,lName,phone,address,weekdayStart,weekdayEnd,weekendStart, weekendEnd, color)" + "VALUES("+id+",'"+ fName + "','"+ lName + "','"+ phone + "','"+ address + "','"+weekdayStart+"','" + weekdayEnd + "','" + weekendStart + "','"+weekendEnd+"', 1);";
 		try(Connection connect = this.connect(); Statement inject = connect.createStatement())
 		{
 			inject.executeUpdate(query);
@@ -1272,4 +1331,29 @@ public class DatabaseConnection
 		}
 		return val;
     }
+    
+    /**
+	 * Delete user from database
+	 * @param userName
+	 */
+	public void deleteUser(int businessID)
+	{
+		log.info("IN deleteUser\n");
+		String query = "DELETE FROM BUSINESS WHERE businessID = "+businessID+";";
+		String query1 = "DELETE FROM users WHERE businessID = "+businessID+";";
+		int id = getOneBusiness(getUser(businessID,"").getID()).getID();
+		String query2 = "DELETE FROM BUSINESS_OWNER WHERE ID = "+id+";";
+		String query3 = "DELETE FROM CLIENTDETAILS WHERE businessID = "+businessID+";";
+		String query4 = "DELETE FROM EMPLOYEES WHERE businessID = "+businessID+";";
+		String query5 = "DELETE FROM BOOKINGS WHERE businessID = "+businessID+";";
+		String query6 = "DELETE FROM SERVICES WHERE businessID = "+businessID+";";
+		executeQuery(query, "Business " + businessID + " deleted\n");
+		executeQuery(query1, "User " + businessID + " deleted\n");
+		executeQuery(query2, "BUSINESS_OWNER " + businessID + " deleted\n");
+		executeQuery(query3, "CLIENTDETAILS " + businessID + " deleted\n");
+		executeQuery(query4, "EMPLOYEES " + businessID + " deleted\n");
+		executeQuery(query5, "BOOKINGS " + businessID + " deleted\n");
+		executeQuery(query6, "SERVICES " + businessID + " deleted\n");
+		log.info("OUT deleteUser\n");
+	}
 }

@@ -43,7 +43,7 @@ public class DatabaseConnection
 		/*
 		 * creates a connection to the database to be used multiple times in the class
 		 */
-		String url = "jdbc:sqlite:db/company.db";
+		String url = "jdbc:sqlite:"+System.getProperty("user.home")+"/resourcing/company.db";
         Connection connect = null;
         try {
             connect = DriverManager.getConnection(url);

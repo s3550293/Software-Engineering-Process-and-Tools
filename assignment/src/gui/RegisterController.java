@@ -115,6 +115,7 @@ public class RegisterController implements Initializable {
 		cmbRegGender.setItems(obListGen);
 	}
 
+	
 	/**
 	 * Returns User to login
 	 * 
@@ -136,23 +137,24 @@ public class RegisterController implements Initializable {
 		//TODO
 		String date = null;
 		log.debug("LOGGER: entered createUser function");
-        if (program.checkInputToContainInvalidChar(txtFirstName.getText().toString())) {
+        if (program.checkInputToContainInvalidChar(txtFirstName.getText())) {
             program.messageBox("ERROR", "Error", "First Name field is empty or contains an invalid character", "");
             return;
         }
-        if (program.checkInputToContainInvalidChar(txtLastName.getText().toString())) {
+        if (program.checkInputToContainInvalidChar(txtLastName.getText())) {
             program.messageBox("ERROR", "Error", "Last Name field is empty or contains an invalid character", "");
             return;
         }
-        if (regProgram.checkTakenUsername(txtRegUsername.getText().toString(),program.business().getBusinessId())) {
-            program.messageBox("ERROR", "Error", "Invalid Username", "");
+        System.out.println("BUSINESS ID = "+program.business().getBusinessId());
+        if (regProgram.checkTakenUsername(txtRegUsername.getText(),program.business().getBusinessId())) {
+            program.messageBox("ERROR", "Error", "Username already taken", "");
             return;
         }
-        if (program.checkInputToContainInvalidChar(txtRegUsername.getText().toString())) {
-            program.messageBox("ERROR", "Error", "Invalid Username", "");
+        if (!program.CheckUsername(txtRegUsername.getText())) {
+            program.messageBox("ERROR", "Error", "Invalid Characters in Username", "");
             return;
         }
-        if (program.checkEmail(txtRegEmail.getText().toString())) {
+        if (program.checkEmail(txtRegEmail.getText())) {
             program.messageBox("ERROR", "Error", "Invalid Email", "");
             return;
         }

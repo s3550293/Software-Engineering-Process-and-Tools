@@ -190,12 +190,36 @@ public class DatabaseConnection
 	 */
 	public User getUser(String username, int businessID)
 	{
-		log.info("IN getUser\n");
-		
-		String query = "SELECT * FROM users WHERE username like '"+username+"' AND businessID = "+businessID;
+		log.info("IN getUser\n");	
+		int _id = 0;
+		String _username = null;
+		String _password = null;
+		int _accountType = 0;
+		String query = "SELECT * FROM users WHERE username like ? AND businessID = ?";
 		//Creates a null user to return, this can be used to validate user at login
 		User databaseUser = null;
-		databaseUser= userlogin(query);
+		try (Connection connect = this.connect(); PreparedStatement  inject  = connect.prepareStatement(query))
+		{
+			//Sets '?' to user name in the query
+			//crates a user from the found information
+			inject.setString(1,username);
+			inject.setInt(2,businessID);
+			ResultSet output = inject.executeQuery();
+			while (output.next()){
+				_id = output.getInt(1);
+				_username = output.getString(2);
+				_password = output.getString(3);
+				_accountType = output.getInt(4);
+				businessID = output.getInt(5);
+			}
+			databaseUser = new User(_id ,_username, _password, _accountType, businessID);
+			output.close();
+		}
+		catch(SQLException sqle)
+		{
+			//System.out.println("Getting User: "+sqle.getMessage());
+			log.warn(sqle.getMessage());
+		}
 		log.info("OUT getUser\n");
 		return databaseUser;
 	}

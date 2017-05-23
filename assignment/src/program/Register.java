@@ -25,25 +25,20 @@ public class Register
 	public boolean checkTakenUsername(String username, int businessID)
 	{
 		log.debug("ID "+ businessID);
-		boolean output = true;
 		User u = connect.getUser(username,businessID);
-		if(!username.equalsIgnoreCase(u.getUsername()))
+		if(username.equalsIgnoreCase("root"))
 		{
-			output = false;
+			System.out.println("USERNAME = "+u._username);
+			System.out.println("BUS ID = "+u._businessID);
+			return true;
 		}
-		else if(!username.equalsIgnoreCase("root"))
+		else if(u._username != null)
 		{
-			output = false;
+			System.out.println("USERNAME = "+u._username);
+			System.out.println("BUS ID = "+u._businessID);
+			return true;
 		}
-		else
-		{
-			System.out.println("Username Taken please enter another username");
-		}
-		if(username.equals("root"))
-		{
-			output = false;
-		}
-		return output;
+		return false;
 	}
 	
 	/**

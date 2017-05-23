@@ -47,6 +47,36 @@ public class ControllerJunit {
 		}
 	}
 	@Test
+	public void testCheckUsername1()
+	{
+		assertFalse(controller.CheckUsername(""));
+	}
+	@Test
+	public void testCheckUsername2()
+	{
+		assertFalse(controller.CheckUsername("Test"));
+	}
+	@Test
+	public void testCheckUsername3()
+	{
+		assertFalse(controller.CheckUsername("hisfsdf;;"));
+	}
+	@Test
+	public void testCheckUsername4()
+	{
+		assertTrue(controller.CheckUsername("Test123456789"));
+	}
+	@Test
+	public void testCheckUsername5()
+	{
+		assertFalse(controller.CheckUsername("dddddddddddddddddddddddddddd$"));
+	}
+	@Test
+	public void testCheckUsername6()
+	{
+		assertTrue(controller.CheckUsername("LukeM"));
+	}
+	@Test
 	public void testGetUpcomingStrDateForDay()
 	{
 		assertEquals("29/05/2017",controller.getUpcomingStrDateForDay(2));

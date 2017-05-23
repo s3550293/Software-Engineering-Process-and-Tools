@@ -507,6 +507,27 @@ public class Controller
 		return employeesWorkingInTimeBlock;
 	}
 	
+	public boolean CheckUsername(String username)
+	{
+		if (username.length() < 5 || username.length() > 30)
+		{
+			return false;
+		}
+		for (int i = 0; i < username.length(); i++)
+		{
+			// checks if the letter is not an upper case letter
+			if ((int) username.charAt(i) < 65 || (int) username.charAt(i) > 122 || ((int) username.charAt(i) < 97 &&(int) username.charAt(i) > 90))// checks if the letter is not a lowercase letter
+			{
+				if((int) username.charAt(i)<48|(int) username.charAt(i)>57)
+				{
+					System.out.println("Char at "+i+"invalid");
+					return false;
+				}				
+			}
+		}	
+		return true;
+	}
+	
 	/**
 	 * @author Luke Mason
 	 * @editor David

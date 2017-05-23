@@ -707,7 +707,7 @@ public class CustomerController  implements Initializable, IUser{
 			lblBookingDur.setText("");
 			lblBookingPrice.setText("");
 			lblCustBookingDate.setText("");
-
+			popListBook();
 		} else {
 			return;
 		}

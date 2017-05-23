@@ -858,12 +858,19 @@ public class CustomerController  implements Initializable, IUser{
 	}
 	
 	public void cancelBooking(){
-				if(connection.cancelBooking(listBookings.getSelectionModel().getSelectedItem().getBookingID()))
-					{
-					program.messageBox("Cancel Booking", "", "Booking cancelled", "");
-					};
-				popListBook();
-		
+		Alert alert = new Alert(AlertType.CONFIRMATION);
+		alert.setTitle("Cancel");
+		alert.setHeaderText("Cancel Selected Booking?");
+		alert.setContentText("Are you sure?");
+
+		Optional<ButtonType> result = alert.showAndWait();
+		if (result.get() == ButtonType.OK) {
+			connection.cancelBooking(listBookings.getSelectionModel().getSelectedItem().getBookingID());			
+			program.messageBox("Cancel Booking", "", "Booking cancelled", "");
+			popListBook();
+		} else {
+			return;
+		}
 	}
 
 	

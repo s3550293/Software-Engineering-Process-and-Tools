@@ -1,11 +1,6 @@
 package program;
 
 import java.awt.image.BufferedImage;
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.sql.Blob;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -14,8 +9,6 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Date;
-
-import javax.imageio.ImageIO;
 
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
@@ -153,7 +146,7 @@ public class DatabaseConnection
 	 * @param username
 	 * @return User Object
 	 */
-	public User getUser(int BID, String val)
+	public User getUser(int BID, int val)
 	{
 		log.info("IN getUser\n");
 		int _id = 0;
@@ -161,7 +154,7 @@ public class DatabaseConnection
 		String _password = "null";
 		int _accountType = 0;
 		int businessID = -1;
-		String query = "SELECT * FROM users WHERE businessID = ?";
+		String query = "SELECT * FROM users WHERE businessID = ? AND accountType = ?";
 		//Creates a null user to return, this can be used to validate user at login
 		User databaseUser = null;
 		try (Connection connect = this.connect(); PreparedStatement  inject  = connect.prepareStatement(query))
@@ -169,6 +162,7 @@ public class DatabaseConnection
 			//Sets '?' to user name in the query
 			//crates a user from the found information
 			inject.setInt(1,BID);
+			inject.setInt(2,val);
 			ResultSet output = inject.executeQuery();
 			while (output.next()){
 				_id = output.getInt(1);
@@ -1336,21 +1330,25 @@ public class DatabaseConnection
 	 * Delete user from database
 	 * @param userName
 	 */
-	public void deleteUser(int businessID)
+    public void deleteUser(int businessID)
 	{
 		log.info("IN deleteUser\n");
 		String query = "DELETE FROM BUSINESS WHERE businessID = "+businessID+";";
 		String query1 = "DELETE FROM users WHERE businessID = "+businessID+";";
-		int id = getOneBusiness(getUser(businessID,"").getID()).getID();
-		String query2 = "DELETE FROM BUSINESS_OWNER WHERE ID = "+id+";";
+		//int id = getOneBusiness(getUser(businessID,1).getID()).getID();
+		BusinessOwner b = getOneBusiness(businessID);
+		if(b!=null){
+			int id = b.getID();
+			String query2 = "DELETE FROM BUSINESS_OWNER WHERE businessID = "+id+";";
+			executeQuery(query2, "BUSINESS_OWNER " + businessID + " deleted\n");
+		}
 		String query3 = "DELETE FROM CLIENTDETAILS WHERE businessID = "+businessID+";";
 		String query4 = "DELETE FROM EMPLOYEES WHERE businessID = "+businessID+";";
 		String query5 = "DELETE FROM BOOKINGS WHERE businessID = "+businessID+";";
 		String query6 = "DELETE FROM SERVICES WHERE businessID = "+businessID+";";
 		executeQuery(query, "Business " + businessID + " deleted\n");
-		executeQuery(query1, "User " + businessID + " deleted\n");
-		executeQuery(query2, "BUSINESS_OWNER " + businessID + " deleted\n");
 		executeQuery(query3, "CLIENTDETAILS " + businessID + " deleted\n");
+		executeQuery(query1, "User " + businessID + " deleted\n");
 		executeQuery(query4, "EMPLOYEES " + businessID + " deleted\n");
 		executeQuery(query5, "BOOKINGS " + businessID + " deleted\n");
 		executeQuery(query6, "SERVICES " + businessID + " deleted\n");

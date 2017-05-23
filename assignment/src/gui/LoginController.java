@@ -40,7 +40,6 @@ import program.Database;
 import program.DatabaseConnection;
 import program.Login;
 import program.Service;
-import program.User;
 
 
 public class LoginController implements Initializable {
@@ -65,6 +64,8 @@ public class LoginController implements Initializable {
 	@FXML
 	ComboBox<Business> cmbBusiness;
 	
+	private final Image defaultImage = new Image("images/ic_person_black_48dp_2x.png");
+	
 	@Override
 	public void initialize(URL url, ResourceBundle rb)
 	{
@@ -83,15 +84,20 @@ public class LoginController implements Initializable {
 			@Override
 			public void changed(ObservableValue<? extends Business> observable, Business oldValue, Business newValue) {
 				if (newValue != null) {
+					program.business(newValue);
 					if(con.getlogo(newValue.getBusinessId())!=null){
+						program.business(newValue);
 						FileInputStream fis;
 						try {
-							fis = new FileInputStream(con.getlogo(newValue.getBusinessId()));
-							Image image = new Image(fis);
-				            imgView.setImage(image);
+								fis = new FileInputStream(con.getlogo(newValue.getBusinessId()));
+								Image image = new Image(fis);
+								imgView.setImage(image);
 						} catch (FileNotFoundException e) {
 							e.printStackTrace();
 						}
+					}
+					else{
+						imgView.setImage(defaultImage);
 					}
 				}
 			}
@@ -261,7 +267,7 @@ public class LoginController implements Initializable {
 		int businessID = business.getBusinessId();
 		
 		connect.addUser("heyhey", "S123456789", 1,businessID);	
-		connect.addBusinessOwner(businessID, "Luke", "Mason", "0417125229", "80 Stanton Grove Lilydale", "05:00", "06:30", "05:00", "07:00");
+		//connect.addBusinessOwner(businessID, "Luke", "Mason", "0417125229", "80 Stanton Grove Lilydale", "05:00", "17:30", "05:00", "19:00");
 		connect.addUser("William", "Apples22", 0,businessID); // customer attached to Business 2
 		connect.addUser("Hannah", "Apples22", 0,businessID); // customer attached to Business 2
 		connect.addUserDetails(3, "William", "Porter", "will@mail.com", "0452368593", "01/01/2002", "Male", businessID);

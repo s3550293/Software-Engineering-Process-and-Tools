@@ -142,10 +142,11 @@ public class RootController implements Initializable, IUser {
 		Optional<ButtonType> result = alert.showAndWait();
 		if (result.get() == ButtonType.OK) {
 			con.deleteUser(id);
-			refresh();
+			loadListView();
 		} else {
 			return;
 		}
+		loadListView();
 	}
 	
 	@FXML

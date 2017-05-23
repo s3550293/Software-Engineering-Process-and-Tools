@@ -165,7 +165,9 @@ public class CustomerController  implements Initializable, IUser{
 			@Override
 			public void changed(ObservableValue<? extends String> observable, String oldValue,String newValue) {
 				if (newValue != null) {
-					loadpreferedEmp(newValue, /*endTime*/ , program.business().getBusinessId());
+					Date eTime=program.calEnTime(program.strToTime(newValue),Integer.parseInt(lblServiceDur.getText()));
+					String endtime =program.timeToStr(eTime);
+					loadpreferedEmp(newValue, endtime , program.business().getBusinessId());
 				}
 			}
 		});

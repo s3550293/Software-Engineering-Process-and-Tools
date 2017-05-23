@@ -625,7 +625,7 @@ public class CustomerController  implements Initializable, IUser{
 			stkpnTime.setVisible(false);
 			stkpnBookingMenu.setVisible(false);
 			stkpnBookingConfirm.setVisible(true);
-			newBook.setStartTime(program.strToDate(listviewTimeSlot.getSelectionModel().getSelectedItem()));
+			newBook.setStartTime(program.strToTime(listviewTimeSlot.getSelectionModel().getSelectedItem()));
 			Date date = program.calEnTime(newBook.getStartTime(), service.getLengthMin());
 			newBook.setEndTime(date);
 			newBook.setEmployee(cmbPreferEmp.getSelectionModel().getSelectedItem().getId());

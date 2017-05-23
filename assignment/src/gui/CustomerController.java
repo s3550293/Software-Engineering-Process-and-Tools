@@ -161,6 +161,15 @@ public class CustomerController  implements Initializable, IUser{
 				popTime();
 			}
 		});
+		listviewTimeSlot.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<String>() {
+			@Override
+			public void changed(ObservableValue<? extends String> observable, String oldValue,String newValue) {
+				if (newValue != null) {
+					loadpreferedEmp(newValue, /*endTime*/ , program.business().getBusinessId());
+				}
+			}
+		});
+		
 		//togbtnMorn.setSelected(true);
 		loadDaySelect();
 		loadallServices();

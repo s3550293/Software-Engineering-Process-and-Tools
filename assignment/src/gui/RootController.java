@@ -53,12 +53,14 @@ public class RootController implements Initializable, IUser {
 	@Override
 	public void initialize(URL url, ResourceBundle rb){
 		loadListView();
+		
 		listviewBO.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<Business>() {
 			@Override
 			public void changed(ObservableValue<? extends Business> observable, Business oldValue,Business newValue) {
 				if (newValue != null) {
 					lblID.setText(""+newValue.getBusinessId());
 					lblName.setText(newValue.getBusinessName());
+					program.business(newValue);
 				}
 			}
 		});
@@ -142,10 +144,12 @@ public class RootController implements Initializable, IUser {
 		Optional<ButtonType> result = alert.showAndWait();
 		if (result.get() == ButtonType.OK) {
 			con.deleteUser(id);
-			refresh();
+			loadListView();
 		} else {
 			return;
 		}
+		lblID.setText("");
+		lblName.setText("");
 	}
 	
 	@FXML

@@ -14,7 +14,7 @@ public class Register
 	public void registerUser(String fname, String lname, String username, String email, String mobilenumber, String dob, String gender, String password, int businessID)
 	{
 		connect.addUser(username, password, 0,businessID);
-		connect.addUserDetails(connect.getUser(username,businessID).getID(),fname,lname, email, mobilenumber, dob, gender);	
+		connect.addUserDetails(connect.getUser(username,businessID).getID(),fname,lname, email, mobilenumber, dob, gender, businessID);	
 	}
 	
 	/**

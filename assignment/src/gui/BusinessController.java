@@ -1287,15 +1287,24 @@ public class BusinessController implements Initializable, IUser  {
 			program.messageBox("ERROR", "Error", "A Customer Has Not Been Chosen", "Please select a customer");
 			return;
 		}
+		System.out.println("OUT OF HERE 1");
 		_user = program.getUser();
+		System.out.println("OUT OF HERE 2");
 		program.setUser(connection.getUser(listviewCustomers.getSelectionModel().getSelectedItem().getID()));
+		System.out.println("OUT OF HERE 3");
 		log.debug("LOGGER: Selected user ID - " + listviewCustomers.getSelectionModel().getSelectedItem().getID());
 		log.debug("LOGGER: set user - " + program.getUser());
 		program.bmb = true;
-		IUser customer = userFactory.getUser("Customer");
-		customer.getUserWindow();
-		program.setUser(_user);
-		program.bmb = false;
+
+		System.out.println("OUT OF HERE 4");		
+			IUser customer = userFactory.getUser("Customer");
+			System.out.println("OUT OF HERE 5");
+			customer.getUserWindow();
+			System.out.println("OUT OF HERE 6");
+			program.setUser(_user);
+			System.out.println("OUT OF HERE 7");
+			program.bmb = false;
+		System.out.println("OUT OF HERE 8");
 		/*
 		if (listviewCustomers.getSelectionModel().getSelectedItem() == null) {
 			program.messageBox("ERROR", "Error", "A Customer Has Not Been Chosen", "Please select a customer");

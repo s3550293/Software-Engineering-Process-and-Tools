@@ -267,7 +267,7 @@ public class LoginController implements Initializable {
 		int businessID = business.getBusinessId();
 		
 		connect.addUser("heyhey", "S123456789", 1,businessID);	
-		//connect.addBusinessOwner(businessID, "Luke", "Mason", "0417125229", "80 Stanton Grove Lilydale", "05:00", "17:30", "05:00", "19:00");
+		connect.addBusinessOwner(businessID, "Luke", "Mason", "0417125229", "80 Stanton Grove Lilydale", "05:00", "17:30", "05:00", "19:00");
 		connect.addUser("William", "Apples22", 0,businessID); // customer attached to Business 2
 		connect.addUser("Hannah", "Apples22", 0,businessID); // customer attached to Business 2
 		connect.addUserDetails(3, "William", "Porter", "will@mail.com", "0452368593", "01/01/2002", "Male", businessID);

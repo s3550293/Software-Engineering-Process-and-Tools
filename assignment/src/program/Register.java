@@ -8,7 +8,7 @@ public class Register
 	private static Logger log = Logger.getLogger(Register.class);
 	private DatabaseConnection connect = new DatabaseConnection();
 	
-	public Register(){log.setLevel(Level.DEBUG);}
+	public Register(){log.setLevel(Level.INFO);}
 	
 	
 	public void registerUser(String fname, String lname, String username, String email, String mobilenumber, String dob, String gender, String password, int businessID)

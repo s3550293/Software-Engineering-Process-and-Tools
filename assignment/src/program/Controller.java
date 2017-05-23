@@ -19,7 +19,7 @@ import javafx.scene.control.Alert;
 public class Controller
 {
 	private static Logger log = Logger.getLogger(Controller.class);
-	public Controller(){ log.setLevel(Level.DEBUG);}
+	public Controller(){ log.setLevel(Level.INFO);}
 	
 	private static User _user = null;
 	public User getUser(){return _user;}
@@ -436,6 +436,12 @@ public class Controller
 	 */
 	public List<Employee> getAvailableEmployeesForSpecifiedTime(String date, String startTime, String endTime, int businessID)
 	{
+		
+		log.debug("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
+		log.debug("GET AVAILABLE EMPLOYEES BETWEEN - "+startTime+" AND "+endTime+" in business "+businessID+" ON "+date);
+		log.debug("Business Time block = "+BusinessMenu.MFearly+" - "+BusinessMenu.MFearlyMidDay+" - "+BusinessMenu.MFlateMidDay+" - "+BusinessMenu.MFlate);
+		log.debug("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
+
 		int day = dateToDay(date);
 		DatabaseConnection connect = new DatabaseConnection();
 		log.info("IN getAvailableEmployeesForBooking");
@@ -444,6 +450,15 @@ public class Controller
 		ArrayList<Booking> bookingsOnDate;
 		ArrayList<Employee> employeesNotAvailable = new ArrayList<>();
 		workTimesOnDay = connect.getWorkTimesOnDay(day, businessID);
+
+		for(EmployeeWorkingTime ewt: workTimesOnDay)
+		{
+			log.debug("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
+			log.debug("Day = "+ewt.getDayOfWeek());
+			log.debug("BusID = "+ewt.getBusinessID());
+			log.debug("Employee = "+ewt.getEmpID());
+			log.debug("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
+		}
 		bookingsOnDate = connect.getActiveBookingsOnDate(date, businessID);
 		Date date2 = strToDate(date);
 		Date startTime2 = strToTime(startTime);

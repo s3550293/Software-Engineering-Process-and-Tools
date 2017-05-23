@@ -15,7 +15,6 @@ public class SetupControllerJUnit {
 	@Test
 	public void assignOpenClosingTimesToWeekDays1()
 	{
-		setupC.assignOpenClosingTimesToWeekDays("6:30","7:30");
 		setupC.assignOpenClosingTimesToWeekDays("06:30","07:30");
 	}
 	@Test

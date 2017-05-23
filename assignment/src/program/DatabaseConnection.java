@@ -30,7 +30,7 @@ public class DatabaseConnection
 {
 	private static Logger log = Logger.getLogger(DatabaseConnection.class);
 	private Controller controller = new Controller();
-	public DatabaseConnection(){log.setLevel(Level.DEBUG);}
+	public DatabaseConnection(){log.setLevel(Level.INFO);}
 	private Connection connect()
 	{
 		/*
@@ -598,7 +598,7 @@ public class DatabaseConnection
 	public ArrayList<Booking> getAllBooking (int businessID)
 	{
 		log.info("IN getAllBooking\n");
-		ArrayList<Booking> databaseBookingTime = new ArrayList<Booking>();
+		ArrayList<Booking> databaseBookingTime = new ArrayList<>();
 		int bookingID = 0;
 		int cusID = 0;
 		int empID = 0;
@@ -694,15 +694,24 @@ public class DatabaseConnection
 	{
 		log.info("IN cancelBooking\n");
 		Booking booking = getOneBooking(bookID);
+		if(booking == null)
+		{
+			return false;
+		}
 		ArrayList<Booking> bookList = getAllBooking(booking.getBusinessID());
 		Boolean exists = false;
 		//check if the booking exists using bookID
-		for(Booking b : bookList){
-			if(b.getBookingID() == bookID){
-				exists = true;
-			}
+		if(bookList == null)
+		{
+			return false;
 		}
-		if(exists == false){
+			for(Booking b : bookList){
+				if(b.getBookingID() == bookID){
+					System.out.println(b.getBookingID()+" == "+ bookID);
+					exists = true;
+				}
+			}
+		if(!exists){
 			log.debug("Book ID " + bookID + " does not exists!\n");
 			log.info("OUT cancelBooking\n");
 			return false;
@@ -1133,7 +1142,7 @@ public class DatabaseConnection
 		int bID = 0;
 		String fName,lName,phone,address;
 		Date weekDayStart,weekDayEnd,weekendStart,weekendEnd;
-		String query = "SELECT * FROM BUSINESS_OWNER WHERE id = ?"; 
+		String query = "SELECT * FROM BUSINESS_OWNER WHERE ID = ?"; 		
 		int color = 1;
 		try (Connection connect = this.connect(); PreparedStatement  inject  = connect.prepareStatement(query))
 		{

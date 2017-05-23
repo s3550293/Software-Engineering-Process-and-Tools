@@ -57,7 +57,7 @@ public class CustomerController  implements Initializable, IUser{
 	int globalEmployeeOption = 0;
 	private static Booking newBook = new Booking();
 	SetupController setupC = new SetupController();
-	public CustomerController(){log.setLevel(Level.DEBUG);}
+	public CustomerController(){log.setLevel(Level.ALL);}
 	
 	@FXML
 	AnchorPane root;
@@ -165,8 +165,8 @@ public class CustomerController  implements Initializable, IUser{
 		togbtnMorn.setSelected(true);
 		loadDaySelect();
 		loadallServices();
-		//listTogTDini(program.business().getBusinessId());
-		//listTogTSini(program.business().getBusinessId());
+		listTogTDini(program.business().getBusinessId());
+		listTogTSini(program.business().getBusinessId());
 	}
 	
 	@Override
@@ -464,7 +464,7 @@ public class CustomerController  implements Initializable, IUser{
 				str = open.get(Calendar.HOUR_OF_DAY) + ":" + open.get(Calendar.MINUTE) + "0";
 			}
 			arr.add(str);
-			log.debug("BOOKING TIMES: str");
+			log.debug("BOOKING TIMES: "+str);
 			open.add(Calendar.MINUTE, 30);
 		}
 		return arr;

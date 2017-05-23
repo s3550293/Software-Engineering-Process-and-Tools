@@ -35,7 +35,7 @@ public class Main {
 		/*
 		 * Login menu = new Login(); menu.loginMenu();
 		 */
-		log.setLevel(Level.WARN);
+		log.setLevel(Level.INFO);
 		BasicConfigurator.configure();
 		log.info("Program Launch");
 		LauncherImpl.launchApplication(MainApplication.class, PreLoader.class, args);

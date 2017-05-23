@@ -11,10 +11,10 @@ public class Register
 	public Register(){log.setLevel(Level.WARN);}
 	
 	
-	public void registerUser(String fname, String lname, String username, String email, String mobilenumber, String dob, String gender, String password)
+	public void registerUser(String fname, String lname, String username, String email, String mobilenumber, String dob, String gender, String password, int businessID)
 	{
-		connect.addUser(username, password, 0,2);
-		connect.addUserDetails(connect.getUser(username,2).getID(),fname,lname, email, mobilenumber, dob, gender);	
+		connect.addUser(username, password, 0,businessID);
+		connect.addUserDetails(connect.getUser(username,businessID).getID(),fname,lname, email, mobilenumber, dob, gender);	
 	}
 	
 	/**

@@ -1,5 +1,6 @@
 package gui;
 
+import java.awt.event.ActionEvent;
 import java.io.IOException;
 import java.net.URL;
 import java.text.SimpleDateFormat;
@@ -70,7 +71,7 @@ public class CustomerController  implements Initializable, IUser{
 	
 	@FXML
 	Button btnConfirmBooking, btnNext, btnLogoutCustomer, btnBack, btnCancelAppoitment,
-			btnRToOwnMen;
+			btnRToOwnMen,btndelete;
 
 	@FXML
 	Label lblCustomerName, lblDayDate, lblServiceName, lblServiceDur, lblServicePrice, lblCustBookingDate,
@@ -855,6 +856,15 @@ public class CustomerController  implements Initializable, IUser{
 		}
 		log.debug("false");
 		return false;
+	}
+	
+	public void cancelBooking(){
+				if(connection.cancelBooking(listBookings.getSelectionModel().getSelectedItem().getBookingID()))
+					{
+					program.messageBox("Cancel Booking", "", "Booking cancelled", "");
+					};
+				popListBook();
+		
 	}
 
 	

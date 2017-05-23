@@ -1342,7 +1342,7 @@ public class DatabaseConnection
 		String query = "DELETE FROM BUSINESS WHERE businessID = "+businessID+";";
 		String query1 = "DELETE FROM users WHERE businessID = "+businessID+";";
 		int id = getOneBusiness(getUser(businessID,"").getID()).getID();
-		String query2 = "DELETE FROM BUSINESS_OWNER WHERE ID = "+id+";";
+		String query2 = "DELETE FROM BUSINESS_OWNER WHERE businessID = "+id+";";
 		String query3 = "DELETE FROM CLIENTDETAILS WHERE businessID = "+businessID+";";
 		String query4 = "DELETE FROM EMPLOYEES WHERE businessID = "+businessID+";";
 		String query5 = "DELETE FROM BOOKINGS WHERE businessID = "+businessID+";";

@@ -8,7 +8,7 @@ public class Register
 	private static Logger log = Logger.getLogger(Register.class);
 	private DatabaseConnection connect = new DatabaseConnection();
 	
-	public Register(){log.setLevel(Level.WARN);}
+	public Register(){log.setLevel(Level.DEBUG);}
 	
 	
 	public void registerUser(String fname, String lname, String username, String email, String mobilenumber, String dob, String gender, String password, int businessID)
@@ -24,8 +24,10 @@ public class Register
 	 */
 	public boolean checkTakenUsername(String username, int businessID)
 	{
+		log.debug("ID "+ businessID);
 		boolean output = true;
-		if(!username.equalsIgnoreCase(connect.getUser(username,businessID).getUsername()))
+		User u = connect.getUser(username,businessID);
+		if(!username.equalsIgnoreCase(u.getUsername()))
 		{
 			output = false;
 		}

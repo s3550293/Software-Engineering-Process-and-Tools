@@ -165,7 +165,6 @@ public class CustomerController  implements Initializable, IUser{
 		togbtnMorn.setSelected(true);
 		loadDaySelect();
 		loadallServices();
-		popTime();
 		//listTogTDini(program.business().getBusinessId());
 		//listTogTSini(program.business().getBusinessId());
 	}
@@ -527,12 +526,15 @@ public class CustomerController  implements Initializable, IUser{
 			
 				List<Booking> bookings = new ArrayList<Booking>(connection.getAllBooking(program.business().getBusinessId()));
 				for (Booking b : bookings) {
-					if (b.getStatus() != "canceled"){
-						enD = b.getEndTime();
-						if (program.dateToStr(newBook.getDate()).equals(program.dateToStr(b.getDate()))) {
-							if (enD.after(program.strToTime(arr.get(i))) && enD.before(program.strToTime(arr.get(i+1)))) {
-								if(arr.get(i).contains("\n") || arr.get(i).contains("\\n")){
-									arr.set(i, arr.get(i)+"\nUnavailable");
+					if(b!=null)
+					{
+						if (b.getStatus() != "canceled"){
+							enD = b.getEndTime();
+							if (program.dateToStr(newBook.getDate()).equals(program.dateToStr(b.getDate()))) {
+								if (enD.after(program.strToTime(arr.get(i))) && enD.before(program.strToTime(arr.get(i+1)))) {
+									if(arr.get(i).contains("\n") || arr.get(i).contains("\\n")){
+										arr.set(i, arr.get(i)+"\nUnavailable");
+									}
 								}
 							}
 						}
@@ -553,6 +555,7 @@ public class CustomerController  implements Initializable, IUser{
 		for(int i=0;i<arr.size();i++){
 			List<Booking> bookings = new ArrayList<Booking>(connection.getAllBooking(program.business().getBusinessId()));
 			for (Booking b : bookings) {
+				if(b!=null){
 				if (b.getStatus() != "canceled"){
 					stD = b.getStartTime();
 					if (program.dateToStr(newBook.getDate()).equals(program.dateToStr(b.getDate()))) {
@@ -562,6 +565,7 @@ public class CustomerController  implements Initializable, IUser{
 							}
 						}
 					}
+				}
 				}
 			}
 		}
@@ -646,14 +650,6 @@ public class CustomerController  implements Initializable, IUser{
 		if (stkpnTime.isVisible() && stkpnBookingMenu.isVisible()) {
 
 			cmbPreferEmp.getSelectionModel().clearSelection();
-			togbtnTimeSlot1.setSelected(false);
-			togbtnTimeSlot2.setSelected(false);
-			togbtnTimeSlot3.setSelected(false);
-			togbtnTimeSlot4.setSelected(false);
-			togbtnTimeSlot5.setSelected(false);
-			togbtnTimeSlot6.setSelected(false);
-			togbtnTimeSlot7.setSelected(false);
-			togbtnTimeSlot8.setSelected(false);
 			stkpnTime.setVisible(false);
 			stkpnDateService.setVisible(true);
 			return;

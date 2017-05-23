@@ -4,12 +4,14 @@ package program;
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 
+import gui.IInterface.IUser;
+
 public class Login
 {
 	private static Logger log = Logger.getLogger(Login.class);
 	private final Controller program = new Controller();
 	public Login(){
-		log.setLevel(Level.DEBUG);
+		log.setLevel(Level.INFO);
 	}
 	
 	/**
@@ -19,36 +21,53 @@ public class Login
 	 * @param pass
 	 * @return 0 for valid Customer
 	 * 		   1 for valid Business Owner
+	 * 		   2 for valid Superuser/Admin
 	 *        -1 for nonexistent user
 	 *        -2 for incorrect password
 	 *        -3 for empty user name or password
 	 */
-	public int logInProcess(String userName, String pass){
-		boolean passCheck = false;
+	public int logInProcess(String userName, String pass, int businessID){
 		DatabaseConnection connect = new DatabaseConnection();
 	
-		if(userName.equals(connect.getUser(userName).getUsername()))
+		User user = connect.getUser(userName,businessID);
+		log.info(userName+"\n");
+		log.info(pass+"\n");
+		log.info(businessID+"\n");	
+		if(user == null)
 		{
-			while(passCheck==false)
+			log.debug("NO USER FOUND WITH THAT INPUT\n");
+			return -4;
+		}
+		if(userName.equals(user.getUsername()))
+		{
+			if(pass.equals(user.getPassword()))
 			{
-				if(pass.equals(connect.getUser(userName).getPassword()))
+				if(businessID == user.getBusinessID())
 				{
-					passCheck=true;
-					if(connect.getUser(userName).getAccountType() == 1){
-						program.setUser(connect.getUser(userName));
-						log.debug("LOGGER: User - "+connect.getUser(userName).getFullName());
+					if(user.getAccountType() == 2){
+						program.setUser(user);
+						program.setBusiness(connect.getBusiness(businessID));
+						log.debug("LOGGER: User 2 - "+connect.getUser(userName,businessID).getUsername());
+						return 2;
+					} 			
+					else if(user.getAccountType() == 1){
+						program.setUser(user);
+						program.setBusiness(connect.getBusiness(businessID));
+						log.debug("LOGGER: User 1 - "+connect.getUser(userName,businessID).getUsername());
 						return 1;
-					}else{
-						program.setUser(connect.getUser(userName));
-						log.debug("LOGGER: User - "+connect.getUser(userName).getFullName());
+					}
+					else if(user.getAccountType() == 0){
+						program.setUser(user);
+						program.setBusiness(connect.getBusiness(businessID));
+						log.debug("LOGGER: User 0 - "+connect.getUser(userName,businessID).getUsername());
 						return 0;
 					}
 				}
-				else
-				{
-					log.debug("Incorrect Password");
-					return -2;
-				}
+			}
+			else
+			{
+				log.debug("Incorrect Username or Password");
+				return -2;
 			}
 		}
 		else if (userName.isEmpty() || pass.isEmpty()){
@@ -56,7 +75,7 @@ public class Login
 			return -3;
 		}
 		else{
-			log.debug("Username does not exist!");
+			log.debug("Incorrect Username or Password");
 		}
 		return -1;
 	}

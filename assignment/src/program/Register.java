@@ -8,13 +8,13 @@ public class Register
 	private static Logger log = Logger.getLogger(Register.class);
 	private DatabaseConnection connect = new DatabaseConnection();
 	
-	public Register(){log.setLevel(Level.WARN);}
+	public Register(){log.setLevel(Level.INFO);}
 	
 	
-	public void registerUser(String fname, String lname, String username, String email, String mobilenumber, String dob, String gender, String password)
+	public void registerUser(String fname, String lname, String username, String email, String mobilenumber, String dob, String gender, String password, int businessID)
 	{
-		connect.addUser(username, password, 0);
-		connect.addUserDetails(connect.getUser(username).getID(),fname,lname, email, mobilenumber, dob, gender);	
+		connect.addUser(username, password, 0,businessID);
+		connect.addUserDetails(connect.getUser(username,businessID).getID(),fname,lname, email, mobilenumber, dob, gender, businessID);	
 	}
 	
 	/**
@@ -22,16 +22,26 @@ public class Register
 	 * Checks if the username is equal to one already in the database
 	 * @return true if username already taken, else false
 	 */
-	public boolean checkTakenUsername(String username)
+	public boolean checkTakenUsername(String username, int businessID)
 	{
+		log.debug("ID "+ businessID);
 		boolean output = true;
-		if(!username.equalsIgnoreCase(connect.getUser(username).getUsername()))
+		User u = connect.getUser(username,businessID);
+		if(!username.equalsIgnoreCase(u.getUsername()))
+		{
+			output = false;
+		}
+		else if(!username.equalsIgnoreCase("root"))
 		{
 			output = false;
 		}
 		else
 		{
 			System.out.println("Username Taken please enter another username");
+		}
+		if(username.equals("root"))
+		{
+			output = false;
 		}
 		return output;
 	}

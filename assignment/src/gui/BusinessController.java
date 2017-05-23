@@ -11,6 +11,8 @@ import java.util.ResourceBundle;
 
 import org.apache.log4j.Logger;
 
+import gui.IInterface.ISetup;
+import gui.IInterface.IUser;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
@@ -35,6 +37,7 @@ import javafx.scene.control.ToggleButton;
 import javafx.scene.control.ToggleGroup;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.image.Image;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.stage.Modality;
@@ -42,6 +45,7 @@ import javafx.stage.Stage;
 import javafx.util.Callback;
 import program.Booking;
 import program.BusinessMenu;
+import program.BusinessOwner;
 import program.Controller;
 import program.Customer;
 import program.DatabaseConnection;
@@ -50,13 +54,15 @@ import program.EmployeeWorkingTime;
 import program.Service;
 import program.User;
 
-public class BusinessController  implements Initializable  {
+public class BusinessController implements Initializable, IUser  {
 	private static Logger log = Logger.getLogger(BusinessController.class);
 	private static Controller program = new Controller();
 	private DatabaseConnection connection = new DatabaseConnection();
 	private Employee employee = null;
 	private Booking booking = null;
 	int globalEmployeeOption = 0;
+	UserFactory userFactory = new UserFactory();
+	SetupController setupC = new SetupController();
 
 	public BusinessController() {}
 
@@ -64,6 +70,9 @@ public class BusinessController  implements Initializable  {
 	 * Business Owner
 	 **************/
 
+	@FXML
+	AnchorPane root;
+	
 	@FXML
 	ToggleGroup bookingViewGroup = new ToggleGroup();
 
@@ -137,7 +146,6 @@ public class BusinessController  implements Initializable  {
 
 	private User _user = null;
 
-	private Stage stage = null;
 
 	/**
 	 * initializes the stage
@@ -146,9 +154,31 @@ public class BusinessController  implements Initializable  {
 	 */
 	@Override
 	public void initialize(URL url, ResourceBundle rb) {
-		setColor();
+		BusinessOwner BO = connection.getOneBusiness(program.business().getBusinessId());
+		if(BO == null)
+		{
+			ISetup setup = userFactory.getSetup("SetUp");
+			setup.getSetup();
+		}
+		if(BO != null)
+		{
+			String wds = program.timeToStr(BO.getWeekdayStart());
+			String wde = program.timeToStr(BO.getWeekdayEnd());
+			String wes = program.timeToStr(BO.getWeekendStart());
+			String wee = program.timeToStr(BO.getWeekendEnd());
+			setupC.assignOpenClosingTimesToGlobal(wds, wde, wes, wee);
+		}
+		else{
+			Stage stage= (Stage) btnRefershServices.getScene().getWindow();
+			stage.close();
+		}
+		if(connection.getOneBusiness(program.getUser().getBusinessID()).color() >= 1){
+			setCI();
+		}
+		initialiseWorkTimeBusinessMenu();
+		
 		loadDaySelect();
-		loadallServices("");
+		loadallServices();
 			rbCurrentBook.setSelected(true);
 			loadListViewEmp("");
 			listviewEmployees.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<Employee>() {
@@ -206,7 +236,53 @@ public class BusinessController  implements Initializable  {
 			listLVBookini();
 		}
 
-	
+	public void initialiseWorkTimeBusinessMenu()
+	{
+		String MFearly = BusinessMenu.MFearly; //Start Time for day
+		String MFearlyMidDay = BusinessMenu.MFearlyMidDay; //Early Midday
+		String MFlateMidDay = BusinessMenu.MFlateMidDay; //Late midday
+		String MFlate = BusinessMenu.MFlate; // End Time for day
+		String SSearly = BusinessMenu.SSearly; //Start Time for day
+		String SSearlyMidDay = BusinessMenu.SSearlyMidDay; //Early Midday
+		String SSlateMidDay = BusinessMenu.SSlateMidDay; //Late midday
+		String SSlate = BusinessMenu.SSlate; // End Time for day
+		
+		String sSMorning = SSearly+" - "+SSearlyMidDay;
+		String sSAfternoon = SSearlyMidDay+" - "+SSlateMidDay;
+		String sSEvening = SSlateMidDay+" - "+SSlate;
+		
+		String mFMorning = MFearly +" - "+MFearlyMidDay;
+		String mFAfternoon = MFearlyMidDay +" - "+MFlateMidDay;
+		String mFEvening = MFlateMidDay +" - "+MFlate;
+		
+		btnSunMorning.setText(sSMorning);
+		btnSunAfternoon.setText(sSAfternoon);
+		btnSunEvening.setText(sSEvening);
+		
+		btnSatMorning.setText(sSMorning);
+		btnSatAfternoon.setText(sSAfternoon);
+		btnSatEvening.setText(sSEvening);
+		
+		btnMonMorning.setText(mFMorning); 
+		btnMonAfternoon.setText(mFAfternoon);
+		btnMonEvening.setText(mFEvening); 
+		
+		btnTueMorning.setText(mFMorning);
+		btnTueAfternoon.setText(mFAfternoon);
+		btnTueEvening.setText(mFEvening);
+		
+		btnWedMorning.setText(mFMorning);
+		btnWedAfternoon.setText(mFAfternoon);
+		btnWedEvening.setText(mFEvening);
+		
+		btnThurMorning.setText(mFMorning);
+		btnThurAfternoon.setText(mFAfternoon);
+		btnThurEvening.setText(mFEvening);
+		
+		btnFriMorning.setText(mFMorning);
+		btnFriAfternoon.setText(mFAfternoon);
+		btnFriEvening.setText(mFEvening);
+	}
 	
 	/**
 	 * Returns User to login
@@ -214,7 +290,7 @@ public class BusinessController  implements Initializable  {
 	 * @author Joseph Garner
 	 */
 	private void loadListViewEmp(String name) {
-		ArrayList<Employee> empArray = new ArrayList<>(connection.getEmployees(name));
+		ArrayList<Employee> empArray = new ArrayList<>(connection.getEmployees(name,program.business().getBusinessId()));
 		ObservableList<Employee> empList = FXCollections.observableList(empArray);
 		log.debug("LOGGER: List length:" + empArray.size());
 		if (empList != null) {
@@ -321,7 +397,7 @@ public class BusinessController  implements Initializable  {
 			Calendar cal = Calendar.getInstance();
 			Date now = null;
 			SimpleDateFormat dateView = new SimpleDateFormat("dd/MM/yyyy");
-			ArrayList<Booking> bookArray = new ArrayList<>(connection.getAllBooking());
+			ArrayList<Booking> bookArray = new ArrayList<>(connection.getAllBooking(program.business().getBusinessId()));
 			ArrayList<Booking> bookArrayView = new ArrayList<>();
 			for (Booking b : bookArray) {
 				cal.setTime(b.getDate());
@@ -371,7 +447,7 @@ public class BusinessController  implements Initializable  {
 	public void loadAllBookings() {
 		if (cmbBookingDay.getSelectionModel().getSelectedItem() != null) {
 			listviewBookings.getItems().clear();
-			ArrayList<Booking> bookArray = new ArrayList<>(connection.getAllBooking());
+			ArrayList<Booking> bookArray = new ArrayList<>(connection.getAllBooking(program.business().getBusinessId()));
 			ObservableList<Booking> bookList = FXCollections.observableList(bookArray);
 			log.debug("LOGGER: List length:" + bookArray.size());
 			if (bookList != null) {
@@ -408,9 +484,9 @@ public class BusinessController  implements Initializable  {
 	 * @author Joseph Garner
 	 */
 	@FXML
-	public void loadallServices(String input) {
+	public void loadallServices() {
 		listviewManServices.getItems().clear();
-		ArrayList<Service> serviceArray = new ArrayList<>(connection.getAllServices(input));
+		ArrayList<Service> serviceArray = new ArrayList<>(connection.getAllServices(program.business().getBusinessId()));
 		ObservableList<Service> serviceList = FXCollections.observableList(serviceArray);
 		log.debug("LOGGER: List length:" + serviceArray.size());
 		if (serviceList != null) {
@@ -445,7 +521,7 @@ public class BusinessController  implements Initializable  {
 	@FXML
 	public void loadallCustomers() {
 		listviewCustomers.getItems().clear();
-		ArrayList<Customer> serviceArray = new ArrayList<>(connection.getAllCustomer());
+		ArrayList<Customer> serviceArray = new ArrayList<>(connection.getAllCustomer(program.business().getBusinessId()));
 		ObservableList<Customer> serviceList = FXCollections.observableList(serviceArray);
 		log.debug("LOGGER: List length:" + serviceArray.size());
 		if (serviceList != null) {
@@ -536,7 +612,7 @@ public class BusinessController  implements Initializable  {
 		Calendar cal = Calendar.getInstance();
 		Date now = null;
 		SimpleDateFormat dateView = new SimpleDateFormat("dd/MM/yyyy");
-		ArrayList<Booking> bookArray = new ArrayList<>(connection.getAllBooking());
+		ArrayList<Booking> bookArray = new ArrayList<>(connection.getAllBooking(program.business().getBusinessId()));
 		ArrayList<Booking> bookArrayView = new ArrayList<>();
 		String fname = null;
 		String lname = null;
@@ -691,6 +767,7 @@ public class BusinessController  implements Initializable  {
 	 */
 	@FXML
 	public void createEmp() {
+		int businessID = program.business().getBusinessId();
 		BusinessMenu bMenu = new BusinessMenu();
 		boolean firstName = !program.checkInputToContainInvalidChar(txtaddEmpFirstName.getText());
 		log.debug("First Name = " + firstName + "\n");
@@ -731,8 +808,8 @@ public class BusinessController  implements Initializable  {
 					return;
 				}
 				if (globalEmployeeOption == 0) {
-					bMenu.addEmployee(txtaddEmpFirstName.getText(), txtAddEmpLastName.getText(), payRate);
-					int id = bMenu.getLastEmployeeId();
+					bMenu.addEmployee(txtaddEmpFirstName.getText(), txtAddEmpLastName.getText(), payRate,businessID);
+					int id = bMenu.getLastEmployeeId(businessID);
 					bMenu.addWorkingTimes(id, btnSunMorning.isSelected(), btnSunAfternoon.isSelected(),
 							btnSunEvening.isSelected(), btnMonMorning.isSelected(), btnMonAfternoon.isSelected(),
 							btnMonEvening.isSelected(), btnTueMorning.isSelected(), btnTueAfternoon.isSelected(),
@@ -765,7 +842,7 @@ public class BusinessController  implements Initializable  {
 				}
 			} else {
 				if (globalEmployeeOption == 0) {
-					bMenu.addEmployee(txtaddEmpFirstName.getText(), txtAddEmpLastName.getText(), payRate);
+					bMenu.addEmployee(txtaddEmpFirstName.getText(), txtAddEmpLastName.getText(), payRate,businessID);
 					program.messageBox("SUCCESS", "SUCCESS", "New Employee Added", txtaddEmpFirstName.getText() + " "
 							+ txtAddEmpLastName.getText() + " with $" + payRate + "/h was Added!");
 				} else {
@@ -954,26 +1031,32 @@ public class BusinessController  implements Initializable  {
 			btnMorn.setSelected(true);
 			btnAft.setSelected(true);
 			btnEven.setSelected(true);
+			
 		} else if (timeBlock == 2) {
 			btnMorn.setSelected(true);
 			btnAft.setSelected(true);
 			btnEven.setSelected(false);
+			
 		} else if (timeBlock == 3) {
 			btnMorn.setSelected(false);
 			btnAft.setSelected(true);
 			btnEven.setSelected(true);
+			
 		} else if (timeBlock == 4) {
 			btnMorn.setSelected(true);
 			btnAft.setSelected(false);
 			btnEven.setSelected(false);
+			
 		} else if (timeBlock == 5) {
 			btnMorn.setSelected(false);
 			btnAft.setSelected(true);
 			btnEven.setSelected(false);
+			
 		} else if (timeBlock == 6) {
 			btnMorn.setSelected(false);
 			btnAft.setSelected(false);
 			btnEven.setSelected(true);
+			
 		}
 	}
 	
@@ -1084,7 +1167,7 @@ public class BusinessController  implements Initializable  {
 			log.warn(ioe.getMessage());
 		}
 		log.debug("false");
-		loadallServices("");
+		loadallServices();
 
 	}
 
@@ -1133,14 +1216,7 @@ public class BusinessController  implements Initializable  {
 	 */
 	@FXML
 	public void refreshService() {
-		loadallServices("");
-	}
-	
-	/**
-	 * @author Joseph Garner
-	 */
-	private void setColor(){
-		//TODO
+		loadallServices();
 	}
 
 	/**************
@@ -1155,7 +1231,7 @@ public class BusinessController  implements Initializable  {
 	@FXML
 	public void searchCustomers() {
 		listviewCustomers.getItems().clear();
-		ArrayList<Customer> customerArray = new ArrayList<>(connection.getAllCustomer());
+		ArrayList<Customer> customerArray = new ArrayList<>(connection.getAllCustomer(program.business().getBusinessId()));
 		ArrayList<Customer> customerArrayView = new ArrayList<>();
 		String fname = null;
 		String lname = null;
@@ -1205,9 +1281,30 @@ public class BusinessController  implements Initializable  {
 	 * 
 	 * @author Joseph Garner
 	 */
-	
 	@FXML
 	public void createBooking() {
+		if (listviewCustomers.getSelectionModel().getSelectedItem() == null) {
+			program.messageBox("ERROR", "Error", "A Customer Has Not Been Chosen", "Please select a customer");
+			return;
+		}
+		System.out.println("OUT OF HERE 1");
+		_user = program.getUser();
+		System.out.println("OUT OF HERE 2");
+		program.setUser(connection.getUser(listviewCustomers.getSelectionModel().getSelectedItem().getID()));
+		System.out.println("OUT OF HERE 3");
+		log.debug("LOGGER: Selected user ID - " + listviewCustomers.getSelectionModel().getSelectedItem().getID());
+		log.debug("LOGGER: set user - " + program.getUser());
+		program.bmb = true;
+
+		System.out.println("OUT OF HERE 4");		
+			IUser customer = userFactory.getUser("Customer");
+			System.out.println("OUT OF HERE 5");
+			customer.getUserWindow();
+			System.out.println("OUT OF HERE 6");
+			program.setUser(_user);
+			System.out.println("OUT OF HERE 7");
+			program.bmb = false;
+		System.out.println("OUT OF HERE 8");
 		/*
 		if (listviewCustomers.getSelectionModel().getSelectedItem() == null) {
 			program.messageBox("ERROR", "Error", "A Customer Has Not Been Chosen", "Please select a customer");
@@ -1247,4 +1344,56 @@ public class BusinessController  implements Initializable  {
 			}
 		});
 	}
+	
+	@Override
+	public boolean getUserWindow(){
+		try {
+			Stage secondaryStage = new Stage();
+			secondaryStage.getIcons().add(new Image("images/ic_collections_bookmark_black_48dp_2x.png"));
+			Parent root = FXMLLoader.load(getClass().getResource("businessLayout.fxml"));
+			secondaryStage.setTitle("Business Application");
+			secondaryStage.setMinWidth(800);
+			secondaryStage.setMinHeight(650);
+			secondaryStage.setMaxWidth(1000);
+			secondaryStage.setMaxHeight(850);
+			secondaryStage.setScene(new Scene(root));
+			secondaryStage.initModality(Modality.APPLICATION_MODAL);
+			secondaryStage.showAndWait();
+			if (program.getUser() != null) {
+				return true;
+			}
+		} catch (IOException ioe) {
+			log.warn(ioe.getMessage());
+		}
+		log.debug("false");
+		return false;
+	}
+
+
+
+	
+	@FXML
+	public void showCustom(){
+		try {
+			Stage secondaryStage = new Stage();
+			secondaryStage.getIcons().add(new Image("images/ic_collections_bookmark_black_48dp_2x.png"));
+			Parent roots = FXMLLoader.load(getClass().getResource("mizeLayout.fxml"));
+			secondaryStage.setTitle("Business Application");
+			secondaryStage.setResizable(false);
+			secondaryStage.setScene(new Scene(roots));
+			secondaryStage.initModality(Modality.APPLICATION_MODAL);
+			secondaryStage.showAndWait();
+		} catch (IOException ioe) {
+			log.warn(ioe.getMessage());
+		}
+		setCI();
+	}
+
+	@Override
+	public void setCI() {
+		root.setStyle(program.setColor());
+		log.debug(program.setColor());
+	}
+	
+	
 }

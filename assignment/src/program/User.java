@@ -10,18 +10,31 @@ public class User
 	protected String _fname, _lname, _phone, _payment;
 	protected String _username, _password;
 	protected int _accountType;
-	public User(int id, String username, String password, int accountType)
+	protected int _businessID;
+	protected String fullName;
+	public User(int id, String username, String password, int accountType,int businessID)
 	{
 		_id = id;
 		_username = username;
 		_password = password;
 		_accountType = accountType;
+		_businessID = businessID;
 	}
-	public User(String username, String password, int accountType)
+	public User(String username, String password, int accountType,int businessID)
 	{
 		_username = username;
 		_password = password;
 		_accountType = accountType;
+		_businessID = businessID;
+	}
+	public User(int id, String fname, String lname, String phone,int businessID)
+	{
+		_id = id;
+		_fname = fname;
+		_lname = lname;
+		_phone = phone;
+		_businessID = businessID;
+		fullName = _fname+" "+_lname;
 	}
 	public User(int id, String fname, String lname, String phone)
 	{
@@ -29,12 +42,22 @@ public class User
 		_fname = fname;
 		_lname = lname;
 		_phone = phone;
+		fullName = _fname+" "+_lname;
+	}
+	public User(String fname, String lname, String phone,int businessID)
+	{
+		_fname = fname;
+		_lname = lname;
+		_phone = phone;
+		_businessID = businessID;
+		fullName = _fname+" "+_lname;
 	}
 	public User(String fname, String lname, String phone)
 	{
 		_fname = fname;
 		_lname = lname;
 		_phone = phone;
+		fullName = _fname+" "+_lname;
 	}
 	public User(){}
 	
@@ -62,10 +85,12 @@ public class User
 	public String getFName(){return _fname;}
 	public String getLName(){return _lname;}
 	public String getPhone(){return _phone;}
+	public int getBusinessID(){return _businessID;};
 	public void setID(int id){_id = id;}
 	public void setFName(String fname){_fname = fname;}
 	public void setLName(String lname){_lname = lname;}
 	public void setPhone(String phone){_phone = phone;}
+	public void setBusinessID(int id) {_businessID = id;}
 	public void setUsern(String uname){_username = uname;}
 	public void setPass(String pass){_password = pass;}
 }

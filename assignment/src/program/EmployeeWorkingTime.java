@@ -6,15 +6,16 @@ public class EmployeeWorkingTime
 {
 	private int id, empID, dayOfWeek;
 	private Date startTime, endTime;
-	
+	private int businessID;
 	public EmployeeWorkingTime(){}
-	public EmployeeWorkingTime(int id, int empID, int dayOfWeek, Date startTime, Date endTime)
+	public EmployeeWorkingTime(int id, int empID, int dayOfWeek, Date startTime, Date endTime,int businessID)
 	{
 		this.id = id;
 		this.empID = empID;
 		this.dayOfWeek = dayOfWeek;
 		this.startTime = startTime;
 		this.endTime = endTime;
+		this.businessID = businessID;
 	}
 
 	public int getId()
@@ -36,6 +37,10 @@ public class EmployeeWorkingTime
 	public Date getEndTime()
 	{
 		return endTime;
+	}
+	public int getBusinessID()
+	{
+		return businessID;
 	}
 	public void setDayOfWeek(int dayOfWeek)
 	{

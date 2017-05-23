@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.FlowPane?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.RowConstraints?>
+
+<AnchorPane fx:id="root" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="350.0" prefWidth="600.0" stylesheets="@Theme.css" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.CustomizeController">
+   <children>
+      <BorderPane layoutX="262.0" layoutY="186.0" prefHeight="200.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+         <top>
+            <Label styleClass="label-header" text="Customization" BorderPane.alignment="CENTER" />
+         </top>
+         <center>
+            <GridPane BorderPane.alignment="CENTER">
+              <columnConstraints>
+                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+              </columnConstraints>
+              <rowConstraints>
+                <RowConstraints maxHeight="176.0" minHeight="10.0" prefHeight="176.0" vgrow="SOMETIMES" />
+                <RowConstraints maxHeight="182.0" minHeight="10.0" prefHeight="112.0" vgrow="SOMETIMES" />
+              </rowConstraints>
+               <children>
+                  <GridPane>
+                    <columnConstraints>
+                      <ColumnConstraints hgrow="SOMETIMES" maxWidth="294.0" minWidth="10.0" prefWidth="263.0" />
+                      <ColumnConstraints hgrow="SOMETIMES" maxWidth="337.0" minWidth="10.0" prefWidth="337.0" />
+                    </columnConstraints>
+                    <rowConstraints>
+                      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                    </rowConstraints>
+                     <children>
+                        <FlowPane alignment="CENTER" prefHeight="156.0" prefWidth="267.0">
+                           <children>
+                              <Button fx:id="btnUpload" mnemonicParsing="false" onAction="#addImage" text="Upload Image" />
+                           </children>
+                        </FlowPane>
+                        <FlowPane alignment="CENTER" prefHeight="156.0" prefWidth="341.0" GridPane.columnIndex="1">
+                           <children>
+                              <ImageView fx:id="imgView" fitHeight="150.0" fitWidth="286.0" pickOnBounds="true" preserveRatio="true" />
+                           </children>
+                        </FlowPane>
+                     </children>
+                  </GridPane>
+                  <GridPane GridPane.rowIndex="1">
+                    <columnConstraints>
+                      <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                    </columnConstraints>
+                    <rowConstraints>
+                      <RowConstraints maxHeight="89.0" minHeight="10.0" prefHeight="37.0" vgrow="SOMETIMES" />
+                      <RowConstraints maxHeight="149.0" minHeight="10.0" prefHeight="75.0" vgrow="SOMETIMES" />
+                    </rowConstraints>
+                     <children>
+                        <FlowPane alignment="CENTER" prefHeight="69.0" prefWidth="600.0">
+                           <children>
+                              <Label styleClass="label-Subheader" text="UI Color" />
+                           </children>
+                        </FlowPane>
+                        <FlowPane alignment="CENTER" prefHeight="67.0" prefWidth="600.0" GridPane.rowIndex="1">
+                           <children>
+                              <Button fx:id="btnBlue" mnemonicParsing="false" onAction="#blue" prefWidth="50.0" styleClass="blueB">
+                                 <FlowPane.margin>
+                                    <Insets left="10.0" right="10.0" />
+                                 </FlowPane.margin>
+                              </Button>
+                              <Button fx:id="btnPurp" mnemonicParsing="false" onAction="#purp" prefWidth="50.0" styleClass="purpB">
+                                 <FlowPane.margin>
+                                    <Insets left="10.0" right="10.0" />
+                                 </FlowPane.margin>
+                              </Button>
+                              <Button fx:id="btnGreen" mnemonicParsing="false" onAction="#green" prefWidth="50.0" styleClass="greenB">
+                                 <FlowPane.margin>
+                                    <Insets left="10.0" right="10.0" />
+                                 </FlowPane.margin>
+                              </Button>
+                              <Button fx:id="btnOrng" mnemonicParsing="false" onAction="#ong" prefWidth="50.0" styleClass="orngB">
+                                 <FlowPane.margin>
+                                    <Insets left="10.0" right="10.0" />
+                                 </FlowPane.margin>
+                              </Button>
+                           </children>
+                        </FlowPane>
+                     </children>
+                  </GridPane>
+               </children>
+            </GridPane>
+         </center>
+         <bottom>
+            <FlowPane alignment="CENTER_RIGHT" prefHeight="41.0" prefWidth="600.0" BorderPane.alignment="CENTER">
+               <children>
+                  <Button mnemonicParsing="false" onAction="#confirm" text="Confirm">
+                     <FlowPane.margin>
+                        <Insets right="20.0" />
+                     </FlowPane.margin>
+                  </Button>
+               </children>
+            </FlowPane>
+         </bottom>
+      </BorderPane>
+   </children>
+</AnchorPane>

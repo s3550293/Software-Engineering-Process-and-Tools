@@ -11,6 +11,7 @@ import java.util.ResourceBundle;
 
 import org.apache.log4j.Logger;
 
+import gui.IInterface.IUser;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
@@ -69,7 +70,6 @@ public class RegisterController implements Initializable {
 		ObservableList<String> obListMonth = FXCollections.observableList(listMonth);
 		cmbMonth.setItems(obListMonth);
 		List<String> list = new ArrayList<String>();
-		//for(int i =2017; i>1900;i--){list.add(Integer.toString(i));}
 		DateFormat dayFormat = new SimpleDateFormat("yyyy");
 		Calendar cal = Calendar.getInstance();
 		Date date = null;
@@ -144,7 +144,7 @@ public class RegisterController implements Initializable {
             program.messageBox("ERROR", "Error", "Last Name field is empty or contains an invalid character", "");
             return;
         }
-        if (regProgram.checkTakenUsername(txtRegUsername.getText().toString())) {
+        if (regProgram.checkTakenUsername(txtRegUsername.getText().toString(),program.business().getBusinessId())) {
             program.messageBox("ERROR", "Error", "Invalid Username", "");
             return;
         }
@@ -193,9 +193,10 @@ public class RegisterController implements Initializable {
         	program.messageBox("ERROR", "Error", "Passwords Do No Match", "");
             return;
         }
-        regProgram.registerUser(txtFirstName.getText(), txtLastName.getText(), txtRegUsername.getText(), txtRegEmail.getText(), txtMobileNumber.getText(), date, cmbRegGender.getSelectionModel().getSelectedItem(), pfRegPassword.getText());
+        regProgram.registerUser(txtFirstName.getText(), txtLastName.getText(), txtRegUsername.getText(), txtRegEmail.getText(), txtMobileNumber.getText(), date, cmbRegGender.getSelectionModel().getSelectedItem(), pfRegPassword.getText(), program.business().getBusinessId());
         program.messageBox("INFO", "User Added", "User Added", "You have successfully created an account");
         cancel();
 	}
+
 
 }

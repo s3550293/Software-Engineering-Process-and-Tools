@@ -1,4 +1,4 @@
-*{
+`*{
 
 }
 
@@ -49,6 +49,37 @@
         linear-gradient(to bottom, derive(-fx-base1,-60%) 0%, derive(-fx-base1,-35%) 50%, derive(-fx-base1,-30%) 98%, derive(-fx-base1,-50%) 100%),
         linear-gradient(to right, rgba(0,0,0,0.2) 0%, rgba(0,0,0,0) 40%, rgba(0,0,0,0) 190%, rgba(0,0,0,0.3) 200%);
     -fx-text-fill: -fx-base3;
+}
+
+/*MENU BAR*/
+.menu-bar {
+    -fx-background-color: derive(-fx-base2,18%);
+}
+
+.context-menu {
+    -fx-background-color: derive(-fx-base2,50%);
+}
+
+.menu:hover{
+    -fx-background-color: -fx-base1;
+}
+.menu:focused
+{
+    -fx-background-color: -fx-base1;
+}
+.menu{
+    -fx-selection-bar: -fx-base1;
+}
+
+.menu-item:focused{
+    -fx-background-color: -fx-base1;
+}
+
+.menu-bar .label {
+    -fx-font-size: 14pt;
+    -fx-font-family: "Segoe UI Light";
+    -fx-text-fill: -fx-base4;
+    -fx-opacity: 0.9;
 }
 
 
@@ -204,6 +235,8 @@
     -fx-background-color: derive(-fx-focus-color,30%);
 }
 
+
+
 /*TOGGLE BUTTON*/
 .toggle-button:selected{
   -fx-background-radius: 0;
@@ -284,4 +317,132 @@
   -fx-background-insets: 0 0 -1 0, 0, 1, 2;
   -fx-background-radius: 3px, 3px, 2px, 1px;
   -fx-text-fill: -fx-base2;
+}
+
+.purpB:hover {
+    -fx-background-color: #800080;
+}
+
+.purpB:pressed, .purpB:default:hover:pressed {
+  -fx-background-color:
+        -fx-shadow-highlight-color,
+        linear-gradient(to bottom, derive(#800080,-90%) 0%, derive(#800080,-60%) 100%),
+        linear-gradient(to bottom, derive(#800080,-60%) 0%, derive(#800080,-35%) 50%, derive(#800080,-30%) 98%, derive(#800080,-50%) 100%),
+        linear-gradient(to right, rgba(0,0,0,0.2) 0%, rgba(0,0,0,0) 40%, rgba(0,0,0,0) 190%, rgba(0,0,0,0.3) 200%);
+    -fx-text-fill: -fx-base3;
+}
+
+.purpB:disabled, .purpB:default:disabled {
+    -fx-opacity: 0.4;
+    -fx-background-color: #EDEDED;
+    -fx-text-fill: #1d1d1d;
+}
+
+.purpB:default {
+    -fx-background-color: -fx-focus-color;
+    -fx-text-fill: #ffffff;
+}
+
+.purpB:default:hover {
+    -fx-background-color: derive(-fx-focus-color,30%);
+}
+
+
+.blueB:hover {
+    -fx-background-color: #446CB3;
+}
+
+.blueB:pressed, .blueB:default:hover:pressed {
+  -fx-background-color:
+        -fx-shadow-highlight-color,
+        linear-gradient(to bottom, derive(#446CB3,-90%) 0%, derive(#446CB3,-60%) 100%),
+        linear-gradient(to bottom, derive(#446CB3,-60%) 0%, derive(#446CB3,-35%) 50%, derive(#446CB3,-30%) 98%, derive(#446CB3,-50%) 100%),
+        linear-gradient(to right, rgba(0,0,0,0.2) 0%, rgba(0,0,0,0) 40%, rgba(0,0,0,0) 190%, rgba(0,0,0,0.3) 200%);
+    -fx-text-fill: -fx-base3;
+}
+
+.blueB:disabled, .blueB:default:disabled {
+    -fx-opacity: 0.4;
+    -fx-background-color: #EDEDED;
+    -fx-text-fill: #1d1d1d;
+}
+
+.blueB:default {
+    -fx-background-color: -fx-focus-color;
+    -fx-text-fill: #ffffff;
+}
+
+.blueB:default:hover {
+    -fx-background-color: derive(-fx-focus-color,30%);
+}
+
+
+.greenB:hover {
+    -fx-background-color: #008B45;
+}
+
+.greenB:pressed, .greenB:default:hover:pressed {
+  -fx-background-color:
+        -fx-shadow-highlight-color,
+        linear-gradient(to bottom, derive(#008B45,-90%) 0%, derive(#008B45,-60%) 100%),
+        linear-gradient(to bottom, derive(#008B45,-60%) 0%, derive(#008B45,-35%) 50%, derive(#008B45,-30%) 98%, derive(#008B45,-50%) 100%),
+        linear-gradient(to right, rgba(0,0,0,0.2) 0%, rgba(0,0,0,0) 40%, rgba(0,0,0,0) 190%, rgba(0,0,0,0.3) 200%);
+    -fx-text-fill: -fx-base3;
+}
+
+.greenB:disabled, .greenB:default:disabled {
+    -fx-opacity: 0.4;
+    -fx-background-color: #EDEDED;
+    -fx-text-fill: #1d1d1d;
+}
+
+.greenB:default {
+    -fx-background-color: -fx-focus-color;
+    -fx-text-fill: #ffffff;
+}
+
+.greenB:default:hover {
+    -fx-background-color: derive(-fx-focus-color,30%);
+}
+
+
+.orngB:hover {
+    -fx-background-color: #FF7F24;
+}
+
+.orngB:pressed, .orngB:default:hover:pressed {
+  -fx-background-color:
+        -fx-shadow-highlight-color,
+        linear-gradient(to bottom, derive(#FF7F24,-90%) 0%, derive(#FF7F24,-60%) 100%),
+        linear-gradient(to bottom, derive(#FF7F24,-60%) 0%, derive(#FF7F24,-35%) 50%, derive(#FF7F24,-30%) 98%, derive(#FF7F24,-50%) 100%),
+        linear-gradient(to right, rgba(0,0,0,0.2) 0%, rgba(0,0,0,0) 40%, rgba(0,0,0,0) 190%, rgba(0,0,0,0.3) 200%);
+    -fx-text-fill: -fx-base3;
+}
+
+.orngB:disabled, .orngB:default:disabled {
+    -fx-opacity: 0.4;
+    -fx-background-color: #EDEDED;
+    -fx-text-fill: #1d1d1d;
+}
+
+.orngB:default {
+    -fx-background-color: -fx-focus-color;
+    -fx-text-fill: #ffffff;
+}
+
+.orngB:default:hover {
+    -fx-background-color: derive(-fx-focus-color,30%);
+}
+
+.blueB{
+  -fx-background-color: #446CB3;
+}
+.purpB{
+  -fx-background-color: #800080;
+}
+.greenB{
+  -fx-background-color: #008B45;
+}
+.orngB{
+  -fx-background-color: #FF7F24;
 }

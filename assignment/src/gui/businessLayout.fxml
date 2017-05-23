@@ -25,9 +25,9 @@
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.StackPane?>
 
-<AnchorPane fx:id="root" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="650.0" prefWidth="800.0" stylesheets="@Theme.css" xmlns="http://javafx.com/javafx/8.0.121" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.BusinessController">
+<AnchorPane fx:id="root" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="650.0" prefWidth="800.0" stylesheets="@Theme.css" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.BusinessController">
    <children>
-   <StackPane fx:id="stkBusiness" layoutX="27.0" prefHeight="150.0" prefWidth="773.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+   <StackPane layoutX="27.0" prefHeight="150.0" prefWidth="773.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
             <BorderPane prefHeight="200.0" prefWidth="200.0">
                <top>
@@ -38,9 +38,9 @@
                           <MenuItem mnemonicParsing="false" text="Logout" />
                         </items>
                       </Menu>
-                      <Menu mnemonicParsing="false" text="Help">
+                      <Menu mnemonicParsing="false" text="Edit">
                         <items>
-                          <MenuItem mnemonicParsing="false" text="About" />
+                          <MenuItem mnemonicParsing="false" onAction="#showCustom" text="Customise" />
                         </items>
                       </Menu>
                     </menus>
@@ -271,7 +271,7 @@
                                              <bottom>
                                                 <FlowPane alignment="CENTER" prefHeight="49.0" prefWidth="800.0" BorderPane.alignment="CENTER">
                                                    <children>
-                                                      <Button fx:id="btnAddEmp" mnemonicParsing="false" onAction="#showAddNewEmp" text="Add New Employee">
+                                                      <Button mnemonicParsing="false" onAction="#showAddNewEmp" text="Add New Employee">
                                                          <FlowPane.margin>
                                                             <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
                                                          </FlowPane.margin>
@@ -281,7 +281,7 @@
                                                             <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
                                                          </FlowPane.margin>
                                                       </Button>
-                                                      <Button fx:id="btnDeleteEmp" mnemonicParsing="false" onAction="#deleteEmployee" text="Delete Employee">
+                                                      <Button mnemonicParsing="false" onAction="#deleteEmployee" text="Delete Employee">
                                                          <FlowPane.margin>
                                                             <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
                                                          </FlowPane.margin>
@@ -434,17 +434,17 @@
                                                                <children>
                                                                   <FlowPane alignment="CENTER" prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1">
                                                                      <children>
-                                                                        <Label text="Morning 8am-12pm" />
+                                                                        <Label text="TimeBlock 1" />
                                                                      </children>
                                                                   </FlowPane>
                                                                   <FlowPane alignment="CENTER" prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="2">
                                                                      <children>
-                                                                        <Label text="Afternoon 12pm-4pm" />
+                                                                        <Label text="TimeBlock 2" />
                                                                      </children>
                                                                   </FlowPane>
                                                                   <FlowPane alignment="CENTER" prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="3">
                                                                      <children>
-                                                                        <Label text="Evening 4pm-8pm" />
+                                                                        <Label text="TimeBlock 3" />
                                                                      </children>
                                                                   </FlowPane>
                                                                   <FlowPane alignment="CENTER" prefHeight="200.0" prefWidth="200.0" GridPane.rowIndex="1">
@@ -704,7 +704,7 @@
                                                 </GridPane>
                                              </bottom>
                                           </BorderPane>
-                                          <BorderPane fx:id="boardPaneEmpAddTime" prefHeight="200.0" prefWidth="200.0" visible="false" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+                                          <BorderPane prefHeight="200.0" prefWidth="200.0" visible="false" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
                                        </children></AnchorPane>
                                 </content>
                               </Tab>
@@ -890,7 +890,7 @@
                                 <content>
                                   <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                                        <children>
-                                          <BorderPane fx:id="boardPaneEmpOverview11" prefHeight="200.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                          <BorderPane prefHeight="200.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                                              <bottom>
                                                 <GridPane BorderPane.alignment="CENTER">
                                                    <columnConstraints>

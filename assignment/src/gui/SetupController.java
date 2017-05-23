@@ -1,52 +1,66 @@
 package gui;
 
+import java.io.File;
+import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.ResourceBundle;
 
 import org.apache.log4j.Logger;
 
+import gui.IInterface.ISetup;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.StackPane;
+import javafx.stage.FileChooser;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.util.Callback;
+import program.Business;
 import program.BusinessMenu;
 import program.BusinessOwner;
 import program.Controller;
-import program.Database;
 import program.DatabaseConnection;
 import program.Register;
-import program.Service;
 
-public class SetupController implements Initializable {
+public class SetupController implements Initializable, ISetup {
 	public final static Logger log = Logger.getLogger(SetupController.class);
 	private final Controller program = new Controller();
-	private final  DatabaseConnection connection = new DatabaseConnection();
-	private static BusinessOwner business = new BusinessOwner();
+	Business business = program.business();
+	//BusinessMenu bMenu = program.businessMenu();
+	//public final BusinessMenu bMenu = program.bMenu;
+	private DatabaseConnection connection = new DatabaseConnection();
+	private static BusinessOwner businessOwner = new BusinessOwner();
 	public final Register regpro = new Register();
-	public final BusinessMenu bMenu = new BusinessMenu();
+	private File fa = null;
 	/*
 	 * Oder of panes stkpWelcome > stkpDetails > stkpTimeSlot > (Setup Finishes and database is created) > stkpSelectColor
 	 */
 	@FXML
+	ImageView imgView;
+	
+	@FXML
 	AnchorPane root;
 	
 	@FXML
-	StackPane stkpWelcome, stkpDetails, stkpTimeSlot, stkpLogin, stkpSelectColor;
+	StackPane stkpWelcome, stkpDetails, stkpTimeSlot, stkpSelectColor;
 	
 	@FXML
-	TextField txtFNam, txtLNam, txtBNam, txtBPho, txtUserNam, txtPass, txtConPass;
+	TextField txtFNam, txtLNam, txtBNam, txtBPho;
 	
 	@FXML
 	TextArea txtaBAdre;
@@ -60,158 +74,66 @@ public class SetupController implements Initializable {
 		dispMFClose();
 		dispSSOpen();
 		dispSSClose();
-		//createDB();
-		//ini();
-	}
-	//Date business.getWeekdayStart() ,Date business.getWeekdayEnd(), Date business.getWeekendStart() ,Date business.getWeekendEnd()
-	public void assignOpenClosingTimesToGlobal(Date weekdayStart ,Date weekdayEnd, Date weekendStart ,Date weekendEnd)
-	{
-		//Change Dates to Strings
-		String MFOpen = program.timeToStr(weekdayStart);
-		String MFClose = program.timeToStr(weekdayEnd);
-		String SSOpen = program.timeToStr(weekendStart);
-		String SSClose = program.timeToStr(weekendEnd);
-		//assign times for weekends and weekdays
-		assignOpenClosingTimesToWeekDays(MFOpen, MFClose);
-		assignOpenClosingTimesToWeekEnds(SSOpen, SSClose);
-	}
-	public void assignOpenClosingTimesToWeekDays(String MFOpen,String MFClose)
-	{
-		String startTime = "";
-		String endTime = "";
-		if(MFOpen.length() < 5)
-		{
-			//Getting substring hours
-			String A = MFOpen.substring(0,2);
-			//Getting substring minutes
-			String a = MFOpen.substring(3);
-			//converting strings into integers
-			int hours = Integer.parseInt(A);
-			int minutes = Integer.parseInt(a);
-			String formattedHours = String.format("%02d", hours);
-			String formattedMinutes = String.format("%02d", minutes);
-			startTime = formattedHours+":"+formattedMinutes;
-		}
-		if(MFClose.length() < 5)
-		{
-			//Getting substring hours
-			String B = MFClose.substring(0,2);
-			//Getting substring minutes
-			String b = MFClose.substring(3);
-			//converting strings into integers
-			int hours = Integer.parseInt(B);
-			int minutes = Integer.parseInt(b);
-			String formattedHours = String.format("%02d", hours);
-			String formattedMinutes = String.format("%02d", minutes);
-			endTime = formattedHours+":"+formattedMinutes;
-		}
-		String[] times = splitTimeIntoThreeBlocks(startTime, endTime);
-		bMenu.MFearly = times[0];
-		bMenu.MFearlyMidDay = times[1];
-		bMenu.MFlateMidDay = times[2];
-		bMenu.MFlate = times[3];
-	}
-	public void assignOpenClosingTimesToWeekEnds(String SSOpen,String SSClose)
-	{
-		String startTime = "";
-		String endTime = "";
-		if(SSOpen.length() < 5)
-		{
-			//Getting substring hours
-			String A = SSOpen.substring(0,2);
-			//Getting substring minutes
-			String a = SSOpen.substring(3);
-			//converting strings into integers
-			int hours = Integer.parseInt(A);
-			int minutes = Integer.parseInt(a);
-			String formattedHours = String.format("%02d", hours);
-			String formattedMinutes = String.format("%02d", minutes);
-			startTime = formattedHours+":"+formattedMinutes;
-		}
-		if(SSClose.length() < 5)
-		{
-			//Getting substring hours
-			String B = SSClose.substring(0,2);
-			//Getting substring minutes
-			String b = SSClose.substring(3);
-			//converting strings into integers
-			int hours = Integer.parseInt(B);
-			int minutes = Integer.parseInt(b);
-			String formattedHours = String.format("%02d", hours);
-			String formattedMinutes = String.format("%02d", minutes);
-			endTime = formattedHours+":"+formattedMinutes;
-		}
-		String[] times = splitTimeIntoThreeBlocks(startTime, endTime);
-		bMenu.SSearly = times[0];
-		bMenu.SSearlyMidDay = times[1];
-		bMenu.SSlateMidDay = times[2];
-		bMenu.SSlate = times[3];
 	}
 	
 	/**
-	 * Gets a start time and end time and splits the time between them into 3 blocks which are bounded by 4 different times.
-	 * @param startTime - HH:MM
-	 * @param endTime - HH:MM
-	 * @return
+	 * Assigning the Business opening and closing hours for the business
+	 * @author Luke Mason
+	 * @param wds
+	 * @param wde
+	 * @param wes
+	 * @param wee
 	 */
-	public String[] splitTimeIntoThreeBlocks(String startTime, String endTime)
+	public int assignOpenClosingTimesToGlobal(String wds ,String wde, String wes ,String wee)
 	{
-		int MINIMUM_OPEN_TIME = 60; //means that the business must be open for at least 60 minutes a day
-		//A-a represents startTime, B-b represents endTime
-		String[] times = {"","","",""};
-		//Getting substring hours
-		String A = startTime.substring(0,2);
-		String B = endTime.substring(0,2);
-		//Getting substring minutes
-		String a = startTime.substring(3);
-		String b = endTime.substring(3);
-		//converting strings into integers
-		int AA = Integer.parseInt(A);
-		int BB = Integer.parseInt(B);
-		int aa = Integer.parseInt(a);
-		int bb = Integer.parseInt(b);
-		//getting minutes from hours
-		int AAA = AA * 60;
-		int BBB = BB * 60;
-		//getting total minutes
-		int aaa = AAA + aa;
-		int bbb = BBB + bb;
-		//Error checking
-		if((bbb - aaa < MINIMUM_OPEN_TIME)||(aaa > 1380 || bbb > 1440))
+		//Change Dates to Strings
+		String MFOpen = wds;
+		String MFClose = wde;
+		String SSOpen = wes;
+		String SSClose = wee;
+		//assign times for weekends and weekdays
+		int a = assignOpenClosingTimesToWeekDays(MFOpen, MFClose);
+		if(a == 0)
 		{
-			log.warn("endTime, startTime are invalid\n");
-			return times;
+			program.messageBox("ERROR", "Invalid Times", "Invalid Times", "Business Must be open for at least 1 hour");
+			return 0;
 		}
-		//Getting time minutes between startTime aaa and endTime bbb
-		int timeDifference = bbb - aaa;
-		//getting 1 third of time difference
-		int thirdOfTime = timeDifference/3;
-		//Assigning times
-		times[0] = startTime;
-		//converting minutes into HH:MM
-		int middayEarlyTime = aaa + thirdOfTime;
-		int middayLateTime = middayEarlyTime + thirdOfTime;
-		int hours;
-		int minutes;
-		String formattedHours;
-		String formattedMinutes;
-		//Formatting numbers to two digitse.g 02 04 06 10 12 etc	
-		hours = middayEarlyTime/60;
-		minutes = middayEarlyTime%60;
-		formattedHours = String.format("%02d", hours);
-		formattedMinutes = String.format("%02d", minutes);
-		//Assigning time for middayEarlyTime
-		times[1] = formattedHours+":"+formattedMinutes;
-		//Formatting numbers to two digitse.g 02 04 06 10 12 etc
-		hours = middayLateTime/60;
-		minutes = middayLateTime%60;
-		formattedHours = String.format("%02d", hours);
-		formattedMinutes = String.format("%02d", minutes);
-		//Assigning time for middayLateTime
-		times[2] = formattedHours+":"+ formattedMinutes;
-		times[3] = endTime;
-		return times;
+		int b = assignOpenClosingTimesToWeekEnds(SSOpen, SSClose);
+		if(b == 0)
+		{
+			program.messageBox("ERROR", "Invalid Times", "Invalid Times", "Business Must be open for at least 1 hour");
+			return 0;
+		}
+		return 1;
 	}
+	
+	public int assignOpenClosingTimesToWeekDays(String MFOpen,String MFClose)
+	{
+		String[] times = program.splitTimeIntoThreeBlocks(MFOpen, MFClose);
+		if(times[0].equals(""))
+		{
+			return 0;
+		}
+		BusinessMenu.MFearly = times[0];
+		BusinessMenu.MFearlyMidDay = times[1];
+		BusinessMenu.MFlateMidDay = times[2];
+		BusinessMenu.MFlate = times[3];
+		return 1;
+	}
+	public int assignOpenClosingTimesToWeekEnds(String SSOpen,String SSClose)
+	{
+		String[] times = program.splitTimeIntoThreeBlocks(SSOpen, SSClose);
+		if(times[0].equals(""))
+		{
+			return 0;
+		}
+		BusinessMenu.SSearly = times[0];
+		BusinessMenu.SSearlyMidDay = times[1];
+		BusinessMenu.SSlateMidDay = times[2];
+		BusinessMenu.SSlate = times[3];
+		return 1;
+	}
+	
 	/**
 	 * Moves the user to the starting view
 	 * @author Joseph Garner
@@ -239,10 +161,10 @@ public class SetupController implements Initializable {
 				program.messageBox("ERROR", "Error", "Last Name field is empty or contains an invalid character", "");
 				return;
 			}
-			if (program.checkInputToContainInvalidChar(txtBNam.getText().toString())) {
+			/*if (program.checkInputToContainInvalidChar(txtBNam.getText().toString())) {
 				program.messageBox("ERROR", "Error", "Business Name field is empty or contains an invalid character", "");
 				return;
-			}
+			}*/
 			if(txtBPho.getText().length() != 10)
 	        {
 	        	program.messageBox("ERROR", "Error", "Invalid Phone Number", "");
@@ -257,11 +179,12 @@ public class SetupController implements Initializable {
 				program.messageBox("ERROR", "Error", "Address field is empty or contains an invalid character", "");
 				return;
 			}
-			business.setFName(txtFNam.getText());
-			business.setLName(txtLNam.getText());
-			business.setBusiness(txtBNam.getText());
-			business.setPhone(txtBPho.getText());
-			business.setAddress(txtaBAdre.getText());
+			businessOwner.setBusinessID(business.getBusinessId());
+			log.info("BusinessID = "+business.getBusinessId()+"\n");
+			businessOwner.setFName(txtFNam.getText());
+			businessOwner.setLName(txtLNam.getText());
+			businessOwner.setPhone(txtBPho.getText());
+			businessOwner.setAddress(txtaBAdre.getText());
 
 			stkpTimeSlot.setVisible(true);
 			stkpDetails.setVisible(false);
@@ -286,25 +209,55 @@ public class SetupController implements Initializable {
 				return;
 			}
 			
-			business.setWeekdayStart(program.strToTime(cmbMFOpen.getSelectionModel().getSelectedItem()));
-			business.setWeekdayEnd(program.strToTime(cmbMFClose.getSelectionModel().getSelectedItem()));
-			business.setWeekendStart(program.strToTime(cmbSSOpen.getSelectionModel().getSelectedItem()));
-			business.setWeekendEnd(program.strToTime(cmbSSClose.getSelectionModel().getSelectedItem()));
-			if(business.getWeekdayStart().after(business.getWeekdayEnd()))
+			businessOwner.setWeekdayStart(program.strToTime(cmbMFOpen.getSelectionModel().getSelectedItem()));
+			businessOwner.setWeekdayEnd(program.strToTime(cmbMFClose.getSelectionModel().getSelectedItem()));
+			businessOwner.setWeekendStart(program.strToTime(cmbSSOpen.getSelectionModel().getSelectedItem()));
+			businessOwner.setWeekendEnd(program.strToTime(cmbSSClose.getSelectionModel().getSelectedItem()));
+			if(businessOwner.getWeekdayStart().after(businessOwner.getWeekdayEnd()))
 			{
 				program.messageBox("ERROR", "Error", "Invalid choice. Open hours later than closing hours", "");
 				return;
 			}
-			if(business.getWeekendStart().after(business.getWeekendEnd()))
+			if(businessOwner.getWeekendStart().after(businessOwner.getWeekendEnd()))
 			{
 				program.messageBox("ERROR", "Error", "Invalid choice. Open hours later than closing hours", "");
 				return;
 			}
-			stkpLogin.setVisible(true);
+			DatabaseConnection connect = new DatabaseConnection();
+			
+			String wds = program.timeToStr(businessOwner.getWeekdayStart());
+			String wde = program.timeToStr(businessOwner.getWeekdayEnd());
+			String wes = program.timeToStr(businessOwner.getWeekendStart());
+			String wee = program.timeToStr(businessOwner.getWeekendEnd());
+			int id = businessOwner.getBusinessID();
+			String fName = businessOwner.getFName();
+			String lName = businessOwner.getLName();
+			String phone = businessOwner.getPhone();
+			String address = businessOwner.getAddress();
+			
+			System.out.println("WDS = "+wds);
+			System.out.println("WDE = "+wde);
+			System.out.println("WES = "+wes);
+			System.out.println("WEE = "+wee);
+			System.out.println("ID = "+id);
+			System.out.println("firstName = "+fName);
+			System.out.println("lastName = "+lName);
+			System.out.println("Phone = "+phone);
+			System.out.println("Address = "+address);
+
+			//Add to the database the new information
+
+			int check = assignOpenClosingTimesToGlobal(wds,wde,wes,wee);
+			if(check == 0)
+			{
+				return;
+			}
+			connect.addBusinessOwner(id, fName, lName, phone, address, wds, wde, wes, wee);
 			stkpTimeSlot.setVisible(false);
+			stkpSelectColor.setVisible(true);
 			return;
 		}
-		if(stkpLogin.isVisible())
+		/*if(stkpLogin.isVisible())
 		{
 	        if (program.checkInputToContainInvalidChar(txtUserNam.getText().toString())) {
 	            program.messageBox("ERROR", "Error", "Invalid Username", "");
@@ -321,15 +274,16 @@ public class SetupController implements Initializable {
 	        	program.messageBox("ERROR", "Error", "Passwords Do No Match", "");
 	            return;
 	        }
-	        business.setUsern(txtUserNam.getText());
-	        business.setPass(txtPass.getText());
+	        businessOwner.setUsern(txtUserNam.getText());
+	        businessOwner.setPass(txtPass.getText());
 			stkpSelectColor.setVisible(true);
 			stkpLogin.setVisible(false);
 			createDB();
 			createBO();
 			return;
-		}
+		}*/
 	}
+
 	/**
 	 * Moves the user to the next view
 	 * @author Joseph Garner
@@ -341,25 +295,8 @@ public class SetupController implements Initializable {
 			stkpDetails.setVisible(true);
 			return;
 		}
-		if(stkpLogin.isVisible()){
-			stkpTimeSlot.setVisible(true);
-			stkpLogin.setVisible(false);
-		}
-		
 	}
-	
-	/**
-	 * 
-	 * @author Bryan
-	 */
-	@FXML
-	public void createBO() {
-		// TODO
-		connection.addUser(business.getUsername(), business.getPassword(), 1);
-		business.setID(connection.getUser(business.getUsername()).getID());
-		connection.createBusiness(business);
-		ini();
-	}
+
 	
 	/**
 	 * Closes the setup and start the program
@@ -369,6 +306,10 @@ public class SetupController implements Initializable {
 	public void openRun(){
 		Stage setSt = (Stage) cmbMFOpen.getScene().getWindow();
 		setSt.close();
+		if(fa!=null){
+			fa.renameTo(new File(System.getProperty("user.home")+"/resourcing/"+fa.getName()));
+			connection.addImage(System.getProperty("user.home")+"/resourcing/"+fa.getName(), program.getUser().getBusinessID());
+		}	
 	}
 	
 	private ArrayList<String> timeArr(){
@@ -388,6 +329,8 @@ public class SetupController implements Initializable {
 		}
 		return val;
 	}
+	
+	
 	private void dispMFOpen(){
 		ObservableList<String> tl = FXCollections.observableList(timeArr());
 		if(tl != null)
@@ -565,140 +508,76 @@ public class SetupController implements Initializable {
 	}
 	
 	
-	private void createDB(){
-		Database db = new Database("company.db");
-		db.createTable("company.db");
+	public boolean getSetup() {
+		log.debug("Setup Started");
+		try {
+			Stage secondaryStage = new Stage();
+			secondaryStage.getIcons().add(new Image("images/ic_collections_bookmark_black_48dp_2x.png"));
+			Parent root = FXMLLoader.load(getClass().getResource("setupLayout.fxml"));
+			secondaryStage.setTitle("Setup");
+			secondaryStage.setResizable(false);
+			secondaryStage.setScene(new Scene(root));
+			secondaryStage.initModality(Modality.APPLICATION_MODAL);
+			secondaryStage.showAndWait();
+			File varTmpData = new File("db/program.db");
+			if (varTmpData.exists() == false) {
+				log.debug("false");
+				return false;
+			}
+		} catch (IOException ioe) {
+			log.warn(ioe.getMessage());
+		}
+		return true;
 	}
-	private void ini()
-    {
-		DatabaseConnection connect = new DatabaseConnection();
-		BusinessMenu bMenu = new BusinessMenu();
-		connect.addUser("admin","Monday10!",1);
-		connect.addUser("William", "Apples22", 0);
-		connect.addUser("Hannah", "Apples22", 0);
-		
-		connect.addEmployee("Luke Charles",25);
-		connect.addEmployee("David Smith",26.6);
-		connect.addEmployee("Will Turner",15);
-		connect.addEmployee("Rob Pointer",14);
-		connect.addEmployee("Adam Mason",12);
-		connect.addEmployee("David Chang",17);
-		connect.addEmployee("Joseph Tun",17);
-		connect.addEmployee("Casey Pointer",17);
-		connect.addEmployee("Danyon Glenk",10);
-		connect.addEmployee("Justin Lui",24);
-		connect.addEmployee("Jan Misso",15.7);
-		connect.addEmployee("Harry Nancarrow",19);
-		connect.addEmployee("Tom Gates",18.54);
-		connect.addEmployee("Emma Snelling",16.3);
-		connect.addEmployee("Laura Rite",15.2);
-		connect.addEmployee("Harry Potter",18);
-		
-		bMenu.addDayWorkingTime(1,1,true,true,false);
-		bMenu.addDayWorkingTime(1,2,true,true,false);
-		bMenu.addDayWorkingTime(1,3,true,false,false);
-		bMenu.addDayWorkingTime(1,4,true,false,false);
-		bMenu.addDayWorkingTime(1,5,true,false,false);
-		bMenu.addDayWorkingTime(1,6,false,true,true);
-		bMenu.addDayWorkingTime(1,7,true,true,false);
-		
-		bMenu.addDayWorkingTime(2,1,true,true,false);
-		bMenu.addDayWorkingTime(2,2,true,true,false);
-		bMenu.addDayWorkingTime(2,3,true,false,false);
-		bMenu.addDayWorkingTime(2,4,true,false,false);
-		bMenu.addDayWorkingTime(2,5,true,false,false);
-		bMenu.addDayWorkingTime(2,6,false,true,true);
-		bMenu.addDayWorkingTime(2,7,true,true,false);
-		
-		bMenu.addDayWorkingTime(3,1,true,true,false);
-		bMenu.addDayWorkingTime(3,2,true,true,false);
-		bMenu.addDayWorkingTime(3,3,true,false,false);
-		bMenu.addDayWorkingTime(3,4,true,false,false);
-		bMenu.addDayWorkingTime(3,5,true,false,false);
-		bMenu.addDayWorkingTime(3,6,false,true,true);
-		bMenu.addDayWorkingTime(3,7,true,true,false);
-		
-		bMenu.addDayWorkingTime(4,5,false,true,false);
-		bMenu.addDayWorkingTime(4,6,false,true,true);
-		
-		bMenu.addDayWorkingTime(5,1,true,true,false);
-		bMenu.addDayWorkingTime(5,7,true,true,true);
-		
-		bMenu.addDayWorkingTime(6,1,true,true,false);
-		bMenu.addDayWorkingTime(6,2,true,true,false);
-		bMenu.addDayWorkingTime(6,3,true,false,false);
-		bMenu.addDayWorkingTime(6,4,true,false,false);
-		bMenu.addDayWorkingTime(6,5,true,false,false);
-		bMenu.addDayWorkingTime(6,6,false,true,true);
-		bMenu.addDayWorkingTime(6,7,true,true,false);
-		
-		bMenu.addDayWorkingTime(7,1,true,true,false);
-		bMenu.addDayWorkingTime(7,6,true,true,true);
-		
-		bMenu.addDayWorkingTime(8,5,false,true,false);
-		bMenu.addDayWorkingTime(8,6,false,true,true);
-		
-		bMenu.addDayWorkingTime(9,4,true,true,false);
-		bMenu.addDayWorkingTime(9,6,true,true,true);
-		
-		bMenu.addDayWorkingTime(10,3,false,true,false);
-		bMenu.addDayWorkingTime(10,4,false,true,true);
-		
-		bMenu.addDayWorkingTime(11,1,true,true,false);
-		bMenu.addDayWorkingTime(11,2,true,true,false);
-		bMenu.addDayWorkingTime(11,3,true,true,false);
-		bMenu.addDayWorkingTime(11,4,true,false,false);
-		bMenu.addDayWorkingTime(11,5,true,false,false);
-		bMenu.addDayWorkingTime(11,6,true,false,false);
-		bMenu.addDayWorkingTime(11,7,false,true,true);
-		
-		
-		bMenu.addDayWorkingTime(12,2,false,true,false);
-		bMenu.addDayWorkingTime(12,4,false,true,true);
-		
-		bMenu.addDayWorkingTime(13,5,true,true,false);
-		bMenu.addDayWorkingTime(13,7,true,true,true);
-		
-		bMenu.addDayWorkingTime(14,1,true,true,false);
-		bMenu.addDayWorkingTime(14,2,true,true,false);
-		bMenu.addDayWorkingTime(14,3,true,false,false);
-		bMenu.addDayWorkingTime(14,4,true,false,false);
-		bMenu.addDayWorkingTime(14,5,true,false,false);
-		bMenu.addDayWorkingTime(14,6,false,true,true);
-		bMenu.addDayWorkingTime(14,7,true,true,false);
-		
-		bMenu.addDayWorkingTime(15,1,true,true,false);
-		bMenu.addDayWorkingTime(15,7,true,true,true);
-		
-		bMenu.addDayWorkingTime(16,4,false,true,false);
-		bMenu.addDayWorkingTime(16,6,false,true,true);
-		
-		connect.addUserDetails(2, "William", "Porter", "will@mail.com", "0452368593", "01/01/2002", "Male");
-		connect.addUserDetails(3, "Hannah", "Hawlking", "hannah@mail.com", "0452136859", "20/04/1995", "Famale");
-
-		connect.addSerice(new Service("Trim",30,25));
-		connect.addSerice(new Service("Wash",45,30));
-		connect.addSerice(new Service("Cut and Style",90,60));
-		
-		connect.addBooking(2,1, "21/04/2017", "10:00", "10:40", 1,"active");
-		connect.addBooking(2,2, "22/04/2017", "11:00", "11:59", 2,"canceled");
-		connect.addBooking(2,1, "23/04/2017", "10:00", "10:40", 3,"canceled");
-		connect.addBooking(2,2, "24/04/2017", "11:00", "11:59", 2,"canceled");
-		connect.addBooking(2,3, "25/04/2017", "8:00", "8:40", 2, "active");
-		connect.addBooking(2,2, "26/04/2017", "8:00", "8:40", 2, "canceled");
-		connect.addBooking(2,3, "27/04/2017", "10:00", "10:40", 1,"active");
-		connect.addBooking(2,2, "28/04/2017", "11:00", "11:59", 1,"active");
-		connect.addBooking(2,3, "29/04/2017", "8:00", "8:40", 1, "canceled");
-		
-		connect.addBooking(2,1, "24/05/2017", "8:00", "8:40", 2, "active");
-		connect.addBooking(3,1, "16/07/2017", "10:00", "10:40", 3,"active");
-		connect.addBooking(3,2, "14/05/2017", "11:00", "11:59", 1,"active");
-		connect.addBooking(3,1, "4/05/2017", "10:00", "10:40", 2,"active");
-		connect.addBooking(3,2, "6/05/2017", "11:00", "11:59", 3,"active");
-		
-
-
-		
-		//connect.cancelBooking(2);
-    }
+	
+	@FXML
+	public void addImage(){
+		Stage stage = new Stage();
+        FileChooser fileChooser = new FileChooser();
+        FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter("PNG files (*.png)", "*.png");
+        fileChooser.getExtensionFilters().add(extFilter);
+        try{
+        	fa = fileChooser.showOpenDialog(stage);
+        	Image image = new Image(fa.getPath());
+            imgView.setImage(image);
+        }
+        catch(Exception e){
+        	log.debug(e.getMessage());
+        }
+	}
+	
+	@FXML
+	public void blue(){
+		int id = program.getUser().getBusinessID();
+		DatabaseConnection con = new DatabaseConnection();
+		con.updateBO(id, 1);
+		root.setStyle(program.setColor());
+	}
+	
+	@FXML
+	public void purp(){
+		int id = program.getUser().getBusinessID();
+		DatabaseConnection con = new DatabaseConnection();
+		con.updateBO(id, 2);
+		root.setStyle(program.setColor());
+	}
+	
+	@FXML
+	public void green(){
+		int id = program.getUser().getBusinessID();
+		DatabaseConnection con = new DatabaseConnection();
+		con.updateBO(id, 3);
+		root.setStyle(program.setColor());
+	}
+	
+	@FXML
+	public void ong(){
+		int id = program.getUser().getBusinessID();
+		DatabaseConnection con = new DatabaseConnection();
+		con.updateBO(id, 4);
+		root.setStyle(program.setColor());
+	}
+	
+	
+	
 }

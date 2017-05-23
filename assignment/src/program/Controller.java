@@ -19,14 +19,23 @@ import javafx.scene.control.Alert;
 public class Controller
 {
 	private static Logger log = Logger.getLogger(Controller.class);
-	public Controller(){ log.setLevel(Level.DEBUG);}
+	public Controller(){ log.setLevel(Level.INFO);}
+	
 	private static User _user = null;
 	public User getUser(){return _user;}
 	public void setUser(User user){_user = user;}
+	
+	public boolean bmb = false;
+	
 	private static Booking _booking = null;
 	public Booking getBooking(){return _booking;}
 	Scanner kb = new Scanner(System.in);
-
+	//public BusinessMenu bMenu = new BusinessMenu();
+	private static Business bis = new Business();
+	public void business(Business b){bis = b;}
+	//public BusinessMenu businessMenu(){return bMenu;}
+	public Business business(){return bis;}
+	public void setBusiness(Business business){bis = business;}
 	/**
 	 * @author Luke Mason
 	 * Checks each letter in the string and see's if the letter is not in the alphabet(lower case) and is not in the alphabet(Upper case)
@@ -75,6 +84,71 @@ public class Controller
 			log.info("OUT changeStringToDouble\n");
 			return -1;
 		}
+	}
+	
+	/**
+	 * Gets a start time and end time and splits the time between them into 3 blocks which are bounded by 4 different times.
+	 * @param startTime - HH:MM
+	 * @param endTime - HH:MM
+	 * @return
+	 */
+	public String[] splitTimeIntoThreeBlocks(String startTime, String endTime)
+	{
+		int MINIMUM_OPEN_TIME = 60; //means that the business must be open for at least 60 minutes a day
+		//A-a represents startTime, B-b represents endTime
+		String[] times = {"","","",""};
+		//Getting substring hours
+		String A = startTime.substring(0,2);
+		String B = endTime.substring(0,2);
+		//Getting substring minutes
+		String a = startTime.substring(3);
+		String b = endTime.substring(3);
+		//converting strings into integers
+		int AA = Integer.parseInt(A);
+		int BB = Integer.parseInt(B);
+		int aa = Integer.parseInt(a);
+		int bb = Integer.parseInt(b);
+		//getting minutes from hours
+		int AAA = AA * 60;
+		int BBB = BB * 60;
+		//getting total minutes
+		int aaa = AAA + aa;
+		int bbb = BBB + bb;
+		//Error checking
+		if((bbb - aaa < MINIMUM_OPEN_TIME)||(aaa > 1380 || bbb > 1440))
+		{
+			log.warn("endTime, startTime are invalid\n");
+			return times;
+		}
+		//Getting time minutes between startTime aaa and endTime bbb
+		int timeDifference = bbb - aaa;
+		//getting 1 third of time difference
+		int thirdOfTime = timeDifference/3;
+		//Assigning times
+		times[0] = startTime;
+		//converting minutes into HH:MM
+		int middayEarlyTime = aaa + thirdOfTime;
+		int middayLateTime = middayEarlyTime + thirdOfTime;
+		int hours;
+		int minutes;
+		String formattedHours;
+		String formattedMinutes;
+		//Formatting numbers to two digitse.g 02 04 06 10 12 etc	
+		hours = middayEarlyTime/60;
+		minutes = middayEarlyTime%60;
+		formattedHours = String.format("%02d", hours);
+		formattedMinutes = String.format("%02d", minutes);
+		//Assigning time for middayEarlyTime
+		times[1] = formattedHours+":"+formattedMinutes;
+		//Formatting numbers to two digitse.g 02 04 06 10 12 etc
+		hours = middayLateTime/60;
+		minutes = middayLateTime%60;
+		formattedHours = String.format("%02d", hours);
+		formattedMinutes = String.format("%02d", minutes);
+		//Assigning time for middayLateTime
+		times[2] = formattedHours+":"+ formattedMinutes;
+		times[3] = endTime;
+		return times;
 	}
 
 	
@@ -360,8 +434,14 @@ public class Controller
 	 * @param endTime
 	 * @return List of Available Employee's object
 	 */
-	public List<Employee> getAvailableEmployeesForSpecifiedTime(String date, String startTime, String endTime)
+	public List<Employee> getAvailableEmployeesForSpecifiedTime(String date, String startTime, String endTime, int businessID)
 	{
+		
+		log.debug("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
+		log.debug("GET AVAILABLE EMPLOYEES BETWEEN - "+startTime+" AND "+endTime+" in business "+businessID+" ON "+date);
+		log.debug("Business Time block = "+BusinessMenu.MFearly+" - "+BusinessMenu.MFearlyMidDay+" - "+BusinessMenu.MFlateMidDay+" - "+BusinessMenu.MFlate);
+		log.debug("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
+
 		int day = dateToDay(date);
 		DatabaseConnection connect = new DatabaseConnection();
 		log.info("IN getAvailableEmployeesForBooking");
@@ -369,8 +449,17 @@ public class Controller
 		ArrayList<EmployeeWorkingTime> workTimesOnDay;
 		ArrayList<Booking> bookingsOnDate;
 		ArrayList<Employee> employeesNotAvailable = new ArrayList<>();
-		workTimesOnDay = connect.getWorkTimesOnDay(day);
-		bookingsOnDate = connect.getActiveBookingsOnDate(date);
+		workTimesOnDay = connect.getWorkTimesOnDay(day, businessID);
+
+		for(EmployeeWorkingTime ewt: workTimesOnDay)
+		{
+			log.debug("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
+			log.debug("Day = "+ewt.getDayOfWeek());
+			log.debug("BusID = "+ewt.getBusinessID());
+			log.debug("Employee = "+ewt.getEmpID());
+			log.debug("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
+		}
+		bookingsOnDate = connect.getActiveBookingsOnDate(date, businessID);
 		Date date2 = strToDate(date);
 		Date startTime2 = strToTime(startTime);
 		log.debug("Booking Start Time = "+startTime2+"\n");
@@ -482,4 +571,22 @@ public class Controller
 		date = strToTime(cal.get(Calendar.HOUR_OF_DAY)+":"+cal.get(Calendar.MINUTE));
 		return date;
 	}
+	
+	/**
+	 * Sets the GUI color
+	 * @return
+	 */
+	  public String setColor(){
+		  DatabaseConnection c = new DatabaseConnection();
+	        int val = bis.getBusinessId();
+	        int color = c.getOneBusiness(val).color();
+	        log.trace("ID "+val);
+	        String[] arr = c.getColor(color);
+	        String ret = "";
+	        for(int i=0;i<arr.length;i++){
+	            log.debug(arr[i]);
+	            ret += "-fx-base"+(i+1)+": "+arr[i]+"; ";
+	        }
+	        return ret;
+	    }
 }

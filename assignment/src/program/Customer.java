@@ -4,10 +4,11 @@ package program;
 public class Customer extends User
 {
 	String _dob, _gender, _email;
+	int businessID;
 	public Customer(){}
-	public Customer(int id, String fname, String lname, String phone, String dob, String gender, String email)
+	public Customer(int id, String fname, String lname, String phone, String dob, String gender, String email,int businessID)
 	{
-		super(id, fname, lname, phone);
+		super(id, fname, lname, phone, businessID);
 		_dob = dob;
 		_gender = gender;
 		_email = email;

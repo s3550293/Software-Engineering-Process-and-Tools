@@ -5,30 +5,39 @@ import java.util.ArrayList;
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 
+import gui.SetupController;
+
 
 public class BusinessMenu
 {
 	private static Logger log = Logger.getLogger(BusinessMenu.class);
-	private boolean flag = true;
 	private Controller controller = new Controller();
 	DatabaseConnection connect = new DatabaseConnection();
-	public BusinessMenu(){log.setLevel(Level.WARN);}
+	public BusinessMenu(){log.setLevel(Level.INFO);}
 	//Monday to Friday
-	public String MFearly = "08:00"; //Start Time for day
-	public String MFearlyMidDay = "12:00"; //Early Midday
-	public String MFlateMidDay = "16:00"; //Late midday
-	public String MFlate = "20:00"; // End Time for day
+	public static String MFearly = "08:00"; //Start Time for day
+	public static String MFearlyMidDay = "12:00"; //Early Midday
+	public static String MFlateMidDay = "16:00"; //Late midday
+	public static String MFlate = "20:00"; // End Time for day
 	//Sunday to Saturday
-	public String SSearly = "08:00"; //Start Time for day
-	public String SSearlyMidDay = "12:00"; //Early Midday
-	public String SSlateMidDay = "16:00"; //Late midday
-	public String SSlate = "20:00"; // End Time for day
+	public static String SSearly = "08:00"; //Start Time for day
+	public static String SSearlyMidDay = "12:00"; //Early Midday
+	public static String SSlateMidDay = "16:00"; //Late midday
+	public static String SSlate = "20:00"; // End Time for day
 	
 	/**
 	 * @author Luke Mason
 	 * Used to check information to add a new employee to database
 	 */
-			
+				
+	/**
+	 * Changes the worktime labels to the worktime blocks when selecting work times for an employee
+	 */
+	public void changeWorkTimeLabelsToTimes()
+	{
+		//TODO
+	}
+	
 				/**
 				 * Convert string to Double
 				 * @param employeePayRate
@@ -65,12 +74,12 @@ public class BusinessMenu
 				 * @param employeeLName
 				 * @param employeePayRate
 				 */
-				public void addEmployee(String employeeFName,String employeeLName,double employeePayRate)
+				public void addEmployee(String employeeFName,String employeeLName,double employeePayRate, int businessID)
 				{
 					log.info("IN addEmployee-bMenu\n");
 					DatabaseConnection connect = new DatabaseConnection();
 					String employeeName = employeeFName + " " + employeeLName;//concatenating first and last name into name
-					connect.addEmployee(employeeName, employeePayRate);//adding employee
+					connect.addEmployee(employeeName, employeePayRate,businessID);//adding employee
 					log.info("OUT addEmployee-bMenu\n");
 				}
 				
@@ -78,11 +87,11 @@ public class BusinessMenu
 				 * Gets the last employeeID in the database
 				 * @return an id number of the last employee
 				 */
-				public int getLastEmployeeId()
+				public int getLastEmployeeId(int businessID)
 				{
 					log.info("IN getLastEmployeeId\n");
 					log.debug("getting id from last employee");
-					ArrayList<Employee> employees = connect.getEmployees("");//adding working times to employee just made
+					ArrayList<Employee> employees = connect.getEmployees("",businessID);//adding working times to employee just made
 					//This is for if more than one employee has the same name as searched
 					int id = -1;
 					Employee lastEmp = new Employee();
@@ -354,6 +363,23 @@ public class BusinessMenu
 				public boolean addDayWorkingTime(int employeeID,int dayOfWeek,boolean morning, boolean afternoon, boolean evening)
 				{
 					log.info("IN addDayWorkingTime");
+					Employee emp = connect.getEmployee(employeeID);
+					int businessID = emp.getBusinessID();
+					BusinessOwner BO = connect.getOneBusiness(businessID);
+					if(BO == null)
+					{
+						log.debug("BO IS NULLL FOR THIS WORKTIME BUSINESS");
+						return false;
+					}
+					if(BO != null)
+					{
+						String wds = controller.timeToStr(BO.getWeekdayStart());
+						String wde = controller.timeToStr(BO.getWeekdayEnd());
+						String wes = controller.timeToStr(BO.getWeekendStart());
+						String wee = controller.timeToStr(BO.getWeekendEnd());
+						SetupController setupC = new SetupController();
+						setupC.assignOpenClosingTimesToGlobal(wds, wde, wes, wee);
+					}
 					// -Day- is not used but is there if needed
 					String[] array = new String[2];
 					int check = getWorkTimes(morning, afternoon, evening);
@@ -380,7 +406,7 @@ public class BusinessMenu
 						log.info("OUT addDayWorkingTime");
 						return false;//day 0 does not exist, day 8 does not exist
 					}
-					connect.addEmployeeWorkingTime(employeeID, dayOfWeek, array[0], array[1]);
+					connect.addEmployeeWorkingTime(employeeID, dayOfWeek, array[0], array[1],emp.getBusinessID());
 					log.info("OUT addDayWorkingTime");
 					return true;
 				}
@@ -402,6 +428,7 @@ public class BusinessMenu
 					//0 = weekdays, 1 = weekend
 					if(dayBlock == 0)
 					{
+						log.debug("Work Time is WeekDay");
 						early = MFearly; //Start Time for day
 						earlyMidDay = MFearlyMidDay; //Early Midday
 						lateMidDay = MFlateMidDay; //Late midday
@@ -410,6 +437,7 @@ public class BusinessMenu
 					}
 					else if(dayBlock == 1)
 					{
+						log.debug("Work Time is WeekEnd");
 						early = SSearly; //Start Time for day
 						earlyMidDay = SSearlyMidDay; //Early Midday
 						lateMidDay = SSlateMidDay; //Late midday

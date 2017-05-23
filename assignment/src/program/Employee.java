@@ -8,17 +8,20 @@ public class Employee {
 	private int id;
 	private double payRate;
 	private String name;
-	public Employee(int id, String name, double payRate)
+	int businessID;
+	public Employee(int id, String name, double payRate,int businessID)
 	{
 		this.id = id;
 		this.name = name;
 		this.payRate = payRate;
+		this.businessID = businessID;
 	}
 	public Employee(){}
-	public Employee(String name, double payRate)
+	public Employee(String name, double payRate,int businessID)
 	{
 		this.name = name;
 		this.payRate = payRate;
+		this.businessID = businessID;
 	}
 	public int getId()
 	{
@@ -35,6 +38,10 @@ public class Employee {
 	public double getPayRate()
 	{
 		return payRate;
+	}
+	public int getBusinessID()
+	{
+		return businessID;
 	}
 	public void setName(String name)
 	{

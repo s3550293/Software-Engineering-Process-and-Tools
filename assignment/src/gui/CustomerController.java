@@ -165,8 +165,9 @@ public class CustomerController  implements Initializable, IUser{
 		togbtnMorn.setSelected(true);
 		loadDaySelect();
 		loadallServices();
-		listTogTDini(program.business().getBusinessId());
-		listTogTSini(program.business().getBusinessId());
+		
+		//listTogTDini(program.business().getBusinessId());
+		//listTogTSini(program.business().getBusinessId());
 	}
 	
 	@Override

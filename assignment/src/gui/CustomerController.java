@@ -92,8 +92,7 @@ public class CustomerController  implements Initializable, IUser{
 	Label lblBookConDate, lblBookConSer, lblBookConPri, lblBookConDur, lblBookConSTim, lblBookConEmp;
 
 	@FXML
-	ToggleButton togbtnMorn, togbtnAft, togbtnEven, togbtnTimeSlot1, togbtnTimeSlot2, togbtnTimeSlot3, togbtnTimeSlot4,
-			togbtnTimeSlot5, togbtnTimeSlot6, togbtnTimeSlot7, togbtnTimeSlot8;
+	ToggleButton togbtnMorn, togbtnAft, togbtnEven;
 
 	@FXML
 	ToggleGroup timeODayGroup = new ToggleGroup();
@@ -162,12 +161,21 @@ public class CustomerController  implements Initializable, IUser{
 				popTime();
 			}
 		});
-		togbtnMorn.setSelected(true);
+		listviewTimeSlot.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<String>() {
+			@Override
+			public void changed(ObservableValue<? extends String> observable, String oldValue,String newValue) {
+				if (newValue != null) {
+					Date eTime=program.calEnTime(program.strToTime(newValue),Integer.parseInt(lblServiceDur.getText()));
+					String endtime =program.timeToStr(eTime);
+					loadpreferedEmp(newValue, endtime , program.business().getBusinessId());
+				}
+			}
+		});
+		
+		//togbtnMorn.setSelected(true);
 		loadDaySelect();
 		loadallServices();
-		
-		//listTogTDini(program.business().getBusinessId());
-		//listTogTSini(program.business().getBusinessId());
+
 	}
 	
 	@Override
@@ -260,6 +268,7 @@ public class CustomerController  implements Initializable, IUser{
 	 * Display Booking Time for the three shifts(morning, afternoon, evening) in 30 minutes interval
 	 * @param calendar
 	 */
+	/*
 	public void diplayBookingTime(Calendar date){
 		for (int i = 0; i < 8; i++) {
 			if (i == 0) {
@@ -297,6 +306,7 @@ public class CustomerController  implements Initializable, IUser{
 			date.add(Calendar.MINUTE, 30);
 		}
 	}
+	*/
 	
 	/**
 	 * loads all Services into list view
@@ -687,14 +697,6 @@ public class CustomerController  implements Initializable, IUser{
 			stkpnDateService.setVisible(true);
 			stkpnBookingConfirm.setVisible(false);
 			stkpnUserMenu.setVisible(true);
-			togbtnTimeSlot1.setSelected(false);
-			togbtnTimeSlot2.setSelected(false);
-			togbtnTimeSlot3.setSelected(false);
-			togbtnTimeSlot4.setSelected(false);
-			togbtnTimeSlot5.setSelected(false);
-			togbtnTimeSlot6.setSelected(false);
-			togbtnTimeSlot7.setSelected(false);
-			togbtnTimeSlot8.setSelected(false);
 			lblBookConSer.setText("");
 			lblBookConDur.setText("");
 			lblBookConPri.setText("");
@@ -725,17 +727,9 @@ public class CustomerController  implements Initializable, IUser{
 	}
 	
 	
-	
+	/*
 	private void listTogTSini(int businessID){
 		togbtnMorn.setSelected(true);
-		togbtnTimeSlot1.setToggleGroup(timeGroup);
-		togbtnTimeSlot2.setToggleGroup(timeGroup);
-		togbtnTimeSlot3.setToggleGroup(timeGroup);
-		togbtnTimeSlot4.setToggleGroup(timeGroup);
-		togbtnTimeSlot5.setToggleGroup(timeGroup);
-		togbtnTimeSlot6.setToggleGroup(timeGroup);
-		togbtnTimeSlot7.setToggleGroup(timeGroup);
-		togbtnTimeSlot8.setToggleGroup(timeGroup);
 		timeGroup.selectedToggleProperty().addListener(new ChangeListener<Toggle>() {
 			public void changed(ObservableValue<? extends Toggle> ov, Toggle old_toggle, Toggle new_toggle) {
 				//addBookingTime();
@@ -771,20 +765,14 @@ public class CustomerController  implements Initializable, IUser{
 			}
 		});
 	}
+	*/
+	/*
 	private void listTogTDini(int businessID){
 		togbtnMorn.setToggleGroup(timeODayGroup);
 		togbtnAft.setToggleGroup(timeODayGroup);
 		togbtnEven.setToggleGroup(timeODayGroup);
 		timeODayGroup.selectedToggleProperty().addListener(new ChangeListener<Toggle>() {
 			public void changed(ObservableValue<? extends Toggle> ov, Toggle old_toggle, Toggle new_toggle) {
-				togbtnTimeSlot1.setSelected(false);
-				togbtnTimeSlot2.setSelected(false);
-				togbtnTimeSlot3.setSelected(false);
-				togbtnTimeSlot4.setSelected(false);
-				togbtnTimeSlot5.setSelected(false);
-				togbtnTimeSlot6.setSelected(false);
-				togbtnTimeSlot7.setSelected(false);
-				togbtnTimeSlot8.setSelected(false);
 				if (togbtnMorn.isSelected()) {
 					togbtnAft.setSelected(false);
 					togbtnEven.setSelected(false);
@@ -817,6 +805,8 @@ public class CustomerController  implements Initializable, IUser{
 			}
 		});
 	}
+	*/
+	
 	
 	/**
 	 * Logs the user out

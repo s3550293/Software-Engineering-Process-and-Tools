@@ -1051,7 +1051,7 @@ public class DatabaseConnection
 	public void createBooking(Booking book){
 		log.info("IN addBookingToDatabase\n");
 		//bookingID is made in the database
-		String query = "INSERT INTO BOOKINGS (userID,employeeID,date,startTime,endTime, serviceID,status)" + "VALUES(" + book.getCustomerId() + ","+book.getEmployeeID()+",'" + controller.dateToStr(book.getDate()) + "','" + controller.timeToStr(book.getStartTime()) + "','" + controller.timeToStr(book.getEndTime()) + "',"+book.getService()+",'" + book.getStatus() + "');";
+		String query = "INSERT INTO BOOKINGS (userID,employeeID,date,startTime,endTime, serviceID,status,businessID)" + "VALUES(" + book.getCustomerId() + ","+book.getEmployeeID()+",'" + controller.dateToStr(book.getDate()) + "','" + controller.timeToStr(book.getStartTime()) + "','" + controller.timeToStr(book.getEndTime()) + "',"+book.getService()+",'" + book.getStatus() + "',"+book.getBookingID()+");";
 		try(Connection connect = this.connect(); Statement inject = connect.createStatement())
 		{
 			inject.executeUpdate(query);

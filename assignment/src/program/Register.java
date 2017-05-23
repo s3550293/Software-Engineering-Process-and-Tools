@@ -29,7 +29,7 @@ public class Register
 		{
 			output = false;
 		}
-		else if(username.equalsIgnoreCase("root"))
+		else if(!username.equalsIgnoreCase("root"))
 		{
 			output = false;
 		}

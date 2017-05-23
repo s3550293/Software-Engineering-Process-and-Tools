@@ -391,21 +391,6 @@ public class LoginController implements Initializable {
 		connect.addBooking(3,2, "24/04/2017", "11:00", "11:59", 2,"canceled",1);
 		connect.addBooking(4,3, "25/04/2017", "8:00", "8:40", 2, "active",1);
 		connect.addBooking(4,2, "26/04/2017", "8:00", "8:40", 2, "canceled",1);
-		connect.addBooking(4,1, "21/04/2017", "10:00", "10:40", 1,"active",2);
-		connect.addBooking(4,2, "22/04/2017", "11:00", "11:59", 2,"canceled",2);
-		connect.addBooking(4,1, "23/04/2017", "10:00", "10:40", 3,"canceled",2);
-		connect.addBooking(4,2, "24/04/2017", "11:00", "11:59", 2,"canceled",2);
-		connect.addBooking(3,3, "25/04/2017", "8:00", "8:40", 2, "active",2);
-		connect.addBooking(3,2, "26/04/2017", "8:00", "8:40", 2, "canceled",2);
-		connect.addBooking(3,3, "27/04/2017", "10:00", "10:40", 1,"active",3);
-		connect.addBooking(3,2, "28/04/2017", "11:00", "11:59", 1,"active",3);
-		connect.addBooking(4,3, "29/04/2017", "8:00", "8:40", 1, "canceled",3);
-		
-		connect.addBooking(3,1, "24/05/2017", "8:00", "8:40", 2, "active",3);
-		connect.addBooking(3,1, "16/07/2017", "10:00", "10:40", 3,"active",4);
-		connect.addBooking(3,2, "14/05/2017", "11:00", "11:59", 1,"active",4);
-		connect.addBooking(3,1, "4/05/2017", "10:00", "10:40", 2,"active",4);
-		connect.addBooking(3,2, "6/05/2017", "11:00", "11:59", 3,"active",4);
 	
 		//connect.cancelBooking(2);
     }

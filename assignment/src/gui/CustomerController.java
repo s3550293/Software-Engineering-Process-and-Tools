@@ -176,8 +176,7 @@ public class CustomerController  implements Initializable, IUser{
 		//togbtnMorn.setSelected(true);
 		loadDaySelect();
 		loadallServices();
-		//listTogTDini(program.business().getBusinessId());
-		//listTogTSini(program.business().getBusinessId());
+
 	}
 	
 	@Override
@@ -202,7 +201,7 @@ public class CustomerController  implements Initializable, IUser{
 							super.updateItem(t, bln);
 							if (t != null) {
 								log.debug("LOGGER: added:" + t.getBookingID());
-								setText("ID: "+t.getBookingID()+"\n"
+								setText("ID: "+t.getBookingID()+" "+t.getStatus().toUpperCase()+"\n"
 										+ connection.getEmployee(t.getEmployeeID()).getName()+", "
 												+ ""+program.timeToStr(t.getStartTime())+", "+program.dateToStr(t.getDate())+", "+connection.getService(t.getService()).getName());
 							}
@@ -709,7 +708,7 @@ public class CustomerController  implements Initializable, IUser{
 			lblBookingDur.setText("");
 			lblBookingPrice.setText("");
 			lblCustBookingDate.setText("");
-
+			popListBook();
 		} else {
 			return;
 		}

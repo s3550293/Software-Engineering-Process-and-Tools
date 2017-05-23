@@ -65,6 +65,8 @@ public class LoginController implements Initializable {
 	@FXML
 	ComboBox<Business> cmbBusiness;
 	
+        final Image defaultImage = imgView.getImage();
+	
 	@Override
 	public void initialize(URL url, ResourceBundle rb)
 	{
@@ -84,11 +86,18 @@ public class LoginController implements Initializable {
 			public void changed(ObservableValue<? extends Business> observable, Business oldValue, Business newValue) {
 				if (newValue != null) {
 					if(con.getlogo(newValue.getBusinessId())!=null){
+						program.business(newValue);
 						FileInputStream fis;
 						try {
-							fis = new FileInputStream(con.getlogo(newValue.getBusinessId()));
-							Image image = new Image(fis);
-				            imgView.setImage(image);
+							if(con.getlogo(newValue.getBusinessId()) !=null)
+							{
+								fis = new FileInputStream(con.getlogo(newValue.getBusinessId()));
+								Image image = new Image(fis);
+								imgView.setImage(image);
+							}
+							else{
+								imgView.setImage(defaultImage);
+							}
 						} catch (FileNotFoundException e) {
 							e.printStackTrace();
 						}

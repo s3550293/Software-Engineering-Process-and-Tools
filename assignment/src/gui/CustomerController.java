@@ -200,7 +200,7 @@ public class CustomerController  implements Initializable, IUser{
 							super.updateItem(t, bln);
 							if (t != null) {
 								log.debug("LOGGER: added:" + t.getBookingID());
-								setText("ID: "+t.getBookingID()+"\n"
+								setText("ID: "+t.getBookingID()+"   BOOKING STATUS - "+t.getStatus().toUpperCase()+"\n"
 										+ connection.getEmployee(t.getEmployeeID()).getName()+", "
 												+ ""+program.timeToStr(t.getStartTime())+", "+program.dateToStr(t.getDate())+", "+connection.getService(t.getService()).getName());
 							}

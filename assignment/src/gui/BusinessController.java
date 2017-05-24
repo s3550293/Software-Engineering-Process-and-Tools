@@ -159,6 +159,7 @@ public class BusinessController implements Initializable, IUser  {
 		{
 			ISetup setup = userFactory.getSetup("SetUp");
 			setup.getSetup();
+			BO = connection.getOneBusiness(program.business().getBusinessId());
 		}
 		if(BO != null)
 		{

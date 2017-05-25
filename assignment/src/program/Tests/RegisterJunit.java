@@ -66,14 +66,14 @@ public class RegisterJunit
 	public void testUname1()
 	{
 		log.debug("Uname Test 1");
-		assertTrue(reg.checkTakenUsername("TestUser",2));
+		assertFalse(reg.checkTakenUsername("TestUser",2));
 	}
 	
 	@Test
 	public void testUname2()
 	{
 		log.debug("Uname Test 2");
-		assertTrue(reg.checkTakenUsername("testuser",2));
+		assertFalse(reg.checkTakenUsername("testuser",2));
 	}
 
 	@Test
@@ -81,6 +81,12 @@ public class RegisterJunit
 	{
 		log.debug("Uname Test 3");
 		assertFalse(reg.checkTakenUsername("Charlie21",2));
+	}
+	@Test
+	public void testUname4()
+	{
+		log.debug("Uname Test 4");
+		assertFalse(reg.checkTakenUsername("root",2));
 	}
 	@After
 	public void teardown()

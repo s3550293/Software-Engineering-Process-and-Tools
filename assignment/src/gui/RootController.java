@@ -53,12 +53,14 @@ public class RootController implements Initializable, IUser {
 	@Override
 	public void initialize(URL url, ResourceBundle rb){
 		loadListView();
+		
 		listviewBO.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<Business>() {
 			@Override
 			public void changed(ObservableValue<? extends Business> observable, Business oldValue,Business newValue) {
 				if (newValue != null) {
 					lblID.setText(""+newValue.getBusinessId());
 					lblName.setText(newValue.getBusinessName());
+					program.business(newValue);
 				}
 			}
 		});
@@ -142,10 +144,12 @@ public class RootController implements Initializable, IUser {
 		Optional<ButtonType> result = alert.showAndWait();
 		if (result.get() == ButtonType.OK) {
 			con.deleteUser(id);
-			refresh();
+			loadListView();
 		} else {
 			return;
 		}
+		lblID.setText("");
+		lblName.setText("");
 	}
 	
 	@FXML
@@ -155,8 +159,8 @@ public class RootController implements Initializable, IUser {
 			secondaryStage.getIcons().add(new Image("images/ic_collections_bookmark_black_48dp_2x.png"));
 			Parent root = FXMLLoader.load(getClass().getResource("addBOLayout.fxml"));
 			secondaryStage.setTitle("Customer Application");
-			secondaryStage.setMinWidth(300);
-			secondaryStage.setMinHeight(200);
+			secondaryStage.setMinWidth(450);
+			secondaryStage.setMinHeight(250);
 			secondaryStage.setMaxWidth(500);
 			secondaryStage.setMaxHeight(400);
 			secondaryStage.setScene(new Scene(root));
@@ -166,6 +170,7 @@ public class RootController implements Initializable, IUser {
 			log.warn(ioe.getMessage());
 		}
 		log.debug("false");
+		loadListView();
 	}
 
 	@Override

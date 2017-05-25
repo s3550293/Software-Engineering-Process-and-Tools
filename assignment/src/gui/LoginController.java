@@ -40,7 +40,6 @@ import program.Database;
 import program.DatabaseConnection;
 import program.Login;
 import program.Service;
-import program.User;
 
 
 public class LoginController implements Initializable {
@@ -65,6 +64,8 @@ public class LoginController implements Initializable {
 	@FXML
 	ComboBox<Business> cmbBusiness;
 	
+	private final Image defaultImage = new Image("images/ic_person_black_48dp_2x.png");
+	
 	@Override
 	public void initialize(URL url, ResourceBundle rb)
 	{
@@ -83,15 +84,20 @@ public class LoginController implements Initializable {
 			@Override
 			public void changed(ObservableValue<? extends Business> observable, Business oldValue, Business newValue) {
 				if (newValue != null) {
+					program.business(newValue);
 					if(con.getlogo(newValue.getBusinessId())!=null){
+						program.business(newValue);
 						FileInputStream fis;
 						try {
-							fis = new FileInputStream(con.getlogo(newValue.getBusinessId()));
-							Image image = new Image(fis);
-				            imgView.setImage(image);
+								fis = new FileInputStream(con.getlogo(newValue.getBusinessId()));
+								Image image = new Image(fis);
+								imgView.setImage(image);
 						} catch (FileNotFoundException e) {
 							e.printStackTrace();
 						}
+					}
+					else{
+						imgView.setImage(defaultImage);
 					}
 				}
 			}
@@ -261,7 +267,7 @@ public class LoginController implements Initializable {
 		int businessID = business.getBusinessId();
 		
 		connect.addUser("heyhey", "S123456789", 1,businessID);	
-		connect.addBusinessOwner(businessID, "Luke", "Mason", "0417125229", "80 Stanton Grove Lilydale", "05:00", "06:30", "05:00", "07:00");
+		connect.addBusinessOwner(businessID, "Luke", "Mason", "0417125229", "80 Stanton Grove Lilydale", "05:00", "17:30", "05:00", "19:00");
 		connect.addUser("William", "Apples22", 0,businessID); // customer attached to Business 2
 		connect.addUser("Hannah", "Apples22", 0,businessID); // customer attached to Business 2
 		connect.addUserDetails(3, "William", "Porter", "will@mail.com", "0452368593", "01/01/2002", "Male", businessID);
@@ -385,21 +391,6 @@ public class LoginController implements Initializable {
 		connect.addBooking(3,2, "24/04/2017", "11:00", "11:59", 2,"canceled",1);
 		connect.addBooking(4,3, "25/04/2017", "8:00", "8:40", 2, "active",1);
 		connect.addBooking(4,2, "26/04/2017", "8:00", "8:40", 2, "canceled",1);
-		connect.addBooking(4,1, "21/04/2017", "10:00", "10:40", 1,"active",2);
-		connect.addBooking(4,2, "22/04/2017", "11:00", "11:59", 2,"canceled",2);
-		connect.addBooking(4,1, "23/04/2017", "10:00", "10:40", 3,"canceled",2);
-		connect.addBooking(4,2, "24/04/2017", "11:00", "11:59", 2,"canceled",2);
-		connect.addBooking(3,3, "25/04/2017", "8:00", "8:40", 2, "active",2);
-		connect.addBooking(3,2, "26/04/2017", "8:00", "8:40", 2, "canceled",2);
-		connect.addBooking(3,3, "27/04/2017", "10:00", "10:40", 1,"active",3);
-		connect.addBooking(3,2, "28/04/2017", "11:00", "11:59", 1,"active",3);
-		connect.addBooking(4,3, "29/04/2017", "8:00", "8:40", 1, "canceled",3);
-		
-		connect.addBooking(3,1, "24/05/2017", "8:00", "8:40", 2, "active",3);
-		connect.addBooking(3,1, "16/07/2017", "10:00", "10:40", 3,"active",4);
-		connect.addBooking(3,2, "14/05/2017", "11:00", "11:59", 1,"active",4);
-		connect.addBooking(3,1, "4/05/2017", "10:00", "10:40", 2,"active",4);
-		connect.addBooking(3,2, "6/05/2017", "11:00", "11:59", 3,"active",4);
 	
 		//connect.cancelBooking(2);
     }

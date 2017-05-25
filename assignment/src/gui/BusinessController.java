@@ -159,6 +159,7 @@ public class BusinessController implements Initializable, IUser  {
 		{
 			ISetup setup = userFactory.getSetup("SetUp");
 			setup.getSetup();
+			BO = connection.getOneBusiness(program.business().getBusinessId());
 		}
 		if(BO != null)
 		{
@@ -1289,13 +1290,14 @@ public class BusinessController implements Initializable, IUser  {
 		}
 		_user = program.getUser();
 		program.setUser(connection.getUser(listviewCustomers.getSelectionModel().getSelectedItem().getID()));
+		System.out.println("OUT OF HERE 3");
 		log.debug("LOGGER: Selected user ID - " + listviewCustomers.getSelectionModel().getSelectedItem().getID());
 		log.debug("LOGGER: set user - " + program.getUser());
-		program.bmb = true;
-		IUser customer = userFactory.getUser("Customer");
-		customer.getUserWindow();
-		program.setUser(_user);
-		program.bmb = false;
+		program.bmb = true;		
+			IUser customer = userFactory.getUser("Customer");
+			customer.getUserWindow();
+			program.setUser(_user);
+			program.bmb = false;
 		/*
 		if (listviewCustomers.getSelectionModel().getSelectedItem() == null) {
 			program.messageBox("ERROR", "Error", "A Customer Has Not Been Chosen", "Please select a customer");

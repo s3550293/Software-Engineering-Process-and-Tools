@@ -11,7 +11,7 @@ public class Login
 	private static Logger log = Logger.getLogger(Login.class);
 	private final Controller program = new Controller();
 	public Login(){
-		log.setLevel(Level.DEBUG);
+		log.setLevel(Level.INFO);
 	}
 	
 	/**

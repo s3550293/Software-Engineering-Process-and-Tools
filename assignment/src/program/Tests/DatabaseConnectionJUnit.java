@@ -43,16 +43,12 @@ public class DatabaseConnectionJUnit {
 	@Before
 	public void setUp()
 	{
-		System.out.println("\n\nSet Up\n--------------");
 		//Wiping EMPLOYEES table at start of test in case of any changes manually made via SQLite
 		try(Connection connect = connect(); Statement inject = connect.createStatement())
 		{
 			inject.executeUpdate("DROP TABLE IF EXISTS EMPLOYEES");
-			System.out.println("Dropped Employees Table");
 			inject.executeUpdate("DROP TABLE IF EXISTS EMPLOYEES_WORKING_TIMES");
-			System.out.println("Dropped 'Working Times' Table");
 			inject.executeUpdate("DROP TABLE IF EXISTS BOOKINGS");
-			System.out.println("Dropped 'Bookings' Table");
 		}
 		catch(SQLException sqle)
 		{
@@ -116,7 +112,6 @@ public class DatabaseConnectionJUnit {
 	@Test
 	public void testGetEmployees1()
 	{
-		System.out.println("\n\nGetEmployees\n------------------------------------------------------------------------");
 		ArrayList<Employee> employees = connect.getEmployees("Smith",2);
 		assertTrue(employees.size() == 2);
 	}
@@ -334,9 +329,6 @@ public class DatabaseConnectionJUnit {
 	{
 		ArrayList<Booking> bookingLists = new ArrayList<Booking>();
 		bookingLists = connect.getAllBooking(2);
-		System.out.println(bookingLists.get(0).getStatus());
-		System.out.println(bookingLists.get(1).getStatus());
-		System.out.println(bookingLists.get(2).getStatus());
 		assertEquals(bookingLists.get(0).getStatus(), "active");
 		assertEquals(bookingLists.get(1).getStatus(), "active");
 		assertEquals(bookingLists.get(2).getStatus(), "active");
@@ -350,10 +342,6 @@ public class DatabaseConnectionJUnit {
 		assertTrue(connect.cancelBooking(3));
 		
 		books = connect.getAllBooking(2);
-		System.out.print("THIS ONE!~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
-		System.out.println(books.get(0).getStatus());
-		System.out.println(books.get(1).getStatus());
-		System.out.println(books.get(2).getStatus());
 		assertEquals("canceled",books.get(0).getStatus());
 		assertEquals("active",books.get(1).getStatus());
 		assertEquals("canceled",books.get(2).getStatus());	
@@ -374,16 +362,12 @@ public class DatabaseConnectionJUnit {
 	@After
 	public void tearDown()
 	{
-		System.out.println("\n\nTear Down\n--------------");
 		//Deleting table EMPLOYEES after the Test has been executed correctly
 		try(Connection connect = this.connect(); Statement inject = connect.createStatement())
 		{
 			inject.executeUpdate("DROP TABLE EMPLOYEES");
-			System.out.println("Dropped Employees Table");
 			inject.executeUpdate("DROP TABLE EMPLOYEES_WORKING_TIMES");
-			System.out.println("Dropped 'Working Times' Table");
-			inject.executeUpdate("DROP TABLE BOOKINGS IF EXISTS BOOKINGS");
-			System.out.println("Dropped 'Bookings' Table");
+			inject.executeUpdate("DROP TABLE BOOKINGS");
 		}
 		catch(SQLException sqle)
 		{

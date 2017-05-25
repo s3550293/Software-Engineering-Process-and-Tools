@@ -10,6 +10,6 @@ public class CustomerMenu
 
 	public CustomerMenu()
 	{
-		log.setLevel(Level.WARN);
+		log.setLevel(Level.INFO);
 	}
 }

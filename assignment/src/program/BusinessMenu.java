@@ -13,7 +13,7 @@ public class BusinessMenu
 	private static Logger log = Logger.getLogger(BusinessMenu.class);
 	private Controller controller = new Controller();
 	DatabaseConnection connect = new DatabaseConnection();
-	public BusinessMenu(){log.setLevel(Level.WARN);}
+	public BusinessMenu(){log.setLevel(Level.INFO);}
 	//Monday to Friday
 	public static String MFearly = "08:00"; //Start Time for day
 	public static String MFearlyMidDay = "12:00"; //Early Midday
@@ -368,6 +368,7 @@ public class BusinessMenu
 					BusinessOwner BO = connect.getOneBusiness(businessID);
 					if(BO == null)
 					{
+						log.debug("BO IS NULLL FOR THIS WORKTIME BUSINESS");
 						return false;
 					}
 					if(BO != null)

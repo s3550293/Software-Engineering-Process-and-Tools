@@ -19,7 +19,7 @@ public class Database
 	 */
 	public Database(String filename)
 	{
-		log.setLevel(Level.DEBUG);
+		log.setLevel(Level.INFO);
 		createNewDatabase(filename);
 	}
 

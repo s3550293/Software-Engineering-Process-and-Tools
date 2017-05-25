@@ -8,13 +8,13 @@ public class Register
 	private static Logger log = Logger.getLogger(Register.class);
 	private DatabaseConnection connect = new DatabaseConnection();
 	
-	public Register(){log.setLevel(Level.WARN);}
+	public Register(){log.setLevel(Level.INFO);}
 	
 	
-	public void registerUser(String fname, String lname, String username, String email, String mobilenumber, String dob, String gender, String password)
+	public void registerUser(String fname, String lname, String username, String email, String mobilenumber, String dob, String gender, String password, int businessID)
 	{
-		connect.addUser(username, password, 0,2);
-		connect.addUserDetails(connect.getUser(username,2).getID(),fname,lname, email, mobilenumber, dob, gender);	
+		connect.addUser(username, password, 0,businessID);
+		connect.addUserDetails(connect.getUser(username,businessID).getID(),fname,lname, email, mobilenumber, dob, gender, businessID);	
 	}
 	
 	/**
@@ -24,20 +24,21 @@ public class Register
 	 */
 	public boolean checkTakenUsername(String username, int businessID)
 	{
-		boolean output = true;
-		if(!username.equalsIgnoreCase(connect.getUser(username,businessID).getUsername()))
+		log.debug("ID "+ businessID);
+		User u = connect.getUser(username,businessID);
+		if(username.equalsIgnoreCase("root"))
 		{
-			output = false;
+			System.out.println("USERNAME = "+u._username);
+			System.out.println("BUS ID = "+u._businessID);
+			return true;
 		}
-		else if(!username.equalsIgnoreCase("root"))
+		else if(u._username != null)
 		{
-			output = false;
+			System.out.println("USERNAME = "+u._username);
+			System.out.println("BUS ID = "+u._businessID);
+			return true;
 		}
-		else
-		{
-			System.out.println("Username Taken please enter another username");
-		}
-		return output;
+		return false;
 	}
 	
 	/**

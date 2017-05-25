@@ -19,7 +19,7 @@ import javafx.scene.control.Alert;
 public class Controller
 {
 	private static Logger log = Logger.getLogger(Controller.class);
-	public Controller(){ log.setLevel(Level.DEBUG);}
+	public Controller(){ log.setLevel(Level.INFO);}
 	
 	private static User _user = null;
 	public User getUser(){return _user;}
@@ -436,6 +436,12 @@ public class Controller
 	 */
 	public List<Employee> getAvailableEmployeesForSpecifiedTime(String date, String startTime, String endTime, int businessID)
 	{
+		
+		log.debug("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
+		log.debug("GET AVAILABLE EMPLOYEES BETWEEN - "+startTime+" AND "+endTime+" in business "+businessID+" ON "+date);
+		log.debug("Business Time block = "+BusinessMenu.MFearly+" - "+BusinessMenu.MFearlyMidDay+" - "+BusinessMenu.MFlateMidDay+" - "+BusinessMenu.MFlate);
+		log.debug("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
+
 		int day = dateToDay(date);
 		DatabaseConnection connect = new DatabaseConnection();
 		log.info("IN getAvailableEmployeesForBooking");
@@ -444,6 +450,15 @@ public class Controller
 		ArrayList<Booking> bookingsOnDate;
 		ArrayList<Employee> employeesNotAvailable = new ArrayList<>();
 		workTimesOnDay = connect.getWorkTimesOnDay(day, businessID);
+
+		for(EmployeeWorkingTime ewt: workTimesOnDay)
+		{
+			log.debug("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
+			log.debug("Day = "+ewt.getDayOfWeek());
+			log.debug("BusID = "+ewt.getBusinessID());
+			log.debug("Employee = "+ewt.getEmpID());
+			log.debug("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
+		}
 		bookingsOnDate = connect.getActiveBookingsOnDate(date, businessID);
 		Date date2 = strToDate(date);
 		Date startTime2 = strToTime(startTime);
@@ -490,6 +505,27 @@ public class Controller
 		}
 		log.info("OUT getAvailableEmployeesForBooking");	
 		return employeesWorkingInTimeBlock;
+	}
+	
+	public boolean CheckUsername(String username)
+	{
+		if (username.length() < 5 || username.length() > 30)
+		{
+			return false;
+		}
+		for (int i = 0; i < username.length(); i++)
+		{
+			// checks if the letter is not an upper case letter
+			if ((int) username.charAt(i) < 65 || (int) username.charAt(i) > 122 || ((int) username.charAt(i) < 97 &&(int) username.charAt(i) > 90))// checks if the letter is not a lowercase letter
+			{
+				if((int) username.charAt(i)<48|(int) username.charAt(i)>57)
+				{
+					System.out.println("Char at "+i+"invalid");
+					return false;
+				}				
+			}
+		}	
+		return true;
 	}
 	
 	/**

@@ -1,11 +1,6 @@
 package program;
 
 import java.awt.image.BufferedImage;
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.sql.Blob;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -14,8 +9,6 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Date;
-
-import javax.imageio.ImageIO;
 
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
@@ -37,7 +30,7 @@ public class DatabaseConnection
 {
 	private static Logger log = Logger.getLogger(DatabaseConnection.class);
 	private Controller controller = new Controller();
-	public DatabaseConnection(){log.setLevel(Level.DEBUG);}
+	public DatabaseConnection(){log.setLevel(Level.INFO);}
 	private Connection connect()
 	{
 		/*
@@ -153,7 +146,7 @@ public class DatabaseConnection
 	 * @param username
 	 * @return User Object
 	 */
-	public User getUser(int BID, String val)
+	public User getUser(int BID, int val)
 	{
 		log.info("IN getUser\n");
 		int _id = 0;
@@ -161,7 +154,7 @@ public class DatabaseConnection
 		String _password = "null";
 		int _accountType = 0;
 		int businessID = -1;
-		String query = "SELECT * FROM users WHERE businessID = ?";
+		String query = "SELECT * FROM users WHERE businessID = ? AND accountType = ?";
 		//Creates a null user to return, this can be used to validate user at login
 		User databaseUser = null;
 		try (Connection connect = this.connect(); PreparedStatement  inject  = connect.prepareStatement(query))
@@ -169,6 +162,7 @@ public class DatabaseConnection
 			//Sets '?' to user name in the query
 			//crates a user from the found information
 			inject.setInt(1,BID);
+			inject.setInt(2,val);
 			ResultSet output = inject.executeQuery();
 			while (output.next()){
 				_id = output.getInt(1);
@@ -196,12 +190,36 @@ public class DatabaseConnection
 	 */
 	public User getUser(String username, int businessID)
 	{
-		log.info("IN getUser\n");
-		
-		String query = "SELECT * FROM users WHERE username like '"+username+"' AND businessID = "+businessID;
+		log.info("IN getUser\n");	
+		int _id = 0;
+		String _username = null;
+		String _password = null;
+		int _accountType = 0;
+		String query = "SELECT * FROM users WHERE username like ? AND businessID = ?";
 		//Creates a null user to return, this can be used to validate user at login
 		User databaseUser = null;
-		databaseUser= userlogin(query);
+		try (Connection connect = this.connect(); PreparedStatement  inject  = connect.prepareStatement(query))
+		{
+			//Sets '?' to user name in the query
+			//crates a user from the found information
+			inject.setString(1,username);
+			inject.setInt(2,businessID);
+			ResultSet output = inject.executeQuery();
+			while (output.next()){
+				_id = output.getInt(1);
+				_username = output.getString(2);
+				_password = output.getString(3);
+				_accountType = output.getInt(4);
+				businessID = output.getInt(5);
+			}
+			databaseUser = new User(_id ,_username, _password, _accountType, businessID);
+			output.close();
+		}
+		catch(SQLException sqle)
+		{
+			//System.out.println("Getting User: "+sqle.getMessage());
+			log.warn(sqle.getMessage());
+		}
 		log.info("OUT getUser\n");
 		return databaseUser;
 	}
@@ -604,7 +622,7 @@ public class DatabaseConnection
 	public ArrayList<Booking> getAllBooking (int businessID)
 	{
 		log.info("IN getAllBooking\n");
-		ArrayList<Booking> databaseBookingTime = new ArrayList<Booking>();
+		ArrayList<Booking> databaseBookingTime = new ArrayList<>();
 		int bookingID = 0;
 		int cusID = 0;
 		int empID = 0;
@@ -700,15 +718,24 @@ public class DatabaseConnection
 	{
 		log.info("IN cancelBooking\n");
 		Booking booking = getOneBooking(bookID);
+		if(booking == null)
+		{
+			return false;
+		}
 		ArrayList<Booking> bookList = getAllBooking(booking.getBusinessID());
 		Boolean exists = false;
 		//check if the booking exists using bookID
-		for(Booking b : bookList){
-			if(b.getBookingID() == bookID){
-				exists = true;
-			}
+		if(bookList == null)
+		{
+			return false;
 		}
-		if(exists == false){
+			for(Booking b : bookList){
+				if(b.getBookingID() == bookID){
+					System.out.println(b.getBookingID()+" == "+ bookID);
+					exists = true;
+				}
+			}
+		if(!exists){
 			log.debug("Book ID " + bookID + " does not exists!\n");
 			log.info("OUT cancelBooking\n");
 			return false;
@@ -1048,7 +1075,7 @@ public class DatabaseConnection
 	public void createBooking(Booking book){
 		log.info("IN addBookingToDatabase\n");
 		//bookingID is made in the database
-		String query = "INSERT INTO BOOKINGS (userID,employeeID,date,startTime,endTime, serviceID,status)" + "VALUES(" + book.getCustomerId() + ","+book.getEmployeeID()+",'" + controller.dateToStr(book.getDate()) + "','" + controller.timeToStr(book.getStartTime()) + "','" + controller.timeToStr(book.getEndTime()) + "',"+book.getService()+",'" + book.getStatus() + "');";
+		String query = "INSERT INTO BOOKINGS (userID,employeeID,date,startTime,endTime, serviceID,status,businessID)" + "VALUES(" + book.getCustomerId() + ","+book.getEmployeeID()+",'" + controller.dateToStr(book.getDate()) + "','" + controller.timeToStr(book.getStartTime()) + "','" + controller.timeToStr(book.getEndTime()) + "',"+book.getService()+",'" + book.getStatus() + "',"+getUser(book.getCustomerId()).getBusinessID()+");";
 		try(Connection connect = this.connect(); Statement inject = connect.createStatement())
 		{
 			inject.executeUpdate(query);
@@ -1139,7 +1166,7 @@ public class DatabaseConnection
 		int bID = 0;
 		String fName,lName,phone,address;
 		Date weekDayStart,weekDayEnd,weekendStart,weekendEnd;
-		String query = "SELECT * FROM BUSINESS_OWNER WHERE id = ?"; 
+		String query = "SELECT * FROM BUSINESS_OWNER WHERE ID = ?"; 		
 		int color = 1;
 		try (Connection connect = this.connect(); PreparedStatement  inject  = connect.prepareStatement(query))
 		{
@@ -1336,21 +1363,25 @@ public class DatabaseConnection
 	 * Delete user from database
 	 * @param userName
 	 */
-	public void deleteUser(int businessID)
+    public void deleteUser(int businessID)
 	{
 		log.info("IN deleteUser\n");
 		String query = "DELETE FROM BUSINESS WHERE businessID = "+businessID+";";
 		String query1 = "DELETE FROM users WHERE businessID = "+businessID+";";
-		int id = getOneBusiness(getUser(businessID,"").getID()).getID();
-		String query2 = "DELETE FROM BUSINESS_OWNER WHERE ID = "+id+";";
+		//int id = getOneBusiness(getUser(businessID,1).getID()).getID();
+		BusinessOwner b = getOneBusiness(businessID);
+		if(b!=null){
+			int id = b.getID();
+			String query2 = "DELETE FROM BUSINESS_OWNER WHERE businessID = "+id+";";
+			executeQuery(query2, "BUSINESS_OWNER " + businessID + " deleted\n");
+		}
 		String query3 = "DELETE FROM CLIENTDETAILS WHERE businessID = "+businessID+";";
 		String query4 = "DELETE FROM EMPLOYEES WHERE businessID = "+businessID+";";
 		String query5 = "DELETE FROM BOOKINGS WHERE businessID = "+businessID+";";
 		String query6 = "DELETE FROM SERVICES WHERE businessID = "+businessID+";";
 		executeQuery(query, "Business " + businessID + " deleted\n");
-		executeQuery(query1, "User " + businessID + " deleted\n");
-		executeQuery(query2, "BUSINESS_OWNER " + businessID + " deleted\n");
 		executeQuery(query3, "CLIENTDETAILS " + businessID + " deleted\n");
+		executeQuery(query1, "User " + businessID + " deleted\n");
 		executeQuery(query4, "EMPLOYEES " + businessID + " deleted\n");
 		executeQuery(query5, "BOOKINGS " + businessID + " deleted\n");
 		executeQuery(query6, "SERVICES " + businessID + " deleted\n");

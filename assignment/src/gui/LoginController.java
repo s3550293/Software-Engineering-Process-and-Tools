@@ -77,7 +77,7 @@ public class LoginController implements Initializable {
 			Database data = new Database(file);
 			data.createNewDatabase(file);
 			data.createTable(file);
-			ini();
+			//ini();
 		}
 		popcmb();
 		cmbBusiness.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<Business>() {

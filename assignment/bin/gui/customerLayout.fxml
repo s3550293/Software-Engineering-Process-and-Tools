@@ -104,7 +104,7 @@
                                                 </FlowPane>
                                                 <FlowPane alignment="CENTER" prefHeight="0.0" prefWidth="355.0" GridPane.columnIndex="1">
                                                    <children>
-                                                      <Button fx:id="btndelete" mnemonicParsing="false" text="Delete Booking">
+                                                      <Button fx:id="btndelete" mnemonicParsing="false" onAction="#cancelBooking" text="Cancel Booking">
                                                          <FlowPane.margin>
                                                             <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
                                                          </FlowPane.margin>

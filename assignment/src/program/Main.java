@@ -1,5 +1,8 @@
 package program;
 
+
+
+import org.apache.log4j.BasicConfigurator;
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 
@@ -8,7 +11,6 @@ import com.sun.javafx.application.LauncherImpl;
 import gui.MainApplication;
 import gui.PreLoader;
 
-import org.apache.log4j.BasicConfigurator;
 
 /**
  * The Appointment Booking System program implements an application that Allows

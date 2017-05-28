@@ -37,6 +37,14 @@
             </archive>
           </configuration>
       </plugin>
+      <plugin>
+        <groupId>com.zenjava</groupId>
+        <artifactId>javafx-maven-plugin</artifactId>
+        <version>8.8.3</version>
+        <configuration>
+            <mainClass>gui.MainApplication</mainClass>
+        </configuration>
+      </plugin>
     </plugins>
   </build>
   <dependencies>
@@ -53,7 +61,7 @@
   	<dependency>
       <groupId>log4j</groupId>
       <artifactId>log4j</artifactId>
-      <version>1.2.15</version>
+      <version>1.2.17</version>
       <exclusions>
         <exclusion>
             <groupId>com.sun.jmx</groupId>
